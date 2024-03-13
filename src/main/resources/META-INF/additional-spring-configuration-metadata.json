@@ -1,0 +1,11 @@
+{
+  "groups": [
+    {
+      "name": "uw.task.center",
+      "type": "uw.task.center.conf.TaskCenterProperties",
+      "sourceType": "uw.task.center.conf.TaskCenterProperties"
+    }
+  ],
+  "properties": [],
+  "hints": []
+}
