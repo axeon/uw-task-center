@@ -168,12 +168,12 @@
             <!--切换成自我游的仓库-->
             <distributionManagement>
                 <snapshotRepository>
-                    <id>zwy-snapshots</id>
-                    <url>http://maven.corp.ziwoyou.cn/repository/maven-snapshots/</url>
+                    <id>xili-nexus</id>
+                    <url>http://dev.xili.pub:61881/repository/maven-snapshots/</url>
                 </snapshotRepository>
                 <repository>
-                    <id>zwy-releases</id>
-                    <url>http://maven.corp.ziwoyou.cn/repository/maven-releases/</url>
+                    <id>xili-nexus</id>
+                    <url>http://dev.xili.pub:61881/repository/maven-releases/</url>
                 </repository>
             </distributionManagement>
         </profile>
