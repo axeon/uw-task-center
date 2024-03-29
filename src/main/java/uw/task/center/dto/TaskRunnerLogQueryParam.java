@@ -79,21 +79,21 @@ public class TaskRunnerLogQueryParam extends PageQueryParam {
     /**
      * 队列类型
      */
-    @ColumnMeta(columnName = "queue_type", dataType = "String", dataSize = 20, nullable = true)
+    @QueryMeta(expr = "queueType=?")
     @Schema(title = "队列类型", description = "队列类型")
     private int queueType;
 
     /**
      * 重试类型
      */
-    @ColumnMeta(columnName = "retry_type", dataType = "String", dataSize = 20, nullable = true)
+    @QueryMeta(expr = "retryType=?")
     @Schema(title = "重试类型", description = "重试类型")
     private int retryType;
 
     /**
      * 流量限速TAG
      */
-    @ColumnMeta(columnName = "rate_limit_tag", dataType = "String", dataSize = 100, nullable = true)
+    @QueryMeta(expr = "rateLimitTag=?")
     @Schema(title = "流量限速TAG", description = "流量限速TAG")
     private String rateLimitTag;
 
