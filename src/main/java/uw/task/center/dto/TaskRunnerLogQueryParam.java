@@ -102,14 +102,14 @@ public class TaskRunnerLogQueryParam extends PageQueryParam {
      */
     @QueryMeta(expr = "queueDate between ? and ?")
     @Schema(title = "队列时间范围", description = "队列时间范围")
-    private Date[] queueDateRange;
+    private Long[] queueDateRange;
 
     /**
      * 运行时间范围
      */
     @QueryMeta(expr = "runDate between ? and ?")
     @Schema(title = "运行时间范围", description = "运行时间范围")
-    private Date[] runDateRange;
+    private Long[] runDateRange;
 
     /**
      * 状态1正常，0暂停，-1标记删除
@@ -236,19 +236,19 @@ public class TaskRunnerLogQueryParam extends PageQueryParam {
         this.rateLimitTag = rateLimitTag;
     }
 
-    public Date[] getQueueDateRange() {
+    public Long[] getQueueDateRange() {
         return queueDateRange;
     }
 
-    public void setQueueDateRange(Date[] queueDateRange) {
+    public void setQueueDateRange(Long[] queueDateRange) {
         this.queueDateRange = queueDateRange;
     }
 
-    public Date[] getRunDateRange() {
+    public Long[] getRunDateRange() {
         return runDateRange;
     }
 
-    public void setRunDateRange(Date[] runDateRange) {
+    public void setRunDateRange(Long[] runDateRange) {
         this.runDateRange = runDateRange;
     }
 

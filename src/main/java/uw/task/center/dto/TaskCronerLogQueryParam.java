@@ -80,7 +80,7 @@ public class TaskCronerLogQueryParam extends PageQueryParam {
      */
     @QueryMeta(expr = "runDate between ? and ?")
     @Schema(title = "运行时间范围", description = "运行时间范围")
-    private Date[] runDateRange;
+    private Long[] runDateRange;
 
     /**
      * 状态1正常，0暂停，-1标记删除
@@ -183,11 +183,11 @@ public class TaskCronerLogQueryParam extends PageQueryParam {
         this.appHost = appHost;
     }
 
-    public Date[] getRunDateRange() {
+    public Long[] getRunDateRange() {
         return runDateRange;
     }
 
-    public void setRunDateRange(Date[] runDateRange) {
+    public void setRunDateRange(Long[] runDateRange) {
         this.runDateRange = runDateRange;
     }
 
@@ -222,5 +222,4 @@ public class TaskCronerLogQueryParam extends PageQueryParam {
     public void setStateOp(String stateOp) {
         this.stateOp = stateOp;
     }
-
 }
