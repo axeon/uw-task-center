@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.umtone</groupId>
     <artifactId>uw-task-center</artifactId>
-    <version>5.0.82</version>
+    <version>5.0.83</version>
     <packaging>jar</packaging>
 
     <name>uw-task-center</name>
@@ -31,11 +31,11 @@
         <msgpack-core.version>0.9.6</msgpack-core.version>
         <guava.version>33.0.0-jre</guava.version>
         <knife4j.version>4.5.0</knife4j.version>
-        <uw-dao.version>5.1.8</uw-dao.version>
-        <uw-auth-service.version>6.0.59</uw-auth-service.version>
-        <uw-logback-es.version>3.0.37</uw-logback-es.version>
-        <uw-log-es.version>3.0.32</uw-log-es.version>
-        <uw-task.version>5.0.80</uw-task.version>
+        <uw-dao.version>5.1.9</uw-dao.version>
+        <uw-auth-service.version>6.0.60</uw-auth-service.version>
+        <uw-logback-es.version>3.0.38</uw-logback-es.version>
+        <uw-log-es.version>3.0.33</uw-log-es.version>
+        <uw-task.version>5.0.82</uw-task.version>
     </properties>
 
     <dependencyManagement>
