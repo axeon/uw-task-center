@@ -66,7 +66,7 @@ public class DashboardController {
     @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.NONE)
     public List<TaskAlertInfo> newAlertInfo() throws TransactionException {
         // 获取七天之内的最新10条邮件信息记录回显
-        return dao.list( TaskAlertInfo.class, "select * from task_alert_info order by create_date desc", 0, 10, false ).results();
+        return dao.list( TaskAlertInfo.class, "select * from task_alert_info order by id desc", 0, 10, false ).results();
     }
 
 
