@@ -28,11 +28,11 @@
         <mysql.version>8.0.33</mysql.version>
         <hikaricp.version>5.1.0</hikaricp.version>
         <caffeine.version>3.1.8</caffeine.version>
-        <msgpack-core.version>0.9.6</msgpack-core.version>
-        <guava.version>33.0.0-jre</guava.version>
+        <msgpack-core.version>0.9.8</msgpack-core.version>
+        <guava.version>33.2.0-jre</guava.version>
         <knife4j.version>4.5.0</knife4j.version>
         <uw-dao.version>5.1.9</uw-dao.version>
-        <uw-auth-service.version>6.0.62</uw-auth-service.version>
+        <uw-auth-service.version>6.0.63</uw-auth-service.version>
         <uw-logback-es.version>3.0.38</uw-logback-es.version>
         <uw-log-es.version>3.0.33</uw-log-es.version>
         <uw-task.version>5.0.82</uw-task.version>
@@ -180,13 +180,6 @@
     </profiles>
 
     <build>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
-
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
