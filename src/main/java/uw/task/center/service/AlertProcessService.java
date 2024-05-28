@@ -426,7 +426,7 @@ public class AlertProcessService {
             notify.setContactMan( contact.getContactName() );
             // 设置为email，因为这是邮件发送 获取根据里面的设置
             notify.setCreateDate( new Date() );
-            notify.setSendTimes( 0 );
+            notify.setSentTimes( 0 );
             notify.setState( 0 );
             //写入email通知
             if (StringUtils.isNotBlank( contact.getEmail() )) {

@@ -65,16 +65,16 @@ public class TaskAlertNotify implements DataEntity,Serializable{
 	/**
 	 * 发送时间
 	 */
-	@ColumnMeta(columnName="sended_date", dataType="java.util.Date", dataSize=23, nullable=true)
+	@ColumnMeta(columnName="sent_date", dataType="java.util.Date", dataSize=23, nullable=true)
 	@Schema(title = "发送时间", description = "发送时间")
-	private java.util.Date sendedDate;
+	private java.util.Date sentDate;
 
 	/**
 	 * 发送次数
 	 */
-	@ColumnMeta(columnName="send_times", dataType="int", dataSize=10, nullable=true)
+	@ColumnMeta(columnName="sent_times", dataType="int", dataSize=10, nullable=true)
 	@Schema(title = "发送次数", description = "发送次数")
-	private int sendTimes;
+	private int sentTimes;
 
 	/**
 	 * 状态
@@ -176,15 +176,15 @@ public class TaskAlertNotify implements DataEntity,Serializable{
 	/**
 	 * 获得发送时间。
 	 */
-	public java.util.Date getSendedDate(){
-		return this.sendedDate;
+	public java.util.Date getSentDate(){
+		return this.sentDate;
 	}
 
 	/**
 	 * 获得发送次数。
 	 */
-	public int getSendTimes(){
-		return this.sendTimes;
+	public int getSentTimes(){
+		return this.sentTimes;
 	}
 
 	/**
@@ -288,30 +288,30 @@ public class TaskAlertNotify implements DataEntity,Serializable{
 	/**
 	 * 设置发送时间。
 	 */
-	public void setSendedDate(java.util.Date sendedDate){
-		if ((!String.valueOf(this.sendedDate).equals(String.valueOf(sendedDate)))) {
+	public void setSentDate(java.util.Date sentDate){
+		if ((!String.valueOf(this.sentDate).equals(String.valueOf(sentDate)))) {
 			if (this.UPDATED_COLUMN == null) {
 				_INIT_UPDATE_INFO();
 			}
-			this.UPDATED_COLUMN.add("sended_date");
-			this.UPDATED_INFO.append("sended_date:\"" + this.sendedDate+ "\"=>\""
-                + sendedDate + "\"\r\n");
-			this.sendedDate = sendedDate;
+			this.UPDATED_COLUMN.add("sent_date");
+			this.UPDATED_INFO.append("sent_date:\"" + this.sentDate+ "\"=>\""
+                + sentDate + "\"\r\n");
+			this.sentDate = sentDate;
 		}
 	}
 
 	/**
 	 * 设置发送次数。
 	 */
-	public void setSendTimes(int sendTimes){
-		if ((!String.valueOf(this.sendTimes).equals(String.valueOf(sendTimes)))) {
+	public void setSentTimes(int sentTimes){
+		if ((!String.valueOf(this.sentTimes).equals(String.valueOf(sentTimes)))) {
 			if (this.UPDATED_COLUMN == null) {
 				_INIT_UPDATE_INFO();
 			}
-			this.UPDATED_COLUMN.add("send_times");
-			this.UPDATED_INFO.append("send_times:\"" + this.sendTimes+ "\"=>\""
-                + sendTimes + "\"\r\n");
-			this.sendTimes = sendTimes;
+			this.UPDATED_COLUMN.add("sent_times");
+			this.UPDATED_INFO.append("sent_times:\"" + this.sentTimes+ "\"=>\""
+                + sentTimes + "\"\r\n");
+			this.sentTimes = sentTimes;
 		}
 	}
 
@@ -342,8 +342,8 @@ public class TaskAlertNotify implements DataEntity,Serializable{
 		sb.append("contact_type:\"" + this.contactType + "\"\r\n");
 		sb.append("contact_info:\"" + this.contactInfo + "\"\r\n");
 		sb.append("create_date:\"" + this.createDate + "\"\r\n");
-		sb.append("sended_date:\"" + this.sendedDate + "\"\r\n");
-		sb.append("send_times:\"" + this.sendTimes + "\"\r\n");
+		sb.append("sent_date:\"" + this.sentDate + "\"\r\n");
+		sb.append("sent_times:\"" + this.sentTimes + "\"\r\n");
 		sb.append("state:\"" + this.state + "\"\r\n");
 		return sb.toString();
 	}

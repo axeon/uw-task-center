@@ -57,24 +57,24 @@ public class TaskAlertNotifyQueryParam extends PageQueryParam{
     /**
     * 发送时间范围
     */
-    @QueryMeta(expr = "sended_date between ? and ?")
+    @QueryMeta(expr = "sent_date between ? and ?")
     @Schema(title="发送时间范围", description = "发送时间范围")
-    private Date[] sendedDateRange;
+    private Date[] sentDateRange;
 
 
     /**
     * 发送次数
     */
-    @QueryMeta(expr = "send_times=?")
+    @QueryMeta(expr = "sent_times=?")
     @Schema(title="发送次数", description = "发送次数")
-    private Integer sendTimes;
+    private Integer sentTimes;
 
     /**
     * 发送次数范围
     */
-    @QueryMeta(expr = "send_times between ? and ?")
+    @QueryMeta(expr = "sent_times between ? and ?")
     @Schema(title="发送次数范围", description = "发送次数范围")
-    private Integer[] sendTimesRange;
+    private Integer[] sentTimesRange;
     /**
     * 状态
     */
@@ -198,44 +198,44 @@ public class TaskAlertNotifyQueryParam extends PageQueryParam{
     /**
     * 获得发送时间范围。
     */
-    public Date[] getSendedDateRange(){
-        return this.sendedDateRange;
+    public Date[] getSentDateRange(){
+        return this.sentDateRange;
     }
 
     /**
     * 设置发送时间范围。
     */
-    public void setSendedDateRange(Date[] sendedDateRange){
-        this.sendedDateRange = sendedDateRange;
+    public void setSentDateRange(Date[] sentDateRange){
+        this.sentDateRange = sentDateRange;
     }
 
 
     /**
     * 获得发送次数。
     */
-    public Integer getSendTimes(){
-        return this.sendTimes;
+    public Integer getSentTimes(){
+        return this.sentTimes;
     }
 
     /**
     * 设置发送次数。
     */
-    public void setSendTimes(Integer sendTimes){
-        this.sendTimes = sendTimes;
+    public void setSentTimes(Integer sentTimes){
+        this.sentTimes = sentTimes;
     }
 
     /**
     * 获得发送次数范围。
     */
-    public Integer[] getSendTimesRange(){
-        return this.sendTimesRange;
+    public Integer[] getSentTimesRange(){
+        return this.sentTimesRange;
     }
 
     /**
     * 设置发送次数范围。
     */
-    public void setSendTimesRange(Integer[] sendTimesRange){
-        this.sendTimesRange = sendTimesRange;
+    public void setSentTimesRange(Integer[] sentTimesRange){
+        this.sentTimesRange = sentTimesRange;
     }
 
     /**

@@ -53,8 +53,8 @@ CREATE TABLE `task_alert_notify` (
                                      `contact_type` varchar(10) DEFAULT NULL COMMENT '联系人信息类型,mobile,qq,wx,email',
                                      `contact_info` varchar(100) DEFAULT NULL COMMENT '联系人信息',
                                      `create_date` datetime(3) DEFAULT NULL COMMENT '创建时间',
-                                     `sended_date` datetime(3) DEFAULT NULL COMMENT '发送时间',
-                                     `send_times` int DEFAULT NULL COMMENT '发送次数',
+                                     `sent_date` datetime(3) DEFAULT NULL COMMENT '发送时间',
+                                     `sent_times` int DEFAULT NULL COMMENT '发送次数',
                                      `state` int DEFAULT NULL COMMENT '状态',
                                      PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='报警信息通知';

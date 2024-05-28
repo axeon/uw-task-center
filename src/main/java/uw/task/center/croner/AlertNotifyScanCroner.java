@@ -52,13 +52,14 @@ public class AlertNotifyScanCroner extends TaskCroner {
     @Override
     public String runTask(TaskCronerLog taskCronerLog) throws Exception {
         // 先更新到处理中状态
-        int effect = dao.executeCommand("update task_alert_notify set state=1 where state=0 and send_times=0");
+        int effect = dao.executeCommand("update task_alert_notify set state=1 where state=0 and sent_times=0");
         if (effect < 1) {
             return "本次执行无数据!";
         }
         DataList<TaskAlertNotify> notifyList = dao.list(TaskAlertNotify.class,
-                "select * from task_alert_notify where state=1 and send_times=0");
-        dao.executeCommand("update task_alert_notify set sended_date=now(),send_times=1 where state=1 and send_times=0");
+                "select * from task_alert_notify where state=1 and sent_times=0");
+        dao.executeCommand("update task_alert_notify set sent_date=now(),sent_times=1 where state=1 and sent_times=0");
+
 
         // 先按照用户收敛.key=email value=infoIdList
         Map<String[], String> emailMap = new HashMap<>();
@@ -101,7 +102,7 @@ public class AlertNotifyScanCroner extends TaskCroner {
             TaskData<TaskAlertNotifyData, String> taskData = new TaskData<>();
             taskData.setTaskClass(AlertNotifySendRunner.class.getName());
             taskData.setTaskParam(notifyData);
-            taskFactory.sendToQueue(taskData);
+            taskFactory.runQueue(taskData);
         }
 
         // 按照信息构造要发送的信息。
@@ -120,7 +121,7 @@ public class AlertNotifyScanCroner extends TaskCroner {
             TaskData<TaskAlertNotifyData, String> taskData = new TaskData<>();
             taskData.setTaskClass(AlertNotifySendRunner.class.getName());
             taskData.setTaskParam(notifyData);
-            taskFactory.sendToQueue(taskData);
+            taskFactory.runQueue(taskData);
         }
 
         //发送通知信息。
@@ -136,7 +137,7 @@ public class AlertNotifyScanCroner extends TaskCroner {
                 content.append("##### 报警内容:").append(info.getAlertBody()).append(" \n\n ");
             }
             TaskAlertNotifyData notifyData = new TaskAlertNotifyData(notifyUrlInfo[0], "notifyUrl", notifyUrlInfo[1], title, content.toString());
-            taskFactory.sendToQueue(TaskData.builder(AlertNotifySendRunner.class.getName()).taskParam(notifyData).build());
+            taskFactory.runQueue(TaskData.builder(AlertNotifySendRunner.class.getName()).taskParam(notifyData).build());
         }
         return "共扫描" + notifyList.size() + "条信息，合并后发送" + emailMap.size() + "条Email, " + notifyMap.size() + "条通知!";
     }

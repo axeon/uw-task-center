@@ -38,6 +38,9 @@ public class TaskAlertNotifyData {
         this.notifyBody = notifyBody;
     }
 
+    public TaskAlertNotifyData() {
+    }
+
     public String getContactMan() {
         return contactMan;
     }
