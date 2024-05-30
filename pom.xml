@@ -31,7 +31,7 @@
         <msgpack-core.version>0.9.8</msgpack-core.version>
         <guava.version>33.2.0-jre</guava.version>
         <knife4j.version>4.5.0</knife4j.version>
-        <uw-dao.version>5.1.9</uw-dao.version>
+        <uw-dao.version>5.1.10</uw-dao.version>
         <uw-auth-service.version>6.0.80</uw-auth-service.version>
         <uw-logback-es.version>3.0.39</uw-logback-es.version>
         <uw-log-es.version>3.0.35</uw-log-es.version>
@@ -60,20 +60,10 @@
     </dependencyManagement>
 
     <dependencies>
-        <!--替换uw-task底层amqp-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-amqp</artifactId>
-        </dependency>
-
         <!-- Spring Boot -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -89,27 +79,32 @@
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-bootstrap</artifactId>
         </dependency>
-
         <!-- Spring Cloud -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
         </dependency>
-
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
         </dependency>
-
         <dependency>
-            <groupId>com.umtone</groupId>
-            <artifactId>uw-task</artifactId>
-            <version>${uw-task.version}</version>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-loadbalancer</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
+            <version>${knife4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
         </dependency>
         <dependency>
             <groupId>com.umtone</groupId>
@@ -132,52 +127,12 @@
             <version>${uw-dao.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.msgpack</groupId>
-            <artifactId>msgpack-core</artifactId>
-            <version>${msgpack-core.version}</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>${guava.version}</version>
-        </dependency>
-
-        <!--prometheus 监控-->
-        <dependency>
-            <groupId>io.micrometer</groupId>
-            <artifactId>micrometer-registry-prometheus</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-loadbalancer</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.xiaoymin</groupId>
-            <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
-            <version>${knife4j.version}</version>
+            <groupId>com.umtone</groupId>
+            <artifactId>uw-task</artifactId>
+            <version>${uw-task.version}</version>
         </dependency>
     </dependencies>
 
-    <profiles>
-        <profile>
-            <id>release</id>
-            <!--切换成自我游的仓库-->
-            <distributionManagement>
-                <snapshotRepository>
-                    <id>xili-nexus</id>
-                    <url>http://dev.xili.pub:61881/repository/maven-snapshots/</url>
-                </snapshotRepository>
-                <repository>
-                    <id>xili-nexus</id>
-                    <url>http://dev.xili.pub:61881/repository/maven-releases/</url>
-                </repository>
-            </distributionManagement>
-        </profile>
-    </profiles>
 
     <build>
         <resources>
