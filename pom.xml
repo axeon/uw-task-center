@@ -35,7 +35,7 @@
         <uw-auth-service.version>6.0.80</uw-auth-service.version>
         <uw-logback-es.version>3.0.39</uw-logback-es.version>
         <uw-log-es.version>3.0.35</uw-log-es.version>
-        <uw-task.version>5.0.83</uw-task.version>
+        <uw-task.version>5.0.85</uw-task.version>
     </properties>
 
     <dependencyManagement>
