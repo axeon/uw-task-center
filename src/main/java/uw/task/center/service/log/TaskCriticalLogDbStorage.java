@@ -34,8 +34,8 @@ public class TaskCriticalLogDbStorage implements AuthCriticalLogStorage {
         critLog.setGroupId( mscActionLog.getGroupId() );
         critLog.setUserName( mscActionLog.getUserName() );
         critLog.setUserType( mscActionLog.getUserType() );
-        critLog.setObjectId( String.valueOf( mscActionLog.getObjectId() ) );
-        critLog.setObjectType( mscActionLog.getObjectType() );
+        critLog.setObjectId( String.valueOf( mscActionLog.getRefId() ) );
+        critLog.setObjectType( mscActionLog.getRefType() );
         critLog.setRequestBody( mscActionLog.getRequestBody() );
         critLog.setResponseBody( mscActionLog.getResponseBody() );
         critLog.setResponseMillis( mscActionLog.getResponseMillis() );
