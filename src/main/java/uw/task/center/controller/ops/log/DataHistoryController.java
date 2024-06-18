@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import uw.app.common.dto.SysDataHistoryQueryParam;
+import uw.app.common.entity.SysDataHistory;
 import uw.auth.service.AuthServiceHelper;
 import uw.auth.service.annotation.MscPermDeclare;
 import uw.auth.service.constant.ActionLog;
@@ -15,8 +17,6 @@ import uw.auth.service.constant.UserType;
 import uw.dao.DaoFactory;
 import uw.dao.DataList;
 import uw.dao.TransactionException;
-import uw.task.center.dto.TaskDataHistoryQueryParam;
-import uw.task.center.entity.TaskDataHistory;
 
 
 /**
@@ -40,9 +40,9 @@ public class DataHistoryController {
     @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
     @Operation(summary = "列表数据历史", description = "列表数据历史")
     @GetMapping("/list")
-    public DataList<TaskDataHistory> list(TaskDataHistoryQueryParam queryParam) throws TransactionException {
-        AuthServiceHelper.logInfo(TaskDataHistory.class, 0, "列表saas系统修改数据历史");
-        return dao.list(TaskDataHistory.class, queryParam);
+    public DataList<SysDataHistory> list(SysDataHistoryQueryParam queryParam) throws TransactionException {
+        AuthServiceHelper.logInfo(SysDataHistory.class, 0, "列表saas系统修改数据历史");
+        return dao.list(SysDataHistory.class, queryParam);
     }
 
     /**
@@ -54,9 +54,9 @@ public class DataHistoryController {
     @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
     @Operation(summary = "加载数据历史", description = "加载数据历史")
     @GetMapping("/load")
-    public TaskDataHistory load(@Parameter(description = "主键ID", required = true, example = "1") @RequestParam long id) throws TransactionException {
-        AuthServiceHelper.logInfo(TaskDataHistory.class, id, "加载saas系统修改数据历史");
-        return dao.load(TaskDataHistory.class, id);
+    public SysDataHistory load(@Parameter(description = "主键ID", required = true, example = "1") @RequestParam long id) throws TransactionException {
+        AuthServiceHelper.logInfo(SysDataHistory.class, id, "加载saas系统修改数据历史");
+        return dao.load(SysDataHistory.class, id);
     }
 
 }

@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
+import uw.app.common.helper.SysDataHistoryHelper;
 import uw.auth.service.AuthServiceHelper;
 import uw.auth.service.annotation.MscPermDeclare;
 import uw.auth.service.constant.ActionLog;
@@ -15,7 +16,6 @@ import uw.dao.DataList;
 import uw.dao.TransactionException;
 import uw.task.center.dto.TaskAlertContactQueryParam;
 import uw.task.center.entity.TaskAlertContact;
-import uw.task.center.service.TaskDataHistoryHelper;
 
 import java.util.Date;
 
@@ -78,7 +78,7 @@ public class TaskAlertContactController {
         taskAlertContact.setModifyDate( null );
         taskAlertContact.setState( 1 );
         dao.save( taskAlertContact );
-        TaskDataHistoryHelper.saveHistory( taskAlertContact.getId(), taskAlertContact );
+        SysDataHistoryHelper.saveHistory( taskAlertContact.getId(), taskAlertContact ,"","");
         return ResponseData.success( taskAlertContact );
     }
 
@@ -109,7 +109,7 @@ public class TaskAlertContactController {
         //保存新记录。
         taskAlertContactDb.setModifyDate( new Date() );
         dao.update( taskAlertContactDb );
-        TaskDataHistoryHelper.saveHistory( taskAlertContactDb.getId(), taskAlertContactDb );
+        SysDataHistoryHelper.saveHistory( taskAlertContactDb.getId(), taskAlertContactDb ,"","");
         return ResponseData.success( taskAlertContactDb );
     }
 

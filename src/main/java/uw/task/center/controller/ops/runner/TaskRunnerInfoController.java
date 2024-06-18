@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
+import uw.app.common.helper.SysDataHistoryHelper;
 import uw.auth.service.AuthServiceHelper;
 import uw.auth.service.annotation.MscPermDeclare;
 import uw.auth.service.constant.ActionLog;
@@ -15,7 +16,6 @@ import uw.dao.DataList;
 import uw.dao.TransactionException;
 import uw.task.center.dto.TaskRunnerInfoQueryParam;
 import uw.task.center.entity.TaskRunnerInfo;
-import uw.task.center.service.TaskDataHistoryHelper;
 
 import java.util.Date;
 import java.util.Objects;
@@ -70,7 +70,7 @@ public class TaskRunnerInfoController {
         taskRunnerInfo.setState( 1 );
         dao.save( taskRunnerInfo );
         //保存历史记录
-        TaskDataHistoryHelper.saveHistory( taskRunnerInfo.getId(), taskRunnerInfo );
+        SysDataHistoryHelper.saveHistory( taskRunnerInfo.getId(), taskRunnerInfo ,"","");
         return ResponseData.success( taskRunnerInfo );
     }
 
@@ -119,7 +119,7 @@ public class TaskRunnerInfoController {
         //保存新记录。
         taskRunnerInfoDb.setModifyDate( new Date() );
         dao.update( taskRunnerInfoDb );
-        TaskDataHistoryHelper.saveHistory( taskRunnerInfoDb.getId(), taskRunnerInfoDb );
+        SysDataHistoryHelper.saveHistory( taskRunnerInfoDb.getId(), taskRunnerInfoDb ,"","");
         return ResponseData.success( taskRunnerInfoDb );
     }
 

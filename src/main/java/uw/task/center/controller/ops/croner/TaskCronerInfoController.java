@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
+import uw.app.common.helper.SysDataHistoryHelper;
 import uw.auth.service.AuthServiceHelper;
 import uw.auth.service.annotation.MscPermDeclare;
 import uw.auth.service.constant.ActionLog;
@@ -12,13 +13,9 @@ import uw.auth.service.constant.UserType;
 import uw.common.dto.ResponseData;
 import uw.dao.DaoFactory;
 import uw.dao.DataList;
-import uw.dao.SequenceFactory;
 import uw.dao.TransactionException;
 import uw.task.center.dto.TaskCronerInfoQueryParam;
-import uw.task.center.dto.TaskDataHistoryQueryParam;
 import uw.task.center.entity.TaskCronerInfo;
-import uw.task.center.entity.TaskDataHistory;
-import uw.task.center.service.TaskDataHistoryHelper;
 
 import java.util.Date;
 import java.util.Objects;
@@ -72,7 +69,7 @@ public class TaskCronerInfoController {
         taskCronerInfo.setModifyDate(new Date());
         taskCronerInfo.setState(1);
         //保存历史记录
-        TaskDataHistoryHelper.saveHistory(taskCronerInfo.getId(),taskCronerInfo);
+        SysDataHistoryHelper.saveHistory(taskCronerInfo.getId(),taskCronerInfo,"","");
         return ResponseData.success(taskCronerInfo);
     }
 
@@ -115,7 +112,7 @@ public class TaskCronerInfoController {
         //保存新记录。
         taskCronerInfoDb.setModifyDate(new Date());
         dao.update(taskCronerInfoDb);
-        TaskDataHistoryHelper.saveHistory(taskCronerInfoDb.getId(),taskCronerInfoDb);
+        SysDataHistoryHelper.saveHistory(taskCronerInfoDb.getId(),taskCronerInfoDb,"","");
         return ResponseData.success(taskCronerInfoDb);
     }
 
