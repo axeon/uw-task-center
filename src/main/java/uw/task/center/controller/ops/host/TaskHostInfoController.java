@@ -18,7 +18,6 @@ import uw.task.center.entity.TaskHostInfo;
 
 
 import java.util.Date;
-import java.util.Objects;
 
 /**
  * 主机状态管理
@@ -53,7 +52,7 @@ public class TaskHostInfoController {
     @GetMapping("/load")
     public TaskHostInfo load(@Parameter(description = "主键ID", required = true, example = "1")
                              @RequestParam long id) throws TransactionException {
-        AuthServiceHelper.logInfo( TaskHostInfo.class, id, "加载主机状态" );
+        AuthServiceHelper.log( TaskHostInfo.class, id, "加载主机状态" );
         return dao.load( TaskHostInfo.class, id );
     }
 
@@ -70,10 +69,10 @@ public class TaskHostInfoController {
             taskHostInfo.setModifyDate(new Date());
             taskHostInfo.setState(1);
             dao.update(taskHostInfo);
-            AuthServiceHelper.logInfo(TaskHostInfo.class,id,"启用task主机信息成功！"+remark);
+            AuthServiceHelper.log(TaskHostInfo.class,id,"启用task主机信息成功！"+remark);
             return ResponseData.successMsg("启用task主机信息成功！"+remark);
         }else{
-            AuthServiceHelper.logInfo(TaskHostInfo.class,id,"启用task主机信息失败！"+remark);
+            AuthServiceHelper.log(TaskHostInfo.class,id,"启用task主机信息失败！"+remark);
             return ResponseData.errorMsg("启用task主机信息失败！"+remark);
         }
     }
@@ -90,10 +89,10 @@ public class TaskHostInfoController {
             taskHostInfo.setModifyDate(new Date());
             taskHostInfo.setState(0);
             dao.update(taskHostInfo);
-            AuthServiceHelper.logInfo(TaskHostInfo.class,id,"禁用task主机信息成功！"+remark);
+            AuthServiceHelper.log(TaskHostInfo.class,id,"禁用task主机信息成功！"+remark);
             return ResponseData.successMsg("禁用task主机信息成功！"+remark);
         }else{
-            AuthServiceHelper.logInfo(TaskHostInfo.class,id,"禁用task主机信息失败！"+remark);
+            AuthServiceHelper.log(TaskHostInfo.class,id,"禁用task主机信息失败！"+remark);
             return ResponseData.errorMsg("禁用task主机信息失败！"+remark);
         }
     }

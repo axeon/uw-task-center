@@ -41,7 +41,7 @@ public class TaskAlertContactController {
     @Operation(summary = "列表报警联系人", description = "列表报警联系人")
     @GetMapping("/list")
     public DataList<TaskAlertContact> list(TaskAlertContactQueryParam queryParam) throws TransactionException {
-        AuthServiceHelper.logInfo( TaskAlertContact.class, 0, "列表报警联系人" );
+        AuthServiceHelper.log( TaskAlertContact.class, 0, "列表报警联系人" );
         return dao.list( TaskAlertContact.class, queryParam );
     }
 
@@ -56,7 +56,7 @@ public class TaskAlertContactController {
     @GetMapping("/load")
     public TaskAlertContact load(@Parameter(description = "主键ID", required = true, example = "1")
                                  @RequestParam long id) throws TransactionException {
-        AuthServiceHelper.logInfo( TaskAlertContact.class, id, "加载报警联系人" );
+        AuthServiceHelper.log( TaskAlertContact.class, id, "加载报警联系人" );
         return dao.load( TaskAlertContact.class, id );
     }
 
@@ -72,7 +72,7 @@ public class TaskAlertContactController {
     @PostMapping("/save")
     public ResponseData<TaskAlertContact> save(@RequestBody TaskAlertContact taskAlertContact) throws TransactionException {
         long id = dao.getSequenceId( TaskAlertContact.class );
-        AuthServiceHelper.logInfo( TaskAlertContact.class, id, "新增报警联系人" );
+        AuthServiceHelper.log( TaskAlertContact.class, id, "新增报警联系人" );
         taskAlertContact.setId( id );
         taskAlertContact.setCreateDate( new Date() );
         taskAlertContact.setModifyDate( null );
@@ -93,7 +93,7 @@ public class TaskAlertContactController {
     @Operation(summary = "修改报警联系人", description = "修改报警联系人")
     @PutMapping("/update")
     public ResponseData<TaskAlertContact> update(@RequestBody TaskAlertContact taskAlertContact, @Parameter(name = "remark", description = "备注") @RequestParam String remark) throws TransactionException {
-        AuthServiceHelper.logInfo( TaskAlertContact.class, taskAlertContact.getId(), "修改报警联系信息!" + remark );
+        AuthServiceHelper.log( TaskAlertContact.class, taskAlertContact.getId(), "修改报警联系信息!" + remark );
         TaskAlertContact taskAlertContactDb = dao.load( TaskAlertContact.class, taskAlertContact.getId() );
         if (taskAlertContactDb == null) {
             return ResponseData.errorMsg( "未找到指定ID的数值！" );
@@ -129,10 +129,10 @@ public class TaskAlertContactController {
             taskAlertContact.setModifyDate( new Date() );
             taskAlertContact.setState( -1 );
             dao.update( taskAlertContact );
-            AuthServiceHelper.logInfo( TaskAlertContact.class, id, "删除报警联系信息成功！" + remark );
+            AuthServiceHelper.log( TaskAlertContact.class, id, "删除报警联系信息成功！" + remark );
             return ResponseData.successMsg( "删除报警联系信息成功！" + remark );
         } else {
-            AuthServiceHelper.logInfo( TaskAlertContact.class, id, "删除报警联系信息失败！" + remark );
+            AuthServiceHelper.log( TaskAlertContact.class, id, "删除报警联系信息失败！" + remark );
             return ResponseData.errorMsg( "删除报警联系信息失败！" + remark );
         }
     }
