@@ -132,7 +132,6 @@ public class TaskCronerStatsQueryParam extends PageQueryParam{
     private Date[] createDateRange;
 
 
-
     /**
     * 获得id。
     */
@@ -146,7 +145,6 @@ public class TaskCronerStatsQueryParam extends PageQueryParam{
     public void setId(Long id){
         this.id = id;
     }
-
     /**
     * 获得任务配置id。
     */
@@ -160,7 +158,6 @@ public class TaskCronerStatsQueryParam extends PageQueryParam{
     public void setTaskId(Long taskId){
         this.taskId = taskId;
     }
-
 
     /**
     * 获得全部执行计数。
@@ -190,7 +187,6 @@ public class TaskCronerStatsQueryParam extends PageQueryParam{
         this.numAllRange = numAllRange;
     }
 
-
     /**
     * 获得程序失败计数。
     */
@@ -218,7 +214,6 @@ public class TaskCronerStatsQueryParam extends PageQueryParam{
     public void setNumFailProgramRange(Integer[] numFailProgramRange){
         this.numFailProgramRange = numFailProgramRange;
     }
-
 
     /**
     * 获得配置失败计数。
@@ -248,7 +243,6 @@ public class TaskCronerStatsQueryParam extends PageQueryParam{
         this.numFailConfigRange = numFailConfigRange;
     }
 
-
     /**
     * 获得数据失败计数。
     */
@@ -276,7 +270,6 @@ public class TaskCronerStatsQueryParam extends PageQueryParam{
     public void setNumFailDataRange(Integer[] numFailDataRange){
         this.numFailDataRange = numFailDataRange;
     }
-
 
     /**
     * 获得对方失败计数。
@@ -306,7 +299,6 @@ public class TaskCronerStatsQueryParam extends PageQueryParam{
         this.numFailPartnerRange = numFailPartnerRange;
     }
 
-
     /**
     * 获得超时等待。
     */
@@ -335,7 +327,6 @@ public class TaskCronerStatsQueryParam extends PageQueryParam{
         this.timeWaitRange = timeWaitRange;
     }
 
-
     /**
     * 获得运行时间。
     */
@@ -363,8 +354,6 @@ public class TaskCronerStatsQueryParam extends PageQueryParam{
     public void setTimeRunRange(Integer[] timeRunRange){
         this.timeRunRange = timeRunRange;
     }
-
-
     /**
     * 获得创建时间范围。
     */
@@ -378,4 +367,5 @@ public class TaskCronerStatsQueryParam extends PageQueryParam{
     public void setCreateDateRange(Date[] createDateRange){
         this.createDateRange = createDateRange;
     }
+
 }

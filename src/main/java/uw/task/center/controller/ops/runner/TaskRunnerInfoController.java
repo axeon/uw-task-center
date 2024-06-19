@@ -34,8 +34,8 @@ public class TaskRunnerInfoController {
     /**
      * 列表队列任务
      */
-    @Operation(summary = "列表队列任务", description = "列表队列任务")
     @GetMapping("/list")
+    @Operation(summary = "列表队列任务", description = "列表队列任务")
     @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
     public DataList<TaskRunnerInfo> list(TaskRunnerInfoQueryParam queryParam) throws TransactionException {
         AuthServiceHelper.logInfo( TaskRunnerInfo.class.getSimpleName(), 0, "列表队列任务" );
@@ -45,8 +45,8 @@ public class TaskRunnerInfoController {
     /**
      * 查看队列任务
      */
-    @Operation(summary = "查看队列任务", description = "查看队列任务")
     @GetMapping(value = "/load")
+    @Operation(summary = "查看队列任务", description = "查看队列任务")
     @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.ALL)
     public TaskRunnerInfo load(@Parameter(description = "主键", example = "1") long id) throws TransactionException {
         AuthServiceHelper.logInfo( TaskRunnerInfo.class.getSimpleName(), id, "查看队列任务" );
@@ -57,8 +57,8 @@ public class TaskRunnerInfoController {
     /**
      * 新增队列任务
      */
-    @Operation(summary = "新增队列任务", description = "队列任务配置表(task_runner_info)：新增记录")
     @PostMapping("/save")
+    @Operation(summary = "新增队列任务", description = "队列任务配置表(task_runner_info)：新增记录")
     @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
     public ResponseData<TaskRunnerInfo> save(@RequestBody TaskRunnerInfo taskRunnerInfo) throws TransactionException {
         long id = dao.getSequenceId( TaskRunnerInfo.class );
@@ -76,8 +76,8 @@ public class TaskRunnerInfoController {
     /**
      * 修改队列任务
      */
-    @Operation(summary = "修改队列任务", description = "修改队列任务")
     @PutMapping(value = "/update")
+    @Operation(summary = "修改队列任务", description = "修改队列任务")
     @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
     public ResponseData<TaskRunnerInfo> update(@RequestBody TaskRunnerInfo taskRunnerInfo, @Parameter(name = "remark", description = "备注") @RequestParam String remark) throws TransactionException {
         AuthServiceHelper.logInfo(TaskRunnerInfo.class,taskRunnerInfo.getId(),"修改队列任务配置!"+remark);
@@ -130,9 +130,9 @@ public class TaskRunnerInfoController {
      * @param id
      * @throws TransactionException
      */
+    @PutMapping("/enable")
     @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
     @Operation(summary = "启用队列任务配置", description = "启用队列任务配置")
-    @PutMapping("/enable")
     public ResponseData enable(@Parameter(name = "id", description = "主键ID", example = "1") @RequestParam long id, @Parameter(name = "remark", description = "备注") @RequestParam String remark) throws TransactionException {
         TaskRunnerInfo taskRunnerInfo = dao.load(TaskRunnerInfo.class, id);
         if (taskRunnerInfo != null) {
@@ -153,9 +153,9 @@ public class TaskRunnerInfoController {
      * @param id
      * @throws TransactionException
      */
+    @PutMapping("/disable")
     @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
     @Operation(summary = "禁用队列任务配置", description = "禁用队列任务配置")
-    @PutMapping("/disable")
     public ResponseData disable(@Parameter(name = "id", description = "主键ID", example = "1") @RequestParam long id, @Parameter(name = "remark", description = "备注") @RequestParam String remark) throws TransactionException {
         TaskRunnerInfo taskRunnerInfo = dao.load(TaskRunnerInfo.class, id);
         if (taskRunnerInfo != null) {
@@ -176,9 +176,9 @@ public class TaskRunnerInfoController {
      * @param id
      * @throws TransactionException
      */
+    @DeleteMapping("/delete")
     @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
     @Operation(summary = "删除队列任务配置", description = "删除队列任务配置")
-    @DeleteMapping("/delete")
     public ResponseData delete(@Parameter(name = "id", description = "主键ID", example = "1") @RequestParam long id, @Parameter(name = "remark", description = "备注") @RequestParam String remark) throws TransactionException {
         TaskRunnerInfo taskRunnerInfo = dao.load(TaskRunnerInfo.class, id);
         if (taskRunnerInfo != null) {
@@ -200,8 +200,8 @@ public class TaskRunnerInfoController {
      * @return
      * @throws TransactionException
      */
-    @Operation(summary = "清空统计数据", description = "清空统计数据")
     @PutMapping("/resetStats")
+    @Operation(summary = "清空统计数据", description = "清空统计数据")
     @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
     public ResponseData resetStats(@Parameter(description = "主键", example = "1") long id, @Parameter(name = "remark", description = "备注") @RequestParam String remark) throws TransactionException {
         AuthServiceHelper.logInfo( TaskRunnerInfo.class, id, "清空统计数据!"+remark );

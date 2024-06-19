@@ -105,7 +105,6 @@ public class TaskAlertNotifyQueryParam extends PageQueryParam{
     private String stateOp;
 
 
-
     /**
     * 获得。
     */
@@ -119,7 +118,6 @@ public class TaskAlertNotifyQueryParam extends PageQueryParam{
     public void setId(Long id){
         this.id = id;
     }
-
     /**
     * 获得报警信息ID。
     */
@@ -133,7 +131,6 @@ public class TaskAlertNotifyQueryParam extends PageQueryParam{
     public void setInfoId(Long infoId){
         this.infoId = infoId;
     }
-
 
     /**
     * 获得联系人。
@@ -149,7 +146,6 @@ public class TaskAlertNotifyQueryParam extends PageQueryParam{
         this.contactMan = contactMan;
     }
 
-
     /**
     * 获得联系人信息类型,mobile,qq,wx,email。
     */
@@ -164,7 +160,6 @@ public class TaskAlertNotifyQueryParam extends PageQueryParam{
         this.contactType = contactType;
     }
 
-
     /**
     * 获得联系人信息。
     */
@@ -178,8 +173,6 @@ public class TaskAlertNotifyQueryParam extends PageQueryParam{
     public void setContactInfo(String contactInfo){
         this.contactInfo = contactInfo;
     }
-
-
     /**
     * 获得创建时间范围。
     */
@@ -193,8 +186,6 @@ public class TaskAlertNotifyQueryParam extends PageQueryParam{
     public void setCreateDateRange(Date[] createDateRange){
         this.createDateRange = createDateRange;
     }
-
-
     /**
     * 获得发送时间范围。
     */
@@ -208,7 +199,6 @@ public class TaskAlertNotifyQueryParam extends PageQueryParam{
     public void setSentDateRange(Date[] sentDateRange){
         this.sentDateRange = sentDateRange;
     }
-
 
     /**
     * 获得发送次数。
@@ -237,7 +227,6 @@ public class TaskAlertNotifyQueryParam extends PageQueryParam{
     public void setSentTimesRange(Integer[] sentTimesRange){
         this.sentTimesRange = sentTimesRange;
     }
-
     /**
     * 获得状态。
     */

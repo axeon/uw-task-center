@@ -336,7 +336,6 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     private String stateOp;
 
 
-
     /**
     * 获得id。
     */
@@ -350,7 +349,6 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     public void setId(Long id){
         this.id = id;
     }
-
 
     /**
     * 获得主机注册IP。
@@ -366,7 +364,6 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
         this.hostIp = hostIp;
     }
 
-
     /**
     * 获得应用名称。
     */
@@ -380,7 +377,6 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     public void setAppName(String appName){
         this.appName = appName;
     }
-
 
     /**
     * 获得应用版本。
@@ -396,7 +392,6 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
         this.appVersion = appVersion;
     }
 
-
     /**
     * 获得app主机。
     */
@@ -410,7 +405,6 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     public void setAppHost(String appHost){
         this.appHost = appHost;
     }
-
 
     /**
     * 获得app端口。
@@ -440,7 +434,6 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
         this.appPortRange = appPortRange;
     }
 
-
     /**
     * 获得任务项目。
     */
@@ -455,7 +448,6 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
         this.taskProject = taskProject;
     }
 
-
     /**
     * 获得运行目标。
     */
@@ -469,7 +461,6 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     public void setRunTarget(String runTarget){
         this.runTarget = runTarget;
     }
-
 
     /**
     * 获得定时任务数量。
@@ -499,7 +490,6 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
         this.cronerNumRange = cronerNumRange;
     }
 
-
     /**
     * 获得统计运行次数。
     */
@@ -527,7 +517,6 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     public void setCronerRunNumRange(Integer[] cronerRunNumRange){
         this.cronerRunNumRange = cronerRunNumRange;
     }
-
 
     /**
     * 获得统计运行失败次数。
@@ -557,7 +546,6 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
         this.cronerFailNumRange = cronerFailNumRange;
     }
 
-
     /**
     * 获得统计总时间毫秒数。
     */
@@ -585,7 +573,6 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     public void setCronerRunTimeRange(Long[] cronerRunTimeRange){
         this.cronerRunTimeRange = cronerRunTimeRange;
     }
-
 
     /**
     * 获得队列任务数量。
@@ -615,7 +602,6 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
         this.runnerNumRange = runnerNumRange;
     }
 
-
     /**
     * 获得统计运行次数。
     */
@@ -643,7 +629,6 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     public void setRunnerRunNumRange(Integer[] runnerRunNumRange){
         this.runnerRunNumRange = runnerRunNumRange;
     }
-
 
     /**
     * 获得统计运行失败次数。
@@ -673,7 +658,6 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
         this.runnerFailNumRange = runnerFailNumRange;
     }
 
-
     /**
     * 获得统计总时间毫秒数。
     */
@@ -701,7 +685,6 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     public void setRunnerRunTimeRange(Long[] runnerRunTimeRange){
         this.runnerRunTimeRange = runnerRunTimeRange;
     }
-
 
     /**
     * 获得jvm内存总数。
@@ -731,7 +714,6 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
         this.jvmMemMaxRange = jvmMemMaxRange;
     }
 
-
     /**
     * 获得jvm内存总数。
     */
@@ -759,7 +741,6 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     public void setJvmMemTotalRange(Long[] jvmMemTotalRange){
         this.jvmMemTotalRange = jvmMemTotalRange;
     }
-
 
     /**
     * 获得jvm空闲内存。
@@ -789,7 +770,6 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
         this.jvmMemFreeRange = jvmMemFreeRange;
     }
 
-
     /**
     * 获得活跃线程。
     */
@@ -817,7 +797,6 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     public void setThreadActiveRange(Integer[] threadActiveRange){
         this.threadActiveRange = threadActiveRange;
     }
-
 
     /**
     * 获得峰值线程。
@@ -847,7 +826,6 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
         this.threadPeakRange = threadPeakRange;
     }
 
-
     /**
     * 获得守护线程。
     */
@@ -876,7 +854,6 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
         this.threadDaemonRange = threadDaemonRange;
     }
 
-
     /**
     * 获得累计启动线程。
     */
@@ -904,8 +881,6 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     public void setThreadStartedRange(Long[] threadStartedRange){
         this.threadStartedRange = threadStartedRange;
     }
-
-
     /**
     * 获得建立日期范围。
     */
@@ -919,8 +894,6 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     public void setCreateDateRange(Date[] createDateRange){
         this.createDateRange = createDateRange;
     }
-
-
     /**
     * 获得修改时间范围。
     */
@@ -934,8 +907,6 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     public void setModifyDateRange(Date[] modifyDateRange){
         this.modifyDateRange = modifyDateRange;
     }
-
-
     /**
     * 获得最后更新范围。
     */
@@ -949,7 +920,6 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     public void setLastUpdateRange(Date[] lastUpdateRange){
         this.lastUpdateRange = lastUpdateRange;
     }
-
     /**
     * 获得状态。
     */

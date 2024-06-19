@@ -174,7 +174,6 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
     private Date[] createDateRange;
 
 
-
     /**
     * 获得id。
     */
@@ -188,7 +187,6 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
     public void setId(Long id){
         this.id = id;
     }
-
     /**
     * 获得任务配置id。
     */
@@ -202,7 +200,6 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
     public void setTaskId(Long taskId){
         this.taskId = taskId;
     }
-
 
     /**
     * 获得全部执行计数。
@@ -232,7 +229,6 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
         this.numAllRange = numAllRange;
     }
 
-
     /**
     * 获得程序错误计数。
     */
@@ -260,7 +256,6 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
     public void setNumFailProgramRange(Integer[] numFailProgramRange){
         this.numFailProgramRange = numFailProgramRange;
     }
-
 
     /**
     * 获得配置错误计数。
@@ -290,7 +285,6 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
         this.numFailConfigRange = numFailConfigRange;
     }
 
-
     /**
     * 获得数据错误计数。
     */
@@ -318,7 +312,6 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
     public void setNumFailDataRange(Integer[] numFailDataRange){
         this.numFailDataRange = numFailDataRange;
     }
-
 
     /**
     * 获得对方错误计数。
@@ -348,7 +341,6 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
         this.numFailPartnerRange = numFailPartnerRange;
     }
 
-
     /**
     * 获得队列等待时间。
     */
@@ -376,7 +368,6 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
     public void setTimeWaitQueueRange(Integer[] timeWaitQueueRange){
         this.timeWaitQueueRange = timeWaitQueueRange;
     }
-
 
     /**
     * 获得超时等待时间。
@@ -406,7 +397,6 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
         this.timeWaitDelayRange = timeWaitDelayRange;
     }
 
-
     /**
     * 获得运行时间。
     */
@@ -434,7 +424,6 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
     public void setTimeRunRange(Integer[] timeRunRange){
         this.timeRunRange = timeRunRange;
     }
-
 
     /**
     * 获得队列长度。
@@ -464,7 +453,6 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
         this.queueSizeRange = queueSizeRange;
     }
 
-
     /**
     * 获得消费者数量。
     */
@@ -492,8 +480,6 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
     public void setConsumerNumRange(Integer[] consumerNumRange){
         this.consumerNumRange = consumerNumRange;
     }
-
-
     /**
     * 获得创建时间范围。
     */
@@ -507,4 +493,5 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
     public void setCreateDateRange(Date[] createDateRange){
         this.createDateRange = createDateRange;
     }
+
 }

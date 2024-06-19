@@ -77,7 +77,6 @@ public class TaskAlertInfoQueryParam extends PageQueryParam{
     private String stateOp;
 
 
-
     /**
     * 获得id。
     */
@@ -92,7 +91,6 @@ public class TaskAlertInfoQueryParam extends PageQueryParam{
         this.id = id;
     }
 
-
     /**
     * 获得任务类型。1croner2runner。
     */
@@ -106,7 +104,6 @@ public class TaskAlertInfoQueryParam extends PageQueryParam{
     public void setTaskType(String taskType){
         this.taskType = taskType;
     }
-
     /**
     * 获得任务配置ID。
     */
@@ -121,7 +118,6 @@ public class TaskAlertInfoQueryParam extends PageQueryParam{
         this.taskId = taskId;
     }
 
-
     /**
     * 获得报警标题。
     */
@@ -135,9 +131,6 @@ public class TaskAlertInfoQueryParam extends PageQueryParam{
     public void setAlertTitle(String alertTitle){
         this.alertTitle = alertTitle;
     }
-
-
-
     /**
     * 获得创建时间范围。
     */
@@ -151,7 +144,6 @@ public class TaskAlertInfoQueryParam extends PageQueryParam{
     public void setCreateDateRange(Date[] createDateRange){
         this.createDateRange = createDateRange;
     }
-
     /**
     * 获得状态。
     */

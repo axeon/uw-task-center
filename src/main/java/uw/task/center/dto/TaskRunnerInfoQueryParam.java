@@ -441,7 +441,6 @@ public class TaskRunnerInfoQueryParam extends PageQueryParam{
     private String stateOp;
 
 
-
     /**
     * 获得id。
     */
@@ -455,7 +454,6 @@ public class TaskRunnerInfoQueryParam extends PageQueryParam{
     public void setId(Long id){
         this.id = id;
     }
-
 
     /**
     * 获得任务名称。
@@ -471,8 +469,6 @@ public class TaskRunnerInfoQueryParam extends PageQueryParam{
         this.taskName = taskName;
     }
 
-
-
     /**
     * 获得执行类信息。
     */
@@ -486,7 +482,6 @@ public class TaskRunnerInfoQueryParam extends PageQueryParam{
     public void setTaskClass(String taskClass){
         this.taskClass = taskClass;
     }
-
 
     /**
     * 获得任务所有人。
@@ -502,7 +497,6 @@ public class TaskRunnerInfoQueryParam extends PageQueryParam{
         this.taskOwner = taskOwner;
     }
 
-
     /**
     * 获得运行标签。
     */
@@ -516,7 +510,6 @@ public class TaskRunnerInfoQueryParam extends PageQueryParam{
     public void setTaskTag(String taskTag){
         this.taskTag = taskTag;
     }
-
     /**
     * 获得队列类型。
     */
@@ -530,7 +523,6 @@ public class TaskRunnerInfoQueryParam extends PageQueryParam{
     public void setQueueType(Integer queueType){
         this.queueType = queueType;
     }
-
     /**
     * 获得延迟类型。
     */
@@ -544,7 +536,6 @@ public class TaskRunnerInfoQueryParam extends PageQueryParam{
     public void setDelayType(Integer delayType){
         this.delayType = delayType;
     }
-
 
     /**
     * 获得日志类型。
@@ -574,7 +565,6 @@ public class TaskRunnerInfoQueryParam extends PageQueryParam{
         this.logLevelRange = logLevelRange;
     }
 
-
     /**
     * 获得日志长度限制。
     */
@@ -602,7 +592,6 @@ public class TaskRunnerInfoQueryParam extends PageQueryParam{
     public void setLogLimitSizeRange(Integer[] logLimitSizeRange){
         this.logLimitSizeRange = logLimitSizeRange;
     }
-
     /**
     * 获得运行类型。
     */
@@ -617,7 +606,6 @@ public class TaskRunnerInfoQueryParam extends PageQueryParam{
         this.runType = runType;
     }
 
-
     /**
     * 获得运行目标。
     */
@@ -631,7 +619,6 @@ public class TaskRunnerInfoQueryParam extends PageQueryParam{
     public void setRunTarget(String runTarget){
         this.runTarget = runTarget;
     }
-
 
     /**
     * 获得消费者的数量。
@@ -661,7 +648,6 @@ public class TaskRunnerInfoQueryParam extends PageQueryParam{
         this.consumerNumRange = consumerNumRange;
     }
 
-
     /**
     * 获得队列预取数量。
     */
@@ -689,7 +675,6 @@ public class TaskRunnerInfoQueryParam extends PageQueryParam{
     public void setPrefetchNumRange(Integer[] prefetchNumRange){
         this.prefetchNumRange = prefetchNumRange;
     }
-
     /**
     * 获得限速类型。
     */
@@ -703,7 +688,6 @@ public class TaskRunnerInfoQueryParam extends PageQueryParam{
     public void setRateLimitType(Integer rateLimitType){
         this.rateLimitType = rateLimitType;
     }
-
 
     /**
     * 获得流量限定数值，默认为60次。
@@ -733,7 +717,6 @@ public class TaskRunnerInfoQueryParam extends PageQueryParam{
         this.rateLimitValueRange = rateLimitValueRange;
     }
 
-
     /**
     * 获得流量限定时间(S)，默认为60秒。
     */
@@ -761,7 +744,6 @@ public class TaskRunnerInfoQueryParam extends PageQueryParam{
     public void setRateLimitTimeRange(Integer[] rateLimitTimeRange){
         this.rateLimitTimeRange = rateLimitTimeRange;
     }
-
 
     /**
     * 获得当发生流量限制时，等待的秒数。
@@ -791,7 +773,6 @@ public class TaskRunnerInfoQueryParam extends PageQueryParam{
         this.rateLimitWaitRange = rateLimitWaitRange;
     }
 
-
     /**
     * 获得超过流量限制重试次数。
     */
@@ -820,7 +801,6 @@ public class TaskRunnerInfoQueryParam extends PageQueryParam{
         this.retryTimesByOverratedRange = retryTimesByOverratedRange;
     }
 
-
     /**
     * 获得对方接口错误重试次数。
     */
@@ -848,8 +828,6 @@ public class TaskRunnerInfoQueryParam extends PageQueryParam{
     public void setRetryTimesByPartnerRange(Integer[] retryTimesByPartnerRange){
         this.retryTimesByPartnerRange = retryTimesByPartnerRange;
     }
-
-
     /**
     * 获得最后统计时间范围。
     */
@@ -863,7 +841,6 @@ public class TaskRunnerInfoQueryParam extends PageQueryParam{
     public void setStatsDateRange(Date[] statsDateRange){
         this.statsDateRange = statsDateRange;
     }
-
 
     /**
     * 获得统计运行次数。
@@ -893,7 +870,6 @@ public class TaskRunnerInfoQueryParam extends PageQueryParam{
         this.statsRunNumRange = statsRunNumRange;
     }
 
-
     /**
     * 获得统计运行失败次数。
     */
@@ -921,7 +897,6 @@ public class TaskRunnerInfoQueryParam extends PageQueryParam{
     public void setStatsFailNumRange(Integer[] statsFailNumRange){
         this.statsFailNumRange = statsFailNumRange;
     }
-
 
     /**
     * 获得统计总时间毫秒数。
@@ -951,7 +926,6 @@ public class TaskRunnerInfoQueryParam extends PageQueryParam{
         this.statsRunTimeRange = statsRunTimeRange;
     }
 
-
     /**
     * 获得失败率。
     */
@@ -979,7 +953,6 @@ public class TaskRunnerInfoQueryParam extends PageQueryParam{
     public void setAlertFailRateRange(Integer[] alertFailRateRange){
         this.alertFailRateRange = alertFailRateRange;
     }
-
 
     /**
     * 获得接口失败率。
@@ -1009,7 +982,6 @@ public class TaskRunnerInfoQueryParam extends PageQueryParam{
         this.alertFailPartnerRateRange = alertFailPartnerRateRange;
     }
 
-
     /**
     * 获得程序失败率。
     */
@@ -1037,7 +1009,6 @@ public class TaskRunnerInfoQueryParam extends PageQueryParam{
     public void setAlertFailProgramRateRange(Integer[] alertFailProgramRateRange){
         this.alertFailProgramRateRange = alertFailProgramRateRange;
     }
-
 
     /**
     * 获得配置失败率。
@@ -1067,7 +1038,6 @@ public class TaskRunnerInfoQueryParam extends PageQueryParam{
         this.alertFailConfigRateRange = alertFailConfigRateRange;
     }
 
-
     /**
     * 获得数据失败率。
     */
@@ -1095,7 +1065,6 @@ public class TaskRunnerInfoQueryParam extends PageQueryParam{
     public void setAlertFailDataRateRange(Integer[] alertFailDataRateRange){
         this.alertFailDataRateRange = alertFailDataRateRange;
     }
-
 
     /**
     * 获得队列长度限制。
@@ -1125,7 +1094,6 @@ public class TaskRunnerInfoQueryParam extends PageQueryParam{
         this.alertQueueOversizeRange = alertQueueOversizeRange;
     }
 
-
     /**
     * 获得队列等待超时。
     */
@@ -1153,7 +1121,6 @@ public class TaskRunnerInfoQueryParam extends PageQueryParam{
     public void setAlertQueueTimeoutRange(Integer[] alertQueueTimeoutRange){
         this.alertQueueTimeoutRange = alertQueueTimeoutRange;
     }
-
 
     /**
     * 获得等待超时。
@@ -1183,7 +1150,6 @@ public class TaskRunnerInfoQueryParam extends PageQueryParam{
         this.alertWaitTimeoutRange = alertWaitTimeoutRange;
     }
 
-
     /**
     * 获得运行超时。
     */
@@ -1212,7 +1178,6 @@ public class TaskRunnerInfoQueryParam extends PageQueryParam{
         this.alertRunTimeoutRange = alertRunTimeoutRange;
     }
 
-
     /**
     * 获得我方联系信息。
     */
@@ -1227,7 +1192,6 @@ public class TaskRunnerInfoQueryParam extends PageQueryParam{
         this.taskLinkOur = taskLinkOur;
     }
 
-
     /**
     * 获得商户联系信息。
     */
@@ -1241,8 +1205,6 @@ public class TaskRunnerInfoQueryParam extends PageQueryParam{
     public void setTaskLinkMch(String taskLinkMch){
         this.taskLinkMch = taskLinkMch;
     }
-
-
     /**
     * 获得创建日期范围。
     */
@@ -1256,8 +1218,6 @@ public class TaskRunnerInfoQueryParam extends PageQueryParam{
     public void setCreateDateRange(Date[] createDateRange){
         this.createDateRange = createDateRange;
     }
-
-
     /**
     * 获得最后修改日期范围。
     */
@@ -1271,7 +1231,6 @@ public class TaskRunnerInfoQueryParam extends PageQueryParam{
     public void setModifyDateRange(Date[] modifyDateRange){
         this.modifyDateRange = modifyDateRange;
     }
-
     /**
     * 获得状态1正常，0暂停，-1标记删除。
     */

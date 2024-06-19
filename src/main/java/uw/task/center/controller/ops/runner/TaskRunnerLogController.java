@@ -44,8 +44,8 @@ public class TaskRunnerLogController {
     /**
      * 查询队列任务日志
      */
-    @Operation(summary = "查询队列任务日志", description = "查询队列任务日志")
     @GetMapping(value = "/load")
+    @Operation(summary = "查询队列任务日志", description = "查询队列任务日志")
     @MscPermDeclare(type = UserType.OPS,auth = AuthType.PERM, log = ActionLog.REQUEST)
     public TaskRunnerESLog load(@Parameter(description = "主键", example = "1") long id) throws Exception {
         String dsl = logClient.translateSqlToDsl(
@@ -64,8 +64,8 @@ public class TaskRunnerLogController {
     /**
      * 列表队列任务日志
      */
-    @Operation(summary = "列表队列任务日志", description = "列表队列任务日志")
     @GetMapping("/list")
+    @Operation(summary = "列表队列任务日志", description = "列表队列任务日志")
     @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM,log = ActionLog.REQUEST)
     public ESDataList<TaskRunnerESLog> list(TaskRunnerLogQueryParam queryParam) throws Exception {
         QueryParamResult result = dao.parseQueryParam(TaskRunnerESLog.class, queryParam);

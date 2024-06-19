@@ -294,7 +294,6 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     private String stateOp;
 
 
-
     /**
     * 获得id。
     */
@@ -308,7 +307,6 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     public void setId(Long id){
         this.id = id;
     }
-
 
     /**
     * 获得任务名称。
@@ -324,8 +322,6 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
         this.taskName = taskName;
     }
 
-
-
     /**
     * 获得执行类信息。
     */
@@ -339,7 +335,6 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     public void setTaskClass(String taskClass){
         this.taskClass = taskClass;
     }
-
 
     /**
     * 获得任务参数。
@@ -355,7 +350,6 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
         this.taskParam = taskParam;
     }
 
-
     /**
     * 获得任务所有人。
     */
@@ -370,7 +364,6 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
         this.taskOwner = taskOwner;
     }
 
-
     /**
     * 获得cron表达式。
     */
@@ -384,7 +377,6 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     public void setTaskCron(String taskCron){
         this.taskCron = taskCron;
     }
-
     /**
     * 获得运行类型。
     */
@@ -399,7 +391,6 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
         this.runType = runType;
     }
 
-
     /**
     * 获得运行目标。
     */
@@ -413,7 +404,6 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     public void setRunTarget(String runTarget){
         this.runTarget = runTarget;
     }
-
 
     /**
     * 获得日志类型。
@@ -443,7 +433,6 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
         this.logLevelRange = logLevelRange;
     }
 
-
     /**
     * 获得日志长度限制。
     */
@@ -471,8 +460,6 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     public void setLogLimitSizeRange(Integer[] logLimitSizeRange){
         this.logLimitSizeRange = logLimitSizeRange;
     }
-
-
     /**
     * 获得下次执行时间范围。
     */
@@ -486,8 +473,6 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     public void setNextRunDateRange(Date[] nextRunDateRange){
         this.nextRunDateRange = nextRunDateRange;
     }
-
-
     /**
     * 获得最后统计时间范围。
     */
@@ -501,7 +486,6 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     public void setStatsDateRange(Date[] statsDateRange){
         this.statsDateRange = statsDateRange;
     }
-
 
     /**
     * 获得统计运行次数。
@@ -531,7 +515,6 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
         this.statsRunNumRange = statsRunNumRange;
     }
 
-
     /**
     * 获得统计运行失败次数。
     */
@@ -559,7 +542,6 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     public void setStatsFailNumRange(Integer[] statsFailNumRange){
         this.statsFailNumRange = statsFailNumRange;
     }
-
 
     /**
     * 获得统计总时间毫秒数。
@@ -589,7 +571,6 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
         this.statsRunTimeRange = statsRunTimeRange;
     }
 
-
     /**
     * 获得失败率。
     */
@@ -617,7 +598,6 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     public void setAlertFailRateRange(Integer[] alertFailRateRange){
         this.alertFailRateRange = alertFailRateRange;
     }
-
 
     /**
     * 获得接口失败率。
@@ -647,7 +627,6 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
         this.alertFailPartnerRateRange = alertFailPartnerRateRange;
     }
 
-
     /**
     * 获得数据失败率。
     */
@@ -675,7 +654,6 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     public void setAlertFailDataRateRange(Integer[] alertFailDataRateRange){
         this.alertFailDataRateRange = alertFailDataRateRange;
     }
-
 
     /**
     * 获得程序失败率。
@@ -705,7 +683,6 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
         this.alertFailProgramRateRange = alertFailProgramRateRange;
     }
 
-
     /**
     * 获得等待超时。
     */
@@ -733,7 +710,6 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     public void setAlertWaitTimeoutRange(Integer[] alertWaitTimeoutRange){
         this.alertWaitTimeoutRange = alertWaitTimeoutRange;
     }
-
 
     /**
     * 获得运行超时。
@@ -763,7 +739,6 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
         this.alertRunTimeoutRange = alertRunTimeoutRange;
     }
 
-
     /**
     * 获得我方联系信息。
     */
@@ -778,7 +753,6 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
         this.taskLinkOur = taskLinkOur;
     }
 
-
     /**
     * 获得商户联系信息。
     */
@@ -792,8 +766,6 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     public void setTaskLinkMch(String taskLinkMch){
         this.taskLinkMch = taskLinkMch;
     }
-
-
     /**
     * 获得创建时间范围。
     */
@@ -807,8 +779,6 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     public void setCreateDateRange(Date[] createDateRange){
         this.createDateRange = createDateRange;
     }
-
-
     /**
     * 获得最后修改时间范围。
     */
@@ -822,7 +792,6 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     public void setModifyDateRange(Date[] modifyDateRange){
         this.modifyDateRange = modifyDateRange;
     }
-
     /**
     * 获得状态1正常，0暂停，-1标记删除。
     */

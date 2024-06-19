@@ -119,7 +119,6 @@ public class TaskAlertContactQueryParam extends PageQueryParam{
     private String stateOp;
 
 
-
     /**
     * 获得id。
     */
@@ -133,7 +132,6 @@ public class TaskAlertContactQueryParam extends PageQueryParam{
     public void setId(Long id){
         this.id = id;
     }
-
     /**
     * 获得联系人类型。
     */
@@ -147,7 +145,6 @@ public class TaskAlertContactQueryParam extends PageQueryParam{
     public void setContactType(Integer contactType){
         this.contactType = contactType;
     }
-
 
     /**
     * 获得联系人。
@@ -163,7 +160,6 @@ public class TaskAlertContactQueryParam extends PageQueryParam{
         this.contactName = contactName;
     }
 
-
     /**
     * 获得联系电话。
     */
@@ -177,7 +173,6 @@ public class TaskAlertContactQueryParam extends PageQueryParam{
     public void setMobile(String mobile){
         this.mobile = mobile;
     }
-
 
     /**
     * 获得联系email。
@@ -193,7 +188,6 @@ public class TaskAlertContactQueryParam extends PageQueryParam{
         this.email = email;
     }
 
-
     /**
     * 获得联系微信。
     */
@@ -207,7 +201,6 @@ public class TaskAlertContactQueryParam extends PageQueryParam{
     public void setWechat(String wechat){
         this.wechat = wechat;
     }
-
 
     /**
     * 获得备用im。
@@ -223,7 +216,6 @@ public class TaskAlertContactQueryParam extends PageQueryParam{
         this.im = im;
     }
 
-
     /**
     * 获得通知链接，如钉钉，微信等。
     */
@@ -238,7 +230,6 @@ public class TaskAlertContactQueryParam extends PageQueryParam{
         this.notifyUrl = notifyUrl;
     }
 
-
     /**
     * 获得备注。
     */
@@ -252,8 +243,6 @@ public class TaskAlertContactQueryParam extends PageQueryParam{
     public void setRemark(String remark){
         this.remark = remark;
     }
-
-
     /**
     * 获得创建日期范围。
     */
@@ -267,8 +256,6 @@ public class TaskAlertContactQueryParam extends PageQueryParam{
     public void setCreateDateRange(Date[] createDateRange){
         this.createDateRange = createDateRange;
     }
-
-
     /**
     * 获得修改日期范围。
     */
@@ -282,7 +269,6 @@ public class TaskAlertContactQueryParam extends PageQueryParam{
     public void setModifyDateRange(Date[] modifyDateRange){
         this.modifyDateRange = modifyDateRange;
     }
-
     /**
     * 获得状态。
     */
