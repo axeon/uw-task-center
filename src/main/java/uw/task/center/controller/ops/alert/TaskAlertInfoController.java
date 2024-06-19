@@ -39,7 +39,7 @@ public class TaskAlertInfoController {
     @Operation(summary = "列表报警信息", description = "列表报警信息")
     @GetMapping("/list")
     public DataList<TaskAlertInfo> list(TaskAlertInfoQueryParam queryParam) throws TransactionException {
-        AuthServiceHelper.log(TaskAlertInfo.class, 0, "列表报警信息");
+        AuthServiceHelper.logInfo(TaskAlertInfo.class, 0, "列表报警信息");
         return dao.list(TaskAlertInfo.class, queryParam);
     }
 
@@ -54,7 +54,7 @@ public class TaskAlertInfoController {
     @GetMapping("/load")
     public TaskAlertInfo load(@Parameter(description = "主键ID", required = true, example = "1")
                               @RequestParam long id) throws TransactionException {
-        AuthServiceHelper.log(TaskAlertInfo.class, id, "加载报警信息");
+        AuthServiceHelper.logInfo(TaskAlertInfo.class, id, "加载报警信息");
         return dao.load(TaskAlertInfo.class, id);
     }
 

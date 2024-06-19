@@ -38,7 +38,7 @@ public class TaskRunnerInfoController {
     @GetMapping("/list")
     @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
     public DataList<TaskRunnerInfo> list(TaskRunnerInfoQueryParam queryParam) throws TransactionException {
-        AuthServiceHelper.log( TaskRunnerInfo.class.getSimpleName(), 0, "列表队列任务" );
+        AuthServiceHelper.logInfo( TaskRunnerInfo.class.getSimpleName(), 0, "列表队列任务" );
         return dao.list( TaskRunnerInfo.class, queryParam );
     }
 
@@ -49,7 +49,7 @@ public class TaskRunnerInfoController {
     @GetMapping(value = "/load")
     @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.ALL)
     public TaskRunnerInfo load(@Parameter(description = "主键", example = "1") long id) throws TransactionException {
-        AuthServiceHelper.log( TaskRunnerInfo.class.getSimpleName(), id, "查看队列任务" );
+        AuthServiceHelper.logInfo( TaskRunnerInfo.class.getSimpleName(), id, "查看队列任务" );
         TaskRunnerInfo info = dao.load( TaskRunnerInfo.class, id );
         return info;
     }
@@ -62,7 +62,7 @@ public class TaskRunnerInfoController {
     @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
     public ResponseData<TaskRunnerInfo> save(@RequestBody TaskRunnerInfo taskRunnerInfo) throws TransactionException {
         long id = dao.getSequenceId( TaskRunnerInfo.class );
-        AuthServiceHelper.log( TaskRunnerInfo.class.getSimpleName(), id, "新增队列任务配置" );
+        AuthServiceHelper.logInfo( TaskRunnerInfo.class.getSimpleName(), id, "新增队列任务配置" );
         taskRunnerInfo.setId( id );
         taskRunnerInfo.setCreateDate( new Date() );
         taskRunnerInfo.setModifyDate( null );
@@ -80,7 +80,7 @@ public class TaskRunnerInfoController {
     @PutMapping(value = "/update")
     @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
     public ResponseData<TaskRunnerInfo> update(@RequestBody TaskRunnerInfo taskRunnerInfo, @Parameter(name = "remark", description = "备注") @RequestParam String remark) throws TransactionException {
-        AuthServiceHelper.log(TaskRunnerInfo.class,taskRunnerInfo.getId(),"修改队列任务配置!"+remark);
+        AuthServiceHelper.logInfo(TaskRunnerInfo.class,taskRunnerInfo.getId(),"修改队列任务配置!"+remark);
         TaskRunnerInfo taskRunnerInfoDb = dao.load( TaskRunnerInfo.class, taskRunnerInfo.getId() );
         if (taskRunnerInfoDb == null) {
             return ResponseData.errorMsg( "未找到指定ID的数值！" );
@@ -139,10 +139,10 @@ public class TaskRunnerInfoController {
             taskRunnerInfo.setModifyDate(new Date());
             taskRunnerInfo.setState(1);
             dao.update(taskRunnerInfo);
-            AuthServiceHelper.log(TaskRunnerInfo.class,id,"启用队列任务配置成功！"+remark);
+            AuthServiceHelper.logInfo(TaskRunnerInfo.class,id,"启用队列任务配置成功！"+remark);
             return ResponseData.successMsg("启用队列任务配置成功！"+remark);
         }else{
-            AuthServiceHelper.log(TaskRunnerInfo.class,id,"启用队列任务配置失败！"+remark);
+            AuthServiceHelper.logInfo(TaskRunnerInfo.class,id,"启用队列任务配置失败！"+remark);
             return ResponseData.errorMsg("启用队列任务配置失败！"+remark);
         }
     }
@@ -162,10 +162,10 @@ public class TaskRunnerInfoController {
             taskRunnerInfo.setModifyDate(new Date());
             taskRunnerInfo.setState(0);
             dao.update(taskRunnerInfo);
-            AuthServiceHelper.log(TaskRunnerInfo.class,id,"禁用队列任务配置成功！"+remark);
+            AuthServiceHelper.logInfo(TaskRunnerInfo.class,id,"禁用队列任务配置成功！"+remark);
             return ResponseData.successMsg("禁用队列任务配置成功！"+remark);
         }else{
-            AuthServiceHelper.log(TaskRunnerInfo.class,id,"禁用队列任务配置失败！"+remark);
+            AuthServiceHelper.logInfo(TaskRunnerInfo.class,id,"禁用队列任务配置失败！"+remark);
             return ResponseData.errorMsg("禁用队列任务配置失败！"+remark);
         }
     }
@@ -185,10 +185,10 @@ public class TaskRunnerInfoController {
             taskRunnerInfo.setModifyDate(new Date());
             taskRunnerInfo.setState(-1);
             dao.update(taskRunnerInfo);
-            AuthServiceHelper.log(TaskRunnerInfo.class,id,"删除队列任务配置成功！"+remark);
+            AuthServiceHelper.logInfo(TaskRunnerInfo.class,id,"删除队列任务配置成功！"+remark);
             return ResponseData.successMsg("删除队列任务配置成功！"+remark);
         }else{
-            AuthServiceHelper.log(TaskRunnerInfo.class,id,"删除队列任务配置失败！"+remark);
+            AuthServiceHelper.logInfo(TaskRunnerInfo.class,id,"删除队列任务配置失败！"+remark);
             return ResponseData.errorMsg("删除队列任务配置失败！"+remark);
         }
     }
@@ -204,7 +204,7 @@ public class TaskRunnerInfoController {
     @PutMapping("/resetStats")
     @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
     public ResponseData resetStats(@Parameter(description = "主键", example = "1") long id, @Parameter(name = "remark", description = "备注") @RequestParam String remark) throws TransactionException {
-        AuthServiceHelper.log( TaskRunnerInfo.class, id, "清空统计数据!"+remark );
+        AuthServiceHelper.logInfo( TaskRunnerInfo.class, id, "清空统计数据!"+remark );
         TaskRunnerInfo info = dao.load( TaskRunnerInfo.class, id );
         if (Objects.isNull( info )) {
             return ResponseData.errorMsg( "找不到对应的队列任务！" );
