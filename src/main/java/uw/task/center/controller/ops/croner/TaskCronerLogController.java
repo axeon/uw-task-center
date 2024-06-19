@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import uw.auth.service.AuthServiceHelper;
 import uw.auth.service.annotation.MscPermDeclare;
 import uw.auth.service.constant.ActionLog;
 import uw.auth.service.constant.AuthType;
@@ -25,11 +26,11 @@ import uw.task.center.entity.TaskCronerESLog;
  * 定时任务日志表：增删改查
  */
 @RestController
-@Tag(name = "定时任务日志")
 @RequestMapping("/ops/croner/log")
+@Tag(name = "定时任务日志")
 @MscPermDeclare(type = UserType.OPS)
 public class TaskCronerLogController {
-    private static final Logger log = LoggerFactory.getLogger(TaskCronerLogController.class);
+    private static final Logger log = LoggerFactory.getLogger( TaskCronerLogController.class );
 
     private DaoFactory dao = DaoFactory.getInstance();
 
@@ -41,33 +42,35 @@ public class TaskCronerLogController {
     }
 
     /**
-     * 查看定时任务日志
+     * 列表定时任务日志
      */
-    @Operation(summary = "查看定时任务日志", description = "查看定时任务日志")
-    @GetMapping(value = "/load")
-    @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM,log = ActionLog.REQUEST)
-    public TaskCronerESLog load(@Parameter(description = "主键", example = "1") long id) throws Exception {
-        String dsl = logClient.translateSqlToDsl(
-                "select * from \\\"uw.task.entity.task_croner_log_*\\\" where id = " + id, 0, 1, false);
-        SearchResponse<TaskCronerESLog> response = logClient.dslQuery(TaskCronerESLog.class, "uw.task.entity.task_croner_log_*", dsl);
-        if (response == null) {
-            return null;
-        }
-        SearchResponse.HitsResponse<TaskCronerESLog> hisResponse =
-                response.getHitsResponse();
-        return hisResponse.getHits().get(0).getSource();
+    @GetMapping("/list")
+    @Operation(summary = "列表定时任务日志", description = "列表定时任务日志")
+    @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
+    public ESDataList<TaskCronerESLog> list(TaskCronerLogQueryParam queryParam) throws Exception {
+        AuthServiceHelper.logRef( TaskCronerESLog.class );
+        QueryParamResult result = dao.parseQueryParam( TaskCronerESLog.class, queryParam );
+        String dsl = logClient.translateSqlToDsl( result.genFullSql(), queryParam.GET_START_INDEX(), queryParam.GET_RESULT_NUM(), queryParam.CHECK_AUTO_COUNT() );
+        return logClient.mapQueryResponseToEDataList( logClient.dslQuery( TaskCronerESLog.class, "uw.task.entity.task_croner_log_*", dsl ), queryParam.GET_START_INDEX(),
+                queryParam.GET_RESULT_NUM() );
     }
 
     /**
-     * 列表定时任务日志
+     * 查看定时任务日志
      */
-    @Operation(summary = "列表定时任务日志", description = "列表定时任务日志")
-    @GetMapping("/list")
-    @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM,log = ActionLog.REQUEST)
-    public ESDataList<TaskCronerESLog> list(TaskCronerLogQueryParam queryParam) throws Exception {
-        QueryParamResult result = dao.parseQueryParam(TaskCronerESLog.class, queryParam);
-        String dsl = logClient.translateSqlToDsl(result.genFullSql(), queryParam.GET_START_INDEX(), queryParam.GET_RESULT_NUM(), queryParam.CHECK_AUTO_COUNT());
-        return logClient.mapQueryResponseToEDataList(logClient.dslQuery(TaskCronerESLog.class, "uw.task.entity.task_croner_log_*", dsl), queryParam.GET_START_INDEX(), queryParam.GET_RESULT_NUM());
+    @GetMapping(value = "/load")
+    @Operation(summary = "查看定时任务日志", description = "查看定时任务日志")
+    @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
+    public TaskCronerESLog load(@Parameter(description = "主键", example = "1") long id) throws Exception {
+        AuthServiceHelper.logRef( TaskCronerESLog.class, id );
+        String dsl = logClient.translateSqlToDsl( "select * from \\\"uw.task.entity.task_croner_log_*\\\" where id = " + id, 0, 1, false );
+        SearchResponse<TaskCronerESLog> response = logClient.dslQuery( TaskCronerESLog.class, "uw.task.entity.task_croner_log_*", dsl );
+        if (response == null) {
+            return null;
+        }
+        SearchResponse.HitsResponse<TaskCronerESLog> hisResponse = response.getHitsResponse();
+        return hisResponse.getHits().get( 0 ).getSource();
     }
+
 
 }

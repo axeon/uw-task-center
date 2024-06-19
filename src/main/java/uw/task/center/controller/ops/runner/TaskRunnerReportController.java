@@ -27,8 +27,8 @@ import java.util.List;
  * 队列任务报表
  */
 @RestController
-@Tag(name = "队列任务报表")
 @RequestMapping("/ops/runner/report")
+@Tag(name = "队列任务报表")
 @MscPermDeclare(type = UserType.OPS)
 public class TaskRunnerReportController {
 
@@ -45,7 +45,7 @@ public class TaskRunnerReportController {
      */
     @GetMapping("/statsDateSummary")
     @Operation(summary = "分时段汇总报表", description = "分时段数据汇总报表，如果指定taskId，则显示该任务的报表，否则显示全部报表。")
-    @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM,log = ActionLog.REQUEST)
+    @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
     public DataList<RunnerStatsVo> statsDateSummary(@Parameter(description = "开始日期") @RequestParam(required = false) Date startDate,
                                                     @Parameter(description = "结束日期") @RequestParam(required = false) Date endDate,
                                                     @Parameter(description = "聚合类型。0自动1按日2按时3按分") @RequestParam(required = false, defaultValue = "0") int dateType,
@@ -108,10 +108,10 @@ public class TaskRunnerReportController {
      */
     @GetMapping("/taskStatsList")
     @Operation(summary = "任务汇总报表", description = "分任务的汇总数据，不分时。可以显示出任务名、运行目标、运行类等关键信息")
-    @MscPermDeclare(type = UserType.OPS,auth = AuthType.PERM, log = ActionLog.REQUEST)
+    @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
     public DataList<RunnerStatsDetailVo> taskStatsList(@Parameter(description = "开始日期") @RequestParam(required = false) Date startDate,
-                                                       @Parameter(description = "结束日期") @RequestParam(required = false) Date endDate, @Parameter(description = "聚合类型。0自动1按日2按时3" +
-            "按分") @RequestParam(required = false, defaultValue = "0") int dateType) throws TransactionException {
+                                                       @Parameter(description = "结束日期") @RequestParam(required = false) Date endDate, @Parameter(description =
+            "聚合类型。0自动1按日2按时3" + "按分") @RequestParam(required = false, defaultValue = "0") int dateType) throws TransactionException {
         //判断自动类型。
         if (startDate == null) {
             startDate = new Date( System.currentTimeMillis() - 86400_000L );
@@ -146,9 +146,7 @@ public class TaskRunnerReportController {
             default:
                 throw new IllegalArgumentException( "dateType is error :" + dateType );
         }
-        sql += " from (SELECT task_id ,sum(num_all) as num_all ,sum(num_fail_program) as num_fail_program ,sum(num_fail_config) as num_fail_config ," + "sum(num_fail_data) as " +
-                "num_fail_data,sum(num_fail_partner) as num_fail_partner, sum(time_wait_queue) as time_wait_queue,sum(time_wait_delay) as time_wait_delay,sum(time_run) as " +
-                "time_run FROM " + tableName;
+        sql += " from (SELECT task_id ,sum(num_all) as num_all ,sum(num_fail_program) as num_fail_program ,sum(num_fail_config) as num_fail_config ," + "sum(num_fail_data) as " + "num_fail_data,sum(num_fail_partner) as num_fail_partner, sum(time_wait_queue) as time_wait_queue,sum(time_wait_delay) as time_wait_delay,sum(time_run) as " + "time_run FROM " + tableName;
         sql += " WHERE create_date >= ? AND create_date <= ? ";
         sql += " group by task_id order by num_all desc) tcs left join task_runner_info tcc on tcs.task_id =tcc.id ";
         param.add( startDate );

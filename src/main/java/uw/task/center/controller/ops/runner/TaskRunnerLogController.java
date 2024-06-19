@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import uw.auth.service.AuthServiceHelper;
 import uw.auth.service.annotation.MscPermDeclare;
 import uw.auth.service.constant.ActionLog;
 import uw.auth.service.constant.AuthType;
@@ -25,15 +26,13 @@ import uw.task.center.entity.TaskRunnerESLog;
  * 队列任务日志表：增删改查
  */
 @RestController
-@Tag(name = "队列任务日志", description = "队列任务日志")
 @RequestMapping("/ops/runner/log")
+@Tag(name = "队列任务日志", description = "队列任务日志")
 @MscPermDeclare(type = UserType.OPS)
 public class TaskRunnerLogController {
 
+    private static final Logger log = LoggerFactory.getLogger( TaskRunnerLogController.class );
     private DaoFactory dao = DaoFactory.getInstance();
-
-    private static final Logger log = LoggerFactory.getLogger(TaskRunnerLogController.class);
-
     private LogClient logClient;
 
     @Autowired
@@ -41,16 +40,31 @@ public class TaskRunnerLogController {
         this.logClient = logClient;
     }
 
+
+    /**
+     * 列表队列任务日志
+     */
+    @GetMapping("/list")
+    @Operation(summary = "列表队列任务日志", description = "列表队列任务日志")
+    @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
+    public ESDataList<TaskRunnerESLog> list(TaskRunnerLogQueryParam queryParam) throws Exception {
+        AuthServiceHelper.logRef( TaskRunnerESLog.class );
+        QueryParamResult result = dao.parseQueryParam( TaskRunnerESLog.class, queryParam );
+        String dsl = logClient.translateSqlToDsl( result.genFullSql(), queryParam.GET_START_INDEX(), queryParam.GET_RESULT_NUM(), queryParam.CHECK_AUTO_COUNT() );
+        return logClient.mapQueryResponseToEDataList( logClient.dslQuery( TaskRunnerESLog.class, "uw.task.entity.task_runner_log_*", dsl ), queryParam.GET_START_INDEX(),
+                queryParam.GET_RESULT_NUM() );
+    }
+
     /**
      * 查询队列任务日志
      */
     @GetMapping(value = "/load")
     @Operation(summary = "查询队列任务日志", description = "查询队列任务日志")
-    @MscPermDeclare(type = UserType.OPS,auth = AuthType.PERM, log = ActionLog.REQUEST)
+    @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
     public TaskRunnerESLog load(@Parameter(description = "主键", example = "1") long id) throws Exception {
-        String dsl = logClient.translateSqlToDsl(
-                "select * from \\\"uw.task.entity.task_runner_log_*\\\" where id = " + id, 0, 1, false);
-        SearchResponse<TaskRunnerESLog> response = logClient.dslQuery(TaskRunnerESLog.class, "uw.task.entity.task_runner_log_*", dsl);
+        AuthServiceHelper.logRef( TaskRunnerESLog.class, id );
+        String dsl = logClient.translateSqlToDsl( "select * from \\\"uw.task.entity.task_runner_log_*\\\" where id = " + id, 0, 1, false );
+        SearchResponse<TaskRunnerESLog> response = logClient.dslQuery( TaskRunnerESLog.class, "uw.task.entity.task_runner_log_*", dsl );
         if (response == null) {
             return null;
         }
@@ -58,19 +72,7 @@ public class TaskRunnerLogController {
         if (hisResponse.getHits().size() == 0) {
             return null;
         }
-        return hisResponse.getHits().get(0).getSource();
-    }
-
-    /**
-     * 列表队列任务日志
-     */
-    @GetMapping("/list")
-    @Operation(summary = "列表队列任务日志", description = "列表队列任务日志")
-    @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM,log = ActionLog.REQUEST)
-    public ESDataList<TaskRunnerESLog> list(TaskRunnerLogQueryParam queryParam) throws Exception {
-        QueryParamResult result = dao.parseQueryParam(TaskRunnerESLog.class, queryParam);
-        String dsl = logClient.translateSqlToDsl(result.genFullSql(), queryParam.GET_START_INDEX(), queryParam.GET_RESULT_NUM(), queryParam.CHECK_AUTO_COUNT());
-        return logClient.mapQueryResponseToEDataList(logClient.dslQuery(TaskRunnerESLog.class, "uw.task.entity.task_runner_log_*", dsl), queryParam.GET_START_INDEX(), queryParam.GET_RESULT_NUM());
+        return hisResponse.getHits().get( 0 ).getSource();
     }
 
 

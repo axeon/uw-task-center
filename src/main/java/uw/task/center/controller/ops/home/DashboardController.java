@@ -5,8 +5,8 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import uw.auth.service.annotation.MscPermDeclare;
@@ -14,7 +14,6 @@ import uw.auth.service.constant.ActionLog;
 import uw.auth.service.constant.AuthType;
 import uw.auth.service.constant.UserType;
 import uw.dao.DaoFactory;
-import uw.dao.DataList;
 import uw.dao.TransactionException;
 import uw.dao.annotation.ColumnMeta;
 import uw.dao.annotation.TableMeta;
@@ -40,9 +39,9 @@ public class DashboardController {
      * @return
      * @throws TransactionException
      */
+    @GetMapping("/taskStats")
     @Operation(summary = "任务统计", description = "")
-    @RequestMapping(value = "/taskStats", method = {RequestMethod.GET})
-    @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.NONE)
+    @MscPermDeclare(type = UserType.OPS, auth = AuthType.USER, log = ActionLog.NONE)
     public TaskStatsVo taskStats() throws TransactionException {
         TaskStatsVo taskStatsVo = new TaskStatsVo();
         // 当前运行主机定义:last_update时间在当前系统时间一分钟内的都视为运行中的主机
@@ -61,14 +60,13 @@ public class DashboardController {
      * @return
      * @throws TransactionException
      */
+    @GetMapping("/listNewAlert")
     @Operation(summary = "报警日志NEW", description = "")
-    @RequestMapping(value = "/newAlertInfo", method = {RequestMethod.GET})
-    @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.NONE)
-    public List<TaskAlertInfo> newAlertInfo() throws TransactionException {
+    @MscPermDeclare(type = UserType.OPS, auth = AuthType.USER, log = ActionLog.NONE)
+    public List<TaskAlertInfo> listNewAlert() throws TransactionException {
         // 获取七天之内的最新10条邮件信息记录回显
         return dao.list( TaskAlertInfo.class, "select * from task_alert_info order by id desc", 0, 10, false ).results();
     }
-
 
     /**
      * 首页折线图
@@ -78,9 +76,9 @@ public class DashboardController {
      * @return
      * @throws ParseException
      */
+    @GetMapping("/taskReport")
     @Operation(summary = "任务折线图", description = "任务折线图")
-    @RequestMapping(value = "/taskReport", method = {RequestMethod.GET})
-    @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.NONE)
+    @MscPermDeclare(type = UserType.OPS, auth = AuthType.USER, log = ActionLog.NONE)
     public TaskReportVo taskReport(@Parameter(description = "开始日期") @RequestParam(required = false) Date startDate,
                                    @Parameter(description = "结束日期") @RequestParam(required = false) Date endDate,
                                    @Parameter(description = "聚合类型。0自动1按日2按时3按分") @RequestParam(required = false, defaultValue = "0") int dateType) throws TransactionException {
@@ -131,15 +129,15 @@ public class DashboardController {
         param.add( endDate );
         ArrayList<TaskReportDetail> cronerReportList = new ArrayList<>();
         ArrayList<TaskReportDetail> runnerReportList = new ArrayList<>();
-        runnerReportList.addAll(dao.list( TaskReportDetail.class, String.format( runnerCommand, runnerTableNameA ), param.toArray(), 0, 0, false ).results());
-        cronerReportList.addAll(dao.list( TaskReportDetail.class, String.format( cornerCommand, cronerTableNameA ), param.toArray(), 0, 0, false ).results());
+        runnerReportList.addAll( dao.list( TaskReportDetail.class, String.format( runnerCommand, runnerTableNameA ), param.toArray(), 0, 0, false ).results() );
+        cronerReportList.addAll( dao.list( TaskReportDetail.class, String.format( cornerCommand, cronerTableNameA ), param.toArray(), 0, 0, false ).results() );
         if (!StringUtils.equals( runnerTableNameA, runnerTableNameB )) {
-            runnerReportList.addAll(dao.list( TaskReportDetail.class, String.format( runnerCommand, runnerTableNameB ), param.toArray(), 0, 0, false ).results());
-            cronerReportList.addAll(dao.list( TaskReportDetail.class, String.format( cornerCommand, cronerTableNameB ), param.toArray(), 0, 0, false ).results());
+            runnerReportList.addAll( dao.list( TaskReportDetail.class, String.format( runnerCommand, runnerTableNameB ), param.toArray(), 0, 0, false ).results() );
+            cronerReportList.addAll( dao.list( TaskReportDetail.class, String.format( cornerCommand, cronerTableNameB ), param.toArray(), 0, 0, false ).results() );
         }
 
         TaskReportVo taskReportVo = new TaskReportVo();
-        taskReportVo.setCronerReportDetail( cronerReportList);
+        taskReportVo.setCronerReportDetail( cronerReportList );
         taskReportVo.setRunnerReportDetail( runnerReportList );
         return taskReportVo;
     }

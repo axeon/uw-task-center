@@ -22,8 +22,8 @@ import uw.task.center.entity.TaskAlertInfo;
  * 报警发送信息表：增删改查
  */
 @RestController
-@Tag(name = "报警信息管理")
 @RequestMapping("/ops/alert/info")
+@Tag(name = "报警信息管理")
 @MscPermDeclare(type = UserType.OPS)
 public class TaskAlertInfoController {
     private DaoFactory dao = DaoFactory.getInstance();
@@ -35,12 +35,12 @@ public class TaskAlertInfoController {
      * @return
      * @throws TransactionException
      */
-    @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    @Operation(summary = "列表报警信息", description = "列表报警信息")
     @GetMapping("/list")
+    @Operation(summary = "列表报警信息", description = "列表报警信息")
+    @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
     public DataList<TaskAlertInfo> list(TaskAlertInfoQueryParam queryParam) throws TransactionException {
-        AuthServiceHelper.logInfo(TaskAlertInfo.class, 0, "列表报警信息");
-        return dao.list(TaskAlertInfo.class, queryParam);
+        AuthServiceHelper.logRef( TaskAlertInfo.class );
+        return dao.list( TaskAlertInfo.class, queryParam );
     }
 
     /**
@@ -49,13 +49,13 @@ public class TaskAlertInfoController {
      * @param id
      * @throws TransactionException
      */
-    @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    @Operation(summary = "加载报警信息", description = "加载报警信息")
     @GetMapping("/load")
-    public TaskAlertInfo load(@Parameter(description = "主键ID", required = true, example = "1")
-                              @RequestParam long id) throws TransactionException {
-        AuthServiceHelper.logInfo(TaskAlertInfo.class, id, "加载报警信息");
-        return dao.load(TaskAlertInfo.class, id);
+    @Operation(summary = "加载报警信息", description = "加载报警信息")
+    @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
+    public TaskAlertInfo load(@Parameter(description = "主键ID", required = true, example = "1") @RequestParam long id) throws TransactionException {
+        AuthServiceHelper.logRef( TaskAlertInfo.class, id );
+        return dao.load( TaskAlertInfo.class, id );
     }
+
 
 }

@@ -36,12 +36,12 @@ public class TaskAlertNotifyController {
      * @return
      * @throws TransactionException
      */
-    @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    @Operation(summary = "列表报警信息通知", description = "列表报警信息通知")
     @GetMapping("/list")
+    @Operation(summary = "列表报警信息通知", description = "列表报警信息通知")
+    @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
     public DataList<TaskAlertNotify> list(TaskAlertNotifyQueryParam queryParam) throws TransactionException {
-        AuthServiceHelper.logInfo(TaskAlertNotify.class, 0, "列表报警信息通知");
-        return dao.list(TaskAlertNotify.class, queryParam);
+        AuthServiceHelper.logRef( TaskAlertNotify.class );
+        return dao.list( TaskAlertNotify.class, queryParam );
     }
 
     /**
@@ -50,13 +50,12 @@ public class TaskAlertNotifyController {
      * @param id
      * @throws TransactionException
      */
-    @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    @Operation(summary = "加载报警信息通知", description = "加载报警信息通知")
     @GetMapping("/load")
-    public TaskAlertNotify load(@Parameter(description = "主键ID", required = true, example = "1")
-                                @RequestParam long id) throws TransactionException {
-        AuthServiceHelper.logInfo(TaskAlertNotify.class, id, "加载报警信息通知");
-        return dao.load(TaskAlertNotify.class, id);
+    @Operation(summary = "加载报警信息通知", description = "加载报警信息通知")
+    @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
+    public TaskAlertNotify load(@Parameter(description = "主键ID", required = true, example = "1") @RequestParam long id) throws TransactionException {
+        AuthServiceHelper.logRef( TaskAlertNotify.class, id );
+        return dao.load( TaskAlertNotify.class, id );
     }
 
 }

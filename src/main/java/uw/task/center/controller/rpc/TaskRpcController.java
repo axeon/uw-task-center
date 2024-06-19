@@ -41,8 +41,8 @@ public class TaskRpcController {
     /**
      * 更新当前主机状态，并返回主机配置。
      */
-    @Operation(summary = "更新主机当前状态", description = "更新主机当前状态")
     @PostMapping("/host/report")
+    @Operation(summary = "更新主机当前状态", description = "更新主机当前状态")
     @MscPermDeclare(type = UserType.RPC, log = ActionLog.NONE)
     public HostReportResponse report(@RequestBody TaskHostInfoExt taskHostInfoExt) {
         //构造返回数据。
@@ -62,7 +62,7 @@ public class TaskRpcController {
                     return reportResponse;
                 }
             } catch (Throwable e) {
-                log.error( "load TaskHostInfo exception: " + e.getMessage(), e );
+                log.error( "load TaskHostInfo exception: {}", e.getMessage(), e );
             }
         }
         //任务执行汇总统计信息
@@ -111,17 +111,17 @@ public class TaskRpcController {
                 batchDao.save( stats, runnerTable );
             }
         } catch (Throwable e) {
-            log.error( "Batch save host metrics error! " + e.getMessage(), e );
+            log.error( "Batch save host metrics error! {}", e.getMessage(), e );
         } finally {
             try {
                 bum.submit();
             } catch (Throwable e) {
-                log.error( "BatchUpdateManager error! " + e.getMessage(), e );
+                log.error( "BatchUpdateManager error! {}", e.getMessage(), e );
             }
             try {
                 tm.commit();
             } catch (Throwable e) {
-                log.error( "TransactionManager error! " + e.getMessage(), e );
+                log.error( "TransactionManager error! {}", e.getMessage(), e );
             }
         }
 
@@ -158,7 +158,7 @@ public class TaskRpcController {
                 reportResponse.setId( taskHostInfoExt.getId() );
             }
         } catch (Throwable e) {
-            log.error( "taskHostInfoExt update exception: " + e.getMessage(), e );
+            log.error( "taskHostInfoExt update exception: {}", e.getMessage(), e );
         }
         return reportResponse;
     }
@@ -166,8 +166,8 @@ public class TaskRpcController {
     /**
      * 获得队列任务列表
      */
-    @Operation(summary = "获得定时任务列表", description = "获得定时任务列表")
     @GetMapping("/croner/list")
+    @Operation(summary = "获得定时任务列表", description = "获得定时任务列表")
     @MscPermDeclare(type = UserType.RPC, log = ActionLog.NONE)
     public List<TaskCronerInfo> getCronerConfigList(@Parameter(description = "运行目标", example = "default") String runTarget,
                                                     @Parameter(description = "任务项目", example = "任务项目") String taskProject,
@@ -194,8 +194,8 @@ public class TaskRpcController {
     /**
      * 获得队列任务列表
      */
-    @Operation(summary = "获得队列任务列表", description = "获得队列任务列表")
     @GetMapping("/runner/list")
+    @Operation(summary = "获得队列任务列表", description = "获得队列任务列表")
     @MscPermDeclare(type = UserType.RPC, log = ActionLog.NONE)
     public List<TaskRunnerInfo> getRunnerConfigList(@Parameter(description = "运行目标", example = "default") String runTarget,
                                                     @Parameter(description = "任务项目", example = "任务项目") String taskProject,
@@ -225,8 +225,8 @@ public class TaskRpcController {
      * @param nextDate 下一次执行时间
      * @return
      */
-    @Operation(summary = "更新定时任务下次执行时间", description = "更新定时任务下次执行时间")
     @PutMapping("/croner/tick")
+    @Operation(summary = "更新定时任务下次执行时间", description = "更新定时任务下次执行时间")
     @MscPermDeclare(type = UserType.RPC, log = ActionLog.NONE)
     public int updateCronerLog(@Parameter(description = "主键", example = "1") @RequestParam(required = false) long id,
                                @Parameter(description = "下一个日期", example = "0") @RequestParam(required = false) long nextDate) throws TransactionException {
@@ -236,8 +236,8 @@ public class TaskRpcController {
     /**
      * 初始化Runner配置
      */
-    @Operation(summary = "初始化队列任务配置", description = "初始化队列任务配置")
     @PostMapping("/runner/update")
+    @Operation(summary = "初始化队列任务配置", description = "初始化队列任务配置")
     @MscPermDeclare(type = UserType.RPC, log = ActionLog.NONE)
     public TaskRunnerInfo initRunnerConfig(@RequestBody TaskRunnerInfo config) throws TransactionException {
         if (config != null) {
@@ -269,8 +269,8 @@ public class TaskRpcController {
     /**
      * 初始化Croner配置
      */
-    @Operation(summary = "初始化定时任务配置", description = "初始化定时任务配置")
     @PostMapping("/croner/update")
+    @Operation(summary = "初始化定时任务配置", description = "初始化定时任务配置")
     @MscPermDeclare(type = UserType.RPC, log = ActionLog.NONE)
     public TaskCronerInfo initCronerConfig(@RequestBody TaskCronerInfo config) throws TransactionException {
         if (config != null) {
@@ -302,8 +302,8 @@ public class TaskRpcController {
     /**
      * 提交报警联系人。
      */
-    @Operation(summary = "初始化任务联系人信息", description = "初始化任务联系人信息")
     @PostMapping("/contact/update")
+    @Operation(summary = "初始化任务联系人信息", description = "初始化任务联系人信息")
     @MscPermDeclare(type = UserType.RPC, log = ActionLog.NONE)
     public void initRunnerConfig(@RequestBody Map<String, String> contactData) throws TransactionException {
         if (contactData != null) {
@@ -332,13 +332,13 @@ public class TaskRpcController {
                 } else {
                     contact = contactOpt;
                 }
-                String linkdata =
+                String linkData =
                         new StringBuilder().append( "{\"" ).append( contact.getId() ).append( "\":" ).append( "\"" ).append( contact.getContactName() ).append( "\"}" ).toString();
                 String taskClass = contactData.get( "taskClass" );
                 if (taskClass != null && !taskClass.equals( "" )) {
-                    if (dao.executeCommand( "update task_runner_info set task_owner=? where task_class=? and task_owner='' and state=1", new Object[]{linkdata, taskClass} ) > 0) {
+                    if (dao.executeCommand( "update task_runner_info set task_owner=? where task_class=? and task_owner='' and state=1", new Object[]{linkData, taskClass} ) > 0) {
                     } else {
-                        dao.executeCommand( "update task_croner_info set task_owner=? where task_class=? and task_owner='' and state=1", new Object[]{linkdata, taskClass} );
+                        dao.executeCommand( "update task_croner_info set task_owner=? where task_class=? and task_owner='' and state=1", new Object[]{linkData, taskClass} );
                     }
                 }
             }

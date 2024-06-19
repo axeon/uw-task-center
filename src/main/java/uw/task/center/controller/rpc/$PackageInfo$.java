@@ -12,9 +12,9 @@ import uw.auth.service.constant.UserType;
  */
 @RestController
 public class $PackageInfo$ {
-    @MscPermDeclare(type = UserType.RPC)
-    @Operation(summary = "任务RPC", description = "任务RPC")
     @GetMapping("/rpc/task")
+    @Operation(summary = "任务RPC", description = "任务RPC")
+    @MscPermDeclare(type = UserType.RPC)
     public void info() {
 
     }

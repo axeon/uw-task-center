@@ -26,8 +26,8 @@ import java.util.List;
  * 定时任务报表
  */
 @RestController
-@Tag(name = "定时任务报表")
 @RequestMapping("/ops/croner/report")
+@Tag(name = "定时任务报表")
 @MscPermDeclare(type = UserType.OPS)
 public class TaskCronerReportController {
 
@@ -42,9 +42,9 @@ public class TaskCronerReportController {
      * @param dateType
      * @return
      */
+    @GetMapping("/statsDateSummary")
     @Operation(summary = "分时段汇总报表", description = "分时段数据汇总报表，如果指定taskId，则显示该任务的报表，否则显示全部报表。")
     @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM,log = ActionLog.REQUEST)
-    @GetMapping("/statsDateSummary")
     public List<CronerStatsVo> statsDateSummary(@Parameter(description = "开始日期") @RequestParam(required = false) Date startDate,
                                                 @Parameter(description = "结束日期") @RequestParam(required = false) Date endDate,
                                                 @Parameter(description = "聚合类型。0自动1按日2按时3按分") @RequestParam(required = false, defaultValue = "0") int dateType,
@@ -106,9 +106,9 @@ public class TaskCronerReportController {
      * @param endDate
      * @return
      */
+    @GetMapping("/taskStatsList")
     @Operation(summary = "任务汇总报表", description = "分任务的汇总数据，不分时。可以显示出任务名、运行目标、运行类等关键信息")
     @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM,log = ActionLog.REQUEST)
-    @GetMapping("/taskStatsList")
     public List<CronerStatsDetailVo> taskStatsList(@Parameter(description = "开始日期") @RequestParam(required = false) Date startDate,
                                                    @Parameter(description = "结束日期") @RequestParam(required = false) Date endDate,
                                                    @Parameter(description = "聚合类型。0自动1按日2按时3按分") @RequestParam(required = false, defaultValue = "0") int dateType) throws TransactionException {
