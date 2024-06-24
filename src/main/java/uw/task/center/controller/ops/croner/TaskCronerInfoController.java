@@ -4,7 +4,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
+import uw.app.common.dto.SysCritLogQueryParam;
 import uw.app.common.dto.SysDataHistoryQueryParam;
+import uw.app.common.entity.SysCritLog;
 import uw.app.common.entity.SysDataHistory;
 import uw.app.common.helper.SysDataHistoryHelper;
 import uw.auth.service.AuthServiceHelper;
@@ -34,7 +36,6 @@ import java.util.Objects;
 public class TaskCronerInfoController {
     private DaoFactory dao = DaoFactory.getInstance();
 
-
     /**
      * 列表定时任务配置。
      *
@@ -46,8 +47,22 @@ public class TaskCronerInfoController {
     @Operation(summary = "列表定时任务配置", description = "列表定时任务配置")
     @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
     public DataList<TaskCronerInfo> list(TaskCronerInfoQueryParam queryParam) throws TransactionException {
-        AuthServiceHelper.logRef( TaskCronerInfo.class );
-        return dao.list( TaskCronerInfo.class, queryParam );
+        AuthServiceHelper.logRef(TaskCronerInfo.class);
+        return dao.list(TaskCronerInfo.class, queryParam);
+    }
+
+    /**
+     * 轻量级列表定时任务配置，一般用于select控件。
+     *
+     * @return
+     */
+    @GetMapping("/liteList")
+    @Operation(summary = "轻量级列表定时任务配置", description = "轻量级列表定时任务配置，一般用于select控件。")
+    @MscPermDeclare(type = UserType.OPS, auth = AuthType.USER, log = ActionLog.NONE)
+    public DataList<TaskCronerInfo> liteList(TaskCronerInfoQueryParam queryParam) throws TransactionException {
+        AuthServiceHelper.logRef(TaskCronerInfo.class);
+        queryParam.SET_SELECT_SQL( "SELECT id,task_name,task_class,task_param,task_owner,task_cron,run_type,run_target,log_level,log_limit_size,next_run_date,stats_date,stats_run_num,stats_fail_num,stats_run_time,alert_fail_rate,alert_fail_partner_rate,alert_fail_data_rate,alert_fail_program_rate,alert_wait_timeout,alert_run_timeout,task_link_our,task_link_mch,create_date,modify_date,state from task_croner_info " );
+        return dao.list(TaskCronerInfo.class, queryParam);
     }
 
     /**
@@ -60,23 +75,38 @@ public class TaskCronerInfoController {
     @Operation(summary = "加载定时任务配置", description = "加载定时任务配置")
     @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
     public TaskCronerInfo load(@Parameter(description = "主键ID", required = true, example = "1") @RequestParam long id) throws TransactionException {
-        AuthServiceHelper.logRef( TaskCronerInfo.class, id );
-        return dao.load( TaskCronerInfo.class, id );
+        AuthServiceHelper.logRef(TaskCronerInfo.class,id);
+        return dao.load(TaskCronerInfo.class, id);
     }
 
     /**
-     * 列表定时任务配置历史。
+     * 查询数据历史。
      *
      * @param
      * @return
      */
-    @GetMapping("/history")
-    @Operation(summary = "定时任务配置修改历史", description = "定时任务配置修改历史")
+    @GetMapping("/listDataHistory")
+    @Operation(summary = "查询数据历史", description = "查询数据历史")
     @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public DataList<SysDataHistory> history(SysDataHistoryQueryParam queryParam) throws TransactionException {
-        AuthServiceHelper.logRef( TaskCronerInfo.class, queryParam.getEntityId() );
-        queryParam.setEntityClass( TaskCronerInfo.class );
-        return SysDataHistoryHelper.listHistory( queryParam );
+    public DataList<SysDataHistory> listDataHistory(SysDataHistoryQueryParam queryParam) throws TransactionException {
+        AuthServiceHelper.logRef(TaskCronerInfo.class, queryParam.getEntityId());
+        queryParam.setEntityClass(TaskCronerInfo.class);
+        return dao.list(SysDataHistory.class, queryParam);
+    }
+
+    /**
+     * 查询操作日志。
+     *
+     * @param
+     * @return
+     */
+    @GetMapping("/listCritLog")
+    @Operation(summary = "查询操作日志", description = "查询操作日志")
+    @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
+    public DataList<SysCritLog> listCritLog(SysCritLogQueryParam queryParam) throws TransactionException {
+        AuthServiceHelper.logRef(TaskCronerInfo.class, queryParam.getRefId());
+        queryParam.setRefTypeClass(TaskCronerInfo.class);
+        return dao.list( SysCritLog.class, queryParam);
     }
 
     /**

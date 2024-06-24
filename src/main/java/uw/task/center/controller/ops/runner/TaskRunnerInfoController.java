@@ -4,7 +4,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
+import uw.app.common.dto.SysCritLogQueryParam;
 import uw.app.common.dto.SysDataHistoryQueryParam;
+import uw.app.common.entity.SysCritLog;
 import uw.app.common.entity.SysDataHistory;
 import uw.app.common.helper.SysDataHistoryHelper;
 import uw.auth.service.AuthServiceHelper;
@@ -33,7 +35,6 @@ import java.util.Objects;
 public class TaskRunnerInfoController {
     private DaoFactory dao = DaoFactory.getInstance();
 
-
     /**
      * 列表队列任务配置。
      *
@@ -45,8 +46,22 @@ public class TaskRunnerInfoController {
     @Operation(summary = "列表队列任务配置", description = "列表队列任务配置")
     @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
     public DataList<TaskRunnerInfo> list(TaskRunnerInfoQueryParam queryParam) throws TransactionException {
-        AuthServiceHelper.logRef( TaskRunnerInfo.class );
-        return dao.list( TaskRunnerInfo.class, queryParam );
+        AuthServiceHelper.logRef(TaskRunnerInfo.class);
+        return dao.list(TaskRunnerInfo.class, queryParam);
+    }
+
+    /**
+     * 轻量级列表队列任务配置，一般用于select控件。
+     *
+     * @return
+     */
+    @GetMapping("/liteList")
+    @Operation(summary = "轻量级列表队列任务配置", description = "轻量级列表队列任务配置，一般用于select控件。")
+    @MscPermDeclare(type = UserType.OPS, auth = AuthType.USER, log = ActionLog.NONE)
+    public DataList<TaskRunnerInfo> liteList(TaskRunnerInfoQueryParam queryParam) throws TransactionException {
+        AuthServiceHelper.logRef(TaskRunnerInfo.class);
+        queryParam.SET_SELECT_SQL( "SELECT id,task_name,task_class,task_owner,task_tag,queue_type,delay_type,log_level,log_limit_size,run_type,run_target,consumer_num,prefetch_num,rate_limit_type,rate_limit_value,rate_limit_time,rate_limit_wait,retry_times_by_overrated,retry_times_by_partner,stats_date,stats_run_num,stats_fail_num,stats_run_time,alert_fail_rate,alert_fail_partner_rate,alert_fail_program_rate,alert_fail_config_rate,alert_fail_data_rate,alert_queue_oversize,alert_queue_timeout,alert_wait_timeout,alert_run_timeout,task_link_our,task_link_mch,create_date,modify_date,state from task_runner_info " );
+        return dao.list(TaskRunnerInfo.class, queryParam);
     }
 
     /**
@@ -59,23 +74,38 @@ public class TaskRunnerInfoController {
     @Operation(summary = "加载队列任务配置", description = "加载队列任务配置")
     @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
     public TaskRunnerInfo load(@Parameter(description = "主键ID", required = true, example = "1") @RequestParam long id) throws TransactionException {
-        AuthServiceHelper.logRef( TaskRunnerInfo.class, id );
-        return dao.load( TaskRunnerInfo.class, id );
+        AuthServiceHelper.logRef(TaskRunnerInfo.class,id);
+        return dao.load(TaskRunnerInfo.class, id);
     }
 
     /**
-     * 列表队列任务配置历史。
+     * 查询数据历史。
      *
      * @param
      * @return
      */
-    @GetMapping("/history")
-    @Operation(summary = "队列任务配置修改历史", description = "队列任务配置修改历史")
+    @GetMapping("/listDataHistory")
+    @Operation(summary = "查询数据历史", description = "查询数据历史")
     @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public DataList<SysDataHistory> history(SysDataHistoryQueryParam queryParam) throws TransactionException {
-        AuthServiceHelper.logRef( TaskRunnerInfo.class, queryParam.getEntityId() );
-        queryParam.setEntityClass( TaskRunnerInfo.class );
-        return SysDataHistoryHelper.listHistory( queryParam );
+    public DataList<SysDataHistory> listDataHistory(SysDataHistoryQueryParam queryParam) throws TransactionException {
+        AuthServiceHelper.logRef(TaskRunnerInfo.class, queryParam.getEntityId());
+        queryParam.setEntityClass(TaskRunnerInfo.class);
+        return dao.list(SysDataHistory.class, queryParam);
+    }
+
+    /**
+     * 查询操作日志。
+     *
+     * @param
+     * @return
+     */
+    @GetMapping("/listCritLog")
+    @Operation(summary = "查询操作日志", description = "查询操作日志")
+    @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
+    public DataList<SysCritLog> listCritLog(SysCritLogQueryParam queryParam) throws TransactionException {
+        AuthServiceHelper.logRef(TaskRunnerInfo.class, queryParam.getRefId());
+        queryParam.setRefTypeClass(TaskRunnerInfo.class);
+        return dao.list( SysCritLog.class, queryParam);
     }
 
     /**

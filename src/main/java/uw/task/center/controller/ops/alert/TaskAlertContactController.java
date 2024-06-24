@@ -4,7 +4,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
+import uw.app.common.dto.SysCritLogQueryParam;
 import uw.app.common.dto.SysDataHistoryQueryParam;
+import uw.app.common.entity.SysCritLog;
 import uw.app.common.entity.SysDataHistory;
 import uw.app.common.helper.SysDataHistoryHelper;
 import uw.auth.service.AuthServiceHelper;
@@ -34,18 +36,17 @@ public class TaskAlertContactController {
     private DaoFactory dao = DaoFactory.getInstance();
 
     /**
-     * 列表报警联系信息。
+     * 轻量级列表报警联系信息，一般用于select控件。
      *
-     * @param queryParam
      * @return
-     * @throws TransactionException
      */
-    @GetMapping("/list")
-    @Operation(summary = "列表报警联系信息", description = "列表报警联系信息")
-    @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public DataList<TaskAlertContact> list(TaskAlertContactQueryParam queryParam) throws TransactionException {
-        AuthServiceHelper.logRef( TaskAlertContact.class );
-        return dao.list( TaskAlertContact.class, queryParam );
+    @GetMapping("/liteList")
+    @Operation(summary = "轻量级列表报警联系信息", description = "轻量级列表报警联系信息，一般用于select控件。")
+    @MscPermDeclare(type = UserType.OPS, auth = AuthType.USER, log = ActionLog.NONE)
+    public DataList<TaskAlertContact> liteList(TaskAlertContactQueryParam queryParam) throws TransactionException {
+        AuthServiceHelper.logRef(TaskAlertContact.class);
+        queryParam.SET_SELECT_SQL( "SELECT id,contact_type,contact_name,mobile,email,wechat,im,notify_url,remark,create_date,modify_date,state from task_alert_contact " );
+        return dao.list(TaskAlertContact.class, queryParam);
     }
 
     /**
@@ -58,23 +59,38 @@ public class TaskAlertContactController {
     @Operation(summary = "加载报警联系信息", description = "加载报警联系信息")
     @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
     public TaskAlertContact load(@Parameter(description = "主键ID", required = true, example = "1") @RequestParam long id) throws TransactionException {
-        AuthServiceHelper.logRef( TaskAlertContact.class, id );
-        return dao.load( TaskAlertContact.class, id );
+        AuthServiceHelper.logRef(TaskAlertContact.class,id);
+        return dao.load(TaskAlertContact.class, id);
     }
 
     /**
-     * 列表报警联系信息历史。
+     * 查询数据历史。
      *
      * @param
      * @return
      */
-    @GetMapping("/history")
-    @Operation(summary = "报警联系信息修改历史", description = "报警联系信息修改历史")
+    @GetMapping("/listDataHistory")
+    @Operation(summary = "查询数据历史", description = "查询数据历史")
     @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public DataList<SysDataHistory> history(SysDataHistoryQueryParam queryParam) throws TransactionException {
-        AuthServiceHelper.logRef( TaskAlertContact.class, queryParam.getEntityId() );
-        queryParam.setEntityClass( TaskAlertContact.class );
-        return SysDataHistoryHelper.listHistory( queryParam );
+    public DataList<SysDataHistory> listDataHistory(SysDataHistoryQueryParam queryParam) throws TransactionException {
+        AuthServiceHelper.logRef(TaskAlertContact.class, queryParam.getEntityId());
+        queryParam.setEntityClass(TaskAlertContact.class);
+        return dao.list(SysDataHistory.class, queryParam);
+    }
+
+    /**
+     * 查询操作日志。
+     *
+     * @param
+     * @return
+     */
+    @GetMapping("/listCritLog")
+    @Operation(summary = "查询操作日志", description = "查询操作日志")
+    @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
+    public DataList<SysCritLog> listCritLog(SysCritLogQueryParam queryParam) throws TransactionException {
+        AuthServiceHelper.logRef(TaskAlertContact.class, queryParam.getRefId());
+        queryParam.setRefTypeClass(TaskAlertContact.class);
+        return dao.list(SysCritLog.class, queryParam);
     }
 
     /**
