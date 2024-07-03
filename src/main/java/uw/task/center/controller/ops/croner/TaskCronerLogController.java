@@ -28,7 +28,7 @@ import uw.task.center.entity.TaskCronerESLog;
 @RestController
 @RequestMapping("/ops/croner/log")
 @Tag(name = "定时任务日志")
-@MscPermDeclare(type = UserType.OPS)
+@MscPermDeclare(user = UserType.OPS)
 public class TaskCronerLogController {
     private static final Logger log = LoggerFactory.getLogger( TaskCronerLogController.class );
 
@@ -46,7 +46,7 @@ public class TaskCronerLogController {
      */
     @GetMapping("/list")
     @Operation(summary = "列表定时任务日志", description = "列表定时任务日志")
-    @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
+    @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
     public ESDataList<TaskCronerESLog> list(TaskCronerLogQueryParam queryParam) throws Exception {
         AuthServiceHelper.logRef( TaskCronerESLog.class );
         QueryParamResult result = dao.parseQueryParam( TaskCronerESLog.class, queryParam );
@@ -60,7 +60,7 @@ public class TaskCronerLogController {
      */
     @GetMapping(value = "/load")
     @Operation(summary = "查看定时任务日志", description = "查看定时任务日志")
-    @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
+    @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
     public TaskCronerESLog load(@Parameter(description = "主键", example = "1") long id) throws Exception {
         AuthServiceHelper.logRef( TaskCronerESLog.class, id );
         String dsl = logClient.translateSqlToDsl( "select * from \\\"uw.task.entity.task_croner_log_*\\\" where id = " + id, 0, 1, false );

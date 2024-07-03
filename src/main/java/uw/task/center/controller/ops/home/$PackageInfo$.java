@@ -14,7 +14,7 @@ import uw.auth.service.constant.UserType;
 public class $PackageInfo$ {
     @GetMapping("/ops/home")
     @Operation(summary = "首页", description = "首页")
-    @MscPermDeclare(type = UserType.OPS)
+    @MscPermDeclare(user = UserType.OPS)
     public void info() {
 
     }

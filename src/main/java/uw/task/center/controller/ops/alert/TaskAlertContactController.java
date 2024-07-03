@@ -31,7 +31,7 @@ import java.util.Date;
 @RestController
 @RequestMapping("/ops/alert/contact")
 @Tag(name = "报警联系人管理")
-@MscPermDeclare(type = UserType.OPS)
+@MscPermDeclare(user = UserType.OPS)
 public class TaskAlertContactController {
     private DaoFactory dao = DaoFactory.getInstance();
 
@@ -42,7 +42,7 @@ public class TaskAlertContactController {
      */
     @GetMapping("/liteList")
     @Operation(summary = "轻量级列表报警联系信息", description = "轻量级列表报警联系信息，一般用于select控件。")
-    @MscPermDeclare(type = UserType.OPS, auth = AuthType.USER, log = ActionLog.NONE)
+    @MscPermDeclare(user = UserType.OPS, auth = AuthType.USER, log = ActionLog.NONE)
     public DataList<TaskAlertContact> liteList(TaskAlertContactQueryParam queryParam) throws TransactionException {
         AuthServiceHelper.logRef(TaskAlertContact.class);
         queryParam.SET_SELECT_SQL( "SELECT id,contact_type,contact_name,mobile,email,wechat,im,notify_url,remark,create_date,modify_date,state from task_alert_contact " );
@@ -57,7 +57,7 @@ public class TaskAlertContactController {
      */
     @GetMapping("/load")
     @Operation(summary = "加载报警联系信息", description = "加载报警联系信息")
-    @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
+    @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
     public TaskAlertContact load(@Parameter(description = "主键ID", required = true, example = "1") @RequestParam long id) throws TransactionException {
         AuthServiceHelper.logRef(TaskAlertContact.class,id);
         return dao.load(TaskAlertContact.class, id);
@@ -71,7 +71,7 @@ public class TaskAlertContactController {
      */
     @GetMapping("/listDataHistory")
     @Operation(summary = "查询数据历史", description = "查询数据历史")
-    @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
+    @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
     public DataList<SysDataHistory> listDataHistory(SysDataHistoryQueryParam queryParam) throws TransactionException {
         AuthServiceHelper.logRef(TaskAlertContact.class, queryParam.getEntityId());
         queryParam.setEntityClass(TaskAlertContact.class);
@@ -86,7 +86,7 @@ public class TaskAlertContactController {
      */
     @GetMapping("/listCritLog")
     @Operation(summary = "查询操作日志", description = "查询操作日志")
-    @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
+    @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
     public DataList<SysCritLog> listCritLog(SysCritLogQueryParam queryParam) throws TransactionException {
         AuthServiceHelper.logRef(TaskAlertContact.class, queryParam.getRefId());
         queryParam.setRefTypeClass(TaskAlertContact.class);
@@ -102,7 +102,7 @@ public class TaskAlertContactController {
      */
     @PostMapping("/save")
     @Operation(summary = "新增报警联系信息", description = "新增报警联系信息")
-    @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
+    @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
     public ResponseData<TaskAlertContact> save(@RequestBody TaskAlertContact taskAlertContact) throws TransactionException {
         long id = dao.getSequenceId( TaskAlertContact.class );
         AuthServiceHelper.logRef( TaskAlertContact.class, id );
@@ -125,7 +125,7 @@ public class TaskAlertContactController {
      */
     @PutMapping("/update")
     @Operation(summary = "修改报警联系信息", description = "修改报警联系信息")
-    @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
+    @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
     public ResponseData<TaskAlertContact> update(@RequestBody TaskAlertContact taskAlertContact, @Parameter(name = "remark", description = "备注") @RequestParam String remark) throws TransactionException {
         AuthServiceHelper.logInfo( TaskAlertContact.class, taskAlertContact.getId(), "修改报警联系信息！操作备注：" + remark );
         TaskAlertContact taskAlertContactDb = dao.load( TaskAlertContact.class, taskAlertContact.getId() );
@@ -154,7 +154,7 @@ public class TaskAlertContactController {
      */
     @PatchMapping("/enable")
     @Operation(summary = "启用报警联系信息", description = "启用报警联系信息")
-    @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
+    @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
     public ResponseData enable(@Parameter(name = "id", description = "主键ID", example = "1") @RequestParam long id,
                                @Parameter(name = "remark", description = "备注") @RequestParam String remark) throws TransactionException {
         AuthServiceHelper.logInfo( TaskAlertContact.class, id, "启用报警联系信息！操作备注：" + remark );
@@ -179,7 +179,7 @@ public class TaskAlertContactController {
      */
     @PatchMapping("/disable")
     @Operation(summary = "禁用报警联系信息", description = "禁用报警联系信息")
-    @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
+    @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
     public ResponseData disable(@Parameter(name = "id", description = "主键ID", example = "1") @RequestParam long id,
                                 @Parameter(name = "remark", description = "备注") @RequestParam String remark) throws TransactionException {
         AuthServiceHelper.logInfo( TaskAlertContact.class, id, "禁用报警联系信息！操作备注：" + remark );
@@ -204,7 +204,7 @@ public class TaskAlertContactController {
      */
     @DeleteMapping("/delete")
     @Operation(summary = "删除报警联系信息", description = "删除报警联系信息")
-    @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
+    @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
     public ResponseData delete(@Parameter(name = "id", description = "主键ID", example = "1") @RequestParam long id,
                                @Parameter(name = "remark", description = "备注") @RequestParam String remark) throws TransactionException {
         AuthServiceHelper.logInfo( TaskAlertContact.class, id, "删除报警联系信息！操作备注：" + remark );

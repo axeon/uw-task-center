@@ -30,7 +30,7 @@ import java.util.*;
 @RestController
 @RequestMapping("/rpc/task")
 @Tag(name = "任务RPC接口", description = "任务RPC接口")
-@MscPermDeclare(type = UserType.RPC)
+@MscPermDeclare(user = UserType.RPC)
 @ResponseAdviceIgnore
 public class TaskRpcController {
 
@@ -43,7 +43,7 @@ public class TaskRpcController {
      */
     @PostMapping("/host/report")
     @Operation(summary = "更新主机当前状态", description = "更新主机当前状态")
-    @MscPermDeclare(type = UserType.RPC, log = ActionLog.NONE)
+    @MscPermDeclare(user = UserType.RPC, log = ActionLog.NONE)
     public HostReportResponse report(@RequestBody TaskHostInfoExt taskHostInfoExt) {
         //构造返回数据。
         HostReportResponse reportResponse = new HostReportResponse();
@@ -168,7 +168,7 @@ public class TaskRpcController {
      */
     @GetMapping("/croner/list")
     @Operation(summary = "获得定时任务列表", description = "获得定时任务列表")
-    @MscPermDeclare(type = UserType.RPC, log = ActionLog.NONE)
+    @MscPermDeclare(user = UserType.RPC, log = ActionLog.NONE)
     public List<TaskCronerInfo> getCronerConfigList(@Parameter(description = "运行目标", example = "default") String runTarget,
                                                     @Parameter(description = "任务项目", example = "任务项目") String taskProject,
                                                     @Parameter(description = "上一次更新时间", example = "0") Long lastUpdateTime) throws TransactionException {
@@ -196,7 +196,7 @@ public class TaskRpcController {
      */
     @GetMapping("/runner/list")
     @Operation(summary = "获得队列任务列表", description = "获得队列任务列表")
-    @MscPermDeclare(type = UserType.RPC, log = ActionLog.NONE)
+    @MscPermDeclare(user = UserType.RPC, log = ActionLog.NONE)
     public List<TaskRunnerInfo> getRunnerConfigList(@Parameter(description = "运行目标", example = "default") String runTarget,
                                                     @Parameter(description = "任务项目", example = "任务项目") String taskProject,
                                                     @Parameter(description = "上一次更新时间", example = "0") Long lastUpdateTime) throws TransactionException {
@@ -227,7 +227,7 @@ public class TaskRpcController {
      */
     @PutMapping("/croner/tick")
     @Operation(summary = "更新定时任务下次执行时间", description = "更新定时任务下次执行时间")
-    @MscPermDeclare(type = UserType.RPC, log = ActionLog.NONE)
+    @MscPermDeclare(user = UserType.RPC, log = ActionLog.NONE)
     public int updateCronerLog(@Parameter(description = "主键", example = "1") @RequestParam(required = false) long id,
                                @Parameter(description = "下一个日期", example = "0") @RequestParam(required = false) long nextDate) throws TransactionException {
         return dao.executeCommand( "update task_croner_info set next_run_date = ? where id = ? ", new Object[]{new Date( nextDate ), id} );
@@ -238,7 +238,7 @@ public class TaskRpcController {
      */
     @PostMapping("/runner/update")
     @Operation(summary = "初始化队列任务配置", description = "初始化队列任务配置")
-    @MscPermDeclare(type = UserType.RPC, log = ActionLog.NONE)
+    @MscPermDeclare(user = UserType.RPC, log = ActionLog.NONE)
     public TaskRunnerInfo initRunnerConfig(@RequestBody TaskRunnerInfo config) throws TransactionException {
         if (config != null) {
             String taskClass = config.getTaskClass();
@@ -271,7 +271,7 @@ public class TaskRpcController {
      */
     @PostMapping("/croner/update")
     @Operation(summary = "初始化定时任务配置", description = "初始化定时任务配置")
-    @MscPermDeclare(type = UserType.RPC, log = ActionLog.NONE)
+    @MscPermDeclare(user = UserType.RPC, log = ActionLog.NONE)
     public TaskCronerInfo initCronerConfig(@RequestBody TaskCronerInfo config) throws TransactionException {
         if (config != null) {
             String taskClass = config.getTaskClass();
@@ -304,7 +304,7 @@ public class TaskRpcController {
      */
     @PostMapping("/contact/update")
     @Operation(summary = "初始化任务联系人信息", description = "初始化任务联系人信息")
-    @MscPermDeclare(type = UserType.RPC, log = ActionLog.NONE)
+    @MscPermDeclare(user = UserType.RPC, log = ActionLog.NONE)
     public void initRunnerConfig(@RequestBody Map<String, String> contactData) throws TransactionException {
         if (contactData != null) {
             String contactName = contactData.get( "contactName" );

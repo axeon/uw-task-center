@@ -25,7 +25,7 @@ import uw.task.center.entity.TaskAlertNotify;
 @RestController
 @Tag(name = "报警通知管理")
 @RequestMapping("/ops/alert/notify")
-@MscPermDeclare(type = UserType.OPS)
+@MscPermDeclare(user = UserType.OPS)
 public class TaskAlertNotifyController {
     private DaoFactory dao = DaoFactory.getInstance();
 
@@ -38,7 +38,7 @@ public class TaskAlertNotifyController {
      */
     @GetMapping("/list")
     @Operation(summary = "列表报警信息通知", description = "列表报警信息通知")
-    @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
+    @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
     public DataList<TaskAlertNotify> list(TaskAlertNotifyQueryParam queryParam) throws TransactionException {
         AuthServiceHelper.logRef( TaskAlertNotify.class );
         return dao.list( TaskAlertNotify.class, queryParam );
@@ -52,7 +52,7 @@ public class TaskAlertNotifyController {
      */
     @GetMapping("/load")
     @Operation(summary = "加载报警信息通知", description = "加载报警信息通知")
-    @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
+    @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
     public TaskAlertNotify load(@Parameter(description = "主键ID", required = true, example = "1") @RequestParam long id) throws TransactionException {
         AuthServiceHelper.logRef( TaskAlertNotify.class, id );
         return dao.load( TaskAlertNotify.class, id );

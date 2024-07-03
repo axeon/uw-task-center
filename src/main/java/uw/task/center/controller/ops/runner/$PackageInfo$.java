@@ -14,7 +14,7 @@ import uw.auth.service.constant.UserType;
 public class $PackageInfo$ {
     @GetMapping("/ops/runner")
     @Operation(summary = "队列任务管理", description = "队列任务管理")
-    @MscPermDeclare(type = UserType.OPS)
+    @MscPermDeclare(user = UserType.OPS)
     public void info() {
 
     }

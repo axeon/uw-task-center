@@ -14,7 +14,7 @@ import uw.auth.service.constant.UserType;
 public class $PackageInfo$ {
     @GetMapping("/rpc/task")
     @Operation(summary = "任务RPC", description = "任务RPC")
-    @MscPermDeclare(type = UserType.RPC)
+    @MscPermDeclare(user = UserType.RPC)
     public void info() {
 
     }

@@ -28,7 +28,7 @@ import uw.task.center.entity.TaskRunnerESLog;
 @RestController
 @RequestMapping("/ops/runner/log")
 @Tag(name = "队列任务日志", description = "队列任务日志")
-@MscPermDeclare(type = UserType.OPS)
+@MscPermDeclare(user = UserType.OPS)
 public class TaskRunnerLogController {
 
     private static final Logger log = LoggerFactory.getLogger( TaskRunnerLogController.class );
@@ -46,7 +46,7 @@ public class TaskRunnerLogController {
      */
     @GetMapping("/list")
     @Operation(summary = "列表队列任务日志", description = "列表队列任务日志")
-    @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
+    @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
     public ESDataList<TaskRunnerESLog> list(TaskRunnerLogQueryParam queryParam) throws Exception {
         AuthServiceHelper.logRef( TaskRunnerESLog.class );
         QueryParamResult result = dao.parseQueryParam( TaskRunnerESLog.class, queryParam );
@@ -60,7 +60,7 @@ public class TaskRunnerLogController {
      */
     @GetMapping(value = "/load")
     @Operation(summary = "查询队列任务日志", description = "查询队列任务日志")
-    @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
+    @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
     public TaskRunnerESLog load(@Parameter(description = "主键", example = "1") long id) throws Exception {
         AuthServiceHelper.logRef( TaskRunnerESLog.class, id );
         String dsl = logClient.translateSqlToDsl( "select * from \\\"uw.task.entity.task_runner_log_*\\\" where id = " + id, 0, 1, false );

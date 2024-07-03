@@ -25,7 +25,7 @@ import java.util.Date;
 @RestController
 @RequestMapping("/ops/host/info")
 @Tag(name = "主机状态报表")
-@MscPermDeclare(type = UserType.OPS)
+@MscPermDeclare(user = UserType.OPS)
 public class TaskHostInfoController {
     private DaoFactory dao = DaoFactory.getInstance();
 
@@ -39,7 +39,7 @@ public class TaskHostInfoController {
      */
     @GetMapping("/list")
     @Operation(summary = "列表task主机信息", description = "列表task主机信息")
-    @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
+    @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
     public DataList<TaskHostInfo> list(TaskHostInfoQueryParam queryParam) throws TransactionException {
         AuthServiceHelper.logRef( TaskHostInfo.class );
         return dao.list( TaskHostInfo.class, queryParam );
@@ -54,7 +54,7 @@ public class TaskHostInfoController {
      */
     @GetMapping("/load")
     @Operation(summary = "加载task主机信息", description = "加载task主机信息")
-    @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
+    @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
     public TaskHostInfo load(@Parameter(description = "主键ID", required = true, example = "1") @RequestParam long id) throws TransactionException {
         AuthServiceHelper.logRef( TaskHostInfo.class, id );
         return dao.load( TaskHostInfo.class, id );
@@ -68,7 +68,7 @@ public class TaskHostInfoController {
      */
     @PatchMapping("/enable")
     @Operation(summary = "启用task主机信息", description = "启用task主机信息")
-    @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
+    @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
     public ResponseData enable(@Parameter(name = "id", description = "主键ID", example = "1") @RequestParam long id,
                                @Parameter(name = "remark", description = "备注") @RequestParam String remark) throws TransactionException {
         AuthServiceHelper.logInfo( TaskHostInfo.class, id, "启用task主机信息！操作备注：" + remark );
@@ -93,7 +93,7 @@ public class TaskHostInfoController {
      */
     @PatchMapping("/disable")
     @Operation(summary = "禁用task主机信息", description = "禁用task主机信息")
-    @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
+    @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
     public ResponseData disable(@Parameter(name = "id", description = "主键ID", example = "1") @RequestParam long id,
                                 @Parameter(name = "remark", description = "备注") @RequestParam String remark) throws TransactionException {
         AuthServiceHelper.logInfo( TaskHostInfo.class, id, "禁用task主机信息！操作备注：" + remark );

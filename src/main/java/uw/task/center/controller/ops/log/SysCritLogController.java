@@ -23,7 +23,7 @@ import uw.dao.TransactionException;
 @RestController
 @RequestMapping("/ops/log/critLog")
 @Tag(name = "关键日志", description = "关键日志")
-@MscPermDeclare(type = UserType.OPS)
+@MscPermDeclare(user = UserType.OPS)
 public class SysCritLogController {
 
     DaoFactory dao = DaoFactory.getInstance();
@@ -37,7 +37,7 @@ public class SysCritLogController {
      */
     @GetMapping("/list")
     @Operation(summary = "关键日志查询", description = "列表关键日志")
-    @MscPermDeclare(type = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
+    @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
     public DataList<SysCritLog> list(SysCritLogQueryParam queryParam) throws TransactionException {
         AuthServiceHelper.logRef( SysCritLog.class );
         return dao.list( SysCritLog.class, queryParam );

@@ -14,7 +14,7 @@ import uw.auth.service.constant.UserType;
 public class $PackageInfo$ {
     @GetMapping("/ops/croner")
     @Operation(summary = "定时任务管理", description = "定时任务管理")
-    @MscPermDeclare(type = UserType.OPS)
+    @MscPermDeclare(user = UserType.OPS)
     public void info() {
 
     }
