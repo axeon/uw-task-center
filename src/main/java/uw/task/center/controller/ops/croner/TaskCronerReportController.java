@@ -297,51 +297,51 @@ public class TaskCronerReportController {
         /**
          * 全部执行计数
          */
-        @ColumnMeta(columnName = "num_all", dataType = "int", dataSize = 10, nullable = true)
+        @ColumnMeta(columnName = "num_all", dataType = "long", dataSize = 10, nullable = true)
         @Schema(title = "全部执行计数", description = "全部执行计数")
-        private int numAll;
+        private long numAll;
 
         /**
          * 程序失败计数
          */
-        @ColumnMeta(columnName = "num_fail_program", dataType = "int", dataSize = 10, nullable = true)
+        @ColumnMeta(columnName = "num_fail_program", dataType = "long", dataSize = 10, nullable = true)
         @Schema(title = "程序失败计数", description = "程序失败计数")
-        private int numFailProgram;
+        private long numFailProgram;
 
         /**
          * 配置失败计数
          */
-        @ColumnMeta(columnName = "num_fail_config", dataType = "int", dataSize = 10, nullable = true)
+        @ColumnMeta(columnName = "num_fail_config", dataType = "long", dataSize = 10, nullable = true)
         @Schema(title = "配置失败计数", description = "配置失败计数")
-        private int numFailConfig;
+        private long numFailConfig;
 
         /**
          * 数据失败计数
          */
-        @ColumnMeta(columnName = "num_fail_data", dataType = "int", dataSize = 10, nullable = true)
+        @ColumnMeta(columnName = "num_fail_data", dataType = "long", dataSize = 10, nullable = true)
         @Schema(title = "数据失败计数", description = "数据失败计数")
-        private int numFailData;
+        private long numFailData;
 
         /**
          * 对方失败计数
          */
-        @ColumnMeta(columnName = "num_fail_partner", dataType = "int", dataSize = 10, nullable = true)
+        @ColumnMeta(columnName = "num_fail_partner", dataType = "long", dataSize = 10, nullable = true)
         @Schema(title = "对方失败计数", description = "对方失败计数")
-        private int numFailPartner;
+        private long numFailPartner;
 
         /**
          * 超时等待
          */
-        @ColumnMeta(columnName = "time_wait", dataType = "int", dataSize = 10, nullable = true)
+        @ColumnMeta(columnName = "time_wait", dataType = "long", dataSize = 10, nullable = true)
         @Schema(title = "超时等待", description = "超时等待")
-        private int timeWait;
+        private long timeWait;
 
         /**
          * 运行时间
          */
-        @ColumnMeta(columnName = "time_run", dataType = "int", dataSize = 10, nullable = true)
+        @ColumnMeta(columnName = "time_run", dataType = "long", dataSize = 10, nullable = true)
         @Schema(title = "运行时间", description = "运行时间")
-        private int timeRun;
+        private long timeRun;
 
         /**
          * 统计时间
@@ -350,59 +350,59 @@ public class TaskCronerReportController {
         @Schema(title = "统计时间", description = "统计时间")
         private String statsDate;
 
-        public int getNumAll() {
+        public long getNumAll() {
             return numAll;
         }
 
-        public void setNumAll(int numAll) {
+        public void setNumAll(long numAll) {
             this.numAll = numAll;
         }
 
-        public int getNumFailProgram() {
+        public long getNumFailProgram() {
             return numFailProgram;
         }
 
-        public void setNumFailProgram(int numFailProgram) {
+        public void setNumFailProgram(long numFailProgram) {
             this.numFailProgram = numFailProgram;
         }
 
-        public int getNumFailConfig() {
+        public long getNumFailConfig() {
             return numFailConfig;
         }
 
-        public void setNumFailConfig(int numFailConfig) {
+        public void setNumFailConfig(long numFailConfig) {
             this.numFailConfig = numFailConfig;
         }
 
-        public int getNumFailData() {
+        public long getNumFailData() {
             return numFailData;
         }
 
-        public void setNumFailData(int numFailData) {
+        public void setNumFailData(long numFailData) {
             this.numFailData = numFailData;
         }
 
-        public int getNumFailPartner() {
+        public long getNumFailPartner() {
             return numFailPartner;
         }
 
-        public void setNumFailPartner(int numFailPartner) {
+        public void setNumFailPartner(long numFailPartner) {
             this.numFailPartner = numFailPartner;
         }
 
-        public int getTimeWait() {
+        public long getTimeWait() {
             return timeWait;
         }
 
-        public void setTimeWait(int timeWait) {
+        public void setTimeWait(long timeWait) {
             this.timeWait = timeWait;
         }
 
-        public int getTimeRun() {
+        public long getTimeRun() {
             return timeRun;
         }
 
-        public void setTimeRun(int timeRun) {
+        public void setTimeRun(long timeRun) {
             this.timeRun = timeRun;
         }
 

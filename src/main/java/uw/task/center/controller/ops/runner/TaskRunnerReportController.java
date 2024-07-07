@@ -146,7 +146,7 @@ public class TaskRunnerReportController {
             default:
                 throw new IllegalArgumentException( "dateType is error :" + dateType );
         }
-        sql += " from (SELECT task_id ,sum(num_all) as num_all ,sum(num_fail_program) as num_fail_program ,sum(num_fail_config) as num_fail_config ," + "sum(num_fail_data) as " + "num_fail_data,sum(num_fail_partner) as num_fail_partner, sum(time_wait_queue) as time_wait_queue,sum(time_wait_delay) as time_wait_delay,sum(time_run) as " + "time_run FROM " + tableName;
+        sql += " from (SELECT task_id ,sum(num_all) as num_all ,sum(num_fail_program) as num_fail_program ,sum(num_fail_config) as num_fail_config ,sum(num_fail_data) as num_fail_data,sum(num_fail_partner) as num_fail_partner, sum(time_wait_queue) as time_wait_queue,sum(time_wait_delay) as time_wait_delay,sum(time_run) as time_run FROM " + tableName;
         sql += " WHERE create_date >= ? AND create_date <= ? ";
         sql += " group by task_id order by num_all desc) tcs left join task_runner_info tcc on tcs.task_id =tcc.id ";
         param.add( startDate );
@@ -199,11 +199,10 @@ public class TaskRunnerReportController {
         @Schema(title = "运行标签", description = "运行标签")
         private String taskTag;
 
-
         /**
          * 消费者的数量
          */
-        @ColumnMeta(columnName = "consumer_num", dataType = "int", dataSize = 10, nullable = true)
+        @ColumnMeta(columnName = "consumer_num", dataType = "long", dataSize = 10, nullable = true)
         @Schema(title = "消费者的数量", description = "消费者的数量")
         private int consumerNum;
 
@@ -275,12 +274,10 @@ public class TaskRunnerReportController {
             this.taskTag = taskTag;
         }
 
-        @Override
-        public int getConsumerNum() {
+        public long getConsumerNum() {
             return consumerNum;
         }
 
-        @Override
         public void setConsumerNum(int consumerNum) {
             this.consumerNum = consumerNum;
         }
@@ -328,72 +325,72 @@ public class TaskRunnerReportController {
         /**
          * 全部执行计数
          */
-        @ColumnMeta(columnName = "num_all", dataType = "int", dataSize = 10, nullable = true)
+        @ColumnMeta(columnName = "num_all", dataType = "long", dataSize = 10, nullable = true)
         @Schema(title = "全部执行计数", description = "全部执行计数")
-        private int numAll;
+        private long numAll;
 
         /**
          * 程序失败计数
          */
-        @ColumnMeta(columnName = "num_fail_program", dataType = "int", dataSize = 10, nullable = true)
+        @ColumnMeta(columnName = "num_fail_program", dataType = "long", dataSize = 10, nullable = true)
         @Schema(title = "程序失败计数", description = "程序失败计数")
-        private int numFailProgram;
+        private long numFailProgram;
 
         /**
          * 配置失败计数
          */
-        @ColumnMeta(columnName = "num_fail_config", dataType = "int", dataSize = 10, nullable = true)
+        @ColumnMeta(columnName = "num_fail_config", dataType = "long", dataSize = 10, nullable = true)
         @Schema(title = "配置失败计数", description = "配置失败计数")
-        private int numFailConfig;
+        private long numFailConfig;
 
         /**
          * 数据失败计数
          */
-        @ColumnMeta(columnName = "num_fail_data", dataType = "int", dataSize = 10, nullable = true)
+        @ColumnMeta(columnName = "num_fail_data", dataType = "long", dataSize = 10, nullable = true)
         @Schema(title = "数据失败计数", description = "数据失败计数")
-        private int numFailData;
+        private long numFailData;
 
         /**
          * 对方失败计数
          */
-        @ColumnMeta(columnName = "num_fail_partner", dataType = "int", dataSize = 10, nullable = true)
+        @ColumnMeta(columnName = "num_fail_partner", dataType = "long", dataSize = 10, nullable = true)
         @Schema(title = "对方失败计数", description = "对方失败计数")
-        private int numFailPartner;
+        private long numFailPartner;
 
         /**
          * 队列等待时间
          */
-        @ColumnMeta(columnName = "time_wait_queue", dataType = "int", dataSize = 10, nullable = true)
+        @ColumnMeta(columnName = "time_wait_queue", dataType = "long", dataSize = 10, nullable = true)
         @Schema(title = "队列等待时间", description = "队列等待时间")
-        private int timeWaitQueue;
+        private long timeWaitQueue;
 
         /**
          * 超时等待时间
          */
-        @ColumnMeta(columnName = "time_wait_delay", dataType = "int", dataSize = 10, nullable = true)
+        @ColumnMeta(columnName = "time_wait_delay", dataType = "long", dataSize = 10, nullable = true)
         @Schema(title = "超时等待时间", description = "超时等待时间")
-        private int timeWaitDelay;
+        private long timeWaitDelay;
 
         /**
          * 运行时间
          */
-        @ColumnMeta(columnName = "time_run", dataType = "int", dataSize = 10, nullable = true)
+        @ColumnMeta(columnName = "time_run", dataType = "long", dataSize = 10, nullable = true)
         @Schema(title = "运行时间", description = "运行时间")
-        private int timeRun;
+        private long timeRun;
 
         /**
          * 队列长度
          */
-        @ColumnMeta(columnName = "queue_size", dataType = "int", dataSize = 10, nullable = true)
+        @ColumnMeta(columnName = "queue_size", dataType = "long", dataSize = 10, nullable = true)
         @Schema(title = "队列长度", description = "队列长度")
-        private int queueSize;
+        private long queueSize;
 
         /**
          * 消费者数量
          */
-        @ColumnMeta(columnName = "consumer_num", dataType = "int", dataSize = 10, nullable = true)
+        @ColumnMeta(columnName = "consumer_num", dataType = "long", dataSize = 10, nullable = true)
         @Schema(title = "消费者数量", description = "消费者数量")
-        private int consumerNum;
+        private long consumerNum;
 
         /**
          * 统计时间
@@ -402,83 +399,83 @@ public class TaskRunnerReportController {
         @Schema(title = "统计时间", description = "统计时间")
         private String statsDate;
 
-        public int getNumAll() {
+        public long getNumAll() {
             return numAll;
         }
 
-        public void setNumAll(int numAll) {
+        public void setNumAll(long numAll) {
             this.numAll = numAll;
         }
 
-        public int getNumFailProgram() {
+        public long getNumFailProgram() {
             return numFailProgram;
         }
 
-        public void setNumFailProgram(int numFailProgram) {
+        public void setNumFailProgram(long numFailProgram) {
             this.numFailProgram = numFailProgram;
         }
 
-        public int getNumFailConfig() {
+        public long getNumFailConfig() {
             return numFailConfig;
         }
 
-        public void setNumFailConfig(int numFailConfig) {
+        public void setNumFailConfig(long numFailConfig) {
             this.numFailConfig = numFailConfig;
         }
 
-        public int getNumFailData() {
+        public long getNumFailData() {
             return numFailData;
         }
 
-        public void setNumFailData(int numFailData) {
+        public void setNumFailData(long numFailData) {
             this.numFailData = numFailData;
         }
 
-        public int getNumFailPartner() {
+        public long getNumFailPartner() {
             return numFailPartner;
         }
 
-        public void setNumFailPartner(int numFailPartner) {
+        public void setNumFailPartner(long numFailPartner) {
             this.numFailPartner = numFailPartner;
         }
 
-        public int getTimeWaitQueue() {
+        public long getTimeWaitQueue() {
             return timeWaitQueue;
         }
 
-        public void setTimeWaitQueue(int timeWaitQueue) {
+        public void setTimeWaitQueue(long timeWaitQueue) {
             this.timeWaitQueue = timeWaitQueue;
         }
 
-        public int getTimeWaitDelay() {
+        public long getTimeWaitDelay() {
             return timeWaitDelay;
         }
 
-        public void setTimeWaitDelay(int timeWaitDelay) {
+        public void setTimeWaitDelay(long timeWaitDelay) {
             this.timeWaitDelay = timeWaitDelay;
         }
 
-        public int getTimeRun() {
+        public long getTimeRun() {
             return timeRun;
         }
 
-        public void setTimeRun(int timeRun) {
+        public void setTimeRun(long timeRun) {
             this.timeRun = timeRun;
         }
 
-        public int getQueueSize() {
+        public long getQueueSize() {
             return queueSize;
         }
 
-        public void setQueueSize(int queueSize) {
+        public void setQueueSize(long queueSize) {
             this.queueSize = queueSize;
         }
 
-        public int getConsumerNum() {
+        public long getConsumerNum() {
             return consumerNum;
         }
 
-        public void setConsumerNum(int consumerNum) {
+        public void setConsumerNum(long consumerNum) {
             this.consumerNum = consumerNum;
         }
 

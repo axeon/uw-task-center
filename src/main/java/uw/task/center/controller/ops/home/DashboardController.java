@@ -216,15 +216,15 @@ public class DashboardController {
          * 全部数量
          */
         @Schema(title = "全部数量", description = "全部数量")
-        @ColumnMeta(columnName = "num_all", dataType = "int", dataSize = 10)
-        private int numAll;
+        @ColumnMeta(columnName = "num_all", dataType = "long", dataSize = 10)
+        private long numAll;
 
         /**
          * 失败数量
          */
         @Schema(title = "失败数量", description = "失败数量")
-        @ColumnMeta(columnName = "num_fail", dataType = "int", dataSize = 10)
-        private int numFail;
+        @ColumnMeta(columnName = "num_fail", dataType = "long", dataSize = 10)
+        private long numFail;
 
         /**
          * 时间点
@@ -233,19 +233,19 @@ public class DashboardController {
         @ColumnMeta(columnName = "stats_date", dataType = "String", dataSize = 19)
         private String statsDate;
 
-        public int getNumAll() {
+        public long getNumAll() {
             return numAll;
         }
 
-        public void setNumAll(int numAll) {
+        public void setNumAll(long numAll) {
             this.numAll = numAll;
         }
 
-        public int getNumFail() {
+        public long getNumFail() {
             return numFail;
         }
 
-        public void setNumFail(int numFail) {
+        public void setNumFail(long numFail) {
             this.numFail = numFail;
         }
 
