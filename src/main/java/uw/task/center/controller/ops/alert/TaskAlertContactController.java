@@ -45,7 +45,7 @@ public class TaskAlertContactController {
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.USER, log = ActionLog.NONE)
     public DataList<TaskAlertContact> liteList(TaskAlertContactQueryParam queryParam) throws TransactionException {
         AuthServiceHelper.logRef(TaskAlertContact.class);
-        queryParam.SET_SELECT_SQL( "SELECT id,contact_type,contact_name,mobile,email,wechat,im,notify_url,remark,create_date,modify_date,state from task_alert_contact " );
+        queryParam.SELECT_SQL( "SELECT id,contact_type,contact_name,mobile,email,wechat,im,notify_url,remark,create_date,modify_date,state from task_alert_contact " );
         return dao.list(TaskAlertContact.class, queryParam);
     }
 

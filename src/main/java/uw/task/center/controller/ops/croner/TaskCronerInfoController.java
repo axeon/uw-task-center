@@ -61,7 +61,7 @@ public class TaskCronerInfoController {
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.USER, log = ActionLog.NONE)
     public DataList<TaskCronerInfo> liteList(TaskCronerInfoQueryParam queryParam) throws TransactionException {
         AuthServiceHelper.logRef(TaskCronerInfo.class);
-        queryParam.SET_SELECT_SQL( "SELECT id,task_name,task_class,task_param,task_owner,task_cron,run_type,run_target,log_level,log_limit_size,next_run_date,stats_date,stats_run_num,stats_fail_num,stats_run_time,alert_fail_rate,alert_fail_partner_rate,alert_fail_data_rate,alert_fail_program_rate,alert_wait_timeout,alert_run_timeout,task_link_our,task_link_mch,create_date,modify_date,state from task_croner_info " );
+        queryParam.SELECT_SQL( "SELECT id,task_name,task_class,task_param,task_owner,task_cron,run_type,run_target,log_level,log_limit_size,next_run_date,stats_date,stats_run_num,stats_fail_num,stats_run_time,alert_fail_rate,alert_fail_partner_rate,alert_fail_data_rate,alert_fail_program_rate,alert_wait_timeout,alert_run_timeout,task_link_our,task_link_mch,create_date,modify_date,state from task_croner_info " );
         return dao.list(TaskCronerInfo.class, queryParam);
     }
 

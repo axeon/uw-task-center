@@ -50,9 +50,9 @@ public class TaskRunnerLogController {
     public ESDataList<TaskRunnerESLog> list(TaskRunnerLogQueryParam queryParam) throws Exception {
         AuthServiceHelper.logRef( TaskRunnerESLog.class );
         QueryParamResult result = dao.parseQueryParam( TaskRunnerESLog.class, queryParam );
-        String dsl = logClient.translateSqlToDsl( result.genFullSql(), queryParam.GET_START_INDEX(), queryParam.GET_RESULT_NUM(), queryParam.CHECK_AUTO_COUNT() );
-        return logClient.mapQueryResponseToEDataList( logClient.dslQuery( TaskRunnerESLog.class, "uw.task.entity.task_runner_log_*", dsl ), queryParam.GET_START_INDEX(),
-                queryParam.GET_RESULT_NUM() );
+        String dsl = logClient.translateSqlToDsl( result.genFullSql(), queryParam.START_INDEX(), queryParam.RESULT_NUM(), queryParam.CHECK_AUTO_COUNT() );
+        return logClient.mapQueryResponseToEDataList( logClient.dslQuery( TaskRunnerESLog.class, "uw.task.entity.task_runner_log_*", dsl ), queryParam.START_INDEX(),
+                queryParam.RESULT_NUM() );
     }
 
     /**

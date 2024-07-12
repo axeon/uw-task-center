@@ -50,9 +50,9 @@ public class TaskCronerLogController {
     public ESDataList<TaskCronerESLog> list(TaskCronerLogQueryParam queryParam) throws Exception {
         AuthServiceHelper.logRef( TaskCronerESLog.class );
         QueryParamResult result = dao.parseQueryParam( TaskCronerESLog.class, queryParam );
-        String dsl = logClient.translateSqlToDsl( result.genFullSql(), queryParam.GET_START_INDEX(), queryParam.GET_RESULT_NUM(), queryParam.CHECK_AUTO_COUNT() );
-        return logClient.mapQueryResponseToEDataList( logClient.dslQuery( TaskCronerESLog.class, "uw.task.entity.task_croner_log_*", dsl ), queryParam.GET_START_INDEX(),
-                queryParam.GET_RESULT_NUM() );
+        String dsl = logClient.translateSqlToDsl( result.genFullSql(), queryParam.START_INDEX(), queryParam.RESULT_NUM(), queryParam.CHECK_AUTO_COUNT() );
+        return logClient.mapQueryResponseToEDataList( logClient.dslQuery( TaskCronerESLog.class, "uw.task.entity.task_croner_log_*", dsl ), queryParam.START_INDEX(),
+                queryParam.RESULT_NUM() );
     }
 
     /**
