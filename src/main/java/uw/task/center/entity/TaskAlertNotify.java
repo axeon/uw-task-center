@@ -2,6 +2,7 @@ package uw.task.center.entity;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonRawValue;
@@ -201,7 +202,7 @@ public class TaskAlertNotify implements DataEntity,Serializable{
      * 设置。
      */
     public void setId(long id){
-        if ((!String.valueOf(this.id).equals(String.valueOf(id)))) {
+        if (!Objects.equals(this.id, id)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -215,7 +216,7 @@ public class TaskAlertNotify implements DataEntity,Serializable{
      * 设置报警信息ID。
      */
     public void setInfoId(long infoId){
-        if ((!String.valueOf(this.infoId).equals(String.valueOf(infoId)))) {
+        if (!Objects.equals(this.infoId, infoId)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -229,7 +230,7 @@ public class TaskAlertNotify implements DataEntity,Serializable{
      * 设置联系人。
      */
     public void setContactMan(String contactMan){
-        if ((!String.valueOf(this.contactMan).equals(String.valueOf(contactMan)))) {
+        if (!Objects.equals(this.contactMan, contactMan)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -243,7 +244,7 @@ public class TaskAlertNotify implements DataEntity,Serializable{
      * 设置联系人信息类型,mobile,qq,wx,email。
      */
     public void setContactType(String contactType){
-        if ((!String.valueOf(this.contactType).equals(String.valueOf(contactType)))) {
+        if (!Objects.equals(this.contactType, contactType)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -257,7 +258,7 @@ public class TaskAlertNotify implements DataEntity,Serializable{
      * 设置联系人信息。
      */
     public void setContactInfo(String contactInfo){
-        if ((!String.valueOf(this.contactInfo).equals(String.valueOf(contactInfo)))) {
+        if (!Objects.equals(this.contactInfo, contactInfo)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -271,7 +272,7 @@ public class TaskAlertNotify implements DataEntity,Serializable{
      * 设置创建时间。
      */
     public void setCreateDate(java.util.Date createDate){
-        if ((!String.valueOf(this.createDate).equals(String.valueOf(createDate)))) {
+        if (!Objects.equals(this.createDate, createDate)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -285,7 +286,7 @@ public class TaskAlertNotify implements DataEntity,Serializable{
      * 设置发送时间。
      */
     public void setSentDate(java.util.Date sentDate){
-        if ((!String.valueOf(this.sentDate).equals(String.valueOf(sentDate)))) {
+        if (!Objects.equals(this.sentDate, sentDate)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -299,7 +300,7 @@ public class TaskAlertNotify implements DataEntity,Serializable{
      * 设置发送次数。
      */
     public void setSentTimes(int sentTimes){
-        if ((!String.valueOf(this.sentTimes).equals(String.valueOf(sentTimes)))) {
+        if (!Objects.equals(this.sentTimes, sentTimes)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -313,7 +314,7 @@ public class TaskAlertNotify implements DataEntity,Serializable{
      * 设置状态。
      */
     public void setState(int state){
-        if ((!String.valueOf(this.state).equals(String.valueOf(state)))) {
+        if (!Objects.equals(this.state, state)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }

@@ -2,6 +2,7 @@ package uw.task.center.entity;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonRawValue;
@@ -243,7 +244,7 @@ public class TaskAlertContact implements DataEntity,Serializable{
      * 设置id。
      */
     public void setId(long id){
-        if ((!String.valueOf(this.id).equals(String.valueOf(id)))) {
+        if (!Objects.equals(this.id, id)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -257,7 +258,7 @@ public class TaskAlertContact implements DataEntity,Serializable{
      * 设置联系人类型。
      */
     public void setContactType(int contactType){
-        if ((!String.valueOf(this.contactType).equals(String.valueOf(contactType)))) {
+        if (!Objects.equals(this.contactType, contactType)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -271,7 +272,7 @@ public class TaskAlertContact implements DataEntity,Serializable{
      * 设置联系人。
      */
     public void setContactName(String contactName){
-        if ((!String.valueOf(this.contactName).equals(String.valueOf(contactName)))) {
+        if (!Objects.equals(this.contactName, contactName)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -285,7 +286,7 @@ public class TaskAlertContact implements DataEntity,Serializable{
      * 设置联系电话。
      */
     public void setMobile(String mobile){
-        if ((!String.valueOf(this.mobile).equals(String.valueOf(mobile)))) {
+        if (!Objects.equals(this.mobile, mobile)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -299,7 +300,7 @@ public class TaskAlertContact implements DataEntity,Serializable{
      * 设置联系email。
      */
     public void setEmail(String email){
-        if ((!String.valueOf(this.email).equals(String.valueOf(email)))) {
+        if (!Objects.equals(this.email, email)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -313,7 +314,7 @@ public class TaskAlertContact implements DataEntity,Serializable{
      * 设置联系微信。
      */
     public void setWechat(String wechat){
-        if ((!String.valueOf(this.wechat).equals(String.valueOf(wechat)))) {
+        if (!Objects.equals(this.wechat, wechat)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -327,7 +328,7 @@ public class TaskAlertContact implements DataEntity,Serializable{
      * 设置备用im。
      */
     public void setIm(String im){
-        if ((!String.valueOf(this.im).equals(String.valueOf(im)))) {
+        if (!Objects.equals(this.im, im)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -341,7 +342,7 @@ public class TaskAlertContact implements DataEntity,Serializable{
      * 设置通知链接，如钉钉，微信等。
      */
     public void setNotifyUrl(String notifyUrl){
-        if ((!String.valueOf(this.notifyUrl).equals(String.valueOf(notifyUrl)))) {
+        if (!Objects.equals(this.notifyUrl, notifyUrl)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -355,7 +356,7 @@ public class TaskAlertContact implements DataEntity,Serializable{
      * 设置备注。
      */
     public void setRemark(String remark){
-        if ((!String.valueOf(this.remark).equals(String.valueOf(remark)))) {
+        if (!Objects.equals(this.remark, remark)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -369,7 +370,7 @@ public class TaskAlertContact implements DataEntity,Serializable{
      * 设置创建日期。
      */
     public void setCreateDate(java.util.Date createDate){
-        if ((!String.valueOf(this.createDate).equals(String.valueOf(createDate)))) {
+        if (!Objects.equals(this.createDate, createDate)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -383,7 +384,7 @@ public class TaskAlertContact implements DataEntity,Serializable{
      * 设置修改日期。
      */
     public void setModifyDate(java.util.Date modifyDate){
-        if ((!String.valueOf(this.modifyDate).equals(String.valueOf(modifyDate)))) {
+        if (!Objects.equals(this.modifyDate, modifyDate)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -397,7 +398,7 @@ public class TaskAlertContact implements DataEntity,Serializable{
      * 设置状态。
      */
     public void setState(int state){
-        if ((!String.valueOf(this.state).equals(String.valueOf(state)))) {
+        if (!Objects.equals(this.state, state)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }

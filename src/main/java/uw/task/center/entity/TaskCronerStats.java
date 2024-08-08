@@ -2,6 +2,7 @@ package uw.task.center.entity;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonRawValue;
@@ -215,7 +216,7 @@ public class TaskCronerStats implements DataEntity,Serializable{
      * 设置id。
      */
     public void setId(long id){
-        if ((!String.valueOf(this.id).equals(String.valueOf(id)))) {
+        if (!Objects.equals(this.id, id)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -229,7 +230,7 @@ public class TaskCronerStats implements DataEntity,Serializable{
      * 设置任务配置id。
      */
     public void setTaskId(long taskId){
-        if ((!String.valueOf(this.taskId).equals(String.valueOf(taskId)))) {
+        if (!Objects.equals(this.taskId, taskId)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -243,7 +244,7 @@ public class TaskCronerStats implements DataEntity,Serializable{
      * 设置全部执行计数。
      */
     public void setNumAll(int numAll){
-        if ((!String.valueOf(this.numAll).equals(String.valueOf(numAll)))) {
+        if (!Objects.equals(this.numAll, numAll)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -257,7 +258,7 @@ public class TaskCronerStats implements DataEntity,Serializable{
      * 设置程序失败计数。
      */
     public void setNumFailProgram(int numFailProgram){
-        if ((!String.valueOf(this.numFailProgram).equals(String.valueOf(numFailProgram)))) {
+        if (!Objects.equals(this.numFailProgram, numFailProgram)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -271,7 +272,7 @@ public class TaskCronerStats implements DataEntity,Serializable{
      * 设置配置失败计数。
      */
     public void setNumFailConfig(int numFailConfig){
-        if ((!String.valueOf(this.numFailConfig).equals(String.valueOf(numFailConfig)))) {
+        if (!Objects.equals(this.numFailConfig, numFailConfig)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -285,7 +286,7 @@ public class TaskCronerStats implements DataEntity,Serializable{
      * 设置数据失败计数。
      */
     public void setNumFailData(int numFailData){
-        if ((!String.valueOf(this.numFailData).equals(String.valueOf(numFailData)))) {
+        if (!Objects.equals(this.numFailData, numFailData)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -299,7 +300,7 @@ public class TaskCronerStats implements DataEntity,Serializable{
      * 设置对方失败计数。
      */
     public void setNumFailPartner(int numFailPartner){
-        if ((!String.valueOf(this.numFailPartner).equals(String.valueOf(numFailPartner)))) {
+        if (!Objects.equals(this.numFailPartner, numFailPartner)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -313,7 +314,7 @@ public class TaskCronerStats implements DataEntity,Serializable{
      * 设置超时等待。
      */
     public void setTimeWait(int timeWait){
-        if ((!String.valueOf(this.timeWait).equals(String.valueOf(timeWait)))) {
+        if (!Objects.equals(this.timeWait, timeWait)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -327,7 +328,7 @@ public class TaskCronerStats implements DataEntity,Serializable{
      * 设置运行时间。
      */
     public void setTimeRun(int timeRun){
-        if ((!String.valueOf(this.timeRun).equals(String.valueOf(timeRun)))) {
+        if (!Objects.equals(this.timeRun, timeRun)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -341,7 +342,7 @@ public class TaskCronerStats implements DataEntity,Serializable{
      * 设置创建时间。
      */
     public void setCreateDate(java.util.Date createDate){
-        if ((!String.valueOf(this.createDate).equals(String.valueOf(createDate)))) {
+        if (!Objects.equals(this.createDate, createDate)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }

@@ -2,6 +2,7 @@ package uw.task.center.entity;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonRawValue;
@@ -173,7 +174,7 @@ public class TaskAlertInfo implements DataEntity,Serializable{
      * 设置id。
      */
     public void setId(long id){
-        if ((!String.valueOf(this.id).equals(String.valueOf(id)))) {
+        if (!Objects.equals(this.id, id)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -187,7 +188,7 @@ public class TaskAlertInfo implements DataEntity,Serializable{
      * 设置任务类型。1croner2runner。
      */
     public void setTaskType(String taskType){
-        if ((!String.valueOf(this.taskType).equals(String.valueOf(taskType)))) {
+        if (!Objects.equals(this.taskType, taskType)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -201,7 +202,7 @@ public class TaskAlertInfo implements DataEntity,Serializable{
      * 设置任务配置ID。
      */
     public void setTaskId(long taskId){
-        if ((!String.valueOf(this.taskId).equals(String.valueOf(taskId)))) {
+        if (!Objects.equals(this.taskId, taskId)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -215,7 +216,7 @@ public class TaskAlertInfo implements DataEntity,Serializable{
      * 设置报警标题。
      */
     public void setAlertTitle(String alertTitle){
-        if ((!String.valueOf(this.alertTitle).equals(String.valueOf(alertTitle)))) {
+        if (!Objects.equals(this.alertTitle, alertTitle)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -229,7 +230,7 @@ public class TaskAlertInfo implements DataEntity,Serializable{
      * 设置报警信息。
      */
     public void setAlertBody(String alertBody){
-        if ((!String.valueOf(this.alertBody).equals(String.valueOf(alertBody)))) {
+        if (!Objects.equals(this.alertBody, alertBody)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -243,7 +244,7 @@ public class TaskAlertInfo implements DataEntity,Serializable{
      * 设置创建时间。
      */
     public void setCreateDate(java.util.Date createDate){
-        if ((!String.valueOf(this.createDate).equals(String.valueOf(createDate)))) {
+        if (!Objects.equals(this.createDate, createDate)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -257,7 +258,7 @@ public class TaskAlertInfo implements DataEntity,Serializable{
      * 设置状态。
      */
     public void setState(int state){
-        if ((!String.valueOf(this.state).equals(String.valueOf(state)))) {
+        if (!Objects.equals(this.state, state)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }

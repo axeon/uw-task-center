@@ -2,6 +2,7 @@ package uw.task.center.entity;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonRawValue;
@@ -453,7 +454,7 @@ public class TaskHostInfo implements DataEntity,Serializable{
      * 设置id。
      */
     public void setId(long id){
-        if ((!String.valueOf(this.id).equals(String.valueOf(id)))) {
+        if (!Objects.equals(this.id, id)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -467,7 +468,7 @@ public class TaskHostInfo implements DataEntity,Serializable{
      * 设置主机注册IP。
      */
     public void setHostIp(String hostIp){
-        if ((!String.valueOf(this.hostIp).equals(String.valueOf(hostIp)))) {
+        if (!Objects.equals(this.hostIp, hostIp)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -481,7 +482,7 @@ public class TaskHostInfo implements DataEntity,Serializable{
      * 设置应用名称。
      */
     public void setAppName(String appName){
-        if ((!String.valueOf(this.appName).equals(String.valueOf(appName)))) {
+        if (!Objects.equals(this.appName, appName)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -495,7 +496,7 @@ public class TaskHostInfo implements DataEntity,Serializable{
      * 设置应用版本。
      */
     public void setAppVersion(String appVersion){
-        if ((!String.valueOf(this.appVersion).equals(String.valueOf(appVersion)))) {
+        if (!Objects.equals(this.appVersion, appVersion)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -509,7 +510,7 @@ public class TaskHostInfo implements DataEntity,Serializable{
      * 设置app主机。
      */
     public void setAppHost(String appHost){
-        if ((!String.valueOf(this.appHost).equals(String.valueOf(appHost)))) {
+        if (!Objects.equals(this.appHost, appHost)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -523,7 +524,7 @@ public class TaskHostInfo implements DataEntity,Serializable{
      * 设置app端口。
      */
     public void setAppPort(int appPort){
-        if ((!String.valueOf(this.appPort).equals(String.valueOf(appPort)))) {
+        if (!Objects.equals(this.appPort, appPort)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -537,7 +538,7 @@ public class TaskHostInfo implements DataEntity,Serializable{
      * 设置任务项目。
      */
     public void setTaskProject(String taskProject){
-        if ((!String.valueOf(this.taskProject).equals(String.valueOf(taskProject)))) {
+        if (!Objects.equals(this.taskProject, taskProject)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -551,7 +552,7 @@ public class TaskHostInfo implements DataEntity,Serializable{
      * 设置运行目标。
      */
     public void setRunTarget(String runTarget){
-        if ((!String.valueOf(this.runTarget).equals(String.valueOf(runTarget)))) {
+        if (!Objects.equals(this.runTarget, runTarget)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -565,7 +566,7 @@ public class TaskHostInfo implements DataEntity,Serializable{
      * 设置定时任务数量。
      */
     public void setCronerNum(int cronerNum){
-        if ((!String.valueOf(this.cronerNum).equals(String.valueOf(cronerNum)))) {
+        if (!Objects.equals(this.cronerNum, cronerNum)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -579,7 +580,7 @@ public class TaskHostInfo implements DataEntity,Serializable{
      * 设置统计运行次数。
      */
     public void setCronerRunNum(int cronerRunNum){
-        if ((!String.valueOf(this.cronerRunNum).equals(String.valueOf(cronerRunNum)))) {
+        if (!Objects.equals(this.cronerRunNum, cronerRunNum)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -593,7 +594,7 @@ public class TaskHostInfo implements DataEntity,Serializable{
      * 设置统计运行失败次数。
      */
     public void setCronerFailNum(int cronerFailNum){
-        if ((!String.valueOf(this.cronerFailNum).equals(String.valueOf(cronerFailNum)))) {
+        if (!Objects.equals(this.cronerFailNum, cronerFailNum)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -607,7 +608,7 @@ public class TaskHostInfo implements DataEntity,Serializable{
      * 设置统计总时间毫秒数。
      */
     public void setCronerRunTime(long cronerRunTime){
-        if ((!String.valueOf(this.cronerRunTime).equals(String.valueOf(cronerRunTime)))) {
+        if (!Objects.equals(this.cronerRunTime, cronerRunTime)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -621,7 +622,7 @@ public class TaskHostInfo implements DataEntity,Serializable{
      * 设置队列任务数量。
      */
     public void setRunnerNum(int runnerNum){
-        if ((!String.valueOf(this.runnerNum).equals(String.valueOf(runnerNum)))) {
+        if (!Objects.equals(this.runnerNum, runnerNum)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -635,7 +636,7 @@ public class TaskHostInfo implements DataEntity,Serializable{
      * 设置统计运行次数。
      */
     public void setRunnerRunNum(int runnerRunNum){
-        if ((!String.valueOf(this.runnerRunNum).equals(String.valueOf(runnerRunNum)))) {
+        if (!Objects.equals(this.runnerRunNum, runnerRunNum)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -649,7 +650,7 @@ public class TaskHostInfo implements DataEntity,Serializable{
      * 设置统计运行失败次数。
      */
     public void setRunnerFailNum(int runnerFailNum){
-        if ((!String.valueOf(this.runnerFailNum).equals(String.valueOf(runnerFailNum)))) {
+        if (!Objects.equals(this.runnerFailNum, runnerFailNum)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -663,7 +664,7 @@ public class TaskHostInfo implements DataEntity,Serializable{
      * 设置统计总时间毫秒数。
      */
     public void setRunnerRunTime(long runnerRunTime){
-        if ((!String.valueOf(this.runnerRunTime).equals(String.valueOf(runnerRunTime)))) {
+        if (!Objects.equals(this.runnerRunTime, runnerRunTime)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -677,7 +678,7 @@ public class TaskHostInfo implements DataEntity,Serializable{
      * 设置jvm内存总数。
      */
     public void setJvmMemMax(long jvmMemMax){
-        if ((!String.valueOf(this.jvmMemMax).equals(String.valueOf(jvmMemMax)))) {
+        if (!Objects.equals(this.jvmMemMax, jvmMemMax)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -691,7 +692,7 @@ public class TaskHostInfo implements DataEntity,Serializable{
      * 设置jvm内存总数。
      */
     public void setJvmMemTotal(long jvmMemTotal){
-        if ((!String.valueOf(this.jvmMemTotal).equals(String.valueOf(jvmMemTotal)))) {
+        if (!Objects.equals(this.jvmMemTotal, jvmMemTotal)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -705,7 +706,7 @@ public class TaskHostInfo implements DataEntity,Serializable{
      * 设置jvm空闲内存。
      */
     public void setJvmMemFree(long jvmMemFree){
-        if ((!String.valueOf(this.jvmMemFree).equals(String.valueOf(jvmMemFree)))) {
+        if (!Objects.equals(this.jvmMemFree, jvmMemFree)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -719,7 +720,7 @@ public class TaskHostInfo implements DataEntity,Serializable{
      * 设置活跃线程。
      */
     public void setThreadActive(int threadActive){
-        if ((!String.valueOf(this.threadActive).equals(String.valueOf(threadActive)))) {
+        if (!Objects.equals(this.threadActive, threadActive)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -733,7 +734,7 @@ public class TaskHostInfo implements DataEntity,Serializable{
      * 设置峰值线程。
      */
     public void setThreadPeak(int threadPeak){
-        if ((!String.valueOf(this.threadPeak).equals(String.valueOf(threadPeak)))) {
+        if (!Objects.equals(this.threadPeak, threadPeak)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -747,7 +748,7 @@ public class TaskHostInfo implements DataEntity,Serializable{
      * 设置守护线程。
      */
     public void setThreadDaemon(int threadDaemon){
-        if ((!String.valueOf(this.threadDaemon).equals(String.valueOf(threadDaemon)))) {
+        if (!Objects.equals(this.threadDaemon, threadDaemon)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -761,7 +762,7 @@ public class TaskHostInfo implements DataEntity,Serializable{
      * 设置累计启动线程。
      */
     public void setThreadStarted(long threadStarted){
-        if ((!String.valueOf(this.threadStarted).equals(String.valueOf(threadStarted)))) {
+        if (!Objects.equals(this.threadStarted, threadStarted)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -775,7 +776,7 @@ public class TaskHostInfo implements DataEntity,Serializable{
      * 设置建立日期。
      */
     public void setCreateDate(java.util.Date createDate){
-        if ((!String.valueOf(this.createDate).equals(String.valueOf(createDate)))) {
+        if (!Objects.equals(this.createDate, createDate)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -789,7 +790,7 @@ public class TaskHostInfo implements DataEntity,Serializable{
      * 设置修改时间。
      */
     public void setModifyDate(java.util.Date modifyDate){
-        if ((!String.valueOf(this.modifyDate).equals(String.valueOf(modifyDate)))) {
+        if (!Objects.equals(this.modifyDate, modifyDate)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -803,7 +804,7 @@ public class TaskHostInfo implements DataEntity,Serializable{
      * 设置最后更新。
      */
     public void setLastUpdate(java.util.Date lastUpdate){
-        if ((!String.valueOf(this.lastUpdate).equals(String.valueOf(lastUpdate)))) {
+        if (!Objects.equals(this.lastUpdate, lastUpdate)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -817,7 +818,7 @@ public class TaskHostInfo implements DataEntity,Serializable{
      * 设置状态。
      */
     public void setState(int state){
-        if ((!String.valueOf(this.state).equals(String.valueOf(state)))) {
+        if (!Objects.equals(this.state, state)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }

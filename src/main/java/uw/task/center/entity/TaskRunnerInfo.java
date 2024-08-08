@@ -2,6 +2,7 @@ package uw.task.center.entity;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonRawValue;
@@ -607,7 +608,7 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
      * 设置id。
      */
     public void setId(long id){
-        if ((!String.valueOf(this.id).equals(String.valueOf(id)))) {
+        if (!Objects.equals(this.id, id)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -621,7 +622,7 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
      * 设置任务名称。
      */
     public void setTaskName(String taskName){
-        if ((!String.valueOf(this.taskName).equals(String.valueOf(taskName)))) {
+        if (!Objects.equals(this.taskName, taskName)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -635,7 +636,7 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
      * 设置任务描述。
      */
     public void setTaskDesc(String taskDesc){
-        if ((!String.valueOf(this.taskDesc).equals(String.valueOf(taskDesc)))) {
+        if (!Objects.equals(this.taskDesc, taskDesc)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -649,7 +650,7 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
      * 设置执行类信息。
      */
     public void setTaskClass(String taskClass){
-        if ((!String.valueOf(this.taskClass).equals(String.valueOf(taskClass)))) {
+        if (!Objects.equals(this.taskClass, taskClass)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -663,7 +664,7 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
      * 设置任务所有人。
      */
     public void setTaskOwner(String taskOwner){
-        if ((!String.valueOf(this.taskOwner).equals(String.valueOf(taskOwner)))) {
+        if (!Objects.equals(this.taskOwner, taskOwner)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -677,7 +678,7 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
      * 设置运行标签。
      */
     public void setTaskTag(String taskTag){
-        if ((!String.valueOf(this.taskTag).equals(String.valueOf(taskTag)))) {
+        if (!Objects.equals(this.taskTag, taskTag)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -691,7 +692,7 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
      * 设置队列类型。
      */
     public void setQueueType(int queueType){
-        if ((!String.valueOf(this.queueType).equals(String.valueOf(queueType)))) {
+        if (!Objects.equals(this.queueType, queueType)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -705,7 +706,7 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
      * 设置延迟类型。
      */
     public void setDelayType(int delayType){
-        if ((!String.valueOf(this.delayType).equals(String.valueOf(delayType)))) {
+        if (!Objects.equals(this.delayType, delayType)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -719,7 +720,7 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
      * 设置日志类型。
      */
     public void setLogLevel(int logLevel){
-        if ((!String.valueOf(this.logLevel).equals(String.valueOf(logLevel)))) {
+        if (!Objects.equals(this.logLevel, logLevel)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -733,7 +734,7 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
      * 设置日志长度限制。
      */
     public void setLogLimitSize(int logLimitSize){
-        if ((!String.valueOf(this.logLimitSize).equals(String.valueOf(logLimitSize)))) {
+        if (!Objects.equals(this.logLimitSize, logLimitSize)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -747,7 +748,7 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
      * 设置运行类型。
      */
     public void setRunType(int runType){
-        if ((!String.valueOf(this.runType).equals(String.valueOf(runType)))) {
+        if (!Objects.equals(this.runType, runType)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -761,7 +762,7 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
      * 设置运行目标。
      */
     public void setRunTarget(String runTarget){
-        if ((!String.valueOf(this.runTarget).equals(String.valueOf(runTarget)))) {
+        if (!Objects.equals(this.runTarget, runTarget)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -775,7 +776,7 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
      * 设置消费者的数量。
      */
     public void setConsumerNum(int consumerNum){
-        if ((!String.valueOf(this.consumerNum).equals(String.valueOf(consumerNum)))) {
+        if (!Objects.equals(this.consumerNum, consumerNum)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -789,7 +790,7 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
      * 设置队列预取数量。
      */
     public void setPrefetchNum(int prefetchNum){
-        if ((!String.valueOf(this.prefetchNum).equals(String.valueOf(prefetchNum)))) {
+        if (!Objects.equals(this.prefetchNum, prefetchNum)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -803,7 +804,7 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
      * 设置限速类型。
      */
     public void setRateLimitType(int rateLimitType){
-        if ((!String.valueOf(this.rateLimitType).equals(String.valueOf(rateLimitType)))) {
+        if (!Objects.equals(this.rateLimitType, rateLimitType)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -817,7 +818,7 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
      * 设置流量限定数值，默认为60次。
      */
     public void setRateLimitValue(int rateLimitValue){
-        if ((!String.valueOf(this.rateLimitValue).equals(String.valueOf(rateLimitValue)))) {
+        if (!Objects.equals(this.rateLimitValue, rateLimitValue)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -831,7 +832,7 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
      * 设置流量限定时间(S)，默认为60秒。
      */
     public void setRateLimitTime(int rateLimitTime){
-        if ((!String.valueOf(this.rateLimitTime).equals(String.valueOf(rateLimitTime)))) {
+        if (!Objects.equals(this.rateLimitTime, rateLimitTime)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -845,7 +846,7 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
      * 设置当发生流量限制时，等待的秒数。
      */
     public void setRateLimitWait(int rateLimitWait){
-        if ((!String.valueOf(this.rateLimitWait).equals(String.valueOf(rateLimitWait)))) {
+        if (!Objects.equals(this.rateLimitWait, rateLimitWait)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -859,7 +860,7 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
      * 设置超过流量限制重试次数。
      */
     public void setRetryTimesByOverrated(int retryTimesByOverrated){
-        if ((!String.valueOf(this.retryTimesByOverrated).equals(String.valueOf(retryTimesByOverrated)))) {
+        if (!Objects.equals(this.retryTimesByOverrated, retryTimesByOverrated)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -873,7 +874,7 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
      * 设置对方接口错误重试次数。
      */
     public void setRetryTimesByPartner(int retryTimesByPartner){
-        if ((!String.valueOf(this.retryTimesByPartner).equals(String.valueOf(retryTimesByPartner)))) {
+        if (!Objects.equals(this.retryTimesByPartner, retryTimesByPartner)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -887,7 +888,7 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
      * 设置最后统计时间。
      */
     public void setStatsDate(java.util.Date statsDate){
-        if ((!String.valueOf(this.statsDate).equals(String.valueOf(statsDate)))) {
+        if (!Objects.equals(this.statsDate, statsDate)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -901,7 +902,7 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
      * 设置统计运行次数。
      */
     public void setStatsRunNum(int statsRunNum){
-        if ((!String.valueOf(this.statsRunNum).equals(String.valueOf(statsRunNum)))) {
+        if (!Objects.equals(this.statsRunNum, statsRunNum)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -915,7 +916,7 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
      * 设置统计运行失败次数。
      */
     public void setStatsFailNum(int statsFailNum){
-        if ((!String.valueOf(this.statsFailNum).equals(String.valueOf(statsFailNum)))) {
+        if (!Objects.equals(this.statsFailNum, statsFailNum)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -929,7 +930,7 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
      * 设置统计总时间毫秒数。
      */
     public void setStatsRunTime(long statsRunTime){
-        if ((!String.valueOf(this.statsRunTime).equals(String.valueOf(statsRunTime)))) {
+        if (!Objects.equals(this.statsRunTime, statsRunTime)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -943,7 +944,7 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
      * 设置失败率。
      */
     public void setAlertFailRate(int alertFailRate){
-        if ((!String.valueOf(this.alertFailRate).equals(String.valueOf(alertFailRate)))) {
+        if (!Objects.equals(this.alertFailRate, alertFailRate)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -957,7 +958,7 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
      * 设置接口失败率。
      */
     public void setAlertFailPartnerRate(int alertFailPartnerRate){
-        if ((!String.valueOf(this.alertFailPartnerRate).equals(String.valueOf(alertFailPartnerRate)))) {
+        if (!Objects.equals(this.alertFailPartnerRate, alertFailPartnerRate)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -971,7 +972,7 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
      * 设置程序失败率。
      */
     public void setAlertFailProgramRate(int alertFailProgramRate){
-        if ((!String.valueOf(this.alertFailProgramRate).equals(String.valueOf(alertFailProgramRate)))) {
+        if (!Objects.equals(this.alertFailProgramRate, alertFailProgramRate)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -985,7 +986,7 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
      * 设置配置失败率。
      */
     public void setAlertFailConfigRate(int alertFailConfigRate){
-        if ((!String.valueOf(this.alertFailConfigRate).equals(String.valueOf(alertFailConfigRate)))) {
+        if (!Objects.equals(this.alertFailConfigRate, alertFailConfigRate)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -999,7 +1000,7 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
      * 设置数据失败率。
      */
     public void setAlertFailDataRate(int alertFailDataRate){
-        if ((!String.valueOf(this.alertFailDataRate).equals(String.valueOf(alertFailDataRate)))) {
+        if (!Objects.equals(this.alertFailDataRate, alertFailDataRate)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -1013,7 +1014,7 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
      * 设置队列长度限制。
      */
     public void setAlertQueueOversize(int alertQueueOversize){
-        if ((!String.valueOf(this.alertQueueOversize).equals(String.valueOf(alertQueueOversize)))) {
+        if (!Objects.equals(this.alertQueueOversize, alertQueueOversize)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -1027,7 +1028,7 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
      * 设置队列等待超时。
      */
     public void setAlertQueueTimeout(int alertQueueTimeout){
-        if ((!String.valueOf(this.alertQueueTimeout).equals(String.valueOf(alertQueueTimeout)))) {
+        if (!Objects.equals(this.alertQueueTimeout, alertQueueTimeout)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -1041,7 +1042,7 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
      * 设置等待超时。
      */
     public void setAlertWaitTimeout(int alertWaitTimeout){
-        if ((!String.valueOf(this.alertWaitTimeout).equals(String.valueOf(alertWaitTimeout)))) {
+        if (!Objects.equals(this.alertWaitTimeout, alertWaitTimeout)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -1055,7 +1056,7 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
      * 设置运行超时。
      */
     public void setAlertRunTimeout(int alertRunTimeout){
-        if ((!String.valueOf(this.alertRunTimeout).equals(String.valueOf(alertRunTimeout)))) {
+        if (!Objects.equals(this.alertRunTimeout, alertRunTimeout)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -1069,7 +1070,7 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
      * 设置我方联系信息。
      */
     public void setTaskLinkOur(String taskLinkOur){
-        if ((!String.valueOf(this.taskLinkOur).equals(String.valueOf(taskLinkOur)))) {
+        if (!Objects.equals(this.taskLinkOur, taskLinkOur)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -1083,7 +1084,7 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
      * 设置商户联系信息。
      */
     public void setTaskLinkMch(String taskLinkMch){
-        if ((!String.valueOf(this.taskLinkMch).equals(String.valueOf(taskLinkMch)))) {
+        if (!Objects.equals(this.taskLinkMch, taskLinkMch)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -1097,7 +1098,7 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
      * 设置创建日期。
      */
     public void setCreateDate(java.util.Date createDate){
-        if ((!String.valueOf(this.createDate).equals(String.valueOf(createDate)))) {
+        if (!Objects.equals(this.createDate, createDate)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -1111,7 +1112,7 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
      * 设置最后修改日期。
      */
     public void setModifyDate(java.util.Date modifyDate){
-        if ((!String.valueOf(this.modifyDate).equals(String.valueOf(modifyDate)))) {
+        if (!Objects.equals(this.modifyDate, modifyDate)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
@@ -1125,7 +1126,7 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
      * 设置状态1正常，0暂停，-1标记删除。
      */
     public void setState(int state){
-        if ((!String.valueOf(this.state).equals(String.valueOf(state)))) {
+        if (!Objects.equals(this.state, state)){
             if (this.UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
