@@ -17,7 +17,7 @@ import uw.dao.DataList;
 import uw.dao.TransactionException;
 import uw.dao.annotation.ColumnMeta;
 import uw.dao.annotation.TableMeta;
-import uw.dao.util.TableShardingUtils;
+import uw.dao.util.ShardingTableUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -67,7 +67,7 @@ public class TaskRunnerReportController {
                 dateType = 1;
             }
         }
-        String tableName = TableShardingUtils.getTableNameByDate( "task_runner_stats", startDate );
+        String tableName = ShardingTableUtils.getTableNameByDate( "task_runner_stats", startDate );
         List<Object> param = new ArrayList<>();
         String sql;
         // 1按日 2按时 3按10分
@@ -129,7 +129,7 @@ public class TaskRunnerReportController {
                 dateType = 1;
             }
         }
-        String tableName = TableShardingUtils.getTableNameByDate( "task_runner_stats", startDate );
+        String tableName = ShardingTableUtils.getTableNameByDate( "task_runner_stats", startDate );
         List<Object> param = new ArrayList<>();
         String sql = "select tcs.*,tcc.task_name,tcc.run_target,tcc.task_class, tcc.task_owner, tcc.task_tag, tcc.run_type, tcc.consumer_num, tcc.prefetch_num, tcc.queue_type";
         // 1按日 2按时 3按10分

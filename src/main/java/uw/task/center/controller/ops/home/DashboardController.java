@@ -17,7 +17,7 @@ import uw.dao.DaoFactory;
 import uw.dao.TransactionException;
 import uw.dao.annotation.ColumnMeta;
 import uw.dao.annotation.TableMeta;
-import uw.dao.util.TableShardingUtils;
+import uw.dao.util.ShardingTableUtils;
 import uw.task.center.entity.TaskAlertInfo;
 
 import java.text.ParseException;
@@ -99,10 +99,10 @@ public class DashboardController {
                 dateType = 1;
             }
         }
-        String runnerTableNameA = TableShardingUtils.getTableNameByDate( "task_runner_stats", startDate );
-        String cronerTableNameA = TableShardingUtils.getTableNameByDate( "task_croner_stats", startDate );
-        String runnerTableNameB = TableShardingUtils.getTableNameByDate( "task_runner_stats", endDate );
-        String cronerTableNameB = TableShardingUtils.getTableNameByDate( "task_croner_stats", endDate );
+        String runnerTableNameA = ShardingTableUtils.getTableNameByDate( "task_runner_stats", startDate );
+        String cronerTableNameA = ShardingTableUtils.getTableNameByDate( "task_croner_stats", startDate );
+        String runnerTableNameB = ShardingTableUtils.getTableNameByDate( "task_runner_stats", endDate );
+        String cronerTableNameB = ShardingTableUtils.getTableNameByDate( "task_croner_stats", endDate );
         // 1按日 2按時 3按分 4按秒
         String selectSql;
         switch (dateType) {

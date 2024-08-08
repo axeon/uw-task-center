@@ -16,7 +16,7 @@ import uw.dao.DaoFactory;
 import uw.dao.TransactionException;
 import uw.dao.annotation.ColumnMeta;
 import uw.dao.annotation.TableMeta;
-import uw.dao.util.TableShardingUtils;
+import uw.dao.util.ShardingTableUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -67,7 +67,7 @@ public class TaskCronerReportController {
                 dateType = 1;
             }
         }
-        String tableName = TableShardingUtils.getTableNameByDate( "task_croner_stats", startDate );
+        String tableName = ShardingTableUtils.getTableNameByDate( "task_croner_stats", startDate );
         List<Object> param = new ArrayList<>();
         String sql;
         // 1按日 2按时 3按10分
@@ -130,7 +130,7 @@ public class TaskCronerReportController {
             }
         }
 
-        String tableName = TableShardingUtils.getTableNameByDate( "task_croner_stats", startDate );
+        String tableName = ShardingTableUtils.getTableNameByDate( "task_croner_stats", startDate );
         List<Object> param = new ArrayList<>();
         String sql = "select tcs.*,tcc.task_name,tcc.run_target,tcc.task_class, tcc.task_param, tcc.task_owner, tcc.task_cron, tcc.run_type";
         // 1按日 2按时 3按10分

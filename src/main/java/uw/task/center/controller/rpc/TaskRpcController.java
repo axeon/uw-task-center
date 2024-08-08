@@ -16,7 +16,7 @@ import uw.dao.BatchUpdateManager;
 import uw.dao.DaoFactory;
 import uw.dao.TransactionException;
 import uw.dao.TransactionManager;
-import uw.dao.util.TableShardingUtils;
+import uw.dao.util.ShardingTableUtils;
 import uw.task.center.entity.*;
 import uw.task.center.vo.HostReportResponse;
 
@@ -83,8 +83,8 @@ public class TaskRpcController {
         String updateRunnerStats = "update task_runner_info set stats_date=?,stats_run_num=stats_run_num+?,stats_fail_num=stats_fail_num+?,stats_run_time=stats_run_time+? where id=?";
         //开始循环插入统计数据
         Date createDate = new Date();
-        String cronerTable = TableShardingUtils.getTableNameByDate( "task_croner_stats", createDate );
-        String runnerTable = TableShardingUtils.getTableNameByDate( "task_runner_stats", createDate );
+        String cronerTable = ShardingTableUtils.getTableNameByDate( "task_croner_stats", createDate );
+        String runnerTable = ShardingTableUtils.getTableNameByDate( "task_runner_stats", createDate );
         try {
             for (TaskCronerStats stats : taskHostInfoExt.getTaskCronerStatsList()) {
                 int numFail = stats.getNumFailConfig() + stats.getNumFailData() + stats.getNumFailPartner() + stats.getNumFailProgram();
