@@ -37,25 +37,17 @@ public class SwaggerConfig {
     }
 
     /**
-     * user API接口。
+     * opsApi接口。
      *
      * @return
      */
     @Bean
-    public GroupedOpenApi userApi() {
+    public GroupedOpenApi opsApi() {
         return GroupedOpenApi.builder()
-                .group("ops")
+                .group("opsApi")
                 .packagesToScan("uw.task.center.controller.ops")
                 .addOpenApiCustomizer(customOpenAPI())
                 .build();
     }
 
-    @Bean
-    public GroupedOpenApi rpcApi() {
-        return GroupedOpenApi.builder()
-                .group("rpc")
-                .packagesToScan("uw.task.center.controller.rpc")
-                .addOpenApiCustomizer(customOpenAPI())
-                .build();
-    }
 }
