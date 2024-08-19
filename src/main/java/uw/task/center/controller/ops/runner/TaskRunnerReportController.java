@@ -32,7 +32,7 @@ import java.util.List;
 @MscPermDeclare(user = UserType.OPS)
 public class TaskRunnerReportController {
 
-    private static final DaoFactory dao = DaoFactory.getInstance();
+    private final DaoFactory dao = DaoFactory.getInstance();
 
 
     /**

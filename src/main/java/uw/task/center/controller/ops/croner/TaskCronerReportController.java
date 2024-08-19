@@ -31,7 +31,7 @@ import java.util.List;
 @MscPermDeclare(user = UserType.OPS)
 public class TaskCronerReportController {
 
-    private static final DaoFactory dao = DaoFactory.getInstance();
+    private final DaoFactory dao = DaoFactory.getInstance();
 
 
     /**
