@@ -30,7 +30,7 @@ public class AlertProcessService {
     /**
      * 失败类型映射关系。
      */
-    private static Map<String, String> FailTypeTranslateMap = new HashMap<>();
+    private static final Map<String, String> FailTypeTranslateMap = new HashMap<>();
 
     static {
         FailTypeTranslateMap.put( "failRate", "总错误率" );//
@@ -53,15 +53,15 @@ public class AlertProcessService {
      * runner锁。
      */
     private final StampedLock cronerMapLocker = new StampedLock();
-    private DaoFactory dao = DaoFactory.getInstance();
+    private final DaoFactory dao = DaoFactory.getInstance();
     /**
      * 日期格式化。
      */
-    private FastDateFormat dateFormat = FastDateFormat.getInstance( "yyyy-MM-dd HH:mm:ss" );
+    private final FastDateFormat dateFormat = FastDateFormat.getInstance( "yyyy-MM-dd HH:mm:ss" );
     /**
      * 百分比格式化。
      */
-    private DecimalFormat percentFormat = new DecimalFormat( "#.##" );
+    private final DecimalFormat percentFormat = new DecimalFormat( "#.##" );
     /**
      * 队列任务缓存。
      */
@@ -73,12 +73,12 @@ public class AlertProcessService {
     /**
      * 定时任务检查服务。
      */
-    private ExecutorService cronerProcessService = new ThreadPoolExecutor( 1, 20, 30L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(),
+    private final ExecutorService cronerProcessService = new ThreadPoolExecutor( 1, 20, 30L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(),
             new ThreadFactoryBuilder().setDaemon( true ).setNameFormat( "CronerProcessService-%d" ).build() );
     /**
      * 队列任务检查服务。
      */
-    private ExecutorService runnerProcessService = new ThreadPoolExecutor( 1, 20, 30L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(),
+    private final ExecutorService runnerProcessService = new ThreadPoolExecutor( 1, 20, 30L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(),
             new ThreadFactoryBuilder().setDaemon( true ).setNameFormat( "RunnerProcessService-%d" ).build() );
 
     /**

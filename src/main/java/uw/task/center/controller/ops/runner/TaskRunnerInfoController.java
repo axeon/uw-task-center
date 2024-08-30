@@ -33,7 +33,7 @@ import java.util.Objects;
 @Tag(name = "队列任务管理")
 @MscPermDeclare(user = UserType.OPS)
 public class TaskRunnerInfoController {
-    private DaoFactory dao = DaoFactory.getInstance();
+    private final DaoFactory dao = DaoFactory.getInstance();
 
     /**
      * 列表队列任务配置。

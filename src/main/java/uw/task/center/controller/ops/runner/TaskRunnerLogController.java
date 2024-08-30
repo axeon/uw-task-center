@@ -32,7 +32,7 @@ import uw.task.center.entity.TaskRunnerESLog;
 public class TaskRunnerLogController {
 
     private static final Logger log = LoggerFactory.getLogger( TaskRunnerLogController.class );
-    private DaoFactory dao = DaoFactory.getInstance();
+    private final DaoFactory dao = DaoFactory.getInstance();
     private LogClient logClient;
 
     @Autowired

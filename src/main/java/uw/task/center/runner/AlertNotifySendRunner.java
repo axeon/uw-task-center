@@ -19,12 +19,12 @@ import uw.task.entity.TaskRunnerConfig;
 @Component
 public class AlertNotifySendRunner extends TaskRunner<TaskAlertNotifyData, String> {
 
-    private JavaMailSender mailSender;
+    private final JavaMailSender mailSender;
 
     @Value("${spring.mail.username}")
     private String fromEmail;
 
-    private HttpInterface httpInterface = new JsonInterfaceHelper( HttpConfig.builder()
+    private final HttpInterface httpInterface = new JsonInterfaceHelper( HttpConfig.builder()
             .retryOnConnectionFailure( true )
             .connectTimeout( 10_000L )
             .readTimeout( 10_000L )

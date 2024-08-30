@@ -32,7 +32,7 @@ import uw.task.center.entity.TaskCronerESLog;
 public class TaskCronerLogController {
     private static final Logger log = LoggerFactory.getLogger( TaskCronerLogController.class );
 
-    private DaoFactory dao = DaoFactory.getInstance();
+    private final DaoFactory dao = DaoFactory.getInstance();
 
     private LogClient logClient;
 

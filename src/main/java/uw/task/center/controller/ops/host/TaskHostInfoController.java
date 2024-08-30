@@ -27,7 +27,7 @@ import java.util.Date;
 @Tag(name = "主机状态报表")
 @MscPermDeclare(user = UserType.OPS)
 public class TaskHostInfoController {
-    private DaoFactory dao = DaoFactory.getInstance();
+    private final DaoFactory dao = DaoFactory.getInstance();
 
 
     /**

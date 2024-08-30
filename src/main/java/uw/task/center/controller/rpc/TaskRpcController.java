@@ -36,7 +36,7 @@ public class TaskRpcController {
 
     private static final Logger log = LoggerFactory.getLogger( TaskRpcController.class );
 
-    private DaoFactory dao = DaoFactory.getInstance();
+    private final DaoFactory dao = DaoFactory.getInstance();
 
     /**
      * 更新当前主机状态，并返回主机配置。

@@ -16,7 +16,7 @@ import java.util.Date;
 @Component
 public class TaskHostCleanCroner extends TaskCroner {
 
-    private DaoFactory dao = DaoFactory.getInstance();
+    private final DaoFactory dao = DaoFactory.getInstance();
 
     /**
      * 运行任务。

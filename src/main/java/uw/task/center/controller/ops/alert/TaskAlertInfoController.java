@@ -26,7 +26,7 @@ import uw.task.center.entity.TaskAlertInfo;
 @Tag(name = "报警信息管理")
 @MscPermDeclare(user = UserType.OPS)
 public class TaskAlertInfoController {
-    private DaoFactory dao = DaoFactory.getInstance();
+    private final DaoFactory dao = DaoFactory.getInstance();
 
     /**
      * 列表报警信息。

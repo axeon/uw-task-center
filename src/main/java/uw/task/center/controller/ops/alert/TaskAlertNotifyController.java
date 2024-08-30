@@ -27,7 +27,7 @@ import uw.task.center.entity.TaskAlertNotify;
 @RequestMapping("/ops/alert/notify")
 @MscPermDeclare(user = UserType.OPS)
 public class TaskAlertNotifyController {
-    private DaoFactory dao = DaoFactory.getInstance();
+    private final DaoFactory dao = DaoFactory.getInstance();
 
     /**
      * 列表报警信息通知。

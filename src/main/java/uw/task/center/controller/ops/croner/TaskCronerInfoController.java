@@ -34,7 +34,7 @@ import java.util.Objects;
 @Tag(name = "定时任务管理")
 @MscPermDeclare(user = UserType.OPS)
 public class TaskCronerInfoController {
-    private DaoFactory dao = DaoFactory.getInstance();
+    private final DaoFactory dao = DaoFactory.getInstance();
 
     /**
      * 列表定时任务配置。

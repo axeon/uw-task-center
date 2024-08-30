@@ -34,7 +34,7 @@ public class AlertNotifyScanCroner extends TaskCroner {
 
     private final DaoFactory dao = DaoFactory.getInstance();
 
-    private FastDateFormat dateFormat = FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss");
+    private final FastDateFormat dateFormat = FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss");
 
     private final TaskFactory taskFactory;
 

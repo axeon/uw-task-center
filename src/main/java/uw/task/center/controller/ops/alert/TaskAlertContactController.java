@@ -33,7 +33,7 @@ import java.util.Date;
 @Tag(name = "报警联系人管理")
 @MscPermDeclare(user = UserType.OPS)
 public class TaskAlertContactController {
-    private DaoFactory dao = DaoFactory.getInstance();
+    private final DaoFactory dao = DaoFactory.getInstance();
 
     /**
      * 轻量级列表报警联系信息，一般用于select控件。

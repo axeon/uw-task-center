@@ -31,7 +31,7 @@ import java.util.List;
 @MscPermDeclare(user = UserType.OPS)
 public class DashboardController {
 
-    private DaoFactory dao = DaoFactory.getInstance();
+    private final DaoFactory dao = DaoFactory.getInstance();
 
     /**
      * 任务统计。
