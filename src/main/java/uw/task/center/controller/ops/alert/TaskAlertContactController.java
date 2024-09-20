@@ -44,7 +44,6 @@ public class TaskAlertContactController {
     @Operation(summary = "轻量级列表报警联系信息", description = "轻量级列表报警联系信息，一般用于select控件。")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.USER, log = ActionLog.NONE)
     public DataList<TaskAlertContact> liteList(TaskAlertContactQueryParam queryParam) throws TransactionException {
-        AuthServiceHelper.logRef(TaskAlertContact.class);
         queryParam.SELECT_SQL( "SELECT id,contact_type,contact_name,mobile,email,wechat,im,notify_url,remark,create_date,modify_date,state from task_alert_contact " );
         return dao.list(TaskAlertContact.class, queryParam);
     }

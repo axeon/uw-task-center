@@ -59,7 +59,6 @@ public class TaskRunnerInfoController {
     @Operation(summary = "轻量级列表队列任务配置", description = "轻量级列表队列任务配置，一般用于select控件。")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.USER, log = ActionLog.NONE)
     public DataList<TaskRunnerInfo> liteList(TaskRunnerInfoQueryParam queryParam) throws TransactionException {
-        AuthServiceHelper.logRef(TaskRunnerInfo.class);
         queryParam.SELECT_SQL( "SELECT id,task_name,task_class,task_owner,task_tag,queue_type,delay_type,log_level,log_limit_size,run_type,run_target,consumer_num,prefetch_num,rate_limit_type,rate_limit_value,rate_limit_time,rate_limit_wait,retry_times_by_overrated,retry_times_by_partner,stats_date,stats_run_num,stats_fail_num,stats_run_time,alert_fail_rate,alert_fail_partner_rate,alert_fail_program_rate,alert_fail_config_rate,alert_fail_data_rate,alert_queue_oversize,alert_queue_timeout,alert_wait_timeout,alert_run_timeout,task_link_our,task_link_mch,create_date,modify_date,state from task_runner_info " );
         return dao.list(TaskRunnerInfo.class, queryParam);
     }
