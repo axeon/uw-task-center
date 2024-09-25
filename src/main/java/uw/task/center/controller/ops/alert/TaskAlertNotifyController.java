@@ -53,7 +53,7 @@ public class TaskAlertNotifyController {
     @GetMapping("/load")
     @Operation(summary = "加载报警信息通知", description = "加载报警信息通知")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public TaskAlertNotify load(@Parameter(description = "主键ID", required = true, example = "1") @RequestParam long id) throws TransactionException {
+    public TaskAlertNotify load(@Parameter(description = "主键ID", required = true) @RequestParam long id) throws TransactionException {
         AuthServiceHelper.logRef( TaskAlertNotify.class, id );
         return dao.load( TaskAlertNotify.class, id );
     }

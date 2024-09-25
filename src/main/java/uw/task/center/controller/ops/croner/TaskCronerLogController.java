@@ -61,7 +61,7 @@ public class TaskCronerLogController {
     @GetMapping(value = "/load")
     @Operation(summary = "查看定时任务日志", description = "查看定时任务日志")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public TaskCronerESLog load(@Parameter(description = "主键", example = "1") long id) throws Exception {
+    public TaskCronerESLog load(@Parameter(description = "主键") long id) throws Exception {
         AuthServiceHelper.logRef( TaskCronerESLog.class, id );
         String dsl = logClient.translateSqlToDsl( "select * from \\\"uw.task.entity.task_croner_log_*\\\" where id = " + id, 0, 1, false );
         SearchResponse<TaskCronerESLog> response = logClient.dslQuery( TaskCronerESLog.class, "uw.task.entity.task_croner_log_*", dsl );

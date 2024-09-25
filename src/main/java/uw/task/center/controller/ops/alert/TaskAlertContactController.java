@@ -57,7 +57,7 @@ public class TaskAlertContactController {
     @GetMapping("/load")
     @Operation(summary = "加载报警联系信息", description = "加载报警联系信息")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public TaskAlertContact load(@Parameter(description = "主键ID", required = true, example = "1") @RequestParam long id) throws TransactionException {
+    public TaskAlertContact load(@Parameter(description = "主键ID", required = true) @RequestParam long id) throws TransactionException {
         AuthServiceHelper.logRef(TaskAlertContact.class,id);
         return dao.load(TaskAlertContact.class, id);
     }
@@ -154,7 +154,7 @@ public class TaskAlertContactController {
     @PatchMapping("/enable")
     @Operation(summary = "启用报警联系信息", description = "启用报警联系信息")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
-    public ResponseData enable(@Parameter(name = "id", description = "主键ID", example = "1") @RequestParam long id,
+    public ResponseData enable(@Parameter(description = "主键ID") @RequestParam long id,
                                @Parameter( description = "备注") @RequestParam String remark) throws TransactionException {
         AuthServiceHelper.logInfo( TaskAlertContact.class, id, "启用报警联系信息！操作备注：" + remark );
         TaskAlertContact taskAlertContact = dao.load( TaskAlertContact.class, id );
@@ -179,7 +179,7 @@ public class TaskAlertContactController {
     @PatchMapping("/disable")
     @Operation(summary = "禁用报警联系信息", description = "禁用报警联系信息")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
-    public ResponseData disable(@Parameter(name = "id", description = "主键ID", example = "1") @RequestParam long id,
+    public ResponseData disable(@Parameter(description = "主键ID") @RequestParam long id,
                                 @Parameter( description = "备注") @RequestParam String remark) throws TransactionException {
         AuthServiceHelper.logInfo( TaskAlertContact.class, id, "禁用报警联系信息！操作备注：" + remark );
         TaskAlertContact taskAlertContact = dao.load( TaskAlertContact.class, id );
@@ -204,7 +204,7 @@ public class TaskAlertContactController {
     @DeleteMapping("/delete")
     @Operation(summary = "删除报警联系信息", description = "删除报警联系信息")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
-    public ResponseData delete(@Parameter(name = "id", description = "主键ID", example = "1") @RequestParam long id,
+    public ResponseData delete(@Parameter(description = "主键ID") @RequestParam long id,
                                @Parameter( description = "备注") @RequestParam String remark) throws TransactionException {
         AuthServiceHelper.logInfo( TaskAlertContact.class, id, "删除报警联系信息！操作备注：" + remark );
         TaskAlertContact taskAlertContact = dao.load( TaskAlertContact.class, id );

@@ -73,7 +73,7 @@ public class TaskCronerInfoController {
     @GetMapping("/load")
     @Operation(summary = "加载定时任务配置", description = "加载定时任务配置")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public TaskCronerInfo load(@Parameter(description = "主键ID", required = true, example = "1") @RequestParam long id) throws TransactionException {
+    public TaskCronerInfo load(@Parameter(description = "主键ID", required = true) @RequestParam long id) throws TransactionException {
         AuthServiceHelper.logRef(TaskCronerInfo.class,id);
         return dao.load(TaskCronerInfo.class, id);
     }
@@ -185,7 +185,7 @@ public class TaskCronerInfoController {
     @PatchMapping("/enable")
     @Operation(summary = "启用定时任务配置", description = "启用定时任务配置")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
-    public ResponseData enable(@Parameter(name = "id", description = "主键ID", example = "1") @RequestParam long id,
+    public ResponseData enable(@Parameter(description = "主键ID") @RequestParam long id,
                                @Parameter( description = "备注") @RequestParam String remark) throws TransactionException {
         AuthServiceHelper.logInfo( TaskCronerInfo.class, id, "启用定时任务配置！操作备注：" + remark );
         TaskCronerInfo taskCronerInfo = dao.load( TaskCronerInfo.class, id );
@@ -210,7 +210,7 @@ public class TaskCronerInfoController {
     @PatchMapping("/disable")
     @Operation(summary = "禁用定时任务配置", description = "禁用定时任务配置")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
-    public ResponseData disable(@Parameter(name = "id", description = "主键ID", example = "1") @RequestParam long id,
+    public ResponseData disable(@Parameter(description = "主键ID") @RequestParam long id,
                                 @Parameter( description = "备注") @RequestParam String remark) throws TransactionException {
         AuthServiceHelper.logInfo( TaskCronerInfo.class, id, "禁用定时任务配置！操作备注：" + remark );
         TaskCronerInfo taskCronerInfo = dao.load( TaskCronerInfo.class, id );
@@ -235,7 +235,7 @@ public class TaskCronerInfoController {
     @DeleteMapping("/delete")
     @Operation(summary = "删除定时任务配置", description = "删除定时任务配置")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
-    public ResponseData delete(@Parameter(name = "id", description = "主键ID", example = "1") @RequestParam long id,
+    public ResponseData delete(@Parameter(description = "主键ID") @RequestParam long id,
                                @Parameter( description = "备注") @RequestParam String remark) throws TransactionException {
         AuthServiceHelper.logInfo( TaskCronerInfo.class, id, "删除定时任务配置！操作备注：" + remark );
         TaskCronerInfo taskCronerInfo = dao.load( TaskCronerInfo.class, id );
@@ -261,7 +261,7 @@ public class TaskCronerInfoController {
     @PatchMapping("/resetStats")
     @Operation(summary = "清空统计数据", description = "清空统计数据")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
-    public ResponseData resetStats(@Parameter(description = "主键", example = "1") long id, @Parameter( description = "备注") @RequestParam String remark) throws TransactionException {
+    public ResponseData resetStats(@Parameter(description = "主键") long id, @Parameter( description = "备注") @RequestParam String remark) throws TransactionException {
         AuthServiceHelper.logInfo( TaskCronerInfo.class, id, "清空统计数据！操作备注：" + remark );
         TaskCronerInfo info = dao.load( TaskCronerInfo.class, id );
         if (Objects.isNull( info )) {

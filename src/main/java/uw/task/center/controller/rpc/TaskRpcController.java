@@ -228,7 +228,7 @@ public class TaskRpcController {
     @PutMapping("/croner/tick")
     @Operation(summary = "更新定时任务下次执行时间", description = "更新定时任务下次执行时间")
     @MscPermDeclare(user = UserType.RPC, log = ActionLog.NONE)
-    public int updateCronerLog(@Parameter(description = "主键", example = "1") @RequestParam(required = false) long id,
+    public int updateCronerLog(@Parameter(description = "主键") @RequestParam(required = false) long id,
                                @Parameter(description = "下一个日期", example = "0") @RequestParam(required = false) long nextDate) throws TransactionException {
         return dao.executeCommand( "update task_croner_info set next_run_date = ? where id = ? ", new Object[]{new Date( nextDate ), id} );
     }
