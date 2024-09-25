@@ -70,7 +70,7 @@ public class TaskHostInfoController {
     @Operation(summary = "启用task主机信息", description = "启用task主机信息")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
     public ResponseData enable(@Parameter(name = "id", description = "主键ID", example = "1") @RequestParam long id,
-                               @Parameter(name = "remark", description = "备注") @RequestParam String remark) throws TransactionException {
+                               @Parameter( description = "备注") @RequestParam String remark) throws TransactionException {
         AuthServiceHelper.logInfo( TaskHostInfo.class, id, "启用task主机信息！操作备注：" + remark );
         TaskHostInfo taskHostInfo = dao.load( TaskHostInfo.class, id );
         if (taskHostInfo == null) {
@@ -95,7 +95,7 @@ public class TaskHostInfoController {
     @Operation(summary = "禁用task主机信息", description = "禁用task主机信息")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
     public ResponseData disable(@Parameter(name = "id", description = "主键ID", example = "1") @RequestParam long id,
-                                @Parameter(name = "remark", description = "备注") @RequestParam String remark) throws TransactionException {
+                                @Parameter( description = "备注") @RequestParam String remark) throws TransactionException {
         AuthServiceHelper.logInfo( TaskHostInfo.class, id, "禁用task主机信息！操作备注：" + remark );
         TaskHostInfo taskHostInfo = dao.load( TaskHostInfo.class, id );
         if (taskHostInfo == null) {
