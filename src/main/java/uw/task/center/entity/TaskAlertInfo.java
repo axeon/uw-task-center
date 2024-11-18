@@ -82,7 +82,7 @@ public class TaskAlertInfo implements DataEntity,Serializable{
     private transient StringBuilder UPDATED_INFO = null;
 
     /**
-     * 获得更改的字段列表.
+     * 获取更改的字段列表.
      */
     @Override
     public Set<String> GET_UPDATED_COLUMN() {
@@ -90,7 +90,7 @@ public class TaskAlertInfo implements DataEntity,Serializable{
     }
 
     /**
-     * 获得文本更新信息.
+     * 获取文本更新信息.
      */
     @Override
     public String GET_UPDATED_INFO() {
@@ -121,49 +121,49 @@ public class TaskAlertInfo implements DataEntity,Serializable{
 
 
     /**
-     * 获得id。
+     * 获取id。
      */
     public long getId(){
         return this.id;
     }
 
     /**
-     * 获得任务类型。1croner2runner。
+     * 获取任务类型。1croner2runner。
      */
     public String getTaskType(){
         return this.taskType;
     }
 
     /**
-     * 获得任务配置ID。
+     * 获取任务配置ID。
      */
     public long getTaskId(){
         return this.taskId;
     }
 
     /**
-     * 获得报警标题。
+     * 获取报警标题。
      */
     public String getAlertTitle(){
         return this.alertTitle;
     }
 
     /**
-     * 获得报警信息。
+     * 获取报警信息。
      */
     public String getAlertBody(){
         return this.alertBody;
     }
 
     /**
-     * 获得创建时间。
+     * 获取创建时间。
      */
     public java.util.Date getCreateDate(){
         return this.createDate;
     }
 
     /**
-     * 获得状态。
+     * 获取状态。
      */
     public int getState(){
         return this.state;

@@ -14,118 +14,118 @@ public class TaskCronerStatsQueryParam extends PageQueryParam{
 
 
     /**
-    * id
+    * id。
     */
     @QueryMeta(expr = "id=?")
     @Schema(title="id", description = "id")
     private Long id;
 
     /**
-    * 任务配置id
+    * 任务配置id。
     */
     @QueryMeta(expr = "task_id=?")
     @Schema(title="任务配置id", description = "任务配置id")
     private Long taskId;
 
     /**
-    * 全部执行计数
+    * 全部执行计数。
     */
     @QueryMeta(expr = "num_all=?")
     @Schema(title="全部执行计数", description = "全部执行计数")
     private Integer numAll;
 
     /**
-    * 全部执行计数范围
+    * 全部执行计数范围。
     */
     @QueryMeta(expr = "num_all between ? and ?")
     @Schema(title="全部执行计数范围", description = "全部执行计数范围")
     private Integer[] numAllRange;
 
     /**
-    * 程序失败计数
+    * 程序失败计数。
     */
     @QueryMeta(expr = "num_fail_program=?")
     @Schema(title="程序失败计数", description = "程序失败计数")
     private Integer numFailProgram;
 
     /**
-    * 程序失败计数范围
+    * 程序失败计数范围。
     */
     @QueryMeta(expr = "num_fail_program between ? and ?")
     @Schema(title="程序失败计数范围", description = "程序失败计数范围")
     private Integer[] numFailProgramRange;
 
     /**
-    * 配置失败计数
+    * 配置失败计数。
     */
     @QueryMeta(expr = "num_fail_config=?")
     @Schema(title="配置失败计数", description = "配置失败计数")
     private Integer numFailConfig;
 
     /**
-    * 配置失败计数范围
+    * 配置失败计数范围。
     */
     @QueryMeta(expr = "num_fail_config between ? and ?")
     @Schema(title="配置失败计数范围", description = "配置失败计数范围")
     private Integer[] numFailConfigRange;
 
     /**
-    * 数据失败计数
+    * 数据失败计数。
     */
     @QueryMeta(expr = "num_fail_data=?")
     @Schema(title="数据失败计数", description = "数据失败计数")
     private Integer numFailData;
 
     /**
-    * 数据失败计数范围
+    * 数据失败计数范围。
     */
     @QueryMeta(expr = "num_fail_data between ? and ?")
     @Schema(title="数据失败计数范围", description = "数据失败计数范围")
     private Integer[] numFailDataRange;
 
     /**
-    * 对方失败计数
+    * 对方失败计数。
     */
     @QueryMeta(expr = "num_fail_partner=?")
     @Schema(title="对方失败计数", description = "对方失败计数")
     private Integer numFailPartner;
 
     /**
-    * 对方失败计数范围
+    * 对方失败计数范围。
     */
     @QueryMeta(expr = "num_fail_partner between ? and ?")
     @Schema(title="对方失败计数范围", description = "对方失败计数范围")
     private Integer[] numFailPartnerRange;
 
     /**
-    * 超时等待
+    * 超时等待。
     */
     @QueryMeta(expr = "time_wait=?")
     @Schema(title="超时等待", description = "超时等待")
     private Integer timeWait;
 
     /**
-    * 超时等待范围
+    * 超时等待范围。
     */
     @QueryMeta(expr = "time_wait between ? and ?")
     @Schema(title="超时等待范围", description = "超时等待范围")
     private Integer[] timeWaitRange;
 
     /**
-    * 运行时间
+    * 运行时间。
     */
     @QueryMeta(expr = "time_run=?")
     @Schema(title="运行时间", description = "运行时间")
     private Integer timeRun;
 
     /**
-    * 运行时间范围
+    * 运行时间范围。
     */
     @QueryMeta(expr = "time_run between ? and ?")
     @Schema(title="运行时间范围", description = "运行时间范围")
     private Integer[] timeRunRange;
     /**
-    * 创建时间范围
+    * 创建时间范围。
     */
     @QueryMeta(expr = "create_date between ? and ?")
     @Schema(title="创建时间范围", description = "创建时间范围")
@@ -133,7 +133,7 @@ public class TaskCronerStatsQueryParam extends PageQueryParam{
 
 
     /**
-    * 获得id。
+    * 获取id。
     */
     public Long getId(){
         return this.id;
@@ -146,7 +146,7 @@ public class TaskCronerStatsQueryParam extends PageQueryParam{
         this.id = id;
     }
     /**
-    * 获得任务配置id。
+    * 获取任务配置id。
     */
     public Long getTaskId(){
         return this.taskId;
@@ -160,7 +160,7 @@ public class TaskCronerStatsQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得全部执行计数。
+    * 获取全部执行计数。
     */
     public Integer getNumAll(){
         return this.numAll;
@@ -174,7 +174,7 @@ public class TaskCronerStatsQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得全部执行计数范围。
+    * 获取全部执行计数范围。
     */
     public Integer[] getNumAllRange(){
         return this.numAllRange;
@@ -188,7 +188,7 @@ public class TaskCronerStatsQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得程序失败计数。
+    * 获取程序失败计数。
     */
     public Integer getNumFailProgram(){
         return this.numFailProgram;
@@ -202,7 +202,7 @@ public class TaskCronerStatsQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得程序失败计数范围。
+    * 获取程序失败计数范围。
     */
     public Integer[] getNumFailProgramRange(){
         return this.numFailProgramRange;
@@ -216,7 +216,7 @@ public class TaskCronerStatsQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得配置失败计数。
+    * 获取配置失败计数。
     */
     public Integer getNumFailConfig(){
         return this.numFailConfig;
@@ -230,7 +230,7 @@ public class TaskCronerStatsQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得配置失败计数范围。
+    * 获取配置失败计数范围。
     */
     public Integer[] getNumFailConfigRange(){
         return this.numFailConfigRange;
@@ -244,7 +244,7 @@ public class TaskCronerStatsQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得数据失败计数。
+    * 获取数据失败计数。
     */
     public Integer getNumFailData(){
         return this.numFailData;
@@ -258,7 +258,7 @@ public class TaskCronerStatsQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得数据失败计数范围。
+    * 获取数据失败计数范围。
     */
     public Integer[] getNumFailDataRange(){
         return this.numFailDataRange;
@@ -272,7 +272,7 @@ public class TaskCronerStatsQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得对方失败计数。
+    * 获取对方失败计数。
     */
     public Integer getNumFailPartner(){
         return this.numFailPartner;
@@ -286,7 +286,7 @@ public class TaskCronerStatsQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得对方失败计数范围。
+    * 获取对方失败计数范围。
     */
     public Integer[] getNumFailPartnerRange(){
         return this.numFailPartnerRange;
@@ -300,7 +300,7 @@ public class TaskCronerStatsQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得超时等待。
+    * 获取超时等待。
     */
     public Integer getTimeWait(){
         return this.timeWait;
@@ -314,7 +314,7 @@ public class TaskCronerStatsQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得超时等待范围。
+    * 获取超时等待范围。
     */
     public Integer[] getTimeWaitRange(){
         return this.timeWaitRange;
@@ -328,7 +328,7 @@ public class TaskCronerStatsQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得运行时间。
+    * 获取运行时间。
     */
     public Integer getTimeRun(){
         return this.timeRun;
@@ -342,7 +342,7 @@ public class TaskCronerStatsQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得运行时间范围。
+    * 获取运行时间范围。
     */
     public Integer[] getTimeRunRange(){
         return this.timeRunRange;
@@ -355,7 +355,7 @@ public class TaskCronerStatsQueryParam extends PageQueryParam{
         this.timeRunRange = timeRunRange;
     }
     /**
-    * 获得创建时间范围。
+    * 获取创建时间范围。
     */
     public Date[] getCreateDateRange(){
         return this.createDateRange;

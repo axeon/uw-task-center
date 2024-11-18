@@ -103,7 +103,7 @@ public class TaskCronerStats implements DataEntity,Serializable{
     private transient StringBuilder UPDATED_INFO = null;
 
     /**
-     * 获得更改的字段列表.
+     * 获取更改的字段列表.
      */
     @Override
     public Set<String> GET_UPDATED_COLUMN() {
@@ -111,7 +111,7 @@ public class TaskCronerStats implements DataEntity,Serializable{
     }
 
     /**
-     * 获得文本更新信息.
+     * 获取文本更新信息.
      */
     @Override
     public String GET_UPDATED_INFO() {
@@ -142,70 +142,70 @@ public class TaskCronerStats implements DataEntity,Serializable{
 
 
     /**
-     * 获得id。
+     * 获取id。
      */
     public long getId(){
         return this.id;
     }
 
     /**
-     * 获得任务配置id。
+     * 获取任务配置id。
      */
     public long getTaskId(){
         return this.taskId;
     }
 
     /**
-     * 获得全部执行计数。
+     * 获取全部执行计数。
      */
     public int getNumAll(){
         return this.numAll;
     }
 
     /**
-     * 获得程序失败计数。
+     * 获取程序失败计数。
      */
     public int getNumFailProgram(){
         return this.numFailProgram;
     }
 
     /**
-     * 获得配置失败计数。
+     * 获取配置失败计数。
      */
     public int getNumFailConfig(){
         return this.numFailConfig;
     }
 
     /**
-     * 获得数据失败计数。
+     * 获取数据失败计数。
      */
     public int getNumFailData(){
         return this.numFailData;
     }
 
     /**
-     * 获得对方失败计数。
+     * 获取对方失败计数。
      */
     public int getNumFailPartner(){
         return this.numFailPartner;
     }
 
     /**
-     * 获得超时等待。
+     * 获取超时等待。
      */
     public int getTimeWait(){
         return this.timeWait;
     }
 
     /**
-     * 获得运行时间。
+     * 获取运行时间。
      */
     public int getTimeRun(){
         return this.timeRun;
     }
 
     /**
-     * 获得创建时间。
+     * 获取创建时间。
      */
     public java.util.Date getCreateDate(){
         return this.createDate;

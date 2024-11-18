@@ -14,160 +14,160 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
 
 
     /**
-    * id
+    * id。
     */
     @QueryMeta(expr = "id=?")
     @Schema(title="id", description = "id")
     private Long id;
 
     /**
-    * 任务配置id
+    * 任务配置id。
     */
     @QueryMeta(expr = "task_id=?")
     @Schema(title="任务配置id", description = "任务配置id")
     private Long taskId;
 
     /**
-    * 全部执行计数
+    * 全部执行计数。
     */
     @QueryMeta(expr = "num_all=?")
     @Schema(title="全部执行计数", description = "全部执行计数")
     private Integer numAll;
 
     /**
-    * 全部执行计数范围
+    * 全部执行计数范围。
     */
     @QueryMeta(expr = "num_all between ? and ?")
     @Schema(title="全部执行计数范围", description = "全部执行计数范围")
     private Integer[] numAllRange;
 
     /**
-    * 程序错误计数
+    * 程序错误计数。
     */
     @QueryMeta(expr = "num_fail_program=?")
     @Schema(title="程序错误计数", description = "程序错误计数")
     private Integer numFailProgram;
 
     /**
-    * 程序错误计数范围
+    * 程序错误计数范围。
     */
     @QueryMeta(expr = "num_fail_program between ? and ?")
     @Schema(title="程序错误计数范围", description = "程序错误计数范围")
     private Integer[] numFailProgramRange;
 
     /**
-    * 配置错误计数
+    * 配置错误计数。
     */
     @QueryMeta(expr = "num_fail_config=?")
     @Schema(title="配置错误计数", description = "配置错误计数")
     private Integer numFailConfig;
 
     /**
-    * 配置错误计数范围
+    * 配置错误计数范围。
     */
     @QueryMeta(expr = "num_fail_config between ? and ?")
     @Schema(title="配置错误计数范围", description = "配置错误计数范围")
     private Integer[] numFailConfigRange;
 
     /**
-    * 数据错误计数
+    * 数据错误计数。
     */
     @QueryMeta(expr = "num_fail_data=?")
     @Schema(title="数据错误计数", description = "数据错误计数")
     private Integer numFailData;
 
     /**
-    * 数据错误计数范围
+    * 数据错误计数范围。
     */
     @QueryMeta(expr = "num_fail_data between ? and ?")
     @Schema(title="数据错误计数范围", description = "数据错误计数范围")
     private Integer[] numFailDataRange;
 
     /**
-    * 对方错误计数
+    * 对方错误计数。
     */
     @QueryMeta(expr = "num_fail_partner=?")
     @Schema(title="对方错误计数", description = "对方错误计数")
     private Integer numFailPartner;
 
     /**
-    * 对方错误计数范围
+    * 对方错误计数范围。
     */
     @QueryMeta(expr = "num_fail_partner between ? and ?")
     @Schema(title="对方错误计数范围", description = "对方错误计数范围")
     private Integer[] numFailPartnerRange;
 
     /**
-    * 队列等待时间
+    * 队列等待时间。
     */
     @QueryMeta(expr = "time_wait_queue=?")
     @Schema(title="队列等待时间", description = "队列等待时间")
     private Integer timeWaitQueue;
 
     /**
-    * 队列等待时间范围
+    * 队列等待时间范围。
     */
     @QueryMeta(expr = "time_wait_queue between ? and ?")
     @Schema(title="队列等待时间范围", description = "队列等待时间范围")
     private Integer[] timeWaitQueueRange;
 
     /**
-    * 超时等待时间
+    * 超时等待时间。
     */
     @QueryMeta(expr = "time_wait_delay=?")
     @Schema(title="超时等待时间", description = "超时等待时间")
     private Integer timeWaitDelay;
 
     /**
-    * 超时等待时间范围
+    * 超时等待时间范围。
     */
     @QueryMeta(expr = "time_wait_delay between ? and ?")
     @Schema(title="超时等待时间范围", description = "超时等待时间范围")
     private Integer[] timeWaitDelayRange;
 
     /**
-    * 运行时间
+    * 运行时间。
     */
     @QueryMeta(expr = "time_run=?")
     @Schema(title="运行时间", description = "运行时间")
     private Integer timeRun;
 
     /**
-    * 运行时间范围
+    * 运行时间范围。
     */
     @QueryMeta(expr = "time_run between ? and ?")
     @Schema(title="运行时间范围", description = "运行时间范围")
     private Integer[] timeRunRange;
 
     /**
-    * 队列长度
+    * 队列长度。
     */
     @QueryMeta(expr = "queue_size=?")
     @Schema(title="队列长度", description = "队列长度")
     private Integer queueSize;
 
     /**
-    * 队列长度范围
+    * 队列长度范围。
     */
     @QueryMeta(expr = "queue_size between ? and ?")
     @Schema(title="队列长度范围", description = "队列长度范围")
     private Integer[] queueSizeRange;
 
     /**
-    * 消费者数量
+    * 消费者数量。
     */
     @QueryMeta(expr = "consumer_num=?")
     @Schema(title="消费者数量", description = "消费者数量")
     private Integer consumerNum;
 
     /**
-    * 消费者数量范围
+    * 消费者数量范围。
     */
     @QueryMeta(expr = "consumer_num between ? and ?")
     @Schema(title="消费者数量范围", description = "消费者数量范围")
     private Integer[] consumerNumRange;
     /**
-    * 创建时间范围
+    * 创建时间范围。
     */
     @QueryMeta(expr = "create_date between ? and ?")
     @Schema(title="创建时间范围", description = "创建时间范围")
@@ -175,7 +175,7 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
 
 
     /**
-    * 获得id。
+    * 获取id。
     */
     public Long getId(){
         return this.id;
@@ -188,7 +188,7 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
         this.id = id;
     }
     /**
-    * 获得任务配置id。
+    * 获取任务配置id。
     */
     public Long getTaskId(){
         return this.taskId;
@@ -202,7 +202,7 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得全部执行计数。
+    * 获取全部执行计数。
     */
     public Integer getNumAll(){
         return this.numAll;
@@ -216,7 +216,7 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得全部执行计数范围。
+    * 获取全部执行计数范围。
     */
     public Integer[] getNumAllRange(){
         return this.numAllRange;
@@ -230,7 +230,7 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得程序错误计数。
+    * 获取程序错误计数。
     */
     public Integer getNumFailProgram(){
         return this.numFailProgram;
@@ -244,7 +244,7 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得程序错误计数范围。
+    * 获取程序错误计数范围。
     */
     public Integer[] getNumFailProgramRange(){
         return this.numFailProgramRange;
@@ -258,7 +258,7 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得配置错误计数。
+    * 获取配置错误计数。
     */
     public Integer getNumFailConfig(){
         return this.numFailConfig;
@@ -272,7 +272,7 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得配置错误计数范围。
+    * 获取配置错误计数范围。
     */
     public Integer[] getNumFailConfigRange(){
         return this.numFailConfigRange;
@@ -286,7 +286,7 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得数据错误计数。
+    * 获取数据错误计数。
     */
     public Integer getNumFailData(){
         return this.numFailData;
@@ -300,7 +300,7 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得数据错误计数范围。
+    * 获取数据错误计数范围。
     */
     public Integer[] getNumFailDataRange(){
         return this.numFailDataRange;
@@ -314,7 +314,7 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得对方错误计数。
+    * 获取对方错误计数。
     */
     public Integer getNumFailPartner(){
         return this.numFailPartner;
@@ -328,7 +328,7 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得对方错误计数范围。
+    * 获取对方错误计数范围。
     */
     public Integer[] getNumFailPartnerRange(){
         return this.numFailPartnerRange;
@@ -342,7 +342,7 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得队列等待时间。
+    * 获取队列等待时间。
     */
     public Integer getTimeWaitQueue(){
         return this.timeWaitQueue;
@@ -356,7 +356,7 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得队列等待时间范围。
+    * 获取队列等待时间范围。
     */
     public Integer[] getTimeWaitQueueRange(){
         return this.timeWaitQueueRange;
@@ -370,7 +370,7 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得超时等待时间。
+    * 获取超时等待时间。
     */
     public Integer getTimeWaitDelay(){
         return this.timeWaitDelay;
@@ -384,7 +384,7 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得超时等待时间范围。
+    * 获取超时等待时间范围。
     */
     public Integer[] getTimeWaitDelayRange(){
         return this.timeWaitDelayRange;
@@ -398,7 +398,7 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得运行时间。
+    * 获取运行时间。
     */
     public Integer getTimeRun(){
         return this.timeRun;
@@ -412,7 +412,7 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得运行时间范围。
+    * 获取运行时间范围。
     */
     public Integer[] getTimeRunRange(){
         return this.timeRunRange;
@@ -426,7 +426,7 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得队列长度。
+    * 获取队列长度。
     */
     public Integer getQueueSize(){
         return this.queueSize;
@@ -440,7 +440,7 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得队列长度范围。
+    * 获取队列长度范围。
     */
     public Integer[] getQueueSizeRange(){
         return this.queueSizeRange;
@@ -454,7 +454,7 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得消费者数量。
+    * 获取消费者数量。
     */
     public Integer getConsumerNum(){
         return this.consumerNum;
@@ -468,7 +468,7 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得消费者数量范围。
+    * 获取消费者数量范围。
     */
     public Integer[] getConsumerNumRange(){
         return this.consumerNumRange;
@@ -481,7 +481,7 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
         this.consumerNumRange = consumerNumRange;
     }
     /**
-    * 获得创建时间范围。
+    * 获取创建时间范围。
     */
     public Date[] getCreateDateRange(){
         return this.createDateRange;

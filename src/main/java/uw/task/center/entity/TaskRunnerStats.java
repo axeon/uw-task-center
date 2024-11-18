@@ -124,7 +124,7 @@ public class TaskRunnerStats implements DataEntity,Serializable{
     private transient StringBuilder UPDATED_INFO = null;
 
     /**
-     * 获得更改的字段列表.
+     * 获取更改的字段列表.
      */
     @Override
     public Set<String> GET_UPDATED_COLUMN() {
@@ -132,7 +132,7 @@ public class TaskRunnerStats implements DataEntity,Serializable{
     }
 
     /**
-     * 获得文本更新信息.
+     * 获取文本更新信息.
      */
     @Override
     public String GET_UPDATED_INFO() {
@@ -163,91 +163,91 @@ public class TaskRunnerStats implements DataEntity,Serializable{
 
 
     /**
-     * 获得id。
+     * 获取id。
      */
     public long getId(){
         return this.id;
     }
 
     /**
-     * 获得任务配置id。
+     * 获取任务配置id。
      */
     public long getTaskId(){
         return this.taskId;
     }
 
     /**
-     * 获得全部执行计数。
+     * 获取全部执行计数。
      */
     public int getNumAll(){
         return this.numAll;
     }
 
     /**
-     * 获得程序错误计数。
+     * 获取程序错误计数。
      */
     public int getNumFailProgram(){
         return this.numFailProgram;
     }
 
     /**
-     * 获得配置错误计数。
+     * 获取配置错误计数。
      */
     public int getNumFailConfig(){
         return this.numFailConfig;
     }
 
     /**
-     * 获得数据错误计数。
+     * 获取数据错误计数。
      */
     public int getNumFailData(){
         return this.numFailData;
     }
 
     /**
-     * 获得对方错误计数。
+     * 获取对方错误计数。
      */
     public int getNumFailPartner(){
         return this.numFailPartner;
     }
 
     /**
-     * 获得队列等待时间。
+     * 获取队列等待时间。
      */
     public int getTimeWaitQueue(){
         return this.timeWaitQueue;
     }
 
     /**
-     * 获得超时等待时间。
+     * 获取超时等待时间。
      */
     public int getTimeWaitDelay(){
         return this.timeWaitDelay;
     }
 
     /**
-     * 获得运行时间。
+     * 获取运行时间。
      */
     public int getTimeRun(){
         return this.timeRun;
     }
 
     /**
-     * 获得队列长度。
+     * 获取队列长度。
      */
     public int getQueueSize(){
         return this.queueSize;
     }
 
     /**
-     * 获得消费者数量。
+     * 获取消费者数量。
      */
     public int getConsumerNum(){
         return this.consumerNum;
     }
 
     /**
-     * 获得创建时间。
+     * 获取创建时间。
      */
     public java.util.Date getCreateDate(){
         return this.createDate;

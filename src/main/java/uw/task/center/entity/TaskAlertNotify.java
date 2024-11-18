@@ -96,7 +96,7 @@ public class TaskAlertNotify implements DataEntity,Serializable{
     private transient StringBuilder UPDATED_INFO = null;
 
     /**
-     * 获得更改的字段列表.
+     * 获取更改的字段列表.
      */
     @Override
     public Set<String> GET_UPDATED_COLUMN() {
@@ -104,7 +104,7 @@ public class TaskAlertNotify implements DataEntity,Serializable{
     }
 
     /**
-     * 获得文本更新信息.
+     * 获取文本更新信息.
      */
     @Override
     public String GET_UPDATED_INFO() {
@@ -135,63 +135,63 @@ public class TaskAlertNotify implements DataEntity,Serializable{
 
 
     /**
-     * 获得。
+     * 获取。
      */
     public long getId(){
         return this.id;
     }
 
     /**
-     * 获得报警信息ID。
+     * 获取报警信息ID。
      */
     public long getInfoId(){
         return this.infoId;
     }
 
     /**
-     * 获得联系人。
+     * 获取联系人。
      */
     public String getContactMan(){
         return this.contactMan;
     }
 
     /**
-     * 获得联系人信息类型,mobile,qq,wx,email。
+     * 获取联系人信息类型,mobile,qq,wx,email。
      */
     public String getContactType(){
         return this.contactType;
     }
 
     /**
-     * 获得联系人信息。
+     * 获取联系人信息。
      */
     public String getContactInfo(){
         return this.contactInfo;
     }
 
     /**
-     * 获得创建时间。
+     * 获取创建时间。
      */
     public java.util.Date getCreateDate(){
         return this.createDate;
     }
 
     /**
-     * 获得发送时间。
+     * 获取发送时间。
      */
     public java.util.Date getSentDate(){
         return this.sentDate;
     }
 
     /**
-     * 获得发送次数。
+     * 获取发送次数。
      */
     public int getSentTimes(){
         return this.sentTimes;
     }
 
     /**
-     * 获得状态。
+     * 获取状态。
      */
     public int getState(){
         return this.state;

@@ -299,7 +299,7 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
     private transient StringBuilder UPDATED_INFO = null;
 
     /**
-     * 获得更改的字段列表.
+     * 获取更改的字段列表.
      */
     @Override
     public Set<String> GET_UPDATED_COLUMN() {
@@ -307,7 +307,7 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
     }
 
     /**
-     * 获得文本更新信息.
+     * 获取文本更新信息.
      */
     @Override
     public String GET_UPDATED_INFO() {
@@ -338,266 +338,266 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
 
 
     /**
-     * 获得id。
+     * 获取id。
      */
     public long getId(){
         return this.id;
     }
 
     /**
-     * 获得任务名称。
+     * 获取任务名称。
      */
     public String getTaskName(){
         return this.taskName;
     }
 
     /**
-     * 获得任务描述。
+     * 获取任务描述。
      */
     public String getTaskDesc(){
         return this.taskDesc;
     }
 
     /**
-     * 获得执行类信息。
+     * 获取执行类信息。
      */
     public String getTaskClass(){
         return this.taskClass;
     }
 
     /**
-     * 获得任务所有人。
+     * 获取任务所有人。
      */
     public String getTaskOwner(){
         return this.taskOwner;
     }
 
     /**
-     * 获得运行标签。
+     * 获取运行标签。
      */
     public String getTaskTag(){
         return this.taskTag;
     }
 
     /**
-     * 获得队列类型。
+     * 获取队列类型。
      */
     public int getQueueType(){
         return this.queueType;
     }
 
     /**
-     * 获得延迟类型。
+     * 获取延迟类型。
      */
     public int getDelayType(){
         return this.delayType;
     }
 
     /**
-     * 获得日志类型。
+     * 获取日志类型。
      */
     public int getLogLevel(){
         return this.logLevel;
     }
 
     /**
-     * 获得日志长度限制。
+     * 获取日志长度限制。
      */
     public int getLogLimitSize(){
         return this.logLimitSize;
     }
 
     /**
-     * 获得运行类型。
+     * 获取运行类型。
      */
     public int getRunType(){
         return this.runType;
     }
 
     /**
-     * 获得运行目标。
+     * 获取运行目标。
      */
     public String getRunTarget(){
         return this.runTarget;
     }
 
     /**
-     * 获得消费者的数量。
+     * 获取消费者的数量。
      */
     public int getConsumerNum(){
         return this.consumerNum;
     }
 
     /**
-     * 获得队列预取数量。
+     * 获取队列预取数量。
      */
     public int getPrefetchNum(){
         return this.prefetchNum;
     }
 
     /**
-     * 获得限速类型。
+     * 获取限速类型。
      */
     public int getRateLimitType(){
         return this.rateLimitType;
     }
 
     /**
-     * 获得流量限定数值，默认为60次。
+     * 获取流量限定数值，默认为60次。
      */
     public int getRateLimitValue(){
         return this.rateLimitValue;
     }
 
     /**
-     * 获得流量限定时间(S)，默认为60秒。
+     * 获取流量限定时间(S)，默认为60秒。
      */
     public int getRateLimitTime(){
         return this.rateLimitTime;
     }
 
     /**
-     * 获得当发生流量限制时，等待的秒数。
+     * 获取当发生流量限制时，等待的秒数。
      */
     public int getRateLimitWait(){
         return this.rateLimitWait;
     }
 
     /**
-     * 获得超过流量限制重试次数。
+     * 获取超过流量限制重试次数。
      */
     public int getRetryTimesByOverrated(){
         return this.retryTimesByOverrated;
     }
 
     /**
-     * 获得对方接口错误重试次数。
+     * 获取对方接口错误重试次数。
      */
     public int getRetryTimesByPartner(){
         return this.retryTimesByPartner;
     }
 
     /**
-     * 获得最后统计时间。
+     * 获取最后统计时间。
      */
     public java.util.Date getStatsDate(){
         return this.statsDate;
     }
 
     /**
-     * 获得统计运行次数。
+     * 获取统计运行次数。
      */
     public int getStatsRunNum(){
         return this.statsRunNum;
     }
 
     /**
-     * 获得统计运行失败次数。
+     * 获取统计运行失败次数。
      */
     public int getStatsFailNum(){
         return this.statsFailNum;
     }
 
     /**
-     * 获得统计总时间毫秒数。
+     * 获取统计总时间毫秒数。
      */
     public long getStatsRunTime(){
         return this.statsRunTime;
     }
 
     /**
-     * 获得失败率。
+     * 获取失败率。
      */
     public int getAlertFailRate(){
         return this.alertFailRate;
     }
 
     /**
-     * 获得接口失败率。
+     * 获取接口失败率。
      */
     public int getAlertFailPartnerRate(){
         return this.alertFailPartnerRate;
     }
 
     /**
-     * 获得程序失败率。
+     * 获取程序失败率。
      */
     public int getAlertFailProgramRate(){
         return this.alertFailProgramRate;
     }
 
     /**
-     * 获得配置失败率。
+     * 获取配置失败率。
      */
     public int getAlertFailConfigRate(){
         return this.alertFailConfigRate;
     }
 
     /**
-     * 获得数据失败率。
+     * 获取数据失败率。
      */
     public int getAlertFailDataRate(){
         return this.alertFailDataRate;
     }
 
     /**
-     * 获得队列长度限制。
+     * 获取队列长度限制。
      */
     public int getAlertQueueOversize(){
         return this.alertQueueOversize;
     }
 
     /**
-     * 获得队列等待超时。
+     * 获取队列等待超时。
      */
     public int getAlertQueueTimeout(){
         return this.alertQueueTimeout;
     }
 
     /**
-     * 获得等待超时。
+     * 获取等待超时。
      */
     public int getAlertWaitTimeout(){
         return this.alertWaitTimeout;
     }
 
     /**
-     * 获得运行超时。
+     * 获取运行超时。
      */
     public int getAlertRunTimeout(){
         return this.alertRunTimeout;
     }
 
     /**
-     * 获得我方联系信息。
+     * 获取我方联系信息。
      */
     public String getTaskLinkOur(){
         return this.taskLinkOur;
     }
 
     /**
-     * 获得商户联系信息。
+     * 获取商户联系信息。
      */
     public String getTaskLinkMch(){
         return this.taskLinkMch;
     }
 
     /**
-     * 获得创建日期。
+     * 获取创建日期。
      */
     public java.util.Date getCreateDate(){
         return this.createDate;
     }
 
     /**
-     * 获得最后修改日期。
+     * 获取最后修改日期。
      */
     public java.util.Date getModifyDate(){
         return this.modifyDate;
     }
 
     /**
-     * 获得状态1正常，0暂停，-1标记删除。
+     * 获取状态1正常，0暂停，-1标记删除。
      */
     public int getState(){
         return this.state;

@@ -117,7 +117,7 @@ public class TaskAlertContact implements DataEntity,Serializable{
     private transient StringBuilder UPDATED_INFO = null;
 
     /**
-     * 获得更改的字段列表.
+     * 获取更改的字段列表.
      */
     @Override
     public Set<String> GET_UPDATED_COLUMN() {
@@ -125,7 +125,7 @@ public class TaskAlertContact implements DataEntity,Serializable{
     }
 
     /**
-     * 获得文本更新信息.
+     * 获取文本更新信息.
      */
     @Override
     public String GET_UPDATED_INFO() {
@@ -156,84 +156,84 @@ public class TaskAlertContact implements DataEntity,Serializable{
 
 
     /**
-     * 获得id。
+     * 获取id。
      */
     public long getId(){
         return this.id;
     }
 
     /**
-     * 获得联系人类型。
+     * 获取联系人类型。
      */
     public int getContactType(){
         return this.contactType;
     }
 
     /**
-     * 获得联系人。
+     * 获取联系人。
      */
     public String getContactName(){
         return this.contactName;
     }
 
     /**
-     * 获得联系电话。
+     * 获取联系电话。
      */
     public String getMobile(){
         return this.mobile;
     }
 
     /**
-     * 获得联系email。
+     * 获取联系email。
      */
     public String getEmail(){
         return this.email;
     }
 
     /**
-     * 获得联系微信。
+     * 获取联系微信。
      */
     public String getWechat(){
         return this.wechat;
     }
 
     /**
-     * 获得备用im。
+     * 获取备用im。
      */
     public String getIm(){
         return this.im;
     }
 
     /**
-     * 获得通知链接，如钉钉，微信等。
+     * 获取通知链接，如钉钉，微信等。
      */
     public String getNotifyUrl(){
         return this.notifyUrl;
     }
 
     /**
-     * 获得备注。
+     * 获取备注。
      */
     public String getRemark(){
         return this.remark;
     }
 
     /**
-     * 获得创建日期。
+     * 获取创建日期。
      */
     public java.util.Date getCreateDate(){
         return this.createDate;
     }
 
     /**
-     * 获得修改日期。
+     * 获取修改日期。
      */
     public java.util.Date getModifyDate(){
         return this.modifyDate;
     }
 
     /**
-     * 获得状态。
+     * 获取状态。
      */
     public int getState(){
         return this.state;

@@ -14,97 +14,97 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
 
 
     /**
-    * id
+    * id。
     */
     @QueryMeta(expr = "id=?")
     @Schema(title="id", description = "id")
     private Long id;
 
     /**
-    * 任务名称
+    * 任务名称。
     */
     @QueryMeta(expr = "task_name like ?")
     @Schema(title="任务名称", description = "任务名称")
     private String taskName;
 
     /**
-    * 执行类信息
+    * 执行类信息。
     */
     @QueryMeta(expr = "task_class like ?")
     @Schema(title="执行类信息", description = "执行类信息")
     private String taskClass;
 
     /**
-    * 任务参数
+    * 任务参数。
     */
     @QueryMeta(expr = "task_param like ?")
     @Schema(title="任务参数", description = "任务参数")
     private String taskParam;
 
     /**
-    * 任务所有人
+    * 任务所有人。
     */
     @QueryMeta(expr = "task_owner like ?")
     @Schema(title="任务所有人", description = "任务所有人")
     private String taskOwner;
 
     /**
-    * cron表达式
+    * cron表达式。
     */
     @QueryMeta(expr = "task_cron like ?")
     @Schema(title="cron表达式", description = "cron表达式")
     private String taskCron;
 
     /**
-    * 运行类型
+    * 运行类型。
     */
     @QueryMeta(expr = "run_type=?")
     @Schema(title="运行类型", description = "运行类型")
     private Integer runType;
 
     /**
-    * 运行目标
+    * 运行目标。
     */
     @QueryMeta(expr = "run_target like ?")
     @Schema(title="运行目标", description = "运行目标")
     private String runTarget;
 
     /**
-    * 日志类型
+    * 日志类型。
     */
     @QueryMeta(expr = "log_level=?")
     @Schema(title="日志类型", description = "日志类型")
     private Integer logLevel;
 
     /**
-    * 日志类型范围
+    * 日志类型范围。
     */
     @QueryMeta(expr = "log_level between ? and ?")
     @Schema(title="日志类型范围", description = "日志类型范围")
     private Integer[] logLevelRange;
 
     /**
-    * 日志长度限制
+    * 日志长度限制。
     */
     @QueryMeta(expr = "log_limit_size=?")
     @Schema(title="日志长度限制", description = "日志长度限制")
     private Integer logLimitSize;
 
     /**
-    * 日志长度限制范围
+    * 日志长度限制范围。
     */
     @QueryMeta(expr = "log_limit_size between ? and ?")
     @Schema(title="日志长度限制范围", description = "日志长度限制范围")
     private Integer[] logLimitSizeRange;
     /**
-    * 下次执行时间范围
+    * 下次执行时间范围。
     */
     @QueryMeta(expr = "next_run_date between ? and ?")
     @Schema(title="下次执行时间范围", description = "下次执行时间范围")
     private Date[] nextRunDateRange;
 
     /**
-    * 最后统计时间范围
+    * 最后统计时间范围。
     */
     @QueryMeta(expr = "stats_date between ? and ?")
     @Schema(title="最后统计时间范围", description = "最后统计时间范围")
@@ -112,190 +112,189 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
 
 
     /**
-    * 统计运行次数
+    * 统计运行次数。
     */
     @QueryMeta(expr = "stats_run_num=?")
     @Schema(title="统计运行次数", description = "统计运行次数")
     private Integer statsRunNum;
 
     /**
-    * 统计运行次数范围
+    * 统计运行次数范围。
     */
     @QueryMeta(expr = "stats_run_num between ? and ?")
     @Schema(title="统计运行次数范围", description = "统计运行次数范围")
     private Integer[] statsRunNumRange;
 
     /**
-    * 统计运行失败次数
+    * 统计运行失败次数。
     */
     @QueryMeta(expr = "stats_fail_num=?")
     @Schema(title="统计运行失败次数", description = "统计运行失败次数")
     private Integer statsFailNum;
 
     /**
-    * 统计运行失败次数范围
+    * 统计运行失败次数范围。
     */
     @QueryMeta(expr = "stats_fail_num between ? and ?")
     @Schema(title="统计运行失败次数范围", description = "统计运行失败次数范围")
     private Integer[] statsFailNumRange;
 
     /**
-    * 统计总时间毫秒数
+    * 统计总时间毫秒数。
     */
     @QueryMeta(expr = "stats_run_time=?")
     @Schema(title="统计总时间毫秒数", description = "统计总时间毫秒数")
     private Long statsRunTime;
 
     /**
-    * 统计总时间毫秒数范围
+    * 统计总时间毫秒数范围。
     */
     @QueryMeta(expr = "stats_run_time between ? and ?")
     @Schema(title="统计总时间毫秒数范围", description = "统计总时间毫秒数范围")
     private Long[] statsRunTimeRange;
 
     /**
-    * 失败率
+    * 失败率。
     */
     @QueryMeta(expr = "alert_fail_rate=?")
     @Schema(title="失败率", description = "失败率")
     private Integer alertFailRate;
 
     /**
-    * 失败率范围
+    * 失败率范围。
     */
     @QueryMeta(expr = "alert_fail_rate between ? and ?")
     @Schema(title="失败率范围", description = "失败率范围")
     private Integer[] alertFailRateRange;
 
     /**
-    * 接口失败率
+    * 接口失败率。
     */
     @QueryMeta(expr = "alert_fail_partner_rate=?")
     @Schema(title="接口失败率", description = "接口失败率")
     private Integer alertFailPartnerRate;
 
     /**
-    * 接口失败率范围
+    * 接口失败率范围。
     */
     @QueryMeta(expr = "alert_fail_partner_rate between ? and ?")
     @Schema(title="接口失败率范围", description = "接口失败率范围")
     private Integer[] alertFailPartnerRateRange;
 
     /**
-    * 数据失败率
+    * 数据失败率。
     */
     @QueryMeta(expr = "alert_fail_data_rate=?")
     @Schema(title="数据失败率", description = "数据失败率")
     private Integer alertFailDataRate;
 
     /**
-    * 数据失败率范围
+    * 数据失败率范围。
     */
     @QueryMeta(expr = "alert_fail_data_rate between ? and ?")
     @Schema(title="数据失败率范围", description = "数据失败率范围")
     private Integer[] alertFailDataRateRange;
 
     /**
-    * 程序失败率
+    * 程序失败率。
     */
     @QueryMeta(expr = "alert_fail_program_rate=?")
     @Schema(title="程序失败率", description = "程序失败率")
     private Integer alertFailProgramRate;
 
     /**
-    * 程序失败率范围
+    * 程序失败率范围。
     */
     @QueryMeta(expr = "alert_fail_program_rate between ? and ?")
     @Schema(title="程序失败率范围", description = "程序失败率范围")
     private Integer[] alertFailProgramRateRange;
 
     /**
-    * 等待超时
+    * 等待超时。
     */
     @QueryMeta(expr = "alert_wait_timeout=?")
     @Schema(title="等待超时", description = "等待超时")
     private Integer alertWaitTimeout;
 
     /**
-    * 等待超时范围
+    * 等待超时范围。
     */
     @QueryMeta(expr = "alert_wait_timeout between ? and ?")
     @Schema(title="等待超时范围", description = "等待超时范围")
     private Integer[] alertWaitTimeoutRange;
 
     /**
-    * 运行超时
+    * 运行超时。
     */
     @QueryMeta(expr = "alert_run_timeout=?")
     @Schema(title="运行超时", description = "运行超时")
     private Integer alertRunTimeout;
 
     /**
-    * 运行超时范围
+    * 运行超时范围。
     */
     @QueryMeta(expr = "alert_run_timeout between ? and ?")
     @Schema(title="运行超时范围", description = "运行超时范围")
     private Integer[] alertRunTimeoutRange;
 
     /**
-    * 我方联系信息
+    * 我方联系信息。
     */
     @QueryMeta(expr = "task_link_our like ?")
     @Schema(title="我方联系信息", description = "我方联系信息")
     private String taskLinkOur;
 
     /**
-    * 商户联系信息
+    * 商户联系信息。
     */
     @QueryMeta(expr = "task_link_mch like ?")
     @Schema(title="商户联系信息", description = "商户联系信息")
     private String taskLinkMch;
     /**
-    * 创建时间范围
+    * 创建时间范围。
     */
     @QueryMeta(expr = "create_date between ? and ?")
     @Schema(title="创建时间范围", description = "创建时间范围")
     private Date[] createDateRange;
 
     /**
-    * 最后修改时间范围
+    * 最后修改时间范围。
     */
     @QueryMeta(expr = "modify_date between ? and ?")
     @Schema(title="最后修改时间范围", description = "最后修改时间范围")
     private Date[] modifyDateRange;
 
     /**
-    * 状态1正常，0暂停，-1标记删除
+    * 状态1正常，0暂停，-1标记删除。
     */
     @QueryMeta(expr = "state=?")
     @Schema(title="状态1正常，0暂停，-1标记删除", description = "状态1正常，0暂停，-1标记删除")
     private Integer state;
 
     /**
-    * 正常状态1正常，0暂停，-1标记删除
-    */
-    @QueryMeta(expr = "state>-1")
-    @Schema(title="正常状态1正常，0暂停，-1标记删除", description = "正常状态1正常，0暂停，-1标记删除")
-    private Boolean stateOn;
-
-    /**
-    * 状态1正常，0暂停，-1标记删除数组
+    * 数组状态1正常，0暂停，-1标记删除。
     */
     @QueryMeta(expr = "state in (?)")
-    @Schema(title="状态1正常，0暂停，-1标记删除数组", description = "状态1正常，0暂停，-1标记删除数组，可同时匹配多个状态。")
+    @Schema(title="数组状态1正常，0暂停，-1标记删除", description = "状态1正常，0暂停，-1标记删除数组，可同时匹配多个状态。")
     private Integer[] states;
 
     /**
-    * 状态1正常，0暂停，-1标记删除运算条件。
-    * 可以使用运算符号。
+    * 大于等于状态1正常，0暂停，-1标记删除。
     */
-    @QueryMeta(expr = "state ?")
-    @Schema(title="状态1正常，0暂停，-1标记删除运算条件", description = "状态1正常，0暂停，-1标记删除运算条件，可使用><=!比较运算符。")
-    private String stateOp;
+    @QueryMeta(expr = "state>=?")
+    @Schema(title="大于等于状态1正常，0暂停，-1标记删除", description = "大于等于状态1正常，0暂停，-1标记删除")
+    private Integer stateGte;
+
+    /**
+    * 小于等于状态1正常，0暂停，-1标记删除。
+    */
+    @QueryMeta(expr = "state<=?")
+    @Schema(title="小于等于状态1正常，0暂停，-1标记删除", description = "小于等于状态1正常，0暂停，-1标记删除")
+    private Integer stateLte;
 
 
     /**
-    * 获得id。
+    * 获取id。
     */
     public Long getId(){
         return this.id;
@@ -309,7 +308,7 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得任务名称。
+    * 获取任务名称。
     */
     public String getTaskName(){
         return this.taskName;
@@ -323,7 +322,7 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得执行类信息。
+    * 获取执行类信息。
     */
     public String getTaskClass(){
         return this.taskClass;
@@ -337,7 +336,7 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得任务参数。
+    * 获取任务参数。
     */
     public String getTaskParam(){
         return this.taskParam;
@@ -351,7 +350,7 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得任务所有人。
+    * 获取任务所有人。
     */
     public String getTaskOwner(){
         return this.taskOwner;
@@ -365,7 +364,7 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得cron表达式。
+    * 获取cron表达式。
     */
     public String getTaskCron(){
         return this.taskCron;
@@ -378,7 +377,7 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
         this.taskCron = taskCron;
     }
     /**
-    * 获得运行类型。
+    * 获取运行类型。
     */
     public Integer getRunType(){
         return this.runType;
@@ -392,7 +391,7 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得运行目标。
+    * 获取运行目标。
     */
     public String getRunTarget(){
         return this.runTarget;
@@ -406,7 +405,7 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得日志类型。
+    * 获取日志类型。
     */
     public Integer getLogLevel(){
         return this.logLevel;
@@ -420,7 +419,7 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得日志类型范围。
+    * 获取日志类型范围。
     */
     public Integer[] getLogLevelRange(){
         return this.logLevelRange;
@@ -434,7 +433,7 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得日志长度限制。
+    * 获取日志长度限制。
     */
     public Integer getLogLimitSize(){
         return this.logLimitSize;
@@ -448,7 +447,7 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得日志长度限制范围。
+    * 获取日志长度限制范围。
     */
     public Integer[] getLogLimitSizeRange(){
         return this.logLimitSizeRange;
@@ -461,7 +460,7 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
         this.logLimitSizeRange = logLimitSizeRange;
     }
     /**
-    * 获得下次执行时间范围。
+    * 获取下次执行时间范围。
     */
     public Date[] getNextRunDateRange(){
         return this.nextRunDateRange;
@@ -474,7 +473,7 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
         this.nextRunDateRange = nextRunDateRange;
     }
     /**
-    * 获得最后统计时间范围。
+    * 获取最后统计时间范围。
     */
     public Date[] getStatsDateRange(){
         return this.statsDateRange;
@@ -488,7 +487,7 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得统计运行次数。
+    * 获取统计运行次数。
     */
     public Integer getStatsRunNum(){
         return this.statsRunNum;
@@ -502,7 +501,7 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得统计运行次数范围。
+    * 获取统计运行次数范围。
     */
     public Integer[] getStatsRunNumRange(){
         return this.statsRunNumRange;
@@ -516,7 +515,7 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得统计运行失败次数。
+    * 获取统计运行失败次数。
     */
     public Integer getStatsFailNum(){
         return this.statsFailNum;
@@ -530,7 +529,7 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得统计运行失败次数范围。
+    * 获取统计运行失败次数范围。
     */
     public Integer[] getStatsFailNumRange(){
         return this.statsFailNumRange;
@@ -544,7 +543,7 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得统计总时间毫秒数。
+    * 获取统计总时间毫秒数。
     */
     public Long getStatsRunTime(){
         return this.statsRunTime;
@@ -558,7 +557,7 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得统计总时间毫秒数范围。
+    * 获取统计总时间毫秒数范围。
     */
     public Long[] getStatsRunTimeRange(){
         return this.statsRunTimeRange;
@@ -572,7 +571,7 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得失败率。
+    * 获取失败率。
     */
     public Integer getAlertFailRate(){
         return this.alertFailRate;
@@ -586,7 +585,7 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得失败率范围。
+    * 获取失败率范围。
     */
     public Integer[] getAlertFailRateRange(){
         return this.alertFailRateRange;
@@ -600,7 +599,7 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得接口失败率。
+    * 获取接口失败率。
     */
     public Integer getAlertFailPartnerRate(){
         return this.alertFailPartnerRate;
@@ -614,7 +613,7 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得接口失败率范围。
+    * 获取接口失败率范围。
     */
     public Integer[] getAlertFailPartnerRateRange(){
         return this.alertFailPartnerRateRange;
@@ -628,7 +627,7 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得数据失败率。
+    * 获取数据失败率。
     */
     public Integer getAlertFailDataRate(){
         return this.alertFailDataRate;
@@ -642,7 +641,7 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得数据失败率范围。
+    * 获取数据失败率范围。
     */
     public Integer[] getAlertFailDataRateRange(){
         return this.alertFailDataRateRange;
@@ -656,7 +655,7 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得程序失败率。
+    * 获取程序失败率。
     */
     public Integer getAlertFailProgramRate(){
         return this.alertFailProgramRate;
@@ -670,7 +669,7 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得程序失败率范围。
+    * 获取程序失败率范围。
     */
     public Integer[] getAlertFailProgramRateRange(){
         return this.alertFailProgramRateRange;
@@ -684,7 +683,7 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得等待超时。
+    * 获取等待超时。
     */
     public Integer getAlertWaitTimeout(){
         return this.alertWaitTimeout;
@@ -698,7 +697,7 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得等待超时范围。
+    * 获取等待超时范围。
     */
     public Integer[] getAlertWaitTimeoutRange(){
         return this.alertWaitTimeoutRange;
@@ -712,7 +711,7 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得运行超时。
+    * 获取运行超时。
     */
     public Integer getAlertRunTimeout(){
         return this.alertRunTimeout;
@@ -726,7 +725,7 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得运行超时范围。
+    * 获取运行超时范围。
     */
     public Integer[] getAlertRunTimeoutRange(){
         return this.alertRunTimeoutRange;
@@ -740,7 +739,7 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得我方联系信息。
+    * 获取我方联系信息。
     */
     public String getTaskLinkOur(){
         return this.taskLinkOur;
@@ -754,7 +753,7 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得商户联系信息。
+    * 获取商户联系信息。
     */
     public String getTaskLinkMch(){
         return this.taskLinkMch;
@@ -767,7 +766,7 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
         this.taskLinkMch = taskLinkMch;
     }
     /**
-    * 获得创建时间范围。
+    * 获取创建时间范围。
     */
     public Date[] getCreateDateRange(){
         return this.createDateRange;
@@ -780,7 +779,7 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
         this.createDateRange = createDateRange;
     }
     /**
-    * 获得最后修改时间范围。
+    * 获取最后修改时间范围。
     */
     public Date[] getModifyDateRange(){
         return this.modifyDateRange;
@@ -793,7 +792,7 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
         this.modifyDateRange = modifyDateRange;
     }
     /**
-    * 获得状态1正常，0暂停，-1标记删除。
+    * 获取状态1正常，0暂停，-1标记删除。
     */
     public Integer getState(){
         return this.state;
@@ -807,45 +806,46 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得正常状态1正常，0暂停，-1标记删除。
-    */
-    public Boolean getStateOn(){
-        return this.stateOn;
-    }
-
-    /**
-    * 设置正常状态1正常，0暂停，-1标记删除。
-    */
-    public void setStateOn(Boolean stateOn){
-        this.stateOn = stateOn;
-    }
-
-    /**
-    * 获得状态1正常，0暂停，-1标记删除数组。
+    * 获取数组状态1正常，0暂停，-1标记删除。
     */
     public Integer[] getStates(){
         return this.states;
     }
 
     /**
-    * 设置状态1正常，0暂停，-1标记删除数组。
+    * 设置数组状态1正常，0暂停，-1标记删除。
     */
     public void setStates(Integer[] states){
         this.states = states;
     }
-
+    
     /**
-    * 获得状态1正常，0暂停，-1标记删除运算条件。
+    * 获取大于等于状态1正常，0暂停，-1标记删除。
     */
-    public String getStateOp(){
-        return this.stateOp;
+    public Integer getStateGte(){
+        return this.stateGte;
     }
 
     /**
-    * 设置状态1正常，0暂停，-1标记删除运算条件。
+    * 设置大于等于状态1正常，0暂停，-1标记删除。
     */
-    public void setStateOp(String stateOp){
-        this.stateOp = stateOp;
+    public void setStateGte(Integer stateGte){
+        this.stateGte = stateGte;
     }
+    
+    /**
+    * 获取小于等于状态1正常，0暂停，-1标记删除。
+    */
+    public Integer getStateLte(){
+        return this.stateLte;
+    }
+
+    /**
+    * 获取小于等于状态1正常，0暂停，-1标记删除。
+    */
+    public void setStateLte(Integer stateOn){
+        this.stateLte = stateLte;
+    }
+    
 
 }

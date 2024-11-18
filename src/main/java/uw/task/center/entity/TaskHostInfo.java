@@ -222,7 +222,7 @@ public class TaskHostInfo implements DataEntity,Serializable{
     private transient StringBuilder UPDATED_INFO = null;
 
     /**
-     * 获得更改的字段列表.
+     * 获取更改的字段列表.
      */
     @Override
     public Set<String> GET_UPDATED_COLUMN() {
@@ -230,7 +230,7 @@ public class TaskHostInfo implements DataEntity,Serializable{
     }
 
     /**
-     * 获得文本更新信息.
+     * 获取文本更新信息.
      */
     @Override
     public String GET_UPDATED_INFO() {
@@ -261,189 +261,189 @@ public class TaskHostInfo implements DataEntity,Serializable{
 
 
     /**
-     * 获得id。
+     * 获取id。
      */
     public long getId(){
         return this.id;
     }
 
     /**
-     * 获得主机注册IP。
+     * 获取主机注册IP。
      */
     public String getHostIp(){
         return this.hostIp;
     }
 
     /**
-     * 获得应用名称。
+     * 获取应用名称。
      */
     public String getAppName(){
         return this.appName;
     }
 
     /**
-     * 获得应用版本。
+     * 获取应用版本。
      */
     public String getAppVersion(){
         return this.appVersion;
     }
 
     /**
-     * 获得app主机。
+     * 获取app主机。
      */
     public String getAppHost(){
         return this.appHost;
     }
 
     /**
-     * 获得app端口。
+     * 获取app端口。
      */
     public int getAppPort(){
         return this.appPort;
     }
 
     /**
-     * 获得任务项目。
+     * 获取任务项目。
      */
     public String getTaskProject(){
         return this.taskProject;
     }
 
     /**
-     * 获得运行目标。
+     * 获取运行目标。
      */
     public String getRunTarget(){
         return this.runTarget;
     }
 
     /**
-     * 获得定时任务数量。
+     * 获取定时任务数量。
      */
     public int getCronerNum(){
         return this.cronerNum;
     }
 
     /**
-     * 获得统计运行次数。
+     * 获取统计运行次数。
      */
     public int getCronerRunNum(){
         return this.cronerRunNum;
     }
 
     /**
-     * 获得统计运行失败次数。
+     * 获取统计运行失败次数。
      */
     public int getCronerFailNum(){
         return this.cronerFailNum;
     }
 
     /**
-     * 获得统计总时间毫秒数。
+     * 获取统计总时间毫秒数。
      */
     public long getCronerRunTime(){
         return this.cronerRunTime;
     }
 
     /**
-     * 获得队列任务数量。
+     * 获取队列任务数量。
      */
     public int getRunnerNum(){
         return this.runnerNum;
     }
 
     /**
-     * 获得统计运行次数。
+     * 获取统计运行次数。
      */
     public int getRunnerRunNum(){
         return this.runnerRunNum;
     }
 
     /**
-     * 获得统计运行失败次数。
+     * 获取统计运行失败次数。
      */
     public int getRunnerFailNum(){
         return this.runnerFailNum;
     }
 
     /**
-     * 获得统计总时间毫秒数。
+     * 获取统计总时间毫秒数。
      */
     public long getRunnerRunTime(){
         return this.runnerRunTime;
     }
 
     /**
-     * 获得jvm内存总数。
+     * 获取jvm内存总数。
      */
     public long getJvmMemMax(){
         return this.jvmMemMax;
     }
 
     /**
-     * 获得jvm内存总数。
+     * 获取jvm内存总数。
      */
     public long getJvmMemTotal(){
         return this.jvmMemTotal;
     }
 
     /**
-     * 获得jvm空闲内存。
+     * 获取jvm空闲内存。
      */
     public long getJvmMemFree(){
         return this.jvmMemFree;
     }
 
     /**
-     * 获得活跃线程。
+     * 获取活跃线程。
      */
     public int getThreadActive(){
         return this.threadActive;
     }
 
     /**
-     * 获得峰值线程。
+     * 获取峰值线程。
      */
     public int getThreadPeak(){
         return this.threadPeak;
     }
 
     /**
-     * 获得守护线程。
+     * 获取守护线程。
      */
     public int getThreadDaemon(){
         return this.threadDaemon;
     }
 
     /**
-     * 获得累计启动线程。
+     * 获取累计启动线程。
      */
     public long getThreadStarted(){
         return this.threadStarted;
     }
 
     /**
-     * 获得建立日期。
+     * 获取建立日期。
      */
     public java.util.Date getCreateDate(){
         return this.createDate;
     }
 
     /**
-     * 获得修改时间。
+     * 获取修改时间。
      */
     public java.util.Date getModifyDate(){
         return this.modifyDate;
     }
 
     /**
-     * 获得最后更新。
+     * 获取最后更新。
      */
     public java.util.Date getLastUpdate(){
         return this.lastUpdate;
     }
 
     /**
-     * 获得状态。
+     * 获取状态。
      */
     public int getState(){
         return this.state;

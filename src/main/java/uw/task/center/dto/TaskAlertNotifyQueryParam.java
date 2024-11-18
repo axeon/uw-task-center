@@ -14,48 +14,48 @@ public class TaskAlertNotifyQueryParam extends PageQueryParam{
 
 
     /**
-    * 
+    * 。
     */
     @QueryMeta(expr = "id=?")
     @Schema(title="", description = "")
     private Long id;
 
     /**
-    * 报警信息ID
+    * 报警信息ID。
     */
     @QueryMeta(expr = "info_id=?")
     @Schema(title="报警信息ID", description = "报警信息ID")
     private Long infoId;
 
     /**
-    * 联系人
+    * 联系人。
     */
     @QueryMeta(expr = "contact_man like ?")
     @Schema(title="联系人", description = "联系人")
     private String contactMan;
 
     /**
-    * 联系人信息类型,mobile,qq,wx,email
+    * 联系人信息类型,mobile,qq,wx,email。
     */
     @QueryMeta(expr = "contact_type like ?")
     @Schema(title="联系人信息类型,mobile,qq,wx,email", description = "联系人信息类型,mobile,qq,wx,email")
     private String contactType;
 
     /**
-    * 联系人信息
+    * 联系人信息。
     */
     @QueryMeta(expr = "contact_info like ?")
     @Schema(title="联系人信息", description = "联系人信息")
     private String contactInfo;
     /**
-    * 创建时间范围
+    * 创建时间范围。
     */
     @QueryMeta(expr = "create_date between ? and ?")
     @Schema(title="创建时间范围", description = "创建时间范围")
     private Date[] createDateRange;
 
     /**
-    * 发送时间范围
+    * 发送时间范围。
     */
     @QueryMeta(expr = "sent_date between ? and ?")
     @Schema(title="发送时间范围", description = "发送时间范围")
@@ -63,50 +63,49 @@ public class TaskAlertNotifyQueryParam extends PageQueryParam{
 
 
     /**
-    * 发送次数
+    * 发送次数。
     */
     @QueryMeta(expr = "sent_times=?")
     @Schema(title="发送次数", description = "发送次数")
     private Integer sentTimes;
 
     /**
-    * 发送次数范围
+    * 发送次数范围。
     */
     @QueryMeta(expr = "sent_times between ? and ?")
     @Schema(title="发送次数范围", description = "发送次数范围")
     private Integer[] sentTimesRange;
     /**
-    * 状态
+    * 状态。
     */
     @QueryMeta(expr = "state=?")
     @Schema(title="状态", description = "状态")
     private Integer state;
 
     /**
-    * 正常状态
-    */
-    @QueryMeta(expr = "state>-1")
-    @Schema(title="正常状态", description = "正常状态")
-    private Boolean stateOn;
-
-    /**
-    * 状态数组
+    * 数组状态。
     */
     @QueryMeta(expr = "state in (?)")
-    @Schema(title="状态数组", description = "状态数组，可同时匹配多个状态。")
+    @Schema(title="数组状态", description = "状态数组，可同时匹配多个状态。")
     private Integer[] states;
 
     /**
-    * 状态运算条件。
-    * 可以使用运算符号。
+    * 大于等于状态。
     */
-    @QueryMeta(expr = "state ?")
-    @Schema(title="状态运算条件", description = "状态运算条件，可使用><=!比较运算符。")
-    private String stateOp;
+    @QueryMeta(expr = "state>=?")
+    @Schema(title="大于等于状态", description = "大于等于状态")
+    private Integer stateGte;
+
+    /**
+    * 小于等于状态。
+    */
+    @QueryMeta(expr = "state<=?")
+    @Schema(title="小于等于状态", description = "小于等于状态")
+    private Integer stateLte;
 
 
     /**
-    * 获得。
+    * 获取。
     */
     public Long getId(){
         return this.id;
@@ -119,7 +118,7 @@ public class TaskAlertNotifyQueryParam extends PageQueryParam{
         this.id = id;
     }
     /**
-    * 获得报警信息ID。
+    * 获取报警信息ID。
     */
     public Long getInfoId(){
         return this.infoId;
@@ -133,7 +132,7 @@ public class TaskAlertNotifyQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得联系人。
+    * 获取联系人。
     */
     public String getContactMan(){
         return this.contactMan;
@@ -147,7 +146,7 @@ public class TaskAlertNotifyQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得联系人信息类型,mobile,qq,wx,email。
+    * 获取联系人信息类型,mobile,qq,wx,email。
     */
     public String getContactType(){
         return this.contactType;
@@ -161,7 +160,7 @@ public class TaskAlertNotifyQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得联系人信息。
+    * 获取联系人信息。
     */
     public String getContactInfo(){
         return this.contactInfo;
@@ -174,7 +173,7 @@ public class TaskAlertNotifyQueryParam extends PageQueryParam{
         this.contactInfo = contactInfo;
     }
     /**
-    * 获得创建时间范围。
+    * 获取创建时间范围。
     */
     public Date[] getCreateDateRange(){
         return this.createDateRange;
@@ -187,7 +186,7 @@ public class TaskAlertNotifyQueryParam extends PageQueryParam{
         this.createDateRange = createDateRange;
     }
     /**
-    * 获得发送时间范围。
+    * 获取发送时间范围。
     */
     public Date[] getSentDateRange(){
         return this.sentDateRange;
@@ -201,7 +200,7 @@ public class TaskAlertNotifyQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得发送次数。
+    * 获取发送次数。
     */
     public Integer getSentTimes(){
         return this.sentTimes;
@@ -215,7 +214,7 @@ public class TaskAlertNotifyQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得发送次数范围。
+    * 获取发送次数范围。
     */
     public Integer[] getSentTimesRange(){
         return this.sentTimesRange;
@@ -228,7 +227,7 @@ public class TaskAlertNotifyQueryParam extends PageQueryParam{
         this.sentTimesRange = sentTimesRange;
     }
     /**
-    * 获得状态。
+    * 获取状态。
     */
     public Integer getState(){
         return this.state;
@@ -242,45 +241,46 @@ public class TaskAlertNotifyQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得正常状态。
-    */
-    public Boolean getStateOn(){
-        return this.stateOn;
-    }
-
-    /**
-    * 设置正常状态。
-    */
-    public void setStateOn(Boolean stateOn){
-        this.stateOn = stateOn;
-    }
-
-    /**
-    * 获得状态数组。
+    * 获取数组状态。
     */
     public Integer[] getStates(){
         return this.states;
     }
 
     /**
-    * 设置状态数组。
+    * 设置数组状态。
     */
     public void setStates(Integer[] states){
         this.states = states;
     }
-
+    
     /**
-    * 获得状态运算条件。
+    * 获取大于等于状态。
     */
-    public String getStateOp(){
-        return this.stateOp;
+    public Integer getStateGte(){
+        return this.stateGte;
     }
 
     /**
-    * 设置状态运算条件。
+    * 设置大于等于状态。
     */
-    public void setStateOp(String stateOp){
-        this.stateOp = stateOp;
+    public void setStateGte(Integer stateGte){
+        this.stateGte = stateGte;
     }
+    
+    /**
+    * 获取小于等于状态。
+    */
+    public Integer getStateLte(){
+        return this.stateLte;
+    }
+
+    /**
+    * 获取小于等于状态。
+    */
+    public void setStateLte(Integer stateOn){
+        this.stateLte = stateLte;
+    }
+    
 
 }

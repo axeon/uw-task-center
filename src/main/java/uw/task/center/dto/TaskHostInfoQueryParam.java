@@ -14,330 +14,329 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
 
 
     /**
-    * id
+    * id。
     */
     @QueryMeta(expr = "id=?")
     @Schema(title="id", description = "id")
     private Long id;
 
     /**
-    * 主机注册IP
+    * 主机注册IP。
     */
     @QueryMeta(expr = "host_ip like ?")
     @Schema(title="主机注册IP", description = "主机注册IP")
     private String hostIp;
 
     /**
-    * 应用名称
+    * 应用名称。
     */
     @QueryMeta(expr = "app_name like ?")
     @Schema(title="应用名称", description = "应用名称")
     private String appName;
 
     /**
-    * 应用版本
+    * 应用版本。
     */
     @QueryMeta(expr = "app_version like ?")
     @Schema(title="应用版本", description = "应用版本")
     private String appVersion;
 
     /**
-    * app主机
+    * app主机。
     */
     @QueryMeta(expr = "app_host like ?")
     @Schema(title="app主机", description = "app主机")
     private String appHost;
 
     /**
-    * app端口
+    * app端口。
     */
     @QueryMeta(expr = "app_port=?")
     @Schema(title="app端口", description = "app端口")
     private Integer appPort;
 
     /**
-    * app端口范围
+    * app端口范围。
     */
     @QueryMeta(expr = "app_port between ? and ?")
     @Schema(title="app端口范围", description = "app端口范围")
     private Integer[] appPortRange;
 
     /**
-    * 任务项目
+    * 任务项目。
     */
     @QueryMeta(expr = "task_project like ?")
     @Schema(title="任务项目", description = "任务项目")
     private String taskProject;
 
     /**
-    * 运行目标
+    * 运行目标。
     */
     @QueryMeta(expr = "run_target like ?")
     @Schema(title="运行目标", description = "运行目标")
     private String runTarget;
 
     /**
-    * 定时任务数量
+    * 定时任务数量。
     */
     @QueryMeta(expr = "croner_num=?")
     @Schema(title="定时任务数量", description = "定时任务数量")
     private Integer cronerNum;
 
     /**
-    * 定时任务数量范围
+    * 定时任务数量范围。
     */
     @QueryMeta(expr = "croner_num between ? and ?")
     @Schema(title="定时任务数量范围", description = "定时任务数量范围")
     private Integer[] cronerNumRange;
 
     /**
-    * 统计运行次数
+    * 统计运行次数。
     */
     @QueryMeta(expr = "croner_run_num=?")
     @Schema(title="统计运行次数", description = "统计运行次数")
     private Integer cronerRunNum;
 
     /**
-    * 统计运行次数范围
+    * 统计运行次数范围。
     */
     @QueryMeta(expr = "croner_run_num between ? and ?")
     @Schema(title="统计运行次数范围", description = "统计运行次数范围")
     private Integer[] cronerRunNumRange;
 
     /**
-    * 统计运行失败次数
+    * 统计运行失败次数。
     */
     @QueryMeta(expr = "croner_fail_num=?")
     @Schema(title="统计运行失败次数", description = "统计运行失败次数")
     private Integer cronerFailNum;
 
     /**
-    * 统计运行失败次数范围
+    * 统计运行失败次数范围。
     */
     @QueryMeta(expr = "croner_fail_num between ? and ?")
     @Schema(title="统计运行失败次数范围", description = "统计运行失败次数范围")
     private Integer[] cronerFailNumRange;
 
     /**
-    * 统计总时间毫秒数
+    * 统计总时间毫秒数。
     */
     @QueryMeta(expr = "croner_run_time=?")
     @Schema(title="统计总时间毫秒数", description = "统计总时间毫秒数")
     private Long cronerRunTime;
 
     /**
-    * 统计总时间毫秒数范围
+    * 统计总时间毫秒数范围。
     */
     @QueryMeta(expr = "croner_run_time between ? and ?")
     @Schema(title="统计总时间毫秒数范围", description = "统计总时间毫秒数范围")
     private Long[] cronerRunTimeRange;
 
     /**
-    * 队列任务数量
+    * 队列任务数量。
     */
     @QueryMeta(expr = "runner_num=?")
     @Schema(title="队列任务数量", description = "队列任务数量")
     private Integer runnerNum;
 
     /**
-    * 队列任务数量范围
+    * 队列任务数量范围。
     */
     @QueryMeta(expr = "runner_num between ? and ?")
     @Schema(title="队列任务数量范围", description = "队列任务数量范围")
     private Integer[] runnerNumRange;
 
     /**
-    * 统计运行次数
+    * 统计运行次数。
     */
     @QueryMeta(expr = "runner_run_num=?")
     @Schema(title="统计运行次数", description = "统计运行次数")
     private Integer runnerRunNum;
 
     /**
-    * 统计运行次数范围
+    * 统计运行次数范围。
     */
     @QueryMeta(expr = "runner_run_num between ? and ?")
     @Schema(title="统计运行次数范围", description = "统计运行次数范围")
     private Integer[] runnerRunNumRange;
 
     /**
-    * 统计运行失败次数
+    * 统计运行失败次数。
     */
     @QueryMeta(expr = "runner_fail_num=?")
     @Schema(title="统计运行失败次数", description = "统计运行失败次数")
     private Integer runnerFailNum;
 
     /**
-    * 统计运行失败次数范围
+    * 统计运行失败次数范围。
     */
     @QueryMeta(expr = "runner_fail_num between ? and ?")
     @Schema(title="统计运行失败次数范围", description = "统计运行失败次数范围")
     private Integer[] runnerFailNumRange;
 
     /**
-    * 统计总时间毫秒数
+    * 统计总时间毫秒数。
     */
     @QueryMeta(expr = "runner_run_time=?")
     @Schema(title="统计总时间毫秒数", description = "统计总时间毫秒数")
     private Long runnerRunTime;
 
     /**
-    * 统计总时间毫秒数范围
+    * 统计总时间毫秒数范围。
     */
     @QueryMeta(expr = "runner_run_time between ? and ?")
     @Schema(title="统计总时间毫秒数范围", description = "统计总时间毫秒数范围")
     private Long[] runnerRunTimeRange;
 
     /**
-    * jvm内存总数
+    * jvm内存总数。
     */
     @QueryMeta(expr = "jvm_mem_max=?")
     @Schema(title="jvm内存总数", description = "jvm内存总数")
     private Long jvmMemMax;
 
     /**
-    * jvm内存总数范围
+    * jvm内存总数范围。
     */
     @QueryMeta(expr = "jvm_mem_max between ? and ?")
     @Schema(title="jvm内存总数范围", description = "jvm内存总数范围")
     private Long[] jvmMemMaxRange;
 
     /**
-    * jvm内存总数
+    * jvm内存总数。
     */
     @QueryMeta(expr = "jvm_mem_total=?")
     @Schema(title="jvm内存总数", description = "jvm内存总数")
     private Long jvmMemTotal;
 
     /**
-    * jvm内存总数范围
+    * jvm内存总数范围。
     */
     @QueryMeta(expr = "jvm_mem_total between ? and ?")
     @Schema(title="jvm内存总数范围", description = "jvm内存总数范围")
     private Long[] jvmMemTotalRange;
 
     /**
-    * jvm空闲内存
+    * jvm空闲内存。
     */
     @QueryMeta(expr = "jvm_mem_free=?")
     @Schema(title="jvm空闲内存", description = "jvm空闲内存")
     private Long jvmMemFree;
 
     /**
-    * jvm空闲内存范围
+    * jvm空闲内存范围。
     */
     @QueryMeta(expr = "jvm_mem_free between ? and ?")
     @Schema(title="jvm空闲内存范围", description = "jvm空闲内存范围")
     private Long[] jvmMemFreeRange;
 
     /**
-    * 活跃线程
+    * 活跃线程。
     */
     @QueryMeta(expr = "thread_active=?")
     @Schema(title="活跃线程", description = "活跃线程")
     private Integer threadActive;
 
     /**
-    * 活跃线程范围
+    * 活跃线程范围。
     */
     @QueryMeta(expr = "thread_active between ? and ?")
     @Schema(title="活跃线程范围", description = "活跃线程范围")
     private Integer[] threadActiveRange;
 
     /**
-    * 峰值线程
+    * 峰值线程。
     */
     @QueryMeta(expr = "thread_peak=?")
     @Schema(title="峰值线程", description = "峰值线程")
     private Integer threadPeak;
 
     /**
-    * 峰值线程范围
+    * 峰值线程范围。
     */
     @QueryMeta(expr = "thread_peak between ? and ?")
     @Schema(title="峰值线程范围", description = "峰值线程范围")
     private Integer[] threadPeakRange;
 
     /**
-    * 守护线程
+    * 守护线程。
     */
     @QueryMeta(expr = "thread_daemon=?")
     @Schema(title="守护线程", description = "守护线程")
     private Integer threadDaemon;
 
     /**
-    * 守护线程范围
+    * 守护线程范围。
     */
     @QueryMeta(expr = "thread_daemon between ? and ?")
     @Schema(title="守护线程范围", description = "守护线程范围")
     private Integer[] threadDaemonRange;
 
     /**
-    * 累计启动线程
+    * 累计启动线程。
     */
     @QueryMeta(expr = "thread_started=?")
     @Schema(title="累计启动线程", description = "累计启动线程")
     private Long threadStarted;
 
     /**
-    * 累计启动线程范围
+    * 累计启动线程范围。
     */
     @QueryMeta(expr = "thread_started between ? and ?")
     @Schema(title="累计启动线程范围", description = "累计启动线程范围")
     private Long[] threadStartedRange;
     /**
-    * 建立日期范围
+    * 建立日期范围。
     */
     @QueryMeta(expr = "create_date between ? and ?")
     @Schema(title="建立日期范围", description = "建立日期范围")
     private Date[] createDateRange;
 
     /**
-    * 修改时间范围
+    * 修改时间范围。
     */
     @QueryMeta(expr = "modify_date between ? and ?")
     @Schema(title="修改时间范围", description = "修改时间范围")
     private Date[] modifyDateRange;
 
     /**
-    * 最后更新范围
+    * 最后更新范围。
     */
     @QueryMeta(expr = "last_update between ? and ?")
     @Schema(title="最后更新范围", description = "最后更新范围")
     private Date[] lastUpdateRange;
 
     /**
-    * 状态
+    * 状态。
     */
     @QueryMeta(expr = "state=?")
     @Schema(title="状态", description = "状态")
     private Integer state;
 
     /**
-    * 正常状态
-    */
-    @QueryMeta(expr = "state>-1")
-    @Schema(title="正常状态", description = "正常状态")
-    private Boolean stateOn;
-
-    /**
-    * 状态数组
+    * 数组状态。
     */
     @QueryMeta(expr = "state in (?)")
-    @Schema(title="状态数组", description = "状态数组，可同时匹配多个状态。")
+    @Schema(title="数组状态", description = "状态数组，可同时匹配多个状态。")
     private Integer[] states;
 
     /**
-    * 状态运算条件。
-    * 可以使用运算符号。
+    * 大于等于状态。
     */
-    @QueryMeta(expr = "state ?")
-    @Schema(title="状态运算条件", description = "状态运算条件，可使用><=!比较运算符。")
-    private String stateOp;
+    @QueryMeta(expr = "state>=?")
+    @Schema(title="大于等于状态", description = "大于等于状态")
+    private Integer stateGte;
+
+    /**
+    * 小于等于状态。
+    */
+    @QueryMeta(expr = "state<=?")
+    @Schema(title="小于等于状态", description = "小于等于状态")
+    private Integer stateLte;
 
 
     /**
-    * 获得id。
+    * 获取id。
     */
     public Long getId(){
         return this.id;
@@ -351,7 +350,7 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得主机注册IP。
+    * 获取主机注册IP。
     */
     public String getHostIp(){
         return this.hostIp;
@@ -365,7 +364,7 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得应用名称。
+    * 获取应用名称。
     */
     public String getAppName(){
         return this.appName;
@@ -379,7 +378,7 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得应用版本。
+    * 获取应用版本。
     */
     public String getAppVersion(){
         return this.appVersion;
@@ -393,7 +392,7 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得app主机。
+    * 获取app主机。
     */
     public String getAppHost(){
         return this.appHost;
@@ -407,7 +406,7 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得app端口。
+    * 获取app端口。
     */
     public Integer getAppPort(){
         return this.appPort;
@@ -421,7 +420,7 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得app端口范围。
+    * 获取app端口范围。
     */
     public Integer[] getAppPortRange(){
         return this.appPortRange;
@@ -435,7 +434,7 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得任务项目。
+    * 获取任务项目。
     */
     public String getTaskProject(){
         return this.taskProject;
@@ -449,7 +448,7 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得运行目标。
+    * 获取运行目标。
     */
     public String getRunTarget(){
         return this.runTarget;
@@ -463,7 +462,7 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得定时任务数量。
+    * 获取定时任务数量。
     */
     public Integer getCronerNum(){
         return this.cronerNum;
@@ -477,7 +476,7 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得定时任务数量范围。
+    * 获取定时任务数量范围。
     */
     public Integer[] getCronerNumRange(){
         return this.cronerNumRange;
@@ -491,7 +490,7 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得统计运行次数。
+    * 获取统计运行次数。
     */
     public Integer getCronerRunNum(){
         return this.cronerRunNum;
@@ -505,7 +504,7 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得统计运行次数范围。
+    * 获取统计运行次数范围。
     */
     public Integer[] getCronerRunNumRange(){
         return this.cronerRunNumRange;
@@ -519,7 +518,7 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得统计运行失败次数。
+    * 获取统计运行失败次数。
     */
     public Integer getCronerFailNum(){
         return this.cronerFailNum;
@@ -533,7 +532,7 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得统计运行失败次数范围。
+    * 获取统计运行失败次数范围。
     */
     public Integer[] getCronerFailNumRange(){
         return this.cronerFailNumRange;
@@ -547,7 +546,7 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得统计总时间毫秒数。
+    * 获取统计总时间毫秒数。
     */
     public Long getCronerRunTime(){
         return this.cronerRunTime;
@@ -561,7 +560,7 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得统计总时间毫秒数范围。
+    * 获取统计总时间毫秒数范围。
     */
     public Long[] getCronerRunTimeRange(){
         return this.cronerRunTimeRange;
@@ -575,7 +574,7 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得队列任务数量。
+    * 获取队列任务数量。
     */
     public Integer getRunnerNum(){
         return this.runnerNum;
@@ -589,7 +588,7 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得队列任务数量范围。
+    * 获取队列任务数量范围。
     */
     public Integer[] getRunnerNumRange(){
         return this.runnerNumRange;
@@ -603,7 +602,7 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得统计运行次数。
+    * 获取统计运行次数。
     */
     public Integer getRunnerRunNum(){
         return this.runnerRunNum;
@@ -617,7 +616,7 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得统计运行次数范围。
+    * 获取统计运行次数范围。
     */
     public Integer[] getRunnerRunNumRange(){
         return this.runnerRunNumRange;
@@ -631,7 +630,7 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得统计运行失败次数。
+    * 获取统计运行失败次数。
     */
     public Integer getRunnerFailNum(){
         return this.runnerFailNum;
@@ -645,7 +644,7 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得统计运行失败次数范围。
+    * 获取统计运行失败次数范围。
     */
     public Integer[] getRunnerFailNumRange(){
         return this.runnerFailNumRange;
@@ -659,7 +658,7 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得统计总时间毫秒数。
+    * 获取统计总时间毫秒数。
     */
     public Long getRunnerRunTime(){
         return this.runnerRunTime;
@@ -673,7 +672,7 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得统计总时间毫秒数范围。
+    * 获取统计总时间毫秒数范围。
     */
     public Long[] getRunnerRunTimeRange(){
         return this.runnerRunTimeRange;
@@ -687,7 +686,7 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得jvm内存总数。
+    * 获取jvm内存总数。
     */
     public Long getJvmMemMax(){
         return this.jvmMemMax;
@@ -701,7 +700,7 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得jvm内存总数范围。
+    * 获取jvm内存总数范围。
     */
     public Long[] getJvmMemMaxRange(){
         return this.jvmMemMaxRange;
@@ -715,7 +714,7 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得jvm内存总数。
+    * 获取jvm内存总数。
     */
     public Long getJvmMemTotal(){
         return this.jvmMemTotal;
@@ -729,7 +728,7 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得jvm内存总数范围。
+    * 获取jvm内存总数范围。
     */
     public Long[] getJvmMemTotalRange(){
         return this.jvmMemTotalRange;
@@ -743,7 +742,7 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得jvm空闲内存。
+    * 获取jvm空闲内存。
     */
     public Long getJvmMemFree(){
         return this.jvmMemFree;
@@ -757,7 +756,7 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得jvm空闲内存范围。
+    * 获取jvm空闲内存范围。
     */
     public Long[] getJvmMemFreeRange(){
         return this.jvmMemFreeRange;
@@ -771,7 +770,7 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得活跃线程。
+    * 获取活跃线程。
     */
     public Integer getThreadActive(){
         return this.threadActive;
@@ -785,7 +784,7 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得活跃线程范围。
+    * 获取活跃线程范围。
     */
     public Integer[] getThreadActiveRange(){
         return this.threadActiveRange;
@@ -799,7 +798,7 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得峰值线程。
+    * 获取峰值线程。
     */
     public Integer getThreadPeak(){
         return this.threadPeak;
@@ -813,7 +812,7 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得峰值线程范围。
+    * 获取峰值线程范围。
     */
     public Integer[] getThreadPeakRange(){
         return this.threadPeakRange;
@@ -827,7 +826,7 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得守护线程。
+    * 获取守护线程。
     */
     public Integer getThreadDaemon(){
         return this.threadDaemon;
@@ -841,7 +840,7 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得守护线程范围。
+    * 获取守护线程范围。
     */
     public Integer[] getThreadDaemonRange(){
         return this.threadDaemonRange;
@@ -855,7 +854,7 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得累计启动线程。
+    * 获取累计启动线程。
     */
     public Long getThreadStarted(){
         return this.threadStarted;
@@ -869,7 +868,7 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得累计启动线程范围。
+    * 获取累计启动线程范围。
     */
     public Long[] getThreadStartedRange(){
         return this.threadStartedRange;
@@ -882,7 +881,7 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
         this.threadStartedRange = threadStartedRange;
     }
     /**
-    * 获得建立日期范围。
+    * 获取建立日期范围。
     */
     public Date[] getCreateDateRange(){
         return this.createDateRange;
@@ -895,7 +894,7 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
         this.createDateRange = createDateRange;
     }
     /**
-    * 获得修改时间范围。
+    * 获取修改时间范围。
     */
     public Date[] getModifyDateRange(){
         return this.modifyDateRange;
@@ -908,7 +907,7 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
         this.modifyDateRange = modifyDateRange;
     }
     /**
-    * 获得最后更新范围。
+    * 获取最后更新范围。
     */
     public Date[] getLastUpdateRange(){
         return this.lastUpdateRange;
@@ -921,7 +920,7 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
         this.lastUpdateRange = lastUpdateRange;
     }
     /**
-    * 获得状态。
+    * 获取状态。
     */
     public Integer getState(){
         return this.state;
@@ -935,45 +934,46 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得正常状态。
-    */
-    public Boolean getStateOn(){
-        return this.stateOn;
-    }
-
-    /**
-    * 设置正常状态。
-    */
-    public void setStateOn(Boolean stateOn){
-        this.stateOn = stateOn;
-    }
-
-    /**
-    * 获得状态数组。
+    * 获取数组状态。
     */
     public Integer[] getStates(){
         return this.states;
     }
 
     /**
-    * 设置状态数组。
+    * 设置数组状态。
     */
     public void setStates(Integer[] states){
         this.states = states;
     }
-
+    
     /**
-    * 获得状态运算条件。
+    * 获取大于等于状态。
     */
-    public String getStateOp(){
-        return this.stateOp;
+    public Integer getStateGte(){
+        return this.stateGte;
     }
 
     /**
-    * 设置状态运算条件。
+    * 设置大于等于状态。
     */
-    public void setStateOp(String stateOp){
-        this.stateOp = stateOp;
+    public void setStateGte(Integer stateGte){
+        this.stateGte = stateGte;
     }
+    
+    /**
+    * 获取小于等于状态。
+    */
+    public Integer getStateLte(){
+        return this.stateLte;
+    }
+
+    /**
+    * 获取小于等于状态。
+    */
+    public void setStateLte(Integer stateOn){
+        this.stateLte = stateLte;
+    }
+    
 
 }

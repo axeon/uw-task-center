@@ -14,71 +14,70 @@ public class TaskAlertInfoQueryParam extends PageQueryParam{
 
 
     /**
-    * id
+    * id。
     */
     @QueryMeta(expr = "id=?")
     @Schema(title="id", description = "id")
     private Long id;
 
     /**
-    * 任务类型。1croner2runner
+    * 任务类型。1croner2runner。
     */
     @QueryMeta(expr = "task_type like ?")
     @Schema(title="任务类型。1croner2runner", description = "任务类型。1croner2runner")
     private String taskType;
 
     /**
-    * 任务配置ID
+    * 任务配置ID。
     */
     @QueryMeta(expr = "task_id=?")
     @Schema(title="任务配置ID", description = "任务配置ID")
     private Long taskId;
 
     /**
-    * 报警标题
+    * 报警标题。
     */
     @QueryMeta(expr = "alert_title like ?")
     @Schema(title="报警标题", description = "报警标题")
     private String alertTitle;
     /**
-    * 创建时间范围
+    * 创建时间范围。
     */
     @QueryMeta(expr = "create_date between ? and ?")
     @Schema(title="创建时间范围", description = "创建时间范围")
     private Date[] createDateRange;
 
     /**
-    * 状态
+    * 状态。
     */
     @QueryMeta(expr = "state=?")
     @Schema(title="状态", description = "状态")
     private Integer state;
 
     /**
-    * 正常状态
-    */
-    @QueryMeta(expr = "state>-1")
-    @Schema(title="正常状态", description = "正常状态")
-    private Boolean stateOn;
-
-    /**
-    * 状态数组
+    * 数组状态。
     */
     @QueryMeta(expr = "state in (?)")
-    @Schema(title="状态数组", description = "状态数组，可同时匹配多个状态。")
+    @Schema(title="数组状态", description = "状态数组，可同时匹配多个状态。")
     private Integer[] states;
 
     /**
-    * 状态运算条件。
-    * 可以使用运算符号。
+    * 大于等于状态。
     */
-    @QueryMeta(expr = "state ?")
-    @Schema(title="状态运算条件", description = "状态运算条件，可使用><=!比较运算符。")
-    private String stateOp;
+    @QueryMeta(expr = "state>=?")
+    @Schema(title="大于等于状态", description = "大于等于状态")
+    private Integer stateGte;
+
+    /**
+    * 小于等于状态。
+    */
+    @QueryMeta(expr = "state<=?")
+    @Schema(title="小于等于状态", description = "小于等于状态")
+    private Integer stateLte;
 
 
     /**
-    * 获得id。
+    * 获取id。
     */
     public Long getId(){
         return this.id;
@@ -92,7 +91,7 @@ public class TaskAlertInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得任务类型。1croner2runner。
+    * 获取任务类型。1croner2runner。
     */
     public String getTaskType(){
         return this.taskType;
@@ -105,7 +104,7 @@ public class TaskAlertInfoQueryParam extends PageQueryParam{
         this.taskType = taskType;
     }
     /**
-    * 获得任务配置ID。
+    * 获取任务配置ID。
     */
     public Long getTaskId(){
         return this.taskId;
@@ -119,7 +118,7 @@ public class TaskAlertInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得报警标题。
+    * 获取报警标题。
     */
     public String getAlertTitle(){
         return this.alertTitle;
@@ -132,7 +131,7 @@ public class TaskAlertInfoQueryParam extends PageQueryParam{
         this.alertTitle = alertTitle;
     }
     /**
-    * 获得创建时间范围。
+    * 获取创建时间范围。
     */
     public Date[] getCreateDateRange(){
         return this.createDateRange;
@@ -145,7 +144,7 @@ public class TaskAlertInfoQueryParam extends PageQueryParam{
         this.createDateRange = createDateRange;
     }
     /**
-    * 获得状态。
+    * 获取状态。
     */
     public Integer getState(){
         return this.state;
@@ -159,45 +158,46 @@ public class TaskAlertInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获得正常状态。
-    */
-    public Boolean getStateOn(){
-        return this.stateOn;
-    }
-
-    /**
-    * 设置正常状态。
-    */
-    public void setStateOn(Boolean stateOn){
-        this.stateOn = stateOn;
-    }
-
-    /**
-    * 获得状态数组。
+    * 获取数组状态。
     */
     public Integer[] getStates(){
         return this.states;
     }
 
     /**
-    * 设置状态数组。
+    * 设置数组状态。
     */
     public void setStates(Integer[] states){
         this.states = states;
     }
-
+    
     /**
-    * 获得状态运算条件。
+    * 获取大于等于状态。
     */
-    public String getStateOp(){
-        return this.stateOp;
+    public Integer getStateGte(){
+        return this.stateGte;
     }
 
     /**
-    * 设置状态运算条件。
+    * 设置大于等于状态。
     */
-    public void setStateOp(String stateOp){
-        this.stateOp = stateOp;
+    public void setStateGte(Integer stateGte){
+        this.stateGte = stateGte;
     }
+    
+    /**
+    * 获取小于等于状态。
+    */
+    public Integer getStateLte(){
+        return this.stateLte;
+    }
+
+    /**
+    * 获取小于等于状态。
+    */
+    public void setStateLte(Integer stateOn){
+        this.stateLte = stateLte;
+    }
+    
 
 }
