@@ -1282,7 +1282,7 @@ public class TaskRunnerInfoQueryParam extends PageQueryParam{
     /**
     * 获取小于等于状态1正常，0暂停，-1标记删除。
     */
-    public void setStateLte(Integer stateOn){
+    public void setStateLte(Integer stateLte){
         this.stateLte = stateLte;
     }
     

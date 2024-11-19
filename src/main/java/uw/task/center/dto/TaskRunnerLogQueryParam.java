@@ -112,33 +112,33 @@ public class TaskRunnerLogQueryParam extends PageQueryParam {
     private Long[] runDateRange;
 
     /**
-     * 状态1正常，0暂停，-1标记删除
+     * 状态。
      */
     @QueryMeta(expr = "state=?")
-    @Schema(title = "状态1正常，0暂停，-1标记删除", description = "状态1正常，0暂停，-1标记删除")
+    @Schema(title="状态", description = "状态")
     private Integer state;
 
     /**
-     * 正常状态1正常，0暂停，-1标记删除
-     */
-    @QueryMeta(expr = "state>-1")
-    @Schema(title = "正常状态1正常，0暂停，-1标记删除", description = "正常状态1正常，0暂停，-1标记删除")
-    private Boolean stateOn;
-
-    /**
-     * 状态1正常，0暂停，-1标记删除数组
+     * 数组状态。
      */
     @QueryMeta(expr = "state in (?)")
-    @Schema(title = "状态1正常，0暂停，-1标记删除数组", description = "状态1正常，0暂停，-1标记删除数组，可同时匹配多个状态。")
+    @Schema(title="数组状态", description = "状态数组，可同时匹配多个状态。")
     private Integer[] states;
 
     /**
-     * 状态1正常，0暂停，-1标记删除运算条件。
-     * 可以使用运算符号。
+     * 大于等于状态。
      */
-    @QueryMeta(expr = "state ?")
-    @Schema(title = "状态1正常，0暂停，-1标记删除运算条件", description = "状态1正常，0暂停，-1标记删除运算条件，可使用><=!比较运算符。")
-    private String stateOp;
+    @QueryMeta(expr = "state>=?")
+    @Schema(title="大于等于状态", description = "大于等于状态")
+    private Integer stateGte;
+
+    /**
+     * 小于等于状态。
+     */
+    @QueryMeta(expr = "state<=?")
+    @Schema(title="小于等于状态", description = "小于等于状态")
+    private Integer stateLte;
+
 
     public Long getId() {
         return id;
@@ -252,35 +252,60 @@ public class TaskRunnerLogQueryParam extends PageQueryParam {
         this.runDateRange = runDateRange;
     }
 
-    public Integer getState() {
-        return state;
+    /**
+     * 获取状态。
+     */
+    public Integer getState(){
+        return this.state;
     }
 
-    public void setState(Integer state) {
+    /**
+     * 设置状态。
+     */
+    public void setState(Integer state){
         this.state = state;
     }
 
-    public Boolean getStateOn() {
-        return stateOn;
+    /**
+     * 获取数组状态。
+     */
+    public Integer[] getStates(){
+        return this.states;
     }
 
-    public void setStateOn(Boolean stateOn) {
-        this.stateOn = stateOn;
-    }
-
-    public Integer[] getStates() {
-        return states;
-    }
-
-    public void setStates(Integer[] states) {
+    /**
+     * 设置数组状态。
+     */
+    public void setStates(Integer[] states){
         this.states = states;
     }
 
-    public String getStateOp() {
-        return stateOp;
+    /**
+     * 获取大于等于状态。
+     */
+    public Integer getStateGte(){
+        return this.stateGte;
     }
 
-    public void setStateOp(String stateOp) {
-        this.stateOp = stateOp;
+    /**
+     * 设置大于等于状态。
+     */
+    public void setStateGte(Integer stateGte){
+        this.stateGte = stateGte;
     }
+
+    /**
+     * 获取小于等于状态。
+     */
+    public Integer getStateLte(){
+        return this.stateLte;
+    }
+
+    /**
+     * 获取小于等于状态。
+     */
+    public void setStateLte(Integer stateLte){
+        this.stateLte = stateLte;
+    }
+
 }

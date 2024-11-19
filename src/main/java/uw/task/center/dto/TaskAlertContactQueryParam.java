@@ -320,7 +320,7 @@ public class TaskAlertContactQueryParam extends PageQueryParam{
     /**
     * 获取小于等于状态。
     */
-    public void setStateLte(Integer stateOn){
+    public void setStateLte(Integer stateLte){
         this.stateLte = stateLte;
     }
     
