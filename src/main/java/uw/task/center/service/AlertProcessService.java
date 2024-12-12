@@ -30,19 +30,19 @@ public class AlertProcessService {
     /**
      * 失败类型映射关系。
      */
-    private static final Map<String, String> FailTypeTranslateMap = new HashMap<>();
+    private static final Map<String, String> FAIL_TYPE_TRANSLATE_MAP = new HashMap<>();
 
     static {
-        FailTypeTranslateMap.put( "failRate", "总错误率" );//
-        FailTypeTranslateMap.put( "failPartnerRate", "接口错误率" );//
-        FailTypeTranslateMap.put( "failProgramRate", "程序错误率" );//
-        FailTypeTranslateMap.put( "failConfigRate", "配置错误率" );//
-        FailTypeTranslateMap.put( "failDataRate", "数据错误率" );//
-        FailTypeTranslateMap.put( "queueTimeout", "排队超时" );//
-        FailTypeTranslateMap.put( "waitTimeout", "限速超时" );//
-        FailTypeTranslateMap.put( "runTimeout", "运行超时" );//
-        FailTypeTranslateMap.put( "queueSize", "队列长度超限" );//
-        FailTypeTranslateMap.put( "cronerTimeOut", "定时任务超时" );//
+        FAIL_TYPE_TRANSLATE_MAP.put( "failRate", "总错误率" );
+        FAIL_TYPE_TRANSLATE_MAP.put( "failPartnerRate", "接口错误率" );
+        FAIL_TYPE_TRANSLATE_MAP.put( "failProgramRate", "程序错误率" );
+        FAIL_TYPE_TRANSLATE_MAP.put( "failConfigRate", "配置错误率" );
+        FAIL_TYPE_TRANSLATE_MAP.put( "failDataRate", "数据错误率" );
+        FAIL_TYPE_TRANSLATE_MAP.put( "queueTimeout", "排队超时" );
+        FAIL_TYPE_TRANSLATE_MAP.put( "waitTimeout", "限速超时" );
+        FAIL_TYPE_TRANSLATE_MAP.put( "runTimeout", "运行超时" );
+        FAIL_TYPE_TRANSLATE_MAP.put( "queueSize", "队列长度超限" );
+        FAIL_TYPE_TRANSLATE_MAP.put( "cronerTimeOut", "定时任务在计划时间未运行" );
     }
 
     /**
@@ -364,7 +364,7 @@ public class AlertProcessService {
                 links.add( taskLinkMch );
                 break;
             }
-            if (ad.getColumn().equals( "failRate" ) || ad.getColumn().equals( "runTimeout" )) {
+            if ("failRate".equals( ad.getColumn() ) || "runTimeout".equals( ad.getColumn() )) {
                 // 此时必须通知自己人。
                 links.add( taskLinkOur );
             }
@@ -463,17 +463,17 @@ public class AlertProcessService {
      * @throws TransactionException
      */
     private TaskAlertInfo saveAlertInfo(String type, long taskId, String taskInfo, long runTimes, List<AlertData> alertList) {
-        TaskAlertInfo info = new TaskAlertInfo();// 邮件信息
+        TaskAlertInfo info = new TaskAlertInfo();
         info.setId( dao.getSequenceId( TaskAlertInfo.class ) );
         info.setTaskId( taskId );
         info.setTaskType( type );
         // 拼接邮件信息
         StringBuilder title = new StringBuilder();
-        title.append( "#" + info.getId() + "报警" );
+        title.append( "#" ).append( info.getId() ).append( "报警" );
         title.append( "[" ).append( taskInfo ).append( "]" );
         title.append( ":" );
         for (AlertData ad : alertList) {
-            title.append( FailTypeTranslateMap.get( ad.getColumn() ) ).append( "," );
+            title.append( FAIL_TYPE_TRANSLATE_MAP.get( ad.getColumn() ) ).append( "," );
         }
         if (title.charAt( title.length() - 1 ) == ',') {
             title.deleteCharAt( title.length() - 1 );
@@ -481,12 +481,12 @@ public class AlertProcessService {
         title.append( "运行超限!" );
         StringBuilder content = new StringBuilder();
         if (runTimes > 0) {
-            content.append( "[#" + taskId + taskInfo + "]最近1分钟内执行" + runTimes + "次：" );
+            content.append( "[#" ).append( taskId ).append( taskInfo ).append( "]最近1分钟内执行" ).append( runTimes ).append( "次：" );
         } else {
-            content.append( "[#" + taskId + taskInfo + "]最近1分钟内执行异常：" );
+            content.append( "[#" ).append( taskId ).append( taskInfo ).append( "]最近1分钟内执行异常：" );
         }
         for (AlertData ad : alertList) {
-            content.append( FailTypeTranslateMap.get( ad.getColumn() ) ).append( "运行值:" ).append( ad.getValue() ).append( "! 报警阀值:" ).append( ad.getConfig() ).append( "; " );
+            content.append( FAIL_TYPE_TRANSLATE_MAP.get( ad.getColumn() ) ).append( "运行值:" ).append( ad.getValue() ).append( "! 报警阀值:" ).append( ad.getConfig() ).append( "; " );
         }
         content.append( "请尽快处理!!!" );
 
