@@ -11,7 +11,7 @@ public class UwTaskCenterApplication {
         new SpringApplicationBuilder(UwTaskCenterApplication.class)
                 .beanNameGenerator((beanDefinition, beanDefinitionRegistry) -> {
                     String beanClassName = beanDefinition.getBeanClassName();
-                    if (beanClassName.contains("uw.task")) {
+                    if (beanClassName.contains("uw.task.center")) {
                         return beanClassName;
                     }
 
