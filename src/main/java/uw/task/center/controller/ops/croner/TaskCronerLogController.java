@@ -34,7 +34,7 @@ public class TaskCronerLogController {
 
     private final DaoFactory dao = DaoFactory.getInstance();
 
-    private LogClient logClient;
+    private final LogClient logClient;
 
     @Autowired
     public TaskCronerLogController(final LogClient logClient) {
@@ -51,6 +51,8 @@ public class TaskCronerLogController {
         AuthServiceHelper.logRef( TaskCronerESLog.class );
         QueryParamResult result = dao.parseQueryParam( TaskCronerESLog.class, queryParam );
         String dsl = logClient.translateSqlToDsl( result.genFullSql(), queryParam.START_INDEX(), queryParam.RESULT_NUM(), queryParam.CHECK_AUTO_COUNT() );
+        log.info( "sql: {}", result.genFullSql() );
+        log.info( "dsl: {}", dsl );
         return logClient.mapQueryResponseToEDataList( logClient.dslQuery( TaskCronerESLog.class, "uw.task.entity.task_croner_log_*", dsl ), queryParam.START_INDEX(),
                 queryParam.RESULT_NUM() );
     }

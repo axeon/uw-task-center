@@ -33,7 +33,7 @@ public class TaskRunnerLogController {
 
     private static final Logger log = LoggerFactory.getLogger( TaskRunnerLogController.class );
     private final DaoFactory dao = DaoFactory.getInstance();
-    private LogClient logClient;
+    private final LogClient logClient;
 
     @Autowired
     public TaskRunnerLogController(final LogClient logClient) {
