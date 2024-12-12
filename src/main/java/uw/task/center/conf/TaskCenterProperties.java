@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @author axeon
  */
 @ConfigurationProperties(prefix = "uw.task.center")
-public class TaskCenterProperties implements WebMvcConfigurer {
+public class TaskCenterProperties{
 
     /**
      * 系统名称。
