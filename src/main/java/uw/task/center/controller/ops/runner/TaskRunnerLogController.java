@@ -14,12 +14,15 @@ import uw.auth.service.annotation.MscPermDeclare;
 import uw.auth.service.constant.ActionLog;
 import uw.auth.service.constant.AuthType;
 import uw.auth.service.constant.UserType;
+import uw.auth.service.vo.MscActionLog;
 import uw.dao.DaoFactory;
+import uw.dao.PageQueryParam;
 import uw.dao.vo.QueryParamResult;
 import uw.log.es.LogClient;
 import uw.log.es.vo.ESDataList;
 import uw.log.es.vo.SearchResponse;
 import uw.task.center.dto.TaskRunnerLogQueryParam;
+import uw.task.center.entity.TaskCronerESLog;
 import uw.task.center.entity.TaskRunnerESLog;
 
 /**
@@ -49,10 +52,15 @@ public class TaskRunnerLogController {
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
     public ESDataList<TaskRunnerESLog> list(TaskRunnerLogQueryParam queryParam) throws Exception {
         AuthServiceHelper.logRef( TaskRunnerESLog.class );
+        //钉死关键参数
+        queryParam.SORT_NAME( "\\\"@timestamp\\\"" );
+        queryParam.SORT_TYPE( PageQueryParam.SORT_DESC );
+
         QueryParamResult result = dao.parseQueryParam( TaskRunnerESLog.class, queryParam );
+
         String dsl = logClient.translateSqlToDsl( result.genFullSql(), queryParam.START_INDEX(), queryParam.RESULT_NUM(), queryParam.CHECK_AUTO_COUNT() );
-        return logClient.mapQueryResponseToEDataList( logClient.dslQuery( TaskRunnerESLog.class, "uw.task.entity.task_runner_log_*", dsl ), queryParam.START_INDEX(),
-                queryParam.RESULT_NUM() );
+        String loginLogIndex = logClient.getQueryIndexName( TaskRunnerESLog.class );
+        return logClient.mapQueryResponseToEDataList( logClient.dslQuery( TaskRunnerESLog.class, loginLogIndex, dsl ), queryParam.START_INDEX(), queryParam.RESULT_NUM() );
     }
 
     /**
@@ -69,10 +77,7 @@ public class TaskRunnerLogController {
             return null;
         }
         SearchResponse.HitsResponse<TaskRunnerESLog> hisResponse = response.getHitsResponse();
-        if (hisResponse.getHits().size() == 0) {
-            return null;
-        }
-        return hisResponse.getHits().get( 0 ).getSource();
+        return hisResponse.getHits().getFirst().getSource();
     }
 
 

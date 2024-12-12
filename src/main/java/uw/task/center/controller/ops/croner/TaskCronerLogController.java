@@ -15,6 +15,7 @@ import uw.auth.service.constant.ActionLog;
 import uw.auth.service.constant.AuthType;
 import uw.auth.service.constant.UserType;
 import uw.dao.DaoFactory;
+import uw.dao.PageQueryParam;
 import uw.dao.vo.QueryParamResult;
 import uw.log.es.LogClient;
 import uw.log.es.vo.ESDataList;
@@ -49,12 +50,19 @@ public class TaskCronerLogController {
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
     public ESDataList<TaskCronerESLog> list(TaskCronerLogQueryParam queryParam) throws Exception {
         AuthServiceHelper.logRef( TaskCronerESLog.class );
+        //钉死关键参数
+        queryParam.SORT_NAME( "\\\"@timestamp\\\"" );
+        queryParam.SORT_TYPE( PageQueryParam.SORT_DESC );
+
         QueryParamResult result = dao.parseQueryParam( TaskCronerESLog.class, queryParam );
+
         String dsl = logClient.translateSqlToDsl( result.genFullSql(), queryParam.START_INDEX(), queryParam.RESULT_NUM(), queryParam.CHECK_AUTO_COUNT() );
+        String loginLogIndex = logClient.getQueryIndexName( TaskCronerESLog.class );
         log.info( "sql: {}", result.genFullSql() );
         log.info( "dsl: {}", dsl );
-        return logClient.mapQueryResponseToEDataList( logClient.dslQuery( TaskCronerESLog.class, "uw.task.entity.task_croner_log_*", dsl ), queryParam.START_INDEX(),
-                queryParam.RESULT_NUM() );
+        return logClient.mapQueryResponseToEDataList( logClient.dslQuery( TaskCronerESLog.class, loginLogIndex, dsl ), queryParam.START_INDEX(), queryParam.RESULT_NUM() );
+
+
     }
 
     /**
@@ -71,7 +79,7 @@ public class TaskCronerLogController {
             return null;
         }
         SearchResponse.HitsResponse<TaskCronerESLog> hisResponse = response.getHitsResponse();
-        return hisResponse.getHits().get( 0 ).getSource();
+        return hisResponse.getHits().getFirst().getSource();
     }
 
 
