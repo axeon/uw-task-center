@@ -1,21 +1,22 @@
 package uw.task.center.croner;
 
-import com.google.common.base.Joiner;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 import uw.dao.DaoFactory;
 import uw.dao.DataList;
 import uw.task.TaskCroner;
-import uw.task.TaskData;
-import uw.task.TaskFactory;
 import uw.task.center.conf.TaskCenterProperties;
 import uw.task.center.entity.TaskAlertInfo;
 import uw.task.center.entity.TaskAlertNotify;
-import uw.task.center.runner.AlertNotifySendRunner;
 import uw.task.center.util.ContactUtils;
-import uw.task.center.vo.TaskAlertNotifyData;
+import uw.task.center.util.DingUtils;
 import uw.task.entity.TaskContact;
 import uw.task.entity.TaskCronerConfig;
 import uw.task.entity.TaskCronerLog;
@@ -32,16 +33,34 @@ import java.util.Set;
 @Component
 public class AlertNotifyScanCroner extends TaskCroner {
 
-    private static final Joiner JOINER = Joiner.on( "," ).skipNulls();
+
+    private static final Logger logger = LoggerFactory.getLogger( AlertNotifyScanCroner.class );
     private final DaoFactory dao = DaoFactory.getInstance();
+
+    /**
+     * 时间格式化工具.
+     */
     private final FastDateFormat dateFormat = FastDateFormat.getInstance( "yyyy-MM-dd HH:mm:ss" );
-    private final TaskFactory taskFactory;
+
+    /**
+     * 配置中心.
+     */
     private final TaskCenterProperties taskCenterProperties;
 
+    /**
+     * 邮件发送者.
+     */
+    private final JavaMailSender mailSender;
+
+    /**
+     * 邮件发送者.
+     */
+    @Value("${spring.mail.username}")
+    private String fromEmail;
 
     @Autowired
-    public AlertNotifyScanCroner(TaskFactory taskFactory, TaskCenterProperties taskCenterProperties) {
-        this.taskFactory = taskFactory;
+    public AlertNotifyScanCroner(TaskCenterProperties taskCenterProperties, JavaMailSender mailSender) {
+        this.mailSender = mailSender;
         this.taskCenterProperties = taskCenterProperties;
     }
 
@@ -52,8 +71,7 @@ public class AlertNotifyScanCroner extends TaskCroner {
         if (effect < 1) {
             return "本次执行无数据!";
         }
-        DataList<TaskAlertNotify> notifyList = dao.list( TaskAlertNotify.class,
-                "select * from task_alert_notify where state=1 and sent_times=0" );
+        DataList<TaskAlertNotify> notifyList = dao.list( TaskAlertNotify.class, "select * from task_alert_notify where state=1 and sent_times=0" );
         dao.executeCommand( "update task_alert_notify set sent_date=now(),sent_times=1 where state=1 and sent_times=0" );
 
         // 先按照用户收敛.key=email value=infoIdList
@@ -82,8 +100,8 @@ public class AlertNotifyScanCroner extends TaskCroner {
         }
 
         // 发送全局告警通知
-        if (StringUtils.isNotBlank( taskCenterProperties.getGlobalAlertNotifyUrl() ) && globalInfoIdSet.size() > 0) {
-            DataList<TaskAlertInfo> infoList = dao.list( TaskAlertInfo.class, "select * from task_alert_info where id in (" + JOINER.join( globalInfoIdSet ) + ")" );
+        if (globalInfoIdSet.size() > 0) {
+            DataList<TaskAlertInfo> infoList = dao.list( TaskAlertInfo.class, "select * from task_alert_info where id in (" + StringUtils.join( globalInfoIdSet, ',' ) + ")" );
             String title = "!!!收到" + infoList.size() + "条任务报警信息!";
             StringBuilder content = new StringBuilder();
             for (TaskAlertInfo info : infoList) {
@@ -91,11 +109,7 @@ public class AlertNotifyScanCroner extends TaskCroner {
                 content.append( "报警标题:" ).append( info.getAlertTitle() ).append( "\n" );
                 content.append( "报警内容:" ).append( info.getAlertBody() ).append( "\n\n" );
             }
-            TaskAlertNotifyData notifyData = new TaskAlertNotifyData("notifyUrl", taskCenterProperties.getGlobalAlertNotifyUrl(), title, content.toString() );
-            TaskData<TaskAlertNotifyData, String> taskData = new TaskData<>();
-            taskData.setTaskClass( AlertNotifySendRunner.class.getName() );
-            taskData.setTaskParam( notifyData );
-            taskFactory.runQueue( taskData );
+            sendDing( title, content.toString() );
         }
 
         // 按照信息构造要发送的信息。
@@ -110,11 +124,7 @@ public class AlertNotifyScanCroner extends TaskCroner {
                 content.append( "报警标题:" ).append( info.getAlertTitle() ).append( "\n" );
                 content.append( "报警内容:" ).append( info.getAlertBody() ).append( "\n\n" );
             }
-            TaskAlertNotifyData notifyData = new TaskAlertNotifyData( "email", contactInfo, title, content.toString() );
-            TaskData<TaskAlertNotifyData, String> taskData = new TaskData<>();
-            taskData.setTaskClass( AlertNotifySendRunner.class.getName() );
-            taskData.setTaskParam( notifyData );
-            taskFactory.runQueue( taskData );
+            sendEmail( contactInfo, title, content.toString() );
         }
 
         //发送通知信息。
@@ -129,8 +139,8 @@ public class AlertNotifyScanCroner extends TaskCroner {
                 content.append( "##### 报警标题:" ).append( info.getAlertTitle() ).append( " \n\n " );
                 content.append( "##### 报警内容:" ).append( info.getAlertBody() ).append( " \n\n " );
             }
-            TaskAlertNotifyData notifyData = new TaskAlertNotifyData("notifyUrl", contactInfo, title, content.toString() );
-            taskFactory.runQueue( TaskData.builder( AlertNotifySendRunner.class.getName() ).taskParam( notifyData ).build() );
+            //默认只支持钉钉。
+            notifyUrl( contactInfo, title, content.toString() );
         }
         return "共扫描" + notifyList.size() + "条信息，合并后发送" + emailMap.size() + "条Email, " + notifyMap.size() + "条通知!";
     }
@@ -176,5 +186,62 @@ public class AlertNotifyScanCroner extends TaskCroner {
     @Override
     public TaskContact initContact() {
         return ContactUtils.getTaskContact();
+    }
+
+    /**
+     * 发送邮件
+     *
+     * @param toEmail 收件人集合
+     * @param title   邮件标题
+     * @param content 邮件内容
+     */
+    private void sendEmail(String toEmail, String title, String content) {
+        if (StringUtils.isNotBlank( fromEmail ) && StringUtils.isNotBlank( toEmail )) {
+            SimpleMailMessage email = new SimpleMailMessage();
+            email.setFrom( fromEmail );// 发件人
+            email.setTo( toEmail );// 收件人地址
+            email.setSubject( title );// 邮件标题
+            email.setText( content );// 邮件信息
+            mailSender.send( email );
+        }
+    }
+
+    /**
+     * 发送alert。
+     *
+     * @param title
+     * @param content
+     */
+    private void sendDing(String title, String content) {
+        TaskCenterProperties.DingConfig alertDingConfig = taskCenterProperties.getAlertDing();
+        if (alertDingConfig.isValid()) {
+            if (logger.isDebugEnabled()) {
+                logger.debug( "发送Ding报警信息:title={},content={}", title, content );
+            }
+            if (StringUtils.isNotBlank( taskCenterProperties.getCenterName() )) {
+                title = "[" + taskCenterProperties.getCenterName() + "]" + title;
+            }
+            content = "### " + title + "\n" + content;
+            DingUtils.send( alertDingConfig.getNotifyUrl(), alertDingConfig.getNotifyKey() + title, content );
+        } else {
+            logger.warn( "发送Ding信息失败，请检查配置！title={},content={}", title, content );
+        }
+    }
+
+
+    /**
+     * 发送alert。
+     * 当前只支持钉钉。。。
+     *
+     * @param title
+     * @param content
+     */
+    private void notifyUrl(String notifyUrl, String title, String content) {
+        TaskCenterProperties.DingConfig alertDingConfig = taskCenterProperties.getAlertDing();
+        if (StringUtils.isNotBlank( taskCenterProperties.getCenterName() )) {
+            title = "[" + taskCenterProperties.getCenterName() + "]" + title;
+        }
+        content = "### " + title + "\n" + content;
+        DingUtils.send( notifyUrl, alertDingConfig.getNotifyKey() + title, content );
     }
 }
