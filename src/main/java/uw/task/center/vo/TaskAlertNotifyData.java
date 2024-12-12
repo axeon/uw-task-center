@@ -5,10 +5,6 @@ package uw.task.center.vo;
  */
 public class TaskAlertNotifyData {
 
-    /**
-     * 联系人
-     */
-    private String contactMan;
 
     /**
      * 联系方式，email/notifyUrl
@@ -30,8 +26,7 @@ public class TaskAlertNotifyData {
      */
     private String notifyBody;
 
-    public TaskAlertNotifyData(String contactMan, String contactType, String contactInfo, String notifyTitle, String notifyBody) {
-        this.contactMan = contactMan;
+    public TaskAlertNotifyData( String contactType, String contactInfo, String notifyTitle, String notifyBody) {
         this.contactType = contactType;
         this.contactInfo = contactInfo;
         this.notifyTitle = notifyTitle;
@@ -39,14 +34,6 @@ public class TaskAlertNotifyData {
     }
 
     public TaskAlertNotifyData() {
-    }
-
-    public String getContactMan() {
-        return contactMan;
-    }
-
-    public void setContactMan(String contactMan) {
-        this.contactMan = contactMan;
     }
 
     public String getContactType() {

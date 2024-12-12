@@ -58,7 +58,6 @@ public class AlertNotifySendRunner extends TaskRunner<TaskAlertNotifyData, Strin
                 ding.getMarkdown().setTitle( notifyData.getNotifyTitle() );
                 ding.getMarkdown().setText( notifyData.getNotifyBody() );
                 //发送通知。
-                ding.getAt().setAtUserIds( new String[]{notifyData.getContactMan()} );
                 httpInterface.postBodyForData( notifyData.getContactInfo(), ding );
             }
         } else if ("email".equals( notifyData.getContactType() )) {

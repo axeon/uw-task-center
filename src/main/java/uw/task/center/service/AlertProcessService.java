@@ -65,12 +65,12 @@ public class AlertProcessService {
     /**
      * 定时任务检查服务。
      */
-    private final ExecutorService cronerProcessService = new ThreadPoolExecutor( 1, 20, 30L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(),
+    private final ExecutorService cronerProcessService = new ThreadPoolExecutor( 1, 10, 30L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(),
             new ThreadFactoryBuilder().setDaemon( true ).setNameFormat( "CronerProcessService-%d" ).build() );
     /**
      * 队列任务检查服务。
      */
-    private final ExecutorService runnerProcessService = new ThreadPoolExecutor( 1, 20, 30L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(),
+    private final ExecutorService runnerProcessService = new ThreadPoolExecutor( 1, 10, 30L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(),
             new ThreadFactoryBuilder().setDaemon( true ).setNameFormat( "RunnerProcessService-%d" ).build() );
     /**
      * 队列任务缓存。

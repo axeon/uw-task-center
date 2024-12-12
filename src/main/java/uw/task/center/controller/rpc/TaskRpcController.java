@@ -18,6 +18,7 @@ import uw.dao.TransactionException;
 import uw.dao.TransactionManager;
 import uw.dao.util.ShardingTableUtils;
 import uw.task.center.entity.*;
+import uw.task.center.service.AlertProcessService;
 import uw.task.center.vo.HostReportResponse;
 
 import java.util.*;
@@ -35,8 +36,29 @@ import java.util.*;
 public class TaskRpcController {
 
     private static final Logger log = LoggerFactory.getLogger( TaskRpcController.class );
-
+    /**
+     * 更新定时任务统计信息。
+     */
+    private static final String UPDATE_CRONER_STATS = "update task_croner_info set stats_date=?,stats_run_num=stats_run_num+?,stats_fail_num=stats_fail_num+?,stats_run_time" +
+            "=stats_run_time+? where id=?";
+    /**
+     * 更新队列任务统计信息。
+     */
+    private static final String UPDATE_RUNNER_STATS = "update task_runner_info set stats_date=?,stats_run_num=stats_run_num+?,stats_fail_num=stats_fail_num+?,stats_run_time" +
+            "=stats_run_time+? where id=?";
+    /**
+     * 数据库操作对象。
+     */
     private final DaoFactory dao = DaoFactory.getInstance();
+
+    /**
+     * 告警处理服务。
+     */
+    private final AlertProcessService alertProcessService;
+
+    public TaskRpcController(AlertProcessService alertProcessService) {
+        this.alertProcessService = alertProcessService;
+    }
 
     /**
      * 更新当前主机状态，并返回主机配置。
@@ -77,36 +99,37 @@ public class TaskRpcController {
         TransactionManager tm = batchDao.beginTransaction();
         BatchUpdateManager bum = batchDao.beginBatchUpdate();
         bum.setBatchSize( 1000 );
-        //更新croner统计信息的sql
-        String updateCronerStats = "update task_croner_info set stats_date=?,stats_run_num=stats_run_num+?,stats_fail_num=stats_fail_num+?,stats_run_time=stats_run_time+? where "
-                + "id=?";
-        //更新runner统计信息的sql。
-        String updateRunnerStats = "update task_runner_info set stats_date=?,stats_run_num=stats_run_num+?,stats_fail_num=stats_fail_num+?,stats_run_time=stats_run_time+? where "
-                + "id=?";
+
         //开始循环插入统计数据
         Date createDate = new Date();
         String cronerTable = ShardingTableUtils.getTableNameByDate( "task_croner_stats", createDate );
         String runnerTable = ShardingTableUtils.getTableNameByDate( "task_runner_stats", createDate );
         try {
+            //处理croner告警信息。
+            alertProcessService.processCronerStats( taskHostInfoExt.getTaskCronerStatsList() );
+            //处理runner告警信息。
+            alertProcessService.processRunnerStats( taskHostInfoExt.getTaskRunnerStatsList() );
+            //更新croner统计信息。
             for (TaskCronerStats stats : taskHostInfoExt.getTaskCronerStatsList()) {
                 int numFail = stats.getNumFailConfig() + stats.getNumFailData() + stats.getNumFailPartner() + stats.getNumFailProgram();
                 cronerRunNum += stats.getNumAll();
                 cronerRunTime += stats.getTimeRun();
                 cronerFailNum += numFail;
                 //更新任务统计信息。
-                batchDao.executeCommand( updateCronerStats, new Object[]{createDate, stats.getNumAll(), numFail, stats.getTimeRun(), stats.getTaskId()} );
+                batchDao.executeCommand( UPDATE_CRONER_STATS, new Object[]{createDate, stats.getNumAll(), numFail, stats.getTimeRun(), stats.getTaskId()} );
                 //保存stats。
                 stats.setId( dao.getSequenceId( TaskCronerStats.class ) );
                 stats.setCreateDate( createDate );
                 batchDao.save( stats, cronerTable );
             }
+            //更新runner统计信息。
             for (TaskRunnerStats stats : taskHostInfoExt.getTaskRunnerStatsList()) {
                 int numFail = stats.getNumFailConfig() + stats.getNumFailData() + stats.getNumFailPartner() + stats.getNumFailProgram();
                 runnerRunNum += stats.getNumAll();
                 runnerRunTime += stats.getTimeRun();
                 runnerFailNum += numFail;
                 //更新任务统计信息。
-                batchDao.executeCommand( updateRunnerStats, new Object[]{createDate, stats.getNumAll(), numFail, stats.getTimeRun(), stats.getTaskId()} );
+                batchDao.executeCommand( UPDATE_RUNNER_STATS, new Object[]{createDate, stats.getNumAll(), numFail, stats.getTimeRun(), stats.getTaskId()} );
                 //保存stats。
                 stats.setId( dao.getSequenceId( TaskRunnerStats.class ) );
                 stats.setCreateDate( createDate );
@@ -230,8 +253,8 @@ public class TaskRpcController {
     @PutMapping("/croner/tick")
     @Operation(summary = "更新定时任务下次执行时间", description = "更新定时任务下次执行时间")
     @MscPermDeclare(user = UserType.RPC, log = ActionLog.NONE)
-    public int updateCronerLog(@Parameter(description = "主键") @RequestParam(required = false) long id,
-                               @Parameter(description = "下一个日期", example = "0") @RequestParam(required = false) long nextDate) throws TransactionException {
+    public int updateCronerLog(@Parameter(description = "主键") @RequestParam(required = false) long id, @Parameter(description = "下一个日期", example = "0") @RequestParam(required =
+            false) long nextDate) throws TransactionException {
         return dao.executeCommand( "update task_croner_info set next_run_date=? where id=? ", new Object[]{new Date( nextDate ), id} );
     }
 
