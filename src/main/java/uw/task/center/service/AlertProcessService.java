@@ -63,14 +63,6 @@ public class AlertProcessService {
      */
     private final DecimalFormat percentFormat = new DecimalFormat( "#.##" );
     /**
-     * 队列任务缓存。
-     */
-    private Map<Long, TaskRunnerInfo> runnerMap = new ConcurrentHashMap<>();
-    /**
-     * 定时任务缓存。
-     */
-    private Map<Long, TaskCronerInfo> cronerMap = new ConcurrentHashMap<>();
-    /**
      * 定时任务检查服务。
      */
     private final ExecutorService cronerProcessService = new ThreadPoolExecutor( 1, 20, 30L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(),
@@ -80,6 +72,14 @@ public class AlertProcessService {
      */
     private final ExecutorService runnerProcessService = new ThreadPoolExecutor( 1, 20, 30L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(),
             new ThreadFactoryBuilder().setDaemon( true ).setNameFormat( "RunnerProcessService-%d" ).build() );
+    /**
+     * 队列任务缓存。
+     */
+    private Map<Long, TaskRunnerInfo> runnerMap = new ConcurrentHashMap<>();
+    /**
+     * 定时任务缓存。
+     */
+    private Map<Long, TaskCronerInfo> cronerMap = new ConcurrentHashMap<>();
 
     /**
      * 处理队列任务统计信息。
@@ -116,15 +116,15 @@ public class AlertProcessService {
                             if (numFailProgram > 0 && config.getAlertFailProgramRate() > 0) {
                                 double v = (double) numFailProgram / numAll * 100;
                                 if (v > config.getAlertFailProgramRate()) {
-                                    alerts.add( new AlertData( "failProgramRate", percentFormat.format( config.getAlertFailProgramRate() ) + "%", percentFormat.format( v ) + "%" +
-                                            "(" + numFailProgram + ")" ) );
+                                    alerts.add( new AlertData( "failProgramRate", percentFormat.format( config.getAlertFailProgramRate() ) + "%",
+                                            percentFormat.format( v ) + "%" + "(" + numFailProgram + ")" ) );
                                 }
                             }
                             if (numFailPartner > 0 && config.getAlertFailPartnerRate() > 0) {
                                 double v = (double) numFailPartner / numAll * 100;
                                 if (v > config.getAlertFailPartnerRate()) {
-                                    alerts.add( new AlertData( "failPartnerRate", percentFormat.format( config.getAlertFailPartnerRate() ) + "%", percentFormat.format( v ) + "%" +
-                                            "(" + numFailPartner + ")" ) );
+                                    alerts.add( new AlertData( "failPartnerRate", percentFormat.format( config.getAlertFailPartnerRate() ) + "%",
+                                            percentFormat.format( v ) + "%" + "(" + numFailPartner + ")" ) );
                                 }
                             }
                             if (numFailConfig > 0 && config.getAlertFailConfigRate() > 0) {
@@ -208,15 +208,15 @@ public class AlertProcessService {
                             if (numFailProgram > 0 && config.getAlertFailProgramRate() > 0) {
                                 double v = (double) numFailProgram / numAll * 100;
                                 if (v > config.getAlertFailProgramRate()) {
-                                    alerts.add( new AlertData( "failProgramRate", percentFormat.format( config.getAlertFailProgramRate() ) + "%", percentFormat.format( v ) + "%" +
-                                            "(" + numFailProgram + ")" ) );
+                                    alerts.add( new AlertData( "failProgramRate", percentFormat.format( config.getAlertFailProgramRate() ) + "%",
+                                            percentFormat.format( v ) + "%" + "(" + numFailProgram + ")" ) );
                                 }
                             }
                             if (numFailPartner > 0 && config.getAlertFailPartnerRate() > 0) {
                                 double v = (double) numFailPartner / numAll * 100;
                                 if (v > config.getAlertFailPartnerRate()) {
-                                    alerts.add( new AlertData( "failPartnerRate", percentFormat.format( config.getAlertFailPartnerRate() ) + "%", percentFormat.format( v ) + "%" +
-                                            "(" + numFailPartner + ")" ) );
+                                    alerts.add( new AlertData( "failPartnerRate", percentFormat.format( config.getAlertFailPartnerRate() ) + "%",
+                                            percentFormat.format( v ) + "%" + "(" + numFailPartner + ")" ) );
                                 }
                             }
                             if (numFailData > 0 && config.getAlertFailDataRate() > 0) {
@@ -395,17 +395,15 @@ public class AlertProcessService {
                 }
             }
         }
+        if (set.isEmpty()) {
+            return null;
+        }
         String ids = StringUtils.join( set, ',' );
-        DataList<TaskAlertContact> list = null;
         try {
-            list = dao.list( TaskAlertContact.class, "select * from task_alert_contact where id in (?) and state=1", new Object[]{ids} );
+            return dao.list( TaskAlertContact.class, "select * from task_alert_contact where id in (" + ids + ") and state=1" ).results();
         } catch (TransactionException e) {
             log.error( e.getMessage(), e );
-        }
-        if (list == null) {
             return null;
-        } else {
-            return list.results();
         }
     }
 
@@ -443,7 +441,7 @@ public class AlertProcessService {
             if (StringUtils.isNotBlank( contact.getNotifyUrl() )) {
                 notify.setId( dao.getSequenceId( TaskAlertNotify.class ) );
                 notify.setContactType( "notifyUrl" );
-                notify.setContactInfo( contact.getEmail() );
+                notify.setContactInfo( contact.getNotifyUrl() );
                 try {
                     dao.save( notify );
                 } catch (TransactionException e) {
@@ -519,6 +517,7 @@ public class AlertProcessService {
          * 实际值
          */
         private String value;
+
         public AlertData(String column, String config, String value) {
             super();
             this.column = column;

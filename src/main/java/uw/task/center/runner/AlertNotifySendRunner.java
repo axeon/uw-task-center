@@ -51,7 +51,7 @@ public class AlertNotifySendRunner extends TaskRunner<TaskAlertNotifyData, Strin
     @Override
     public String runTask(TaskData<TaskAlertNotifyData, String> taskData) throws Exception {
         TaskAlertNotifyData notifyData = taskData.getTaskParam();
-        if (notifyData.getContactType().equals( "notifyUrl" )) {
+        if ("notifyUrl".equals( notifyData.getContactType() )) {
             String contactInfo = notifyData.getContactInfo();
             if (contactInfo.startsWith( "https://oapi.dingtalk.com/robot/send" )) {
                 DingMarkdownMsg ding = new DingMarkdownMsg();
@@ -61,7 +61,7 @@ public class AlertNotifySendRunner extends TaskRunner<TaskAlertNotifyData, Strin
                 ding.getAt().setAtUserIds( new String[]{notifyData.getContactMan()} );
                 httpInterface.postBodyForData( notifyData.getContactInfo(), ding );
             }
-        } else if (notifyData.getContactType().equals( "email" )) {
+        } else if ("email".equals( notifyData.getContactType() )) {
             sendEmail( notifyData.getContactInfo(), notifyData.getNotifyTitle(), notifyData.getNotifyBody() );
         }
 
