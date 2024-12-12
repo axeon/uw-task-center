@@ -57,10 +57,9 @@ public class TaskCronerLogController {
         QueryParamResult result = dao.parseQueryParam( TaskCronerESLog.class, queryParam );
 
         String dsl = logClient.translateSqlToDsl( result.genFullSql(), queryParam.START_INDEX(), queryParam.RESULT_NUM(), queryParam.CHECK_AUTO_COUNT() );
-        String loginLogIndex = logClient.getQueryIndexName( TaskCronerESLog.class );
         log.info( "sql: {}", result.genFullSql() );
         log.info( "dsl: {}", dsl );
-        return logClient.mapQueryResponseToEDataList( logClient.dslQuery( TaskCronerESLog.class, loginLogIndex, dsl ), queryParam.START_INDEX(), queryParam.RESULT_NUM() );
+        return logClient.mapQueryResponseToEDataList( logClient.dslQuery( TaskCronerESLog.class, "uw.task.entity.task_croner_log_*", dsl ), queryParam.START_INDEX(), queryParam.RESULT_NUM() );
 
 
     }
@@ -73,7 +72,7 @@ public class TaskCronerLogController {
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
     public TaskCronerESLog load(@Parameter(description = "主键") long id) throws Exception {
         AuthServiceHelper.logRef( TaskCronerESLog.class, id );
-        String dsl = logClient.translateSqlToDsl( "select * from \\\"uw.task.entity.task_croner_log_*\\\" where id = " + id, 0, 1, false );
+        String dsl = logClient.translateSqlToDsl( "select * from \\\"uw.task.entity.task_croner_log_*\\\" where id=" + id, 0, 1, false );
         SearchResponse<TaskCronerESLog> response = logClient.dslQuery( TaskCronerESLog.class, "uw.task.entity.task_croner_log_*", dsl );
         if (response == null) {
             return null;

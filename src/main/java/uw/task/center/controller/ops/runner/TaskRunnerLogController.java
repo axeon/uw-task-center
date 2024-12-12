@@ -59,8 +59,7 @@ public class TaskRunnerLogController {
         QueryParamResult result = dao.parseQueryParam( TaskRunnerESLog.class, queryParam );
 
         String dsl = logClient.translateSqlToDsl( result.genFullSql(), queryParam.START_INDEX(), queryParam.RESULT_NUM(), queryParam.CHECK_AUTO_COUNT() );
-        String loginLogIndex = logClient.getQueryIndexName( TaskRunnerESLog.class );
-        return logClient.mapQueryResponseToEDataList( logClient.dslQuery( TaskRunnerESLog.class, loginLogIndex, dsl ), queryParam.START_INDEX(), queryParam.RESULT_NUM() );
+        return logClient.mapQueryResponseToEDataList( logClient.dslQuery( TaskRunnerESLog.class, "uw.task.entity.task_runner_log_*", dsl ), queryParam.START_INDEX(), queryParam.RESULT_NUM() );
     }
 
     /**
