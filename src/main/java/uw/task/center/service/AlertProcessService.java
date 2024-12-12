@@ -42,7 +42,7 @@ public class AlertProcessService {
         FAIL_TYPE_TRANSLATE_MAP.put( "waitTimeout", "限速超时" );
         FAIL_TYPE_TRANSLATE_MAP.put( "runTimeout", "运行超时" );
         FAIL_TYPE_TRANSLATE_MAP.put( "queueSize", "队列长度超限" );
-        FAIL_TYPE_TRANSLATE_MAP.put( "cronerTimeOut", "定时任务在计划时间未运行" );
+        FAIL_TYPE_TRANSLATE_MAP.put( "cronerTimeOut", "定时任务未在计划时间运行" );
     }
 
     /**
@@ -87,87 +87,84 @@ public class AlertProcessService {
      * @param statsList 查询的结果
      */
     public void processRunnerStats(List<TaskRunnerStats> statsList) {
-        runnerProcessService.submit( new Runnable() {
-            @Override
-            public void run() {
-                if (statsList != null && statsList.size() > 0) {
-                    for (TaskRunnerStats stats : statsList) {
-                        TaskRunnerInfo config = getFitRunnerConfig( stats.getTaskId() );
-                        if (config != null) {
-                            ArrayList<AlertData> alerts = new ArrayList<>();
-                            int numAll = stats.getNumAll();
-                            int numFailConfig = stats.getNumFailConfig();
-                            int numFailProgram = stats.getNumFailProgram();
-                            int numFailPartner = stats.getNumFailPartner();
-                            int numFailData = stats.getNumFailData();
-                            int numFail = (numFailConfig + numFailProgram + numFailPartner + numFailData);
-                            int timeWaitDelay = stats.getTimeWaitDelay();
-                            int timeWaitQueue = stats.getTimeWaitQueue();
-                            int timeRun = stats.getTimeRun();
-                            int queueSize = stats.getQueueSize();
-                            // 没有值，直接返回
-                            if (numFail > 0 && config.getAlertFailRate() > 0) {
-                                double v = (double) numFail / numAll * 100;
-                                if (v > config.getAlertFailRate()) {
-                                    alerts.add( new AlertData( "failRate", percentFormat.format( config.getAlertFailRate() ) + "%", percentFormat.format( v ) + "%(" + numFail +
-                                            ")" ) );
-                                }
+        runnerProcessService.submit( () -> {
+            if (statsList != null && statsList.size() > 0) {
+                for (TaskRunnerStats stats : statsList) {
+                    TaskRunnerInfo config = getFitRunnerConfig( stats.getTaskId() );
+                    if (config != null) {
+                        ArrayList<AlertData> alerts = new ArrayList<>();
+                        int numAll = stats.getNumAll();
+                        int numFailConfig = stats.getNumFailConfig();
+                        int numFailProgram = stats.getNumFailProgram();
+                        int numFailPartner = stats.getNumFailPartner();
+                        int numFailData = stats.getNumFailData();
+                        int numFail = (numFailConfig + numFailProgram + numFailPartner + numFailData);
+                        int timeWaitDelay = stats.getTimeWaitDelay();
+                        int timeWaitQueue = stats.getTimeWaitQueue();
+                        int timeRun = stats.getTimeRun();
+                        int queueSize = stats.getQueueSize();
+                        // 没有值，直接返回
+                        if (numFail > 0 && config.getAlertFailRate() > 0) {
+                            double v = (double) numFail / numAll * 100;
+                            if (v > config.getAlertFailRate()) {
+                                alerts.add( new AlertData( "failRate", percentFormat.format( config.getAlertFailRate() ) + "%", percentFormat.format( v ) + "%(" + numFail +
+                                        ")" ) );
                             }
-                            if (numFailProgram > 0 && config.getAlertFailProgramRate() > 0) {
-                                double v = (double) numFailProgram / numAll * 100;
-                                if (v > config.getAlertFailProgramRate()) {
-                                    alerts.add( new AlertData( "failProgramRate", percentFormat.format( config.getAlertFailProgramRate() ) + "%",
-                                            percentFormat.format( v ) + "%" + "(" + numFailProgram + ")" ) );
-                                }
+                        }
+                        if (numFailProgram > 0 && config.getAlertFailProgramRate() > 0) {
+                            double v = (double) numFailProgram / numAll * 100;
+                            if (v > config.getAlertFailProgramRate()) {
+                                alerts.add( new AlertData( "failProgramRate", percentFormat.format( config.getAlertFailProgramRate() ) + "%",
+                                        percentFormat.format( v ) + "%" + "(" + numFailProgram + ")" ) );
                             }
-                            if (numFailPartner > 0 && config.getAlertFailPartnerRate() > 0) {
-                                double v = (double) numFailPartner / numAll * 100;
-                                if (v > config.getAlertFailPartnerRate()) {
-                                    alerts.add( new AlertData( "failPartnerRate", percentFormat.format( config.getAlertFailPartnerRate() ) + "%",
-                                            percentFormat.format( v ) + "%" + "(" + numFailPartner + ")" ) );
-                                }
+                        }
+                        if (numFailPartner > 0 && config.getAlertFailPartnerRate() > 0) {
+                            double v = (double) numFailPartner / numAll * 100;
+                            if (v > config.getAlertFailPartnerRate()) {
+                                alerts.add( new AlertData( "failPartnerRate", percentFormat.format( config.getAlertFailPartnerRate() ) + "%",
+                                        percentFormat.format( v ) + "%" + "(" + numFailPartner + ")" ) );
                             }
-                            if (numFailConfig > 0 && config.getAlertFailConfigRate() > 0) {
-                                double v = (double) numFailConfig / numAll * 100;
-                                if (v > config.getAlertFailConfigRate()) {
-                                    alerts.add( new AlertData( "failConfigRate", percentFormat.format( config.getAlertFailConfigRate() ) + "%",
-                                            percentFormat.format( v ) + "%(" + numFailConfig + ")" ) );
-                                }
+                        }
+                        if (numFailConfig > 0 && config.getAlertFailConfigRate() > 0) {
+                            double v = (double) numFailConfig / numAll * 100;
+                            if (v > config.getAlertFailConfigRate()) {
+                                alerts.add( new AlertData( "failConfigRate", percentFormat.format( config.getAlertFailConfigRate() ) + "%",
+                                        percentFormat.format( v ) + "%(" + numFailConfig + ")" ) );
                             }
-                            if (numFailData > 0 && config.getAlertFailDataRate() > 0) {
-                                double v = (double) numFailData / numAll * 100;
-                                if (v > config.getAlertFailDataRate()) {
-                                    alerts.add( new AlertData( "failDataRate", percentFormat.format( config.getAlertFailDataRate() ) + "%",
-                                            percentFormat.format( v ) + "%(" + numFailData + ")" ) );
-                                }
+                        }
+                        if (numFailData > 0 && config.getAlertFailDataRate() > 0) {
+                            double v = (double) numFailData / numAll * 100;
+                            if (v > config.getAlertFailDataRate()) {
+                                alerts.add( new AlertData( "failDataRate", percentFormat.format( config.getAlertFailDataRate() ) + "%",
+                                        percentFormat.format( v ) + "%(" + numFailData + ")" ) );
                             }
-                            if (timeWaitQueue > 0 && config.getAlertQueueTimeout() > 0) {
-                                long averageTime = timeWaitQueue / numAll;
-                                if (averageTime > config.getAlertQueueTimeout()) {
-                                    alerts.add( new AlertData( "queueTimeout", config.getAlertQueueTimeout() + "ms", averageTime + "ms" ) );
-                                }
+                        }
+                        if (timeWaitQueue > 0 && config.getAlertQueueTimeout() > 0) {
+                            long averageTime = timeWaitQueue / numAll;
+                            if (averageTime > config.getAlertQueueTimeout()) {
+                                alerts.add( new AlertData( "queueTimeout", config.getAlertQueueTimeout() + "ms", averageTime + "ms" ) );
                             }
-                            if (timeWaitDelay > 0 && config.getAlertWaitTimeout() > 0) {
-                                long averageTime = timeWaitDelay / numAll;
-                                if (averageTime > config.getAlertWaitTimeout()) {
-                                    alerts.add( new AlertData( "waitTimeout", config.getAlertWaitTimeout() + "ms", averageTime + "ms" ) );
-                                }
+                        }
+                        if (timeWaitDelay > 0 && config.getAlertWaitTimeout() > 0) {
+                            long averageTime = timeWaitDelay / numAll;
+                            if (averageTime > config.getAlertWaitTimeout()) {
+                                alerts.add( new AlertData( "waitTimeout", config.getAlertWaitTimeout() + "ms", averageTime + "ms" ) );
                             }
-                            if (timeRun > 0 && config.getAlertRunTimeout() > 0) {
-                                long averageTime = timeRun / numAll;
-                                if (averageTime > config.getAlertRunTimeout()) {
-                                    alerts.add( new AlertData( "runTimeout", config.getAlertRunTimeout() + "ms", averageTime + "ms" ) );
-                                }
+                        }
+                        if (timeRun > 0 && config.getAlertRunTimeout() > 0) {
+                            long averageTime = timeRun / numAll;
+                            if (averageTime > config.getAlertRunTimeout()) {
+                                alerts.add( new AlertData( "runTimeout", config.getAlertRunTimeout() + "ms", averageTime + "ms" ) );
                             }
-                            if (queueSize > 0 && config.getAlertQueueOversize() > 0) {
-                                if (queueSize > config.getAlertRunTimeout()) {
-                                    alerts.add( new AlertData( "queueSize", config.getAlertQueueOversize() + "", queueSize + "" ) );
-                                }
+                        }
+                        if (queueSize > 0 && config.getAlertQueueOversize() > 0) {
+                            if (queueSize > config.getAlertRunTimeout()) {
+                                alerts.add( new AlertData( "queueSize", config.getAlertQueueOversize() + "", queueSize + "" ) );
                             }
-                            if (alerts.size() > 0) {
-                                processAlertInfo( "runner", config.getId(), config.getTaskName(), numAll, alerts, config.getTaskOwner(), config.getTaskLinkOur(),
-                                        config.getTaskLinkMch() );
-                            }
+                        }
+                        if (alerts.size() > 0) {
+                            processAlertInfo( "runner", config.getId(), config.getTaskName(), numAll, alerts, config.getTaskOwner(), config.getTaskLinkOur(),
+                                    config.getTaskLinkMch() );
                         }
                     }
                 }
@@ -182,67 +179,64 @@ public class AlertProcessService {
      * @throws Exception
      */
     public void processCronerStats(List<TaskCronerStats> statsList) {
-        cronerProcessService.submit( new Runnable() {
-            @Override
-            public void run() {
-                if (statsList != null && statsList.size() > 0) {
-                    for (TaskCronerStats stats : statsList) {
-                        TaskCronerInfo config = getFitCronerConfig( stats.getTaskId() );
-                        if (config != null) {
-                            ArrayList<AlertData> alerts = new ArrayList<>();
-                            long numAll = stats.getNumAll();
-                            long numFailConfig = stats.getNumFailConfig();
-                            long numFailProgram = stats.getNumFailProgram();
-                            long numFailPartner = stats.getNumFailPartner();
-                            long numFailData = stats.getNumFailData();
-                            long numFail = numFailConfig + numFailProgram + numFailPartner + numFailData;
-                            long timeWait = stats.getTimeWait();
-                            long timeRun = stats.getTimeRun();
-                            if (numFail > 0 && config.getAlertFailRate() > 0) {
-                                double v = (double) numFail / numAll * 100;
-                                if (v > config.getAlertFailRate()) {
-                                    alerts.add( new AlertData( "failRate", percentFormat.format( config.getAlertFailRate() ) + "%", percentFormat.format( v ) + "%(" + numFail +
-                                            ")" ) );
-                                }
+        cronerProcessService.submit( () -> {
+            if (statsList != null && statsList.size() > 0) {
+                for (TaskCronerStats stats : statsList) {
+                    TaskCronerInfo config = getFitCronerConfig( stats.getTaskId() );
+                    if (config != null) {
+                        ArrayList<AlertData> alerts = new ArrayList<>();
+                        long numAll = stats.getNumAll();
+                        long numFailConfig = stats.getNumFailConfig();
+                        long numFailProgram = stats.getNumFailProgram();
+                        long numFailPartner = stats.getNumFailPartner();
+                        long numFailData = stats.getNumFailData();
+                        long numFail = numFailConfig + numFailProgram + numFailPartner + numFailData;
+                        long timeWait = stats.getTimeWait();
+                        long timeRun = stats.getTimeRun();
+                        if (numFail > 0 && config.getAlertFailRate() > 0) {
+                            double v = (double) numFail / numAll * 100;
+                            if (v > config.getAlertFailRate()) {
+                                alerts.add( new AlertData( "failRate", percentFormat.format( config.getAlertFailRate() ) + "%", percentFormat.format( v ) + "%(" + numFail +
+                                        ")" ) );
                             }
-                            if (numFailProgram > 0 && config.getAlertFailProgramRate() > 0) {
-                                double v = (double) numFailProgram / numAll * 100;
-                                if (v > config.getAlertFailProgramRate()) {
-                                    alerts.add( new AlertData( "failProgramRate", percentFormat.format( config.getAlertFailProgramRate() ) + "%",
-                                            percentFormat.format( v ) + "%" + "(" + numFailProgram + ")" ) );
-                                }
+                        }
+                        if (numFailProgram > 0 && config.getAlertFailProgramRate() > 0) {
+                            double v = (double) numFailProgram / numAll * 100;
+                            if (v > config.getAlertFailProgramRate()) {
+                                alerts.add( new AlertData( "failProgramRate", percentFormat.format( config.getAlertFailProgramRate() ) + "%",
+                                        percentFormat.format( v ) + "%" + "(" + numFailProgram + ")" ) );
                             }
-                            if (numFailPartner > 0 && config.getAlertFailPartnerRate() > 0) {
-                                double v = (double) numFailPartner / numAll * 100;
-                                if (v > config.getAlertFailPartnerRate()) {
-                                    alerts.add( new AlertData( "failPartnerRate", percentFormat.format( config.getAlertFailPartnerRate() ) + "%",
-                                            percentFormat.format( v ) + "%" + "(" + numFailPartner + ")" ) );
-                                }
+                        }
+                        if (numFailPartner > 0 && config.getAlertFailPartnerRate() > 0) {
+                            double v = (double) numFailPartner / numAll * 100;
+                            if (v > config.getAlertFailPartnerRate()) {
+                                alerts.add( new AlertData( "failPartnerRate", percentFormat.format( config.getAlertFailPartnerRate() ) + "%",
+                                        percentFormat.format( v ) + "%" + "(" + numFailPartner + ")" ) );
                             }
-                            if (numFailData > 0 && config.getAlertFailDataRate() > 0) {
-                                double v = (double) numFailData / numAll * 100;
-                                if (v > config.getAlertFailDataRate()) {
-                                    alerts.add( new AlertData( "failDataRate", percentFormat.format( config.getAlertFailDataRate() ) + "%",
-                                            percentFormat.format( v ) + "%(" + numFailData + ")" ) );
-                                }
+                        }
+                        if (numFailData > 0 && config.getAlertFailDataRate() > 0) {
+                            double v = (double) numFailData / numAll * 100;
+                            if (v > config.getAlertFailDataRate()) {
+                                alerts.add( new AlertData( "failDataRate", percentFormat.format( config.getAlertFailDataRate() ) + "%",
+                                        percentFormat.format( v ) + "%(" + numFailData + ")" ) );
                             }
-                            if (timeWait > 0 && config.getAlertWaitTimeout() > 0) {
-                                long averageTime = timeWait / numAll;
-                                if (averageTime > config.getAlertWaitTimeout()) {
-                                    alerts.add( new AlertData( "waitTimeout", config.getAlertWaitTimeout() + "ms", averageTime + "ms" ) );
-                                }
+                        }
+                        if (timeWait > 0 && config.getAlertWaitTimeout() > 0) {
+                            long averageTime = timeWait / numAll;
+                            if (averageTime > config.getAlertWaitTimeout()) {
+                                alerts.add( new AlertData( "waitTimeout", config.getAlertWaitTimeout() + "ms", averageTime + "ms" ) );
                             }
-                            if (timeRun > 0 && config.getAlertRunTimeout() > 0) {
-                                long averageTime = timeRun / numAll;
-                                if (averageTime > config.getAlertRunTimeout()) {
-                                    alerts.add( new AlertData( "runTimeout", config.getAlertRunTimeout() + "ms", averageTime + "ms" ) );
-                                }
+                        }
+                        if (timeRun > 0 && config.getAlertRunTimeout() > 0) {
+                            long averageTime = timeRun / numAll;
+                            if (averageTime > config.getAlertRunTimeout()) {
+                                alerts.add( new AlertData( "runTimeout", config.getAlertRunTimeout() + "ms", averageTime + "ms" ) );
                             }
+                        }
 
-                            if (alerts.size() > 0) {
-                                processAlertInfo( "croner", config.getId(), config.getTaskName(), numAll, alerts, config.getTaskOwner(), config.getTaskLinkOur(),
-                                        config.getTaskLinkMch() );
-                            }
+                        if (alerts.size() > 0) {
+                            processAlertInfo( "croner", config.getId(), config.getTaskName(), numAll, alerts, config.getTaskOwner(), config.getTaskLinkOur(),
+                                    config.getTaskLinkMch() );
                         }
                     }
                 }

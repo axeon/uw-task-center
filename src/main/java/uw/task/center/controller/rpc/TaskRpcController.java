@@ -78,9 +78,11 @@ public class TaskRpcController {
         BatchUpdateManager bum = batchDao.beginBatchUpdate();
         bum.setBatchSize( 1000 );
         //更新croner统计信息的sql
-        String updateCronerStats = "update task_croner_info set stats_date=?,stats_run_num=stats_run_num+?,stats_fail_num=stats_fail_num+?,stats_run_time=stats_run_time+? where id=?";
+        String updateCronerStats = "update task_croner_info set stats_date=?,stats_run_num=stats_run_num+?,stats_fail_num=stats_fail_num+?,stats_run_time=stats_run_time+? where "
+                + "id=?";
         //更新runner统计信息的sql。
-        String updateRunnerStats = "update task_runner_info set stats_date=?,stats_run_num=stats_run_num+?,stats_fail_num=stats_fail_num+?,stats_run_time=stats_run_time+? where id=?";
+        String updateRunnerStats = "update task_runner_info set stats_date=?,stats_run_num=stats_run_num+?,stats_fail_num=stats_fail_num+?,stats_run_time=stats_run_time+? where "
+                + "id=?";
         //开始循环插入统计数据
         Date createDate = new Date();
         String cronerTable = ShardingTableUtils.getTableNameByDate( "task_croner_stats", createDate );
@@ -130,8 +132,8 @@ public class TaskRpcController {
             //先检查主机是否存在，决定是更新还是插入。
             if (taskHostInfoDb != null) {
                 //更新操作。
-                String updateHostSql = "UPDATE task_host_info SET croner_num=?, croner_run_num=croner_run_num+?, croner_fail_num=croner_fail_num+?, " +
-                        "croner_run_time=croner_run_time+?, runner_num=?, runner_run_num=runner_run_num+?, runner_fail_num=runner_fail_num+?, runner_run_time=runner_run_time+?, " +
+                String updateHostSql = "UPDATE task_host_info SET croner_num=?, croner_run_num=croner_run_num+?, croner_fail_num=croner_fail_num+?, " + "croner_run_time" +
+                        "=croner_run_time+?, runner_num=?, runner_run_num=runner_run_num+?, runner_fail_num=runner_fail_num+?, runner_run_time=runner_run_time+?, " +
                         "jvm_mem_max=?, jvm_mem_total=?, jvm_mem_free=?, thread_active=?, thread_peak=?, thread_daemon=?, thread_started=?, last_update=? WHERE id=? and " +
                         "host_ip=? and app_host=? and app_port=? and app_name=? and app_version=? and task_project=? and run_target=?";
                 int effectNum = dao.executeCommand( updateHostSql, new Object[]{taskHostInfoExt.getCronerNum(), cronerRunNum, cronerFailNum, cronerRunTime,
@@ -173,7 +175,7 @@ public class TaskRpcController {
                                                     @Parameter(description = "任务项目", example = "任务项目") String taskProject,
                                                     @Parameter(description = "上一次更新时间", example = "0") Long lastUpdateTime) throws TransactionException {
         StringBuilder sql = new StringBuilder( 256 );
-        ArrayList params = new ArrayList( 3 );
+        ArrayList<Object> params = new ArrayList<>( 3 );
         sql.append( "select * from task_croner_info where state>=0 " );
         if (StringUtils.isNotBlank( runTarget )) {
             sql.append( "and run_target=? " );
@@ -230,7 +232,7 @@ public class TaskRpcController {
     @MscPermDeclare(user = UserType.RPC, log = ActionLog.NONE)
     public int updateCronerLog(@Parameter(description = "主键") @RequestParam(required = false) long id,
                                @Parameter(description = "下一个日期", example = "0") @RequestParam(required = false) long nextDate) throws TransactionException {
-        return dao.executeCommand( "update task_croner_info set next_run_date = ? where id = ? ", new Object[]{new Date( nextDate ), id} );
+        return dao.executeCommand( "update task_croner_info set next_run_date=? where id=? ", new Object[]{new Date( nextDate ), id} );
     }
 
     /**
@@ -308,36 +310,31 @@ public class TaskRpcController {
     public void initRunnerConfig(@RequestBody Map<String, String> contactData) throws TransactionException {
         if (contactData != null) {
             String contactName = contactData.get( "contactName" );
-            if (contactName != null && !contactName.equals( "" )) {
+            if (StringUtils.isNotBlank( contactName )) {
                 // 再次检查，并创建配置
-                TaskAlertContact contactOpt = dao.queryForSingleObject( TaskAlertContact.class, "select * from task_alert_contact where contact_name=? and state=1",
+                TaskAlertContact taskAlertContact = dao.queryForSingleObject( TaskAlertContact.class, "select * from task_alert_contact where contact_name=? and state=1",
                         new Object[]{contactName} );
-                TaskAlertContact contact;
-                if (Objects.isNull( contactOpt )) {
-                    contact = new TaskAlertContact();
+                if (Objects.isNull( taskAlertContact )) {
+                    taskAlertContact = new TaskAlertContact();
                     // 再次检查，并创建报警配置
-                    contact.setId( dao.getSequenceId( TaskAlertContact.class ) );
-                    contact.setContactType( 0 );// 任务负责人
-                    contact.setContactName( contactName );
-                    contact.setMobile( contactData.get( "mobile" ) );
-                    contact.setEmail( contactData.get( "email" ) );
-                    contact.setWechat( contactData.get( "wechat" ) );
-                    contact.setIm( contactData.get( "im" ) );
-                    contact.setNotifyUrl( contactData.get( "notifyUrl" ) );
-                    contact.setRemark( contactData.get( "remark" ) );
-                    contact.setCreateDate( new Date() );
-                    contact.setState( 1 );
-                    dao.save( contact );
+                    taskAlertContact.setId( dao.getSequenceId( TaskAlertContact.class ) );
+                    taskAlertContact.setContactType( 0 );// 任务负责人
+                    taskAlertContact.setContactName( contactName );
+                    taskAlertContact.setMobile( contactData.get( "mobile" ) );
+                    taskAlertContact.setEmail( contactData.get( "email" ) );
+                    taskAlertContact.setWechat( contactData.get( "wechat" ) );
+                    taskAlertContact.setIm( contactData.get( "im" ) );
+                    taskAlertContact.setNotifyUrl( contactData.get( "notifyUrl" ) );
+                    taskAlertContact.setRemark( contactData.get( "remark" ) );
+                    taskAlertContact.setCreateDate( new Date() );
+                    taskAlertContact.setState( 1 );
+                    dao.save( taskAlertContact );
                     // 更新任务负责人和任务报警负责人
-                } else {
-                    contact = contactOpt;
                 }
-                String linkData =
-                        new StringBuilder().append( "{\"" ).append( contact.getId() ).append( "\":" ).append( "\"" ).append( contact.getContactName() ).append( "\"}" ).toString();
+                String linkData = "{\"" + taskAlertContact.getId() + "\":" + "\"" + taskAlertContact.getContactName() + "\"}";
                 String taskClass = contactData.get( "taskClass" );
-                if (taskClass != null && !taskClass.equals( "" )) {
-                    if (dao.executeCommand( "update task_runner_info set task_owner=? where task_class=? and task_owner='' and state=1", new Object[]{linkData, taskClass} ) > 0) {
-                    } else {
+                if (StringUtils.isNotBlank( taskClass )) {
+                    if (dao.executeCommand( "update task_runner_info set task_owner=? where task_class=? and task_owner='' and state=1", new Object[]{linkData, taskClass} ) < 1) {
                         dao.executeCommand( "update task_croner_info set task_owner=? where task_class=? and task_owner='' and state=1", new Object[]{linkData, taskClass} );
                     }
                 }

@@ -67,7 +67,7 @@ public class AlertNotifyScanCroner extends TaskCroner {
         Set<Long> globalInfoIdSet = new HashSet<>();
         for (TaskAlertNotify notify : notifyList) {
             globalInfoIdSet.add(notify.getInfoId());
-            if (notify.getContactType().equals("email")) {
+            if ("email".equals( notify.getContactType() )) {
                 String[] emailInfo = new String[]{notify.getContactMan(), notify.getContactInfo()};
                 String ids = emailMap.get(emailInfo);
                 if (ids != null) {
@@ -76,15 +76,15 @@ public class AlertNotifyScanCroner extends TaskCroner {
                     ids = notify.getInfoId() + "";
                 }
                 emailMap.put(emailInfo, ids);
-            } else if (notify.getContactType().equals("notifyUrl")) {
+            } else if ("notifyUrl".equals( notify.getContactType() )) {
                 String[] notifyUrlInfo = new String[]{notify.getContactMan(), notify.getContactInfo()};
-                String ids = emailMap.get(notifyUrlInfo);
+                String ids = notifyMap.get(notifyUrlInfo);
                 if (ids != null) {
                     ids += "," + notify.getInfoId();
                 } else {
                     ids = notify.getInfoId() + "";
                 }
-                emailMap.put(notifyUrlInfo, ids);
+                notifyMap.put(notifyUrlInfo, ids);
             }
         }
 
