@@ -81,14 +81,14 @@ public class TaskRunnerLogQueryParam extends PageQueryParam {
      */
     @QueryMeta(expr = "queueType=?")
     @Schema(title = "队列类型", description = "队列类型")
-    private int queueType;
+    private Integer queueType;
 
     /**
      * 重试类型
      */
     @QueryMeta(expr = "retryType=?")
     @Schema(title = "重试类型", description = "重试类型")
-    private int retryType;
+    private Integer retryType;
 
     /**
      * 流量限速TAG
@@ -138,7 +138,6 @@ public class TaskRunnerLogQueryParam extends PageQueryParam {
     @QueryMeta(expr = "state<=?")
     @Schema(title="小于等于状态", description = "小于等于状态")
     private Integer stateLte;
-
 
     public Long getId() {
         return id;
@@ -212,19 +211,19 @@ public class TaskRunnerLogQueryParam extends PageQueryParam {
         this.runTarget = runTarget;
     }
 
-    public int getQueueType() {
+    public Integer getQueueType() {
         return queueType;
     }
 
-    public void setQueueType(int queueType) {
+    public void setQueueType(Integer queueType) {
         this.queueType = queueType;
     }
 
-    public int getRetryType() {
+    public Integer getRetryType() {
         return retryType;
     }
 
-    public void setRetryType(int retryType) {
+    public void setRetryType(Integer retryType) {
         this.retryType = retryType;
     }
 
@@ -252,60 +251,35 @@ public class TaskRunnerLogQueryParam extends PageQueryParam {
         this.runDateRange = runDateRange;
     }
 
-    /**
-     * 获取状态。
-     */
-    public Integer getState(){
-        return this.state;
+    public Integer getState() {
+        return state;
     }
 
-    /**
-     * 设置状态。
-     */
-    public void setState(Integer state){
+    public void setState(Integer state) {
         this.state = state;
     }
 
-    /**
-     * 获取数组状态。
-     */
-    public Integer[] getStates(){
-        return this.states;
+    public Integer[] getStates() {
+        return states;
     }
 
-    /**
-     * 设置数组状态。
-     */
-    public void setStates(Integer[] states){
+    public void setStates(Integer[] states) {
         this.states = states;
     }
 
-    /**
-     * 获取大于等于状态。
-     */
-    public Integer getStateGte(){
-        return this.stateGte;
+    public Integer getStateGte() {
+        return stateGte;
     }
 
-    /**
-     * 设置大于等于状态。
-     */
-    public void setStateGte(Integer stateGte){
+    public void setStateGte(Integer stateGte) {
         this.stateGte = stateGte;
     }
 
-    /**
-     * 获取小于等于状态。
-     */
-    public Integer getStateLte(){
-        return this.stateLte;
+    public Integer getStateLte() {
+        return stateLte;
     }
 
-    /**
-     * 获取小于等于状态。
-     */
-    public void setStateLte(Integer stateLte){
+    public void setStateLte(Integer stateLte) {
         this.stateLte = stateLte;
     }
-
 }
