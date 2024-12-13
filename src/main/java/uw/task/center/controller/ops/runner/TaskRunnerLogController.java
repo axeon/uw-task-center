@@ -14,7 +14,6 @@ import uw.auth.service.annotation.MscPermDeclare;
 import uw.auth.service.constant.ActionLog;
 import uw.auth.service.constant.AuthType;
 import uw.auth.service.constant.UserType;
-import uw.auth.service.vo.MscActionLog;
 import uw.dao.DaoFactory;
 import uw.dao.PageQueryParam;
 import uw.dao.vo.QueryParamResult;
@@ -22,7 +21,6 @@ import uw.log.es.LogClient;
 import uw.log.es.vo.ESDataList;
 import uw.log.es.vo.SearchResponse;
 import uw.task.center.dto.TaskRunnerLogQueryParam;
-import uw.task.center.entity.TaskCronerESLog;
 import uw.task.center.entity.TaskRunnerESLog;
 
 /**
@@ -35,6 +33,7 @@ import uw.task.center.entity.TaskRunnerESLog;
 public class TaskRunnerLogController {
 
     private static final Logger log = LoggerFactory.getLogger( TaskRunnerLogController.class );
+    private static final String INDEX_NAME = "uw.task.runner.log";
     private final DaoFactory dao = DaoFactory.getInstance();
     private final LogClient logClient;
 
@@ -59,7 +58,7 @@ public class TaskRunnerLogController {
         QueryParamResult result = dao.parseQueryParam( TaskRunnerESLog.class, queryParam );
 
         String dsl = logClient.translateSqlToDsl( result.genFullSql(), queryParam.START_INDEX(), queryParam.RESULT_NUM(), queryParam.CHECK_AUTO_COUNT() );
-        return logClient.mapQueryResponseToEDataList( logClient.dslQuery( TaskRunnerESLog.class, "uw.task.entity.task_runner_log_*", dsl ), queryParam.START_INDEX(), queryParam.RESULT_NUM() );
+        return logClient.mapQueryResponseToEDataList( logClient.dslQuery( TaskRunnerESLog.class, INDEX_NAME, dsl ), queryParam.START_INDEX(), queryParam.RESULT_NUM() );
     }
 
     /**
@@ -70,8 +69,8 @@ public class TaskRunnerLogController {
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
     public TaskRunnerESLog load(@Parameter(description = "主键") long id) throws Exception {
         AuthServiceHelper.logRef( TaskRunnerESLog.class, id );
-        String dsl = logClient.translateSqlToDsl( "select * from \\\"uw.task.entity.task_runner_log_*\\\" where id = " + id, 0, 1, false );
-        SearchResponse<TaskRunnerESLog> response = logClient.dslQuery( TaskRunnerESLog.class, "uw.task.entity.task_runner_log_*", dsl );
+        String dsl = logClient.translateSqlToDsl( "select * from \\\"" + INDEX_NAME + "\\\" where id=" + id, 0, 1, false );
+        SearchResponse<TaskRunnerESLog> response = logClient.dslQuery( TaskRunnerESLog.class, INDEX_NAME, dsl );
         if (response == null) {
             return null;
         }

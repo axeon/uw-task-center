@@ -20,10 +20,8 @@ import java.util.Set;
  * @version $Revision: 1.00 $ $Date: 2017-08-14 10:36:29
  */
 @Schema(title = "队列任务ES实体类", description = "队列任务ES实体类")
-@TableMeta(tableName = "\\\"uw.task.entity.task_runner_log_*\\\"")
+@TableMeta(tableName = "\\\"uw.task.runner.log\\\"")
 public class TaskRunnerESLog extends LogBaseVo implements Serializable {
-
-    private static final long serialVersionUID = 1L;
 
     /**
      * id

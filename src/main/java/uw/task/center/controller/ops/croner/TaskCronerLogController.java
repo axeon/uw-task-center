@@ -32,9 +32,8 @@ import uw.task.center.entity.TaskCronerESLog;
 @MscPermDeclare(user = UserType.OPS)
 public class TaskCronerLogController {
     private static final Logger log = LoggerFactory.getLogger( TaskCronerLogController.class );
-
+    private static final String INDEX_NAME = "uw.task.croner.log";
     private final DaoFactory dao = DaoFactory.getInstance();
-
     private final LogClient logClient;
 
     @Autowired
@@ -53,13 +52,9 @@ public class TaskCronerLogController {
         //钉死关键参数
         queryParam.SORT_NAME( "\\\"@timestamp\\\"" );
         queryParam.SORT_TYPE( PageQueryParam.SORT_DESC );
-
         QueryParamResult result = dao.parseQueryParam( TaskCronerESLog.class, queryParam );
-
         String dsl = logClient.translateSqlToDsl( result.genFullSql(), queryParam.START_INDEX(), queryParam.RESULT_NUM(), queryParam.CHECK_AUTO_COUNT() );
-        log.info( "sql: {}", result.genFullSql() );
-        log.info( "dsl: {}", dsl );
-        return logClient.mapQueryResponseToEDataList( logClient.dslQuery( TaskCronerESLog.class, "uw.task.entity.task_croner_log_*", dsl ), queryParam.START_INDEX(), queryParam.RESULT_NUM() );
+        return logClient.mapQueryResponseToEDataList( logClient.dslQuery( TaskCronerESLog.class, INDEX_NAME, dsl ), queryParam.START_INDEX(), queryParam.RESULT_NUM() );
 
 
     }
@@ -72,8 +67,8 @@ public class TaskCronerLogController {
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
     public TaskCronerESLog load(@Parameter(description = "主键") long id) throws Exception {
         AuthServiceHelper.logRef( TaskCronerESLog.class, id );
-        String dsl = logClient.translateSqlToDsl( "select * from \\\"uw.task.entity.task_croner_log_*\\\" where id=" + id, 0, 1, false );
-        SearchResponse<TaskCronerESLog> response = logClient.dslQuery( TaskCronerESLog.class, "uw.task.entity.task_croner_log_*", dsl );
+        String dsl = logClient.translateSqlToDsl( "select * from \\\"" + INDEX_NAME + "\\\" where id=" + id, 0, 1, false );
+        SearchResponse<TaskCronerESLog> response = logClient.dslQuery( TaskCronerESLog.class, INDEX_NAME, dsl );
         if (response == null) {
             return null;
         }
