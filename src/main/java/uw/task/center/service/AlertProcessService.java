@@ -42,7 +42,7 @@ public class AlertProcessService {
         FAIL_TYPE_TRANSLATE_MAP.put( "waitTimeout", "限速超时" );
         FAIL_TYPE_TRANSLATE_MAP.put( "runTimeout", "运行超时" );
         FAIL_TYPE_TRANSLATE_MAP.put( "queueSize", "队列长度超限" );
-        FAIL_TYPE_TRANSLATE_MAP.put( "cronerTimeOut", "定时任务未在计划时间运行" );
+        FAIL_TYPE_TRANSLATE_MAP.put( "cronerTimeOut", "定时任务未在计划时间" );
     }
 
     /**
@@ -328,10 +328,9 @@ public class AlertProcessService {
                     continue;
                 }
                 // 如果超过约定时间还未执行，就要报警了。
-                if ((config.getNextRunDate().getTime() + (config.getStatsRunTime() / config.getStatsRunNum()) + 180_000L) < System.currentTimeMillis()) {
+                if ((config.getNextRunDate().getTime() + (config.getStatsRunTime() / config.getStatsRunNum()) + 300_000L) < System.currentTimeMillis()) {
                     ArrayList<AlertData> list = new ArrayList<>();
-                    AlertData ad = new AlertData( "cronerTimeOut", dateFormat.format( config.getNextRunDate() ), dateFormat.format( new Date() ) );
-                    list.add( ad );
+                    list.add( new AlertData( "cronerTimeOut", dateFormat.format( config.getNextRunDate() ), dateFormat.format( new Date() ) ) );
                     processAlertInfo( "croner", config.getId(), config.getTaskName(), 0, list, config.getTaskOwner(), config.getTaskLinkOur(), config.getTaskLinkMch() );
                     // 更新下次执行时间为NULL
                     try {
@@ -478,7 +477,13 @@ public class AlertProcessService {
             content.append( "[#" ).append( taskId ).append( taskInfo ).append( "]最近1分钟内执行异常：" );
         }
         for (AlertData ad : alertList) {
-            content.append( FAIL_TYPE_TRANSLATE_MAP.get( ad.getColumn() ) ).append( "运行值:" ).append( ad.getValue() ).append( "! 报警阀值:" ).append( ad.getConfig() ).append( "; " );
+            if ("cronerTimeOut".equals( ad.getColumn() )) {
+                content.append( FAIL_TYPE_TRANSLATE_MAP.get( ad.getColumn() ) ).append( "当前时间:" ).append( ad.getValue() ).append( ", 计划运行时间:" ).append( ad.getConfig() ).append(
+                        "; 已延误超过5分钟！" );
+            } else {
+                content.append( FAIL_TYPE_TRANSLATE_MAP.get( ad.getColumn() ) ).append( "运行值:" ).append( ad.getValue() ).append( "! 报警阀值:" ).append( ad.getConfig() ).append( "; "
+                );
+            }
         }
         content.append( "请尽快处理!!!" );
 
