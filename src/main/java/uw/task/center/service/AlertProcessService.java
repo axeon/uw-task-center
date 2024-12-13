@@ -42,7 +42,7 @@ public class AlertProcessService {
         FAIL_TYPE_TRANSLATE_MAP.put( "waitTimeout", "限速超时" );
         FAIL_TYPE_TRANSLATE_MAP.put( "runTimeout", "运行超时" );
         FAIL_TYPE_TRANSLATE_MAP.put( "queueSize", "队列长度超限" );
-        FAIL_TYPE_TRANSLATE_MAP.put( "cronerTimeOut", "定时任务未在计划时间" );
+        FAIL_TYPE_TRANSLATE_MAP.put( "cronerTimeOut", "定时任务未在计划时间运行" );
     }
 
     /**
@@ -107,22 +107,22 @@ public class AlertProcessService {
                         if (numFail > 0 && config.getAlertFailRate() > 0) {
                             double v = (double) numFail / numAll * 100;
                             if (v > config.getAlertFailRate()) {
-                                alerts.add( new AlertData( "failRate", percentFormat.format( config.getAlertFailRate() ) + "%", percentFormat.format( v ) + "%(" + numFail +
-                                        ")" ) );
+                                alerts.add( new AlertData( "failRate", percentFormat.format( config.getAlertFailRate() ) + "%",
+                                        percentFormat.format( v ) + "%(" + numFail + ")" ) );
                             }
                         }
                         if (numFailProgram > 0 && config.getAlertFailProgramRate() > 0) {
                             double v = (double) numFailProgram / numAll * 100;
                             if (v > config.getAlertFailProgramRate()) {
-                                alerts.add( new AlertData( "failProgramRate", percentFormat.format( config.getAlertFailProgramRate() ) + "%",
-                                        percentFormat.format( v ) + "%" + "(" + numFailProgram + ")" ) );
+                                alerts.add( new AlertData( "failProgramRate", percentFormat.format( config.getAlertFailProgramRate() ) + "%", percentFormat.format( v ) + "%" +
+                                        "(" + numFailProgram + ")" ) );
                             }
                         }
                         if (numFailPartner > 0 && config.getAlertFailPartnerRate() > 0) {
                             double v = (double) numFailPartner / numAll * 100;
                             if (v > config.getAlertFailPartnerRate()) {
-                                alerts.add( new AlertData( "failPartnerRate", percentFormat.format( config.getAlertFailPartnerRate() ) + "%",
-                                        percentFormat.format( v ) + "%" + "(" + numFailPartner + ")" ) );
+                                alerts.add( new AlertData( "failPartnerRate", percentFormat.format( config.getAlertFailPartnerRate() ) + "%", percentFormat.format( v ) + "%" +
+                                        "(" + numFailPartner + ")" ) );
                             }
                         }
                         if (numFailConfig > 0 && config.getAlertFailConfigRate() > 0) {
@@ -196,22 +196,22 @@ public class AlertProcessService {
                         if (numFail > 0 && config.getAlertFailRate() > 0) {
                             double v = (double) numFail / numAll * 100;
                             if (v > config.getAlertFailRate()) {
-                                alerts.add( new AlertData( "failRate", percentFormat.format( config.getAlertFailRate() ) + "%", percentFormat.format( v ) + "%(" + numFail +
-                                        ")" ) );
+                                alerts.add( new AlertData( "failRate", percentFormat.format( config.getAlertFailRate() ) + "%",
+                                        percentFormat.format( v ) + "%(" + numFail + ")" ) );
                             }
                         }
                         if (numFailProgram > 0 && config.getAlertFailProgramRate() > 0) {
                             double v = (double) numFailProgram / numAll * 100;
                             if (v > config.getAlertFailProgramRate()) {
-                                alerts.add( new AlertData( "failProgramRate", percentFormat.format( config.getAlertFailProgramRate() ) + "%",
-                                        percentFormat.format( v ) + "%" + "(" + numFailProgram + ")" ) );
+                                alerts.add( new AlertData( "failProgramRate", percentFormat.format( config.getAlertFailProgramRate() ) + "%", percentFormat.format( v ) + "%" +
+                                        "(" + numFailProgram + ")" ) );
                             }
                         }
                         if (numFailPartner > 0 && config.getAlertFailPartnerRate() > 0) {
                             double v = (double) numFailPartner / numAll * 100;
                             if (v > config.getAlertFailPartnerRate()) {
-                                alerts.add( new AlertData( "failPartnerRate", percentFormat.format( config.getAlertFailPartnerRate() ) + "%",
-                                        percentFormat.format( v ) + "%" + "(" + numFailPartner + ")" ) );
+                                alerts.add( new AlertData( "failPartnerRate", percentFormat.format( config.getAlertFailPartnerRate() ) + "%", percentFormat.format( v ) + "%" +
+                                        "(" + numFailPartner + ")" ) );
                             }
                         }
                         if (numFailData > 0 && config.getAlertFailDataRate() > 0) {
@@ -478,14 +478,12 @@ public class AlertProcessService {
         }
         for (AlertData ad : alertList) {
             if ("cronerTimeOut".equals( ad.getColumn() )) {
-                content.append( FAIL_TYPE_TRANSLATE_MAP.get( ad.getColumn() ) ).append( "当前时间:" ).append( ad.getValue() ).append( ", 计划运行时间:" ).append( ad.getConfig() ).append(
-                        "; 已延误超过5分钟！" );
+                content.append( FAIL_TYPE_TRANSLATE_MAP.get( ad.getColumn() ) ).append( ", 当前时间:" ).append( ad.getValue() ).append( ", 计划运行时间:" ).append( ad.getConfig() ).append( "; 已延误超5分钟！\n" );
             } else {
-                content.append( FAIL_TYPE_TRANSLATE_MAP.get( ad.getColumn() ) ).append( "运行值:" ).append( ad.getValue() ).append( "! 报警阀值:" ).append( ad.getConfig() ).append( "; "
-                );
+                content.append( FAIL_TYPE_TRANSLATE_MAP.get( ad.getColumn() ) ).append( ", 运行值:" ).append( ad.getValue() ).append( "! 报警阀值:" ).append( ad.getConfig() ).append(
+                        "!\n" );
             }
         }
-        content.append( "请尽快处理!!!" );
 
         // 邮件错误类型
         info.setAlertTitle( title.toString() );

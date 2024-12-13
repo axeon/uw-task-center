@@ -105,8 +105,7 @@ public class AlertNotifyScanCroner extends TaskCroner {
             String title = "!!!收到" + infoList.size() + "条任务报警信息!";
             StringBuilder content = new StringBuilder();
             for (TaskAlertInfo info : infoList) {
-                content.append( "报警时间:" ).append( dateFormat.format( info.getCreateDate() ) ).append( "\n" );
-                content.append( "报警标题:" ).append( info.getAlertTitle() ).append( "\n" );
+                content.append( "报警时间:" ).append( dateFormat.format( info.getCreateDate() ) ).append( "\n\n" );
                 content.append( "报警内容:" ).append( info.getAlertBody() ).append( "\n\n" );
             }
             sendDing( title, content.toString() );
@@ -120,8 +119,7 @@ public class AlertNotifyScanCroner extends TaskCroner {
             String title = "!!!收到" + infoList.size() + "条任务报警信息!";
             StringBuilder content = new StringBuilder();
             for (TaskAlertInfo info : infoList) {
-                content.append( "报警时间:" ).append( dateFormat.format( info.getCreateDate() ) ).append( "\n" );
-                content.append( "报警标题:" ).append( info.getAlertTitle() ).append( "\n" );
+                content.append( "报警时间:" ).append( dateFormat.format( info.getCreateDate() ) ).append( "\n\n" );
                 content.append( "报警内容:" ).append( info.getAlertBody() ).append( "\n\n" );
             }
             sendEmail( contactInfo, title, content.toString() );
@@ -136,7 +134,6 @@ public class AlertNotifyScanCroner extends TaskCroner {
             StringBuilder content = new StringBuilder();
             for (TaskAlertInfo info : infoList) {
                 content.append( "##### 报警时间:" ).append( dateFormat.format( info.getCreateDate() ) ).append( " \n\n " );
-                content.append( "##### 报警标题:" ).append( info.getAlertTitle() ).append( " \n\n " );
                 content.append( "##### 报警内容:" ).append( info.getAlertBody() ).append( " \n\n " );
             }
             //默认只支持钉钉。
