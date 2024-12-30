@@ -12,4 +12,4 @@ COPY --from=builder /builder/extracted/application/ ./
 
 ENV JAVA_OPTS="" SPRING_OPTS=""
 
-ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar application.jar $SPRING_OPTS"]
+ENTRYPOINT ["sh", "-c", "exec java $JAVA_OPTS -jar application.jar $SPRING_OPTS"]
