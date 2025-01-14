@@ -52,7 +52,7 @@ public class TaskRunnerLogController {
     public ESDataList<TaskRunnerESLog> list(TaskRunnerLogQueryParam queryParam) throws Exception {
         AuthServiceHelper.logRef( TaskRunnerESLog.class );
         //钉死关键参数
-        queryParam.SORT_NAME( "\\\"@timestamp\\\"" );
+        queryParam.SORT_NAME( "@timestamp" );
         queryParam.SORT_TYPE( PageQueryParam.SORT_DESC );
 
         QueryParamResult result = dao.parseQueryParam( TaskRunnerESLog.class, queryParam );

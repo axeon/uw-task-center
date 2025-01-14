@@ -4,7 +4,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import uw.dao.PageQueryParam;
 import uw.dao.annotation.QueryMeta;
 
-import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 定时任务配置列表查询参数。
@@ -86,30 +87,43 @@ public class TaskCronerLogQueryParam extends PageQueryParam {
      * 状态。
      */
     @QueryMeta(expr = "state=?")
-    @Schema(title="状态", description = "状态")
+    @Schema(title = "状态", description = "状态")
     private Integer state;
 
     /**
      * 数组状态。
      */
     @QueryMeta(expr = "state in (?)")
-    @Schema(title="数组状态", description = "状态数组，可同时匹配多个状态。")
+    @Schema(title = "数组状态", description = "状态数组，可同时匹配多个状态。")
     private Integer[] states;
 
     /**
      * 大于等于状态。
      */
     @QueryMeta(expr = "state>=?")
-    @Schema(title="大于等于状态", description = "大于等于状态")
+    @Schema(title = "大于等于状态", description = "大于等于状态")
     private Integer stateGte;
 
     /**
      * 小于等于状态。
      */
     @QueryMeta(expr = "state<=?")
-    @Schema(title="小于等于状态", description = "小于等于状态")
+    @Schema(title = "小于等于状态", description = "小于等于状态")
     private Integer stateLte;
 
+    /**
+     * 允许的排序属性。
+     * key:排序名 value:排序字段
+     *
+     * @return
+     */
+    @Override
+    public Map<String, String> ALLOWED_SORT_PROPERTY() {
+        return new HashMap<>() {{
+            put( "id", "id" );
+            put( "@timestamp", "\\\"@timestamp\\\"" );
+        }};
+    }
 
     public Long getId() {
         return id;
@@ -190,59 +204,60 @@ public class TaskCronerLogQueryParam extends PageQueryParam {
     public void setRunDateRange(Long[] runDateRange) {
         this.runDateRange = runDateRange;
     }
+
     /**
      * 获取状态。
      */
-    public Integer getState(){
+    public Integer getState() {
         return this.state;
     }
 
     /**
      * 设置状态。
      */
-    public void setState(Integer state){
+    public void setState(Integer state) {
         this.state = state;
     }
 
     /**
      * 获取数组状态。
      */
-    public Integer[] getStates(){
+    public Integer[] getStates() {
         return this.states;
     }
 
     /**
      * 设置数组状态。
      */
-    public void setStates(Integer[] states){
+    public void setStates(Integer[] states) {
         this.states = states;
     }
 
     /**
      * 获取大于等于状态。
      */
-    public Integer getStateGte(){
+    public Integer getStateGte() {
         return this.stateGte;
     }
 
     /**
      * 设置大于等于状态。
      */
-    public void setStateGte(Integer stateGte){
+    public void setStateGte(Integer stateGte) {
         this.stateGte = stateGte;
     }
 
     /**
      * 获取小于等于状态。
      */
-    public Integer getStateLte(){
+    public Integer getStateLte() {
         return this.stateLte;
     }
 
     /**
      * 获取小于等于状态。
      */
-    public void setStateLte(Integer stateLte){
+    public void setStateLte(Integer stateLte) {
         this.stateLte = stateLte;
     }
 

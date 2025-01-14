@@ -2,10 +2,10 @@ package uw.task.center.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import uw.dao.PageQueryParam;
-import uw.dao.annotation.ColumnMeta;
 import uw.dao.annotation.QueryMeta;
 
-import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 定时任务配置列表查询参数。
@@ -115,29 +115,43 @@ public class TaskRunnerLogQueryParam extends PageQueryParam {
      * 状态。
      */
     @QueryMeta(expr = "state=?")
-    @Schema(title="状态", description = "状态")
+    @Schema(title = "状态", description = "状态")
     private Integer state;
 
     /**
      * 数组状态。
      */
     @QueryMeta(expr = "state in (?)")
-    @Schema(title="数组状态", description = "状态数组，可同时匹配多个状态。")
+    @Schema(title = "数组状态", description = "状态数组，可同时匹配多个状态。")
     private Integer[] states;
 
     /**
      * 大于等于状态。
      */
     @QueryMeta(expr = "state>=?")
-    @Schema(title="大于等于状态", description = "大于等于状态")
+    @Schema(title = "大于等于状态", description = "大于等于状态")
     private Integer stateGte;
 
     /**
      * 小于等于状态。
      */
     @QueryMeta(expr = "state<=?")
-    @Schema(title="小于等于状态", description = "小于等于状态")
+    @Schema(title = "小于等于状态", description = "小于等于状态")
     private Integer stateLte;
+
+    /**
+     * 允许的排序属性。
+     * key:排序名 value:排序字段
+     *
+     * @return
+     */
+    @Override
+    public Map<String, String> ALLOWED_SORT_PROPERTY() {
+        return new HashMap<>() {{
+            put( "id", "id" );
+            put( "@timestamp", "\\\"@timestamp\\\"" );
+        }};
+    }
 
     public Long getId() {
         return id;

@@ -50,7 +50,7 @@ public class TaskCronerLogController {
     public ESDataList<TaskCronerESLog> list(TaskCronerLogQueryParam queryParam) throws Exception {
         AuthServiceHelper.logRef( TaskCronerESLog.class );
         //钉死关键参数
-        queryParam.SORT_NAME( "\\\"@timestamp\\\"" );
+        queryParam.SORT_NAME( "@timestamp" );
         queryParam.SORT_TYPE( PageQueryParam.SORT_DESC );
         QueryParamResult result = dao.parseQueryParam( TaskCronerESLog.class, queryParam );
         String dsl = logClient.translateSqlToDsl( result.genFullSql(), queryParam.START_INDEX(), queryParam.RESULT_NUM(), queryParam.CHECK_AUTO_COUNT() );
