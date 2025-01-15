@@ -151,7 +151,7 @@ public class TaskAlertContactController {
      * @param id
      * @throws TransactionException
      */
-    @PatchMapping("/enable")
+    @PutMapping("/enable")
     @Operation(summary = "启用报警联系信息", description = "启用报警联系信息")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
     public ResponseData enable(@Parameter(description = "主键ID") @RequestParam long id,
@@ -176,7 +176,7 @@ public class TaskAlertContactController {
      * @param id
      * @throws TransactionException
      */
-    @PatchMapping("/disable")
+    @PutMapping("/disable")
     @Operation(summary = "禁用报警联系信息", description = "禁用报警联系信息")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
     public ResponseData disable(@Parameter(description = "主键ID") @RequestParam long id,

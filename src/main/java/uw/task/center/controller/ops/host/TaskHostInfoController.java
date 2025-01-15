@@ -66,7 +66,7 @@ public class TaskHostInfoController {
      * @param id
      * @throws TransactionException
      */
-    @PatchMapping("/enable")
+    @PutMapping("/enable")
     @Operation(summary = "启用task主机信息", description = "启用task主机信息")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
     public ResponseData enable(@Parameter(description = "主键ID") @RequestParam long id,
@@ -91,7 +91,7 @@ public class TaskHostInfoController {
      * @param id
      * @throws TransactionException
      */
-    @PatchMapping("/disable")
+    @PutMapping("/disable")
     @Operation(summary = "禁用task主机信息", description = "禁用task主机信息")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
     public ResponseData disable(@Parameter(description = "主键ID") @RequestParam long id,

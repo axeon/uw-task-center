@@ -182,7 +182,7 @@ public class TaskCronerInfoController {
      * @param id
      * @throws TransactionException
      */
-    @PatchMapping("/enable")
+    @PutMapping("/enable")
     @Operation(summary = "启用定时任务配置", description = "启用定时任务配置")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
     public ResponseData enable(@Parameter(description = "主键ID") @RequestParam long id,
@@ -207,7 +207,7 @@ public class TaskCronerInfoController {
      * @param id
      * @throws TransactionException
      */
-    @PatchMapping("/disable")
+    @PutMapping("/disable")
     @Operation(summary = "禁用定时任务配置", description = "禁用定时任务配置")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
     public ResponseData disable(@Parameter(description = "主键ID") @RequestParam long id,
@@ -258,7 +258,7 @@ public class TaskCronerInfoController {
      * @return
      * @throws TransactionException
      */
-    @PatchMapping("/resetStats")
+    @PutMapping("/resetStats")
     @Operation(summary = "清空统计数据", description = "清空统计数据")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
     public ResponseData resetStats(@Parameter(description = "主键") long id, @Parameter( description = "备注") @RequestParam String remark) throws TransactionException {
