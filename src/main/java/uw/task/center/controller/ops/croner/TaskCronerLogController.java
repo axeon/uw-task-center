@@ -62,7 +62,7 @@ public class TaskCronerLogController {
     /**
      * 查看定时任务日志
      */
-    @GetMapping(value = "/load")
+    @GetMapping("/load")
     @Operation(summary = "查看定时任务日志", description = "查看定时任务日志")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
     public TaskCronerESLog load(@Parameter(description = "主键") long id) throws Exception {

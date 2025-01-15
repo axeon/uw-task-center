@@ -64,7 +64,7 @@ public class TaskRunnerLogController {
     /**
      * 查询队列任务日志
      */
-    @GetMapping(value = "/load")
+    @GetMapping("/load")
     @Operation(summary = "查询队列任务日志", description = "查询队列任务日志")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
     public TaskRunnerESLog load(@Parameter(description = "主键") long id) throws Exception {
