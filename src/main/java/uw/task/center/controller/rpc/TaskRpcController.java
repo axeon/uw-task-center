@@ -261,7 +261,7 @@ public class TaskRpcController {
     /**
      * 初始化Runner配置
      */
-    @PostMapping("/runner/update")
+    @PostMapping("/runner/init")
     @Operation(summary = "初始化队列任务配置", description = "初始化队列任务配置")
     @MscPermDeclare(user = UserType.RPC, log = ActionLog.NONE)
     public TaskRunnerInfo initRunnerConfig(@RequestBody TaskRunnerInfo config) throws TransactionException {
@@ -294,7 +294,7 @@ public class TaskRpcController {
     /**
      * 初始化Croner配置
      */
-    @PostMapping("/croner/update")
+    @PostMapping("/croner/init")
     @Operation(summary = "初始化定时任务配置", description = "初始化定时任务配置")
     @MscPermDeclare(user = UserType.RPC, log = ActionLog.NONE)
     public TaskCronerInfo initCronerConfig(@RequestBody TaskCronerInfo config) throws TransactionException {
@@ -327,7 +327,7 @@ public class TaskRpcController {
     /**
      * 提交报警联系人。
      */
-    @PostMapping("/contact/update")
+    @PostMapping("/contact/init")
     @Operation(summary = "初始化任务联系人信息", description = "初始化任务联系人信息")
     @MscPermDeclare(user = UserType.RPC, log = ActionLog.NONE)
     public void initRunnerConfig(@RequestBody Map<String, String> contactData) throws TransactionException {
