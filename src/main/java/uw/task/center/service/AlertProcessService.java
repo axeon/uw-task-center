@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import uw.common.util.JsonUtils;
 import uw.dao.DaoFactory;
 import uw.dao.DataList;
 import uw.dao.TransactionException;
@@ -381,7 +382,7 @@ public class AlertProcessService {
         for (String link : taskLink) {
             if (link.length() > 2) {
                 try {
-                    HashMap map = JsonInterfaceHelper.JSON_CONVERTER.parse( link, HashMap.class );
+                    HashMap map = JsonUtils.parse( link, HashMap.class );
                     set.addAll( map.keySet() );
                 } catch (Exception e) {
                     log.error( e.getMessage(), e );
