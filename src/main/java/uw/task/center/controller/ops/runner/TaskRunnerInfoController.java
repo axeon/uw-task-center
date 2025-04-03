@@ -14,7 +14,7 @@ import uw.auth.service.annotation.MscPermDeclare;
 import uw.auth.service.constant.ActionLog;
 import uw.auth.service.constant.AuthType;
 import uw.auth.service.constant.UserType;
-import uw.common.constant.StateCommon;
+import uw.app.common.constant.CommonState;
 import uw.common.dto.ResponseData;
 import uw.dao.DaoFactory;
 import uw.dao.DataList;
@@ -123,7 +123,7 @@ public class TaskRunnerInfoController {
         taskRunnerInfo.setId( id );
         taskRunnerInfo.setCreateDate( new Date() );
         taskRunnerInfo.setModifyDate( null );
-        taskRunnerInfo.setState( 1 );
+        taskRunnerInfo.setState( CommonState.ENABLED.getValue() );
         dao.save( taskRunnerInfo );
         //保存历史记录
         SysDataHistoryHelper.saveHistory( taskRunnerInfo.getId(), taskRunnerInfo, "队列任务配置", "新增队列任务配置" );
@@ -202,11 +202,11 @@ public class TaskRunnerInfoController {
         if (taskRunnerInfo == null) {
             return ResponseData.warnMsg( "未找到指定id的队列任务配置！" );
         }
-        if (taskRunnerInfo.getState() != StateCommon.DISABLED.getValue()) {
+        if (taskRunnerInfo.getState() != CommonState.DISABLED.getValue()) {
             return ResponseData.warnMsg( "启用队列任务配置失败！当前状态不是禁用状态！" );
         }
         taskRunnerInfo.setModifyDate( new Date() );
-        taskRunnerInfo.setState( StateCommon.ENABLED.getValue() );
+        taskRunnerInfo.setState( CommonState.ENABLED.getValue() );
         dao.update( taskRunnerInfo );
         return ResponseData.success();
     }
@@ -227,11 +227,11 @@ public class TaskRunnerInfoController {
         if (taskRunnerInfo == null) {
             return ResponseData.warnMsg( "未找到指定id的队列任务配置！" );
         }
-        if (taskRunnerInfo.getState() != StateCommon.ENABLED.getValue()) {
+        if (taskRunnerInfo.getState() != CommonState.ENABLED.getValue()) {
             return ResponseData.warnMsg( "禁用队列任务配置失败！当前状态不是启用状态！" );
         }
         taskRunnerInfo.setModifyDate( new Date() );
-        taskRunnerInfo.setState( StateCommon.DISABLED.getValue() );
+        taskRunnerInfo.setState( CommonState.DISABLED.getValue() );
         dao.update( taskRunnerInfo );
         return ResponseData.success();
     }
@@ -252,11 +252,11 @@ public class TaskRunnerInfoController {
         if (taskRunnerInfo == null) {
             return ResponseData.warnMsg( "未找到指定id的队列任务配置！" );
         }
-        if (taskRunnerInfo.getState() != StateCommon.DISABLED.getValue()) {
+        if (taskRunnerInfo.getState() != CommonState.DISABLED.getValue()) {
             return ResponseData.warnMsg( "删除队列任务配置失败！当前状态不是禁用状态！" );
         }
         taskRunnerInfo.setModifyDate( new Date() );
-        taskRunnerInfo.setState( StateCommon.DELETED.getValue() );
+        taskRunnerInfo.setState( CommonState.DELETED.getValue() );
         dao.update( taskRunnerInfo );
         return ResponseData.success();
     }

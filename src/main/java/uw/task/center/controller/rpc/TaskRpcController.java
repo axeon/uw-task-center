@@ -12,6 +12,7 @@ import uw.auth.service.annotation.MscPermDeclare;
 import uw.auth.service.annotation.ResponseAdviceIgnore;
 import uw.auth.service.constant.ActionLog;
 import uw.auth.service.constant.UserType;
+import uw.app.common.constant.CommonState;
 import uw.dao.BatchUpdateManager;
 import uw.dao.DaoFactory;
 import uw.dao.TransactionException;
@@ -72,7 +73,7 @@ public class TaskRpcController {
         String ip = AuthServiceHelper.getRemoteIp();
         taskHostInfoExt.setHostIp( ip );
         reportResponse.setHostIp( ip );
-        reportResponse.setState( 1 ); //默认给正常状态。
+        reportResponse.setState( CommonState.ENABLED.getValue() ); //默认给正常状态。
         TaskHostInfoExt taskHostInfoDb = null;
         if (taskHostInfoExt.getId() > 0) {
             reportResponse.setId( taskHostInfoExt.getId() );
@@ -178,7 +179,7 @@ public class TaskRpcController {
                 taskHostInfoExt.setCronerRunTime( cronerRunTime );
                 taskHostInfoExt.setCreateDate( createDate );
                 taskHostInfoExt.setLastUpdate( createDate );
-                taskHostInfoExt.setState( 1 );
+                taskHostInfoExt.setState( CommonState.ENABLED.getValue() );
                 dao.save( taskHostInfoExt );
                 reportResponse.setId( taskHostInfoExt.getId() );
             }
@@ -283,7 +284,7 @@ public class TaskRpcController {
                     config.setTaskLinkMch( "" );
                     config.setTaskLinkOur( "" );
                     config.setCreateDate( new Date() );
-                    config.setState( 1 );
+                    config.setState( CommonState.ENABLED.getValue() );
                     dao.save( config );
                 }
             }
@@ -316,7 +317,7 @@ public class TaskRpcController {
                     config.setTaskLinkMch( "" );
                     config.setTaskLinkOur( "" );
                     config.setCreateDate( new Date() );
-                    config.setState( 1 );
+                    config.setState( CommonState.ENABLED.getValue() );
                     dao.save( config );
                 }
             }
@@ -350,7 +351,7 @@ public class TaskRpcController {
                     taskAlertContact.setNotifyUrl( contactData.get( "notifyUrl" ) );
                     taskAlertContact.setRemark( contactData.get( "remark" ) );
                     taskAlertContact.setCreateDate( new Date() );
-                    taskAlertContact.setState( 1 );
+                    taskAlertContact.setState( CommonState.ENABLED.getValue() );
                     dao.save( taskAlertContact );
                     // 更新任务负责人和任务报警负责人
                 }

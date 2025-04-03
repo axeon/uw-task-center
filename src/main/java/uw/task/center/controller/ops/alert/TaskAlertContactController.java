@@ -14,7 +14,7 @@ import uw.auth.service.annotation.MscPermDeclare;
 import uw.auth.service.constant.ActionLog;
 import uw.auth.service.constant.AuthType;
 import uw.auth.service.constant.UserType;
-import uw.common.constant.StateCommon;
+import uw.app.common.constant.CommonState;
 import uw.common.dto.ResponseData;
 import uw.dao.DaoFactory;
 import uw.dao.DataList;
@@ -108,7 +108,7 @@ public class TaskAlertContactController {
         taskAlertContact.setId( id );
         taskAlertContact.setCreateDate( new Date() );
         taskAlertContact.setModifyDate( null );
-        taskAlertContact.setState( 1 );
+        taskAlertContact.setState( CommonState.ENABLED.getValue() );
         dao.save( taskAlertContact );
         //保存历史记录
         SysDataHistoryHelper.saveHistory( taskAlertContact.getId(), taskAlertContact, "报警联系信息", "新增报警联系信息" );
@@ -161,11 +161,11 @@ public class TaskAlertContactController {
         if (taskAlertContact == null) {
             return ResponseData.warnMsg( "未找到指定id的报警联系信息！" );
         }
-        if (taskAlertContact.getState() != StateCommon.DISABLED.getValue()) {
+        if (taskAlertContact.getState() != CommonState.DISABLED.getValue()) {
             return ResponseData.warnMsg( "启用报警联系信息失败！当前状态不是禁用状态！" );
         }
         taskAlertContact.setModifyDate( new Date() );
-        taskAlertContact.setState( StateCommon.ENABLED.getValue() );
+        taskAlertContact.setState( CommonState.ENABLED.getValue() );
         dao.update( taskAlertContact );
         return ResponseData.success();
     }
@@ -186,11 +186,11 @@ public class TaskAlertContactController {
         if (taskAlertContact == null) {
             return ResponseData.warnMsg( "未找到指定id的报警联系信息！" );
         }
-        if (taskAlertContact.getState() != StateCommon.ENABLED.getValue()) {
+        if (taskAlertContact.getState() != CommonState.ENABLED.getValue()) {
             return ResponseData.warnMsg( "禁用报警联系信息失败！当前状态不是启用状态！" );
         }
         taskAlertContact.setModifyDate( new Date() );
-        taskAlertContact.setState( StateCommon.DISABLED.getValue() );
+        taskAlertContact.setState( CommonState.DISABLED.getValue() );
         dao.update( taskAlertContact );
         return ResponseData.success();
     }
@@ -211,11 +211,11 @@ public class TaskAlertContactController {
         if (taskAlertContact == null) {
             return ResponseData.warnMsg( "未找到指定id的报警联系信息！" );
         }
-        if (taskAlertContact.getState() != StateCommon.DISABLED.getValue()) {
+        if (taskAlertContact.getState() != CommonState.DISABLED.getValue()) {
             return ResponseData.warnMsg( "删除报警联系信息失败！当前状态不是禁用状态！" );
         }
         taskAlertContact.setModifyDate( new Date() );
-        taskAlertContact.setState( StateCommon.DELETED.getValue() );
+        taskAlertContact.setState( CommonState.DELETED.getValue() );
         dao.update( taskAlertContact );
         return ResponseData.success();
     }

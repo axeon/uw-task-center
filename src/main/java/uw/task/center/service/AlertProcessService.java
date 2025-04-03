@@ -8,11 +8,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import uw.app.common.constant.CommonState;
 import uw.common.util.JsonUtils;
 import uw.dao.DaoFactory;
 import uw.dao.DataList;
 import uw.dao.TransactionException;
-import uw.httpclient.json.JsonInterfaceHelper;
 import uw.task.center.entity.*;
 
 import java.text.DecimalFormat;
@@ -490,7 +490,7 @@ public class AlertProcessService {
         info.setAlertTitle( title.toString() );
         info.setAlertBody( content.toString() );
         info.setCreateDate( new Date() );
-        info.setState( 1 );
+        info.setState( CommonState.ENABLED.getValue() );
 
         try {
             dao.save( info );

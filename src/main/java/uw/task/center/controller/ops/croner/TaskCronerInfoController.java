@@ -14,7 +14,7 @@ import uw.auth.service.annotation.MscPermDeclare;
 import uw.auth.service.constant.ActionLog;
 import uw.auth.service.constant.AuthType;
 import uw.auth.service.constant.UserType;
-import uw.common.constant.StateCommon;
+import uw.app.common.constant.CommonState;
 import uw.common.dto.ResponseData;
 import uw.dao.DaoFactory;
 import uw.dao.DataList;
@@ -124,7 +124,7 @@ public class TaskCronerInfoController {
         taskCronerInfo.setId( id );
         taskCronerInfo.setCreateDate( new Date() );
         taskCronerInfo.setModifyDate( null );
-        taskCronerInfo.setState( 1 );
+        taskCronerInfo.setState( CommonState.ENABLED.getValue() );
         dao.save( taskCronerInfo );
         //保存历史记录
         SysDataHistoryHelper.saveHistory( taskCronerInfo.getId(), taskCronerInfo, "定时任务配置", "新增定时任务配置" );
@@ -192,11 +192,11 @@ public class TaskCronerInfoController {
         if (taskCronerInfo == null) {
             return ResponseData.warnMsg( "未找到指定id的定时任务配置！" );
         }
-        if (taskCronerInfo.getState() != StateCommon.DISABLED.getValue()) {
+        if (taskCronerInfo.getState() != CommonState.DISABLED.getValue()) {
             return ResponseData.warnMsg( "启用定时任务配置失败！当前状态不是禁用状态！" );
         }
         taskCronerInfo.setModifyDate( new Date() );
-        taskCronerInfo.setState( StateCommon.ENABLED.getValue() );
+        taskCronerInfo.setState( CommonState.ENABLED.getValue() );
         dao.update( taskCronerInfo );
         return ResponseData.success();
     }
@@ -217,11 +217,11 @@ public class TaskCronerInfoController {
         if (taskCronerInfo == null) {
             return ResponseData.warnMsg( "未找到指定id的定时任务配置！" );
         }
-        if (taskCronerInfo.getState() != StateCommon.ENABLED.getValue()) {
+        if (taskCronerInfo.getState() != CommonState.ENABLED.getValue()) {
             return ResponseData.warnMsg( "禁用定时任务配置失败！当前状态不是启用状态！" );
         }
         taskCronerInfo.setModifyDate( new Date() );
-        taskCronerInfo.setState( StateCommon.DISABLED.getValue() );
+        taskCronerInfo.setState( CommonState.DISABLED.getValue() );
         dao.update( taskCronerInfo );
         return ResponseData.success();
     }
@@ -242,11 +242,11 @@ public class TaskCronerInfoController {
         if (taskCronerInfo == null) {
             return ResponseData.warnMsg( "未找到指定id的定时任务配置！" );
         }
-        if (taskCronerInfo.getState() != StateCommon.DISABLED.getValue()) {
+        if (taskCronerInfo.getState() != CommonState.DISABLED.getValue()) {
             return ResponseData.warnMsg( "删除定时任务配置失败！当前状态不是禁用状态！" );
         }
         taskCronerInfo.setModifyDate( new Date() );
-        taskCronerInfo.setState( StateCommon.DELETED.getValue() );
+        taskCronerInfo.setState( CommonState.DELETED.getValue() );
         dao.update( taskCronerInfo );
         return ResponseData.success();
     }

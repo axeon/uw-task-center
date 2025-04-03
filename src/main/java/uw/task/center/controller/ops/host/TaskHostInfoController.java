@@ -9,7 +9,7 @@ import uw.auth.service.annotation.MscPermDeclare;
 import uw.auth.service.constant.ActionLog;
 import uw.auth.service.constant.AuthType;
 import uw.auth.service.constant.UserType;
-import uw.common.constant.StateCommon;
+import uw.app.common.constant.CommonState;
 import uw.common.dto.ResponseData;
 import uw.dao.DaoFactory;
 import uw.dao.DataList;
@@ -76,11 +76,11 @@ public class TaskHostInfoController {
         if (taskHostInfo == null) {
             return ResponseData.warnMsg( "未找到指定id的task主机信息！" );
         }
-        if (taskHostInfo.getState() != StateCommon.DISABLED.getValue()) {
+        if (taskHostInfo.getState() != CommonState.DISABLED.getValue()) {
             return ResponseData.warnMsg( "启用task主机信息失败！当前状态不是禁用状态！" );
         }
         taskHostInfo.setModifyDate( new Date() );
-        taskHostInfo.setState( StateCommon.ENABLED.getValue() );
+        taskHostInfo.setState( CommonState.ENABLED.getValue() );
         dao.update( taskHostInfo );
         return ResponseData.success();
     }
@@ -101,11 +101,11 @@ public class TaskHostInfoController {
         if (taskHostInfo == null) {
             return ResponseData.warnMsg( "未找到指定id的task主机信息！" );
         }
-        if (taskHostInfo.getState() != StateCommon.ENABLED.getValue()) {
+        if (taskHostInfo.getState() != CommonState.ENABLED.getValue()) {
             return ResponseData.warnMsg( "禁用task主机信息失败！当前状态不是启用状态！" );
         }
         taskHostInfo.setModifyDate( new Date() );
-        taskHostInfo.setState( StateCommon.DISABLED.getValue() );
+        taskHostInfo.setState( CommonState.DISABLED.getValue() );
         dao.update( taskHostInfo );
         return ResponseData.success();
     }
