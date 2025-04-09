@@ -12,7 +12,7 @@ import uw.auth.service.annotation.MscPermDeclare;
 import uw.auth.service.annotation.ResponseAdviceIgnore;
 import uw.auth.service.constant.ActionLog;
 import uw.auth.service.constant.UserType;
-import uw.app.common.constant.CommonState;
+import uw.common.app.constant.CommonState;
 import uw.dao.BatchUpdateManager;
 import uw.dao.DaoFactory;
 import uw.dao.TransactionException;

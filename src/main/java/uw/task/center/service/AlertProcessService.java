@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import uw.app.common.constant.CommonState;
+import uw.common.app.constant.CommonState;
 import uw.common.util.JsonUtils;
 import uw.dao.DaoFactory;
 import uw.dao.DataList;

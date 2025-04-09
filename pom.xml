@@ -51,7 +51,7 @@
         </dependency>
         <dependency>
             <groupId>com.umtone</groupId>
-            <artifactId>uw-app-common</artifactId>
+            <artifactId>uw-common-app</artifactId>
         </dependency>
         <dependency>
             <groupId>com.umtone</groupId>
