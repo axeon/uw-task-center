@@ -10,6 +10,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import uw.common.app.constant.CommonState;
 import uw.common.util.JsonUtils;
+import uw.common.util.SystemClock;
 import uw.dao.DaoFactory;
 import uw.dao.DataList;
 import uw.dao.TransactionException;
@@ -329,7 +330,7 @@ public class AlertProcessService {
                     continue;
                 }
                 // 如果超过约定时间还未执行，就要报警了。
-                if ((config.getNextRunDate().getTime() + (config.getStatsRunTime() / config.getStatsRunNum()) + 300_000L) < System.currentTimeMillis()) {
+                if ((config.getNextRunDate().getTime() + (config.getStatsRunTime() / config.getStatsRunNum()) + 300_000L) < SystemClock.now()) {
                     ArrayList<AlertData> list = new ArrayList<>();
                     list.add( new AlertData( "cronerTimeOut", dateFormat.format( config.getNextRunDate() ), dateFormat.format( new Date() ) ) );
                     processAlertInfo( "croner", config.getId(), config.getTaskName(), 0, list, config.getTaskOwner(), config.getTaskLinkOur(), config.getTaskLinkMch() );

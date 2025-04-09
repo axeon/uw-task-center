@@ -1,6 +1,7 @@
 package uw.task.center.croner;
 
 import org.springframework.stereotype.Component;
+import uw.common.util.SystemClock;
 import uw.dao.DaoFactory;
 import uw.task.TaskCroner;
 import uw.task.center.util.ContactUtils;
@@ -25,7 +26,7 @@ public class TaskHostCleanCroner extends TaskCroner {
      */
     @Override
     public String runTask(TaskCronerLog taskCronerLog) throws Exception {
-        int effectNum = dao.executeCommand( "update task_host_info set state=-1 where last_update<? and state=1", new Object[]{new Date( System.currentTimeMillis() - 300_000L )} );
+        int effectNum = dao.executeCommand( "update task_host_info set state=-1 where last_update<? and state=1", new Object[]{new Date( SystemClock.now() - 300_000L )} );
         return "清理过期主机记录:" + effectNum;
     }
 
