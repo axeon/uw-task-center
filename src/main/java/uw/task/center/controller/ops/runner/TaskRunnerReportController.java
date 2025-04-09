@@ -12,6 +12,7 @@ import uw.auth.service.annotation.MscPermDeclare;
 import uw.auth.service.constant.ActionLog;
 import uw.auth.service.constant.AuthType;
 import uw.auth.service.constant.UserType;
+import uw.common.util.SystemClock;
 import uw.dao.DaoFactory;
 import uw.dao.DataList;
 import uw.dao.TransactionException;
@@ -52,7 +53,7 @@ public class TaskRunnerReportController {
                                                     @Parameter(description = "任务id") @RequestParam(required = false, defaultValue = "0") long taskId) throws TransactionException {
         //判断自动类型。
         if (startDate == null) {
-            startDate = new Date( System.currentTimeMillis() - 86400_000L );
+            startDate = new Date( SystemClock.now() - 86400_000L );
         }
         if (endDate == null) {
             endDate = new Date();
@@ -114,7 +115,7 @@ public class TaskRunnerReportController {
             "聚合类型。0自动1按日2按时3" + "按分") @RequestParam(required = false, defaultValue = "0") int dateType) throws TransactionException {
         //判断自动类型。
         if (startDate == null) {
-            startDate = new Date( System.currentTimeMillis() - 86400_000L );
+            startDate = new Date( SystemClock.now() - 86400_000L );
         }
         if (endDate == null) {
             endDate = new Date();

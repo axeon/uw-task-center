@@ -13,6 +13,7 @@ import uw.auth.service.annotation.MscPermDeclare;
 import uw.auth.service.constant.ActionLog;
 import uw.auth.service.constant.AuthType;
 import uw.auth.service.constant.UserType;
+import uw.common.util.SystemClock;
 import uw.dao.DaoFactory;
 import uw.dao.TransactionException;
 import uw.dao.annotation.ColumnMeta;
@@ -84,7 +85,7 @@ public class DashboardController {
                                    @Parameter(description = "聚合类型。0自动1按日2按时3按分") @RequestParam(required = false, defaultValue = "0") int dateType) throws TransactionException {
         //判断自动类型。
         if (startDate == null) {
-            startDate = new Date( System.currentTimeMillis() - 10 * 86400_000L );
+            startDate = new Date( SystemClock.now() - 10 * 86400_000L );
         }
         if (endDate == null) {
             endDate = new Date();
