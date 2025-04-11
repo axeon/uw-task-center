@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import uw.auth.service.AuthServiceHelper;
 import uw.auth.service.annotation.MscPermDeclare;
 import uw.auth.service.annotation.ResponseAdviceIgnore;
-import uw.auth.service.constant.ActionLog;
 import uw.auth.service.constant.UserType;
 import uw.common.app.constant.CommonState;
 import uw.dao.BatchUpdateManager;
@@ -66,7 +65,7 @@ public class TaskRpcController {
      */
     @PostMapping("/host/report")
     @Operation(summary = "更新主机当前状态", description = "更新主机当前状态")
-    @MscPermDeclare(user = UserType.RPC, log = ActionLog.NONE)
+    @MscPermDeclare(user = UserType.RPC)
     public HostReportResponse report(@RequestBody TaskHostInfoExt taskHostInfoExt) {
         //构造返回数据。
         HostReportResponse reportResponse = new HostReportResponse();
@@ -194,7 +193,7 @@ public class TaskRpcController {
      */
     @GetMapping("/croner/list")
     @Operation(summary = "获得定时任务列表", description = "获得定时任务列表")
-    @MscPermDeclare(user = UserType.RPC, log = ActionLog.NONE)
+    @MscPermDeclare(user = UserType.RPC)
     public List<TaskCronerInfo> getCronerConfigList(@Parameter(description = "运行目标", example = "default") String runTarget,
                                                     @Parameter(description = "任务项目", example = "任务项目") String taskProject,
                                                     @Parameter(description = "上一次更新时间", example = "0") Long lastUpdateTime) throws TransactionException {
@@ -222,7 +221,7 @@ public class TaskRpcController {
      */
     @GetMapping("/runner/list")
     @Operation(summary = "获得队列任务列表", description = "获得队列任务列表")
-    @MscPermDeclare(user = UserType.RPC, log = ActionLog.NONE)
+    @MscPermDeclare(user = UserType.RPC)
     public List<TaskRunnerInfo> getRunnerConfigList(@Parameter(description = "运行目标", example = "default") String runTarget,
                                                     @Parameter(description = "任务项目", example = "任务项目") String taskProject,
                                                     @Parameter(description = "上一次更新时间", example = "0") Long lastUpdateTime) throws TransactionException {
@@ -253,7 +252,7 @@ public class TaskRpcController {
      */
     @PutMapping("/croner/tick")
     @Operation(summary = "更新定时任务下次执行时间", description = "更新定时任务下次执行时间")
-    @MscPermDeclare(user = UserType.RPC, log = ActionLog.NONE)
+    @MscPermDeclare(user = UserType.RPC)
     public int updateCronerLog(@Parameter(description = "主键") @RequestParam(required = false) long id, @Parameter(description = "下一个日期", example = "0") @RequestParam(required =
             false) long nextDate) throws TransactionException {
         return dao.executeCommand( "update task_croner_info set next_run_date=? where id=? ", new Object[]{new Date( nextDate ), id} );
@@ -264,7 +263,7 @@ public class TaskRpcController {
      */
     @PostMapping("/runner/init")
     @Operation(summary = "初始化队列任务配置", description = "初始化队列任务配置")
-    @MscPermDeclare(user = UserType.RPC, log = ActionLog.NONE)
+    @MscPermDeclare(user = UserType.RPC)
     public TaskRunnerInfo initRunnerConfig(@RequestBody TaskRunnerInfo config) throws TransactionException {
         if (config != null) {
             String taskClass = config.getTaskClass();
@@ -297,7 +296,7 @@ public class TaskRpcController {
      */
     @PostMapping("/croner/init")
     @Operation(summary = "初始化定时任务配置", description = "初始化定时任务配置")
-    @MscPermDeclare(user = UserType.RPC, log = ActionLog.NONE)
+    @MscPermDeclare(user = UserType.RPC)
     public TaskCronerInfo initCronerConfig(@RequestBody TaskCronerInfo config) throws TransactionException {
         if (config != null) {
             String taskClass = config.getTaskClass();
@@ -330,7 +329,7 @@ public class TaskRpcController {
      */
     @PostMapping("/contact/init")
     @Operation(summary = "初始化任务联系人信息", description = "初始化任务联系人信息")
-    @MscPermDeclare(user = UserType.RPC, log = ActionLog.NONE)
+    @MscPermDeclare(user = UserType.RPC)
     public void initRunnerConfig(@RequestBody Map<String, String> contactData) throws TransactionException {
         if (contactData != null) {
             String contactName = contactData.get( "contactName" );
