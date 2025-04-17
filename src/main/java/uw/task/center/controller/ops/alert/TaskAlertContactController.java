@@ -152,7 +152,7 @@ public class TaskAlertContactController {
      */
     @PutMapping("/enable")
     @Operation(summary = "启用报警联系信息", description = "启用报警联系信息")
-    @MscPermDeclare(user = UserType.SAAS, auth = AuthType.PERM, log = ActionLog.CRIT)
+    @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
     public ResponseData enable(@Parameter(description = "主键ID") @RequestParam long id, @Parameter(description = "备注") @RequestParam String remark){
         AuthServiceHelper.logInfo(TaskAlertContact.class,id,remark);
         return dao.update(new TaskAlertContact().modifyDate(new Date()).state(CommonState.ENABLED.getValue()), new IdStateQueryParam(id, CommonState.DISABLED.getValue()));
@@ -166,7 +166,7 @@ public class TaskAlertContactController {
      */
     @PutMapping("/disable")
     @Operation(summary = "禁用报警联系信息", description = "禁用报警联系信息")
-    @MscPermDeclare(user = UserType.SAAS, auth = AuthType.PERM, log = ActionLog.CRIT)
+    @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
     public ResponseData disable(@Parameter(description = "主键ID") @RequestParam long id, @Parameter(description = "备注") @RequestParam String remark){
         AuthServiceHelper.logInfo(TaskAlertContact.class,id,remark);
         return dao.update(new TaskAlertContact().modifyDate(new Date()).state(CommonState.DISABLED.getValue()), new IdStateQueryParam(id, CommonState.ENABLED.getValue()));
@@ -180,7 +180,7 @@ public class TaskAlertContactController {
      */
     @DeleteMapping("/delete")
     @Operation(summary = "删除报警联系信息", description = "删除报警联系信息")
-    @MscPermDeclare(user = UserType.SAAS, auth = AuthType.PERM, log = ActionLog.CRIT)
+    @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
     public ResponseData delete(@Parameter(description = "主键ID") @RequestParam long id, @Parameter(description = "备注") @RequestParam String remark){
         AuthServiceHelper.logInfo(TaskAlertContact.class,id,remark);
         return dao.update(new TaskAlertContact().modifyDate(new Date()).state(CommonState.DELETED.getValue()), new IdStateQueryParam(id, CommonState.DISABLED.getValue()));
