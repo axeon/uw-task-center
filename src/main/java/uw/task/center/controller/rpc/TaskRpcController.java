@@ -189,10 +189,10 @@ public class TaskRpcController {
     }
 
     /**
-     * 获得队列任务列表
+     * 获取队列任务列表
      */
     @GetMapping("/croner/list")
-    @Operation(summary = "获得定时任务列表", description = "获得定时任务列表")
+    @Operation(summary = "获取定时任务列表", description = "获取定时任务列表")
     @MscPermDeclare(user = UserType.RPC)
     public List<TaskCronerInfo> getCronerConfigList(@Parameter(description = "运行目标", example = "default") String runTarget,
                                                     @Parameter(description = "任务项目", example = "任务项目") String taskProject,
@@ -217,10 +217,10 @@ public class TaskRpcController {
     }
 
     /**
-     * 获得队列任务列表
+     * 获取队列任务列表
      */
     @GetMapping("/runner/list")
-    @Operation(summary = "获得队列任务列表", description = "获得队列任务列表")
+    @Operation(summary = "获取队列任务列表", description = "获取队列任务列表")
     @MscPermDeclare(user = UserType.RPC)
     public List<TaskRunnerInfo> getRunnerConfigList(@Parameter(description = "运行目标", example = "default") String runTarget,
                                                     @Parameter(description = "任务项目", example = "任务项目") String taskProject,

@@ -10,7 +10,7 @@ public class ContactUtils {
     private static final TaskContact AXEON = new TaskContact("axeon", "13800138000", "", "", "", "", "");
 
     /**
-     * 获得任务联系人信息。
+     * 获取任务联系人信息。
      */
     public static TaskContact getTaskContact() {
         return AXEON;

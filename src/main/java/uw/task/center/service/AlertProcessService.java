@@ -373,7 +373,7 @@ public class AlertProcessService {
     }
 
     /**
-     * 获得联系方式列表。
+     * 获取联系方式列表。
      *
      * @param taskLink
      * @return
