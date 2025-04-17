@@ -7,7 +7,7 @@ import uw.dao.TransactionException;
 
 @SpringBootApplication
 public class UwTaskCenterApplication {
-    public static void main(String[] args) throws TransactionException {
+    public static void main(String[] args) {
         new SpringApplicationBuilder(UwTaskCenterApplication.class)
                 .beanNameGenerator((beanDefinition, beanDefinitionRegistry) -> {
                     String beanClassName = beanDefinition.getBeanClassName();

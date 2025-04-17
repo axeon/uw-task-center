@@ -9,7 +9,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
-import uw.dao.DaoFactory;
+import uw.common.dto.ResponseData;
+import uw.dao.DaoManager;
 import uw.dao.DataList;
 import uw.task.TaskCroner;
 import uw.task.center.conf.TaskCenterProperties;
@@ -35,7 +36,7 @@ public class AlertNotifyScanCroner extends TaskCroner {
 
 
     private static final Logger logger = LoggerFactory.getLogger( AlertNotifyScanCroner.class );
-    private final DaoFactory dao = DaoFactory.getInstance();
+    private final DaoManager dao = DaoManager.getInstance();
 
     /**
      * 时间格式化工具.
@@ -65,14 +66,20 @@ public class AlertNotifyScanCroner extends TaskCroner {
     }
 
     @Override
-    public String runTask(TaskCronerLog taskCronerLog) throws Exception {
+    public String runTask(TaskCronerLog taskCronerLog){
         // 先更新到处理中状态
-        int effect = dao.executeCommand( "update task_alert_notify set state=1 where state=0 and sent_times=0" );
-        if (effect < 1) {
+        int effectedNum = dao.executeCommand( "update task_alert_notify set state=1 where state=0 and sent_times=0" ).getData();
+        if (effectedNum < 1) {
             return "本次执行无数据!";
         }
-        DataList<TaskAlertNotify> notifyList = dao.list( TaskAlertNotify.class, "select * from task_alert_notify where state=1 and sent_times=0" );
-        dao.executeCommand( "update task_alert_notify set sent_date=now(),sent_times=1 where state=1 and sent_times=0" );
+        DataList<TaskAlertNotify> notifyList = dao.list( TaskAlertNotify.class, "select * from task_alert_notify where state=1 and sent_times=0" ).getData();
+        if (notifyList == null){
+            return "本次执行无数据!";
+        }
+        effectedNum = dao.executeCommand( "update task_alert_notify set sent_date=now(),sent_times=1 where state=1 and sent_times=0" ).getData();
+        if (effectedNum < 1) {
+            return "本次执行无数据!";
+        }
 
         // 先按照用户收敛.key=email value=infoIdList
         Map<String, String> emailMap = new HashMap<>();
@@ -100,44 +107,47 @@ public class AlertNotifyScanCroner extends TaskCroner {
         }
 
         // 发送全局告警通知
-        if (globalInfoIdSet.size() > 0) {
-            DataList<TaskAlertInfo> infoList = dao.list( TaskAlertInfo.class, "select * from task_alert_info where id in (" + StringUtils.join( globalInfoIdSet, ',' ) + ")" );
-            String title = "!!!收到" + infoList.size() + "条任务报警信息!";
-            StringBuilder content = new StringBuilder();
-            for (TaskAlertInfo info : infoList) {
-                content.append( "报警时间:" ).append( dateFormat.format( info.getCreateDate() ) ).append( "\n\n" );
-                content.append( "报警内容:" ).append( info.getAlertBody() ).append( "\n\n" );
-            }
-            sendDing( title, content.toString() );
+        if (!globalInfoIdSet.isEmpty()) {
+            dao.list( TaskAlertInfo.class, "select * from task_alert_info where id in (" + StringUtils.join( globalInfoIdSet, ',' ) + ")" ).onSuccess( list -> {
+                String title = "!!!收到" + list.size() + "条任务报警信息!";
+                StringBuilder content = new StringBuilder();
+                for (TaskAlertInfo info : list) {
+                    content.append( "报警时间:" ).append( dateFormat.format( info.getCreateDate() ) ).append( "\n\n" );
+                    content.append( "报警内容:" ).append( info.getAlertBody() ).append( "\n\n" );
+                }
+                sendDing( title, content.toString() );
+            });
         }
 
         // 按照信息构造要发送的信息。
         for (Map.Entry<String, String> kv : emailMap.entrySet()) {
             String contactInfo = kv.getKey();
             String infoIds = kv.getValue();
-            DataList<TaskAlertInfo> infoList = dao.list( TaskAlertInfo.class, "select * from task_alert_info where id in (" + infoIds + ")" );
-            String title = "!!!收到" + infoList.size() + "条任务报警信息!";
-            StringBuilder content = new StringBuilder();
-            for (TaskAlertInfo info : infoList) {
-                content.append( "报警时间:" ).append( dateFormat.format( info.getCreateDate() ) ).append( "\n\n" );
-                content.append( "报警内容:" ).append( info.getAlertBody() ).append( "\n\n" );
-            }
-            sendEmail( contactInfo, title, content.toString() );
+            dao.list( TaskAlertInfo.class, "select * from task_alert_info where id in (" + infoIds + ")" ).onSuccess( list -> {
+                String title = "!!!收到" + list.size() + "条任务报警信息!";
+                StringBuilder content = new StringBuilder();
+                for (TaskAlertInfo info : list) {
+                    content.append( "报警时间:" ).append( dateFormat.format( info.getCreateDate() ) ).append( "\n\n" );
+                    content.append( "报警内容:" ).append( info.getAlertBody() ).append( "\n\n" );
+                }
+                sendEmail( contactInfo, title, content.toString() );
+            });
         }
 
         //发送通知信息。
         for (Map.Entry<String, String> kv : notifyMap.entrySet()) {
             String contactInfo = kv.getKey();
             String infoIds = kv.getValue();
-            DataList<TaskAlertInfo> infoList = dao.list( TaskAlertInfo.class, "select * from task_alert_info where id in (" + infoIds + ")" );
-            String title = "!!!收到" + infoList.size() + "条任务报警信息!";
-            StringBuilder content = new StringBuilder();
-            for (TaskAlertInfo info : infoList) {
-                content.append( "##### 报警时间:" ).append( dateFormat.format( info.getCreateDate() ) ).append( " \n\n " );
-                content.append( "##### 报警内容:" ).append( info.getAlertBody() ).append( " \n\n " );
-            }
-            //默认只支持钉钉。
-            notifyUrl( contactInfo, title, content.toString() );
+            dao.list( TaskAlertInfo.class, "select * from task_alert_info where id in (" + infoIds + ")" ).onSuccess( list -> {
+                String title = "!!!收到" + list.size() + "条任务报警信息!";
+                StringBuilder content = new StringBuilder();
+                for (TaskAlertInfo info : list) {
+                    content.append( "##### 报警时间:" ).append( dateFormat.format( info.getCreateDate() ) ).append( " \n\n " );
+                    content.append( "##### 报警内容:" ).append( info.getAlertBody() ).append( " \n\n " );
+                }
+                //默认只支持钉钉。
+                notifyUrl( contactInfo, title, content.toString() );
+            });
         }
         return "共扫描" + notifyList.size() + "条信息，合并后发送" + emailMap.size() + "条Email, " + notifyMap.size() + "条通知!";
     }

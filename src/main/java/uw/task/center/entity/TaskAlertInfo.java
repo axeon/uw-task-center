@@ -26,49 +26,49 @@ public class TaskAlertInfo implements DataEntity,Serializable{
      * id
      */
     @ColumnMeta(columnName="id", dataType="long", dataSize=19, nullable=false, primaryKey=true)
-    @Schema(title = "id", description = "id")
+    @Schema(title = "id", description = "id", maxLength=19, nullable=false )
     private long id;
 
     /**
      * 任务类型。1croner2runner
      */
     @ColumnMeta(columnName="task_type", dataType="String", dataSize=20, nullable=true)
-    @Schema(title = "任务类型。1croner2runner", description = "任务类型。1croner2runner")
+    @Schema(title = "任务类型。1croner2runner", description = "任务类型。1croner2runner", maxLength=20, nullable=true )
     private String taskType;
 
     /**
      * 任务配置ID
      */
     @ColumnMeta(columnName="task_id", dataType="long", dataSize=19, nullable=true)
-    @Schema(title = "任务配置ID", description = "任务配置ID")
+    @Schema(title = "任务配置ID", description = "任务配置ID", maxLength=19, nullable=true )
     private long taskId;
 
     /**
      * 报警标题
      */
     @ColumnMeta(columnName="alert_title", dataType="String", dataSize=200, nullable=true)
-    @Schema(title = "报警标题", description = "报警标题")
+    @Schema(title = "报警标题", description = "报警标题", maxLength=200, nullable=true )
     private String alertTitle;
 
     /**
      * 报警信息
      */
-    @ColumnMeta(columnName="alert_body", dataType="String", dataSize=2000, nullable=true)
-    @Schema(title = "报警信息", description = "报警信息")
+    @ColumnMeta(columnName="alert_body", dataType="String", dataSize=2147483646, nullable=true)
+    @Schema(title = "报警信息", description = "报警信息", maxLength=2147483646, nullable=true )
     private String alertBody;
 
     /**
      * 创建时间
      */
     @ColumnMeta(columnName="create_date", dataType="java.util.Date", dataSize=23, nullable=true)
-    @Schema(title = "创建时间", description = "创建时间")
+    @Schema(title = "创建时间", description = "创建时间", maxLength=23, nullable=true )
     private java.util.Date createDate;
 
     /**
      * 状态
      */
     @ColumnMeta(columnName="state", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "状态", description = "状态")
+    @Schema(title = "状态", description = "状态", maxLength=10, nullable=true )
     private int state;
 
     /**
@@ -80,6 +80,32 @@ public class TaskAlertInfo implements DataEntity,Serializable{
      * 更新的信息.
      */
     private transient StringBuilder UPDATED_INFO = null;
+
+
+    /**
+     * 获得实体的表名。
+     */
+    @Override
+    public String ENTITY_TABLE(){
+         return "task_alert_info";
+       }
+
+    /**
+     * 获得实体的表注释。
+     */
+    @Override
+    public String ENTITY_NAME(){
+          return "报警信息";
+       }
+
+    /**
+     * 获得主键
+     */
+    @Override
+    public Serializable ENTITY_ID(){
+          return getId();
+       }
+
 
     /**
      * 获取更改的字段列表.
@@ -179,10 +205,18 @@ public class TaskAlertInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("id");
-            this.UPDATED_INFO.append("id:\"" + this.id+ "\"=>\"" + id + "\"\r\n");
+            this.UPDATED_INFO.append("id:\"").append(this.id).append("\"=>\"").append(id).append("\"\n");
             this.id = id;
         }
     }
+
+    /**
+     *  设置id链式调用。
+     */
+    public TaskAlertInfo id(long id){
+        setId(id);
+        return this;
+        }
 
     /**
      * 设置任务类型。1croner2runner。
@@ -193,10 +227,18 @@ public class TaskAlertInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("task_type");
-            this.UPDATED_INFO.append("task_type:\"" + this.taskType+ "\"=>\"" + taskType + "\"\r\n");
+            this.UPDATED_INFO.append("task_type:\"").append(this.taskType).append("\"=>\"").append(taskType).append("\"\n");
             this.taskType = taskType;
         }
     }
+
+    /**
+     *  设置任务类型。1croner2runner链式调用。
+     */
+    public TaskAlertInfo taskType(String taskType){
+        setTaskType(taskType);
+        return this;
+        }
 
     /**
      * 设置任务配置ID。
@@ -207,10 +249,18 @@ public class TaskAlertInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("task_id");
-            this.UPDATED_INFO.append("task_id:\"" + this.taskId+ "\"=>\"" + taskId + "\"\r\n");
+            this.UPDATED_INFO.append("task_id:\"").append(this.taskId).append("\"=>\"").append(taskId).append("\"\n");
             this.taskId = taskId;
         }
     }
+
+    /**
+     *  设置任务配置ID链式调用。
+     */
+    public TaskAlertInfo taskId(long taskId){
+        setTaskId(taskId);
+        return this;
+        }
 
     /**
      * 设置报警标题。
@@ -221,10 +271,18 @@ public class TaskAlertInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("alert_title");
-            this.UPDATED_INFO.append("alert_title:\"" + this.alertTitle+ "\"=>\"" + alertTitle + "\"\r\n");
+            this.UPDATED_INFO.append("alert_title:\"").append(this.alertTitle).append("\"=>\"").append(alertTitle).append("\"\n");
             this.alertTitle = alertTitle;
         }
     }
+
+    /**
+     *  设置报警标题链式调用。
+     */
+    public TaskAlertInfo alertTitle(String alertTitle){
+        setAlertTitle(alertTitle);
+        return this;
+        }
 
     /**
      * 设置报警信息。
@@ -235,10 +293,18 @@ public class TaskAlertInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("alert_body");
-            this.UPDATED_INFO.append("alert_body:\"" + this.alertBody+ "\"=>\"" + alertBody + "\"\r\n");
+            this.UPDATED_INFO.append("alert_body:\"").append(this.alertBody).append("\"=>\"").append(alertBody).append("\"\n");
             this.alertBody = alertBody;
         }
     }
+
+    /**
+     *  设置报警信息链式调用。
+     */
+    public TaskAlertInfo alertBody(String alertBody){
+        setAlertBody(alertBody);
+        return this;
+        }
 
     /**
      * 设置创建时间。
@@ -249,10 +315,18 @@ public class TaskAlertInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("create_date");
-            this.UPDATED_INFO.append("create_date:\"" + this.createDate+ "\"=>\"" + createDate + "\"\r\n");
+            this.UPDATED_INFO.append("create_date:\"").append(this.createDate).append("\"=>\"").append(createDate).append("\"\n");
             this.createDate = createDate;
         }
     }
+
+    /**
+     *  设置创建时间链式调用。
+     */
+    public TaskAlertInfo createDate(java.util.Date createDate){
+        setCreateDate(createDate);
+        return this;
+        }
 
     /**
      * 设置状态。
@@ -263,10 +337,18 @@ public class TaskAlertInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("state");
-            this.UPDATED_INFO.append("state:\"" + this.state+ "\"=>\"" + state + "\"\r\n");
+            this.UPDATED_INFO.append("state:\"").append(this.state).append("\"=>\"").append(state).append("\"\n");
             this.state = state;
         }
     }
+
+    /**
+     *  设置状态链式调用。
+     */
+    public TaskAlertInfo state(int state){
+        setState(state);
+        return this;
+        }
 
     /**
      * 重载toString方法.

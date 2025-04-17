@@ -13,8 +13,10 @@ import uw.auth.service.annotation.MscPermDeclare;
 import uw.auth.service.constant.ActionLog;
 import uw.auth.service.constant.AuthType;
 import uw.auth.service.constant.UserType;
+import uw.common.dto.ResponseData;
 import uw.common.util.SystemClock;
-import uw.dao.DaoFactory;
+import uw.dao.DaoManager;
+import uw.dao.DataList;
 import uw.dao.TransactionException;
 import uw.dao.annotation.ColumnMeta;
 import uw.dao.annotation.TableMeta;
@@ -32,7 +34,7 @@ import java.util.List;
 @MscPermDeclare(user = UserType.OPS)
 public class DashboardController {
 
-    private final DaoFactory dao = DaoFactory.getInstance();
+    private final DaoManager dao = DaoManager.getInstance();
 
     /**
      * 任务统计。
@@ -43,14 +45,14 @@ public class DashboardController {
     @GetMapping("/taskStats")
     @Operation(summary = "任务统计", description = "")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.USER, log = ActionLog.NONE)
-    public TaskStatsVo taskStats() throws TransactionException {
+    public TaskStatsVo taskStats() {
         TaskStatsVo taskStatsVo = new TaskStatsVo();
         // 当前运行主机定义:last_update时间在当前系统时间一分钟内的都视为运行中的主机
-        Integer taskHostStatusNum = dao.queryForSingleValue( Integer.class, "select count(1) from task_host_info where state=1 " );
+        Integer taskHostStatusNum = dao.queryForSingleValue( Integer.class, "select count(1) from task_host_info where state=1 " ).getData();
         taskStatsVo.setTaskHostStatusNum( taskHostStatusNum );
-        Integer taskCronerConfigNum = dao.queryForSingleValue( Integer.class, "select count(1) from task_croner_info where state = 1" );
+        Integer taskCronerConfigNum = dao.queryForSingleValue( Integer.class, "select count(1) from task_croner_info where state = 1" ).getData();
         taskStatsVo.setTaskCronerConfigNum( taskCronerConfigNum );
-        Integer taskRunnerConfigNum = dao.queryForSingleValue( Integer.class, "select count(1) from task_runner_info where state = 1" );
+        Integer taskRunnerConfigNum = dao.queryForSingleValue( Integer.class, "select count(1) from task_runner_info where state = 1" ).getData();
         taskStatsVo.setTaskRunnerConfigNum( taskRunnerConfigNum );
         return taskStatsVo;
     }
@@ -64,9 +66,9 @@ public class DashboardController {
     @GetMapping("/listNewAlert")
     @Operation(summary = "报警日志NEW", description = "")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.USER, log = ActionLog.NONE)
-    public List<TaskAlertInfo> listNewAlert() throws TransactionException {
+    public ResponseData<DataList<TaskAlertInfo>> listNewAlert() {
         // 获取七天之内的最新10条邮件信息记录回显
-        return dao.list( TaskAlertInfo.class, "select * from task_alert_info order by id desc", 0, 10, false ).results();
+        return dao.list( TaskAlertInfo.class, "select * from task_alert_info order by id desc", 0, 10, false );
     }
 
     /**
@@ -82,7 +84,7 @@ public class DashboardController {
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.USER, log = ActionLog.NONE)
     public TaskReportVo taskReport(@Parameter(description = "开始日期") @RequestParam(required = false) Date startDate,
                                    @Parameter(description = "结束日期") @RequestParam(required = false) Date endDate,
-                                   @Parameter(description = "聚合类型。0自动1按日2按时3按分") @RequestParam(required = false, defaultValue = "0") int dateType) throws TransactionException {
+                                   @Parameter(description = "聚合类型。0自动1按日2按时3按分") @RequestParam(required = false, defaultValue = "0") int dateType) {
         //判断自动类型。
         if (startDate == null) {
             startDate = new Date( SystemClock.now() - 10 * 86400_000L );
@@ -105,20 +107,12 @@ public class DashboardController {
         String runnerTableNameB = ShardingTableUtils.getTableNameByDate( "task_runner_stats", endDate );
         String cronerTableNameB = ShardingTableUtils.getTableNameByDate( "task_croner_stats", endDate );
         // 1按日 2按時 3按分 4按秒
-        String selectSql;
-        switch (dateType) {
-            case 1:
-                selectSql = "SELECT LEFT(create_date,10) AS stats_date,";
-                break;
-            case 2:
-                selectSql = "SELECT LEFT(create_date,13) AS stats_date,";
-                break;
-            case 3:
-                selectSql = "SELECT LEFT(create_date,16) AS stats_date,";
-                break;
-            default:
-                throw new IllegalArgumentException( "dateType is error :" + dateType );
-        }
+        String selectSql = switch (dateType) {
+            case 1 -> "SELECT LEFT(create_date,10) AS stats_date,";
+            case 2 -> "SELECT LEFT(create_date,13) AS stats_date,";
+            case 3 -> "SELECT LEFT(create_date,16) AS stats_date,";
+            default -> throw new IllegalArgumentException("dateType is error :" + dateType);
+        };
         String cornerCommand =
                 selectSql + " sum(num_all) as num_all, sum(num_fail_program + num_fail_config + num_fail_data + num_fail_partner) as num_fail FROM %s WHERE " +
                         " create_date >= ? AND create_date <= ? group by stats_date";
@@ -130,11 +124,19 @@ public class DashboardController {
         param.add( endDate );
         ArrayList<TaskReportDetail> cronerReportList = new ArrayList<>();
         ArrayList<TaskReportDetail> runnerReportList = new ArrayList<>();
-        runnerReportList.addAll( dao.list( TaskReportDetail.class, String.format( runnerCommand, runnerTableNameA ), param.toArray(), 0, 0, false ).results() );
-        cronerReportList.addAll( dao.list( TaskReportDetail.class, String.format( cornerCommand, cronerTableNameA ), param.toArray(), 0, 0, false ).results() );
+        dao.list( TaskReportDetail.class, String.format( runnerCommand, runnerTableNameA ), param.toArray()).onSuccess(list->{
+            runnerReportList.addAll( list.results() );
+        });
+        dao.list( TaskReportDetail.class, String.format( cornerCommand, cronerTableNameA ), param.toArray()).onSuccess(list->{
+           cronerReportList.addAll( list.results() );
+        });
         if (!StringUtils.equals( runnerTableNameA, runnerTableNameB )) {
-            runnerReportList.addAll( dao.list( TaskReportDetail.class, String.format( runnerCommand, runnerTableNameB ), param.toArray(), 0, 0, false ).results() );
-            cronerReportList.addAll( dao.list( TaskReportDetail.class, String.format( cornerCommand, cronerTableNameB ), param.toArray(), 0, 0, false ).results() );
+            dao.list( TaskReportDetail.class, String.format( runnerCommand, runnerTableNameB ), param.toArray()).onSuccess(list->{
+                runnerReportList.addAll( list.results() );
+            });
+            dao.list( TaskReportDetail.class, String.format( cornerCommand, cronerTableNameB ), param.toArray()).onSuccess(list->{
+                cronerReportList.addAll( list.results() );
+            });
         }
 
         TaskReportVo taskReportVo = new TaskReportVo();

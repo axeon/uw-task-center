@@ -14,7 +14,7 @@ import uw.auth.service.annotation.MscPermDeclare;
 import uw.auth.service.constant.ActionLog;
 import uw.auth.service.constant.AuthType;
 import uw.auth.service.constant.UserType;
-import uw.dao.DaoFactory;
+import uw.dao.DaoManager;
 import uw.dao.PageQueryParam;
 import uw.dao.vo.QueryParamResult;
 import uw.log.es.LogClient;
@@ -31,9 +31,10 @@ import uw.task.center.entity.TaskCronerESLog;
 @Tag(name = "定时任务日志")
 @MscPermDeclare(user = UserType.OPS)
 public class TaskCronerLogController {
+
     private static final Logger log = LoggerFactory.getLogger( TaskCronerLogController.class );
     private static final String INDEX_NAME = "uw.task.croner.log";
-    private final DaoFactory dao = DaoFactory.getInstance();
+    private final DaoManager dao = DaoManager.getInstance();
     private final LogClient logClient;
 
     @Autowired

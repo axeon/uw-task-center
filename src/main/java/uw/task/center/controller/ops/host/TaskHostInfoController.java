@@ -10,8 +10,9 @@ import uw.auth.service.constant.ActionLog;
 import uw.auth.service.constant.AuthType;
 import uw.auth.service.constant.UserType;
 import uw.common.app.constant.CommonState;
+import uw.common.app.dto.IdStateQueryParam;
 import uw.common.dto.ResponseData;
-import uw.dao.DaoFactory;
+import uw.dao.DaoManager;
 import uw.dao.DataList;
 import uw.dao.TransactionException;
 import uw.task.center.dto.TaskHostInfoQueryParam;
@@ -27,7 +28,7 @@ import java.util.Date;
 @Tag(name = "主机状态报表")
 @MscPermDeclare(user = UserType.OPS)
 public class TaskHostInfoController {
-    private final DaoFactory dao = DaoFactory.getInstance();
+    private final DaoManager dao = DaoManager.getInstance();
 
 
     /**
@@ -40,7 +41,7 @@ public class TaskHostInfoController {
     @GetMapping("/list")
     @Operation(summary = "列表task主机信息", description = "列表task主机信息")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public DataList<TaskHostInfo> list(TaskHostInfoQueryParam queryParam) throws TransactionException {
+    public ResponseData<DataList<TaskHostInfo>> list(TaskHostInfoQueryParam queryParam) {
         AuthServiceHelper.logRef( TaskHostInfo.class );
         return dao.list( TaskHostInfo.class, queryParam );
     }
@@ -55,7 +56,7 @@ public class TaskHostInfoController {
     @GetMapping("/load")
     @Operation(summary = "加载task主机信息", description = "加载task主机信息")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public TaskHostInfo load(@Parameter(description = "主键ID", required = true) @RequestParam long id) throws TransactionException {
+    public ResponseData<TaskHostInfo> load(@Parameter(description = "主键ID", required = true) @RequestParam long id) {
         AuthServiceHelper.logRef( TaskHostInfo.class, id );
         return dao.load( TaskHostInfo.class, id );
     }
@@ -64,50 +65,42 @@ public class TaskHostInfoController {
      * 启用task主机信息。
      *
      * @param id
-     * @throws TransactionException
+     *
      */
     @PutMapping("/enable")
     @Operation(summary = "启用task主机信息", description = "启用task主机信息")
-    @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
-    public ResponseData enable(@Parameter(description = "主键ID") @RequestParam long id,
-                               @Parameter( description = "备注") @RequestParam String remark) throws TransactionException {
-        AuthServiceHelper.logInfo( TaskHostInfo.class, id, "启用task主机信息！操作备注：" + remark );
-        TaskHostInfo taskHostInfo = dao.load( TaskHostInfo.class, id );
-        if (taskHostInfo == null) {
-            return ResponseData.warnMsg( "未找到指定id的task主机信息！" );
-        }
-        if (taskHostInfo.getState() != CommonState.DISABLED.getValue()) {
-            return ResponseData.warnMsg( "启用task主机信息失败！当前状态不是禁用状态！" );
-        }
-        taskHostInfo.setModifyDate( new Date() );
-        taskHostInfo.setState( CommonState.ENABLED.getValue() );
-        dao.update( taskHostInfo );
-        return ResponseData.success();
+    @MscPermDeclare(user = UserType.SAAS, auth = AuthType.PERM, log = ActionLog.CRIT)
+    public ResponseData enable(@Parameter(description = "主键ID") @RequestParam long id, @Parameter(description = "备注") @RequestParam String remark){
+        AuthServiceHelper.logInfo(TaskHostInfo.class,id,remark);
+        return dao.update(new TaskHostInfo().modifyDate(new Date()).state(CommonState.ENABLED.getValue()), new IdStateQueryParam(id, CommonState.DISABLED.getValue()));
     }
 
     /**
      * 禁用task主机信息。
      *
      * @param id
-     * @throws TransactionException
+     *
      */
     @PutMapping("/disable")
     @Operation(summary = "禁用task主机信息", description = "禁用task主机信息")
-    @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
-    public ResponseData disable(@Parameter(description = "主键ID") @RequestParam long id,
-                                @Parameter( description = "备注") @RequestParam String remark) throws TransactionException {
-        AuthServiceHelper.logInfo( TaskHostInfo.class, id, "禁用task主机信息！操作备注：" + remark );
-        TaskHostInfo taskHostInfo = dao.load( TaskHostInfo.class, id );
-        if (taskHostInfo == null) {
-            return ResponseData.warnMsg( "未找到指定id的task主机信息！" );
-        }
-        if (taskHostInfo.getState() != CommonState.ENABLED.getValue()) {
-            return ResponseData.warnMsg( "禁用task主机信息失败！当前状态不是启用状态！" );
-        }
-        taskHostInfo.setModifyDate( new Date() );
-        taskHostInfo.setState( CommonState.DISABLED.getValue() );
-        dao.update( taskHostInfo );
-        return ResponseData.success();
+    @MscPermDeclare(user = UserType.SAAS, auth = AuthType.PERM, log = ActionLog.CRIT)
+    public ResponseData disable(@Parameter(description = "主键ID") @RequestParam long id, @Parameter(description = "备注") @RequestParam String remark){
+        AuthServiceHelper.logInfo(TaskHostInfo.class,id,remark);
+        return dao.update(new TaskHostInfo().modifyDate(new Date()).state(CommonState.DISABLED.getValue()), new IdStateQueryParam(id, CommonState.ENABLED.getValue()));
+    }
+
+    /**
+     * 删除task主机信息。
+     *
+     * @param id
+     *
+     */
+    @DeleteMapping("/delete")
+    @Operation(summary = "删除task主机信息", description = "删除task主机信息")
+    @MscPermDeclare(user = UserType.SAAS, auth = AuthType.PERM, log = ActionLog.CRIT)
+    public ResponseData delete(@Parameter(description = "主键ID") @RequestParam long id, @Parameter(description = "备注") @RequestParam String remark){
+        AuthServiceHelper.logInfo(TaskHostInfo.class,id,remark);
+        return dao.update(new TaskHostInfo().modifyDate(new Date()).state(CommonState.DELETED.getValue()), new IdStateQueryParam(id, CommonState.DISABLED.getValue()));
     }
 
 }

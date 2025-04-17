@@ -26,189 +26,189 @@ public class TaskCronerInfo implements DataEntity,Serializable{
      * id
      */
     @ColumnMeta(columnName="id", dataType="long", dataSize=19, nullable=false, primaryKey=true)
-    @Schema(title = "id", description = "id")
+    @Schema(title = "id", description = "id", maxLength=19, nullable=false )
     private long id;
 
     /**
      * 任务名称
      */
     @ColumnMeta(columnName="task_name", dataType="String", dataSize=200, nullable=true)
-    @Schema(title = "任务名称", description = "任务名称")
+    @Schema(title = "任务名称", description = "任务名称", maxLength=200, nullable=true )
     private String taskName;
 
     /**
      * 任务描述
      */
     @ColumnMeta(columnName="task_desc", dataType="String", dataSize=1000, nullable=true)
-    @Schema(title = "任务描述", description = "任务描述")
+    @Schema(title = "任务描述", description = "任务描述", maxLength=1000, nullable=true )
     private String taskDesc;
 
     /**
      * 执行类信息
      */
     @ColumnMeta(columnName="task_class", dataType="String", dataSize=200, nullable=true)
-    @Schema(title = "执行类信息", description = "执行类信息")
+    @Schema(title = "执行类信息", description = "执行类信息", maxLength=200, nullable=true )
     private String taskClass;
 
     /**
      * 任务参数
      */
     @ColumnMeta(columnName="task_param", dataType="String", dataSize=100, nullable=true)
-    @Schema(title = "任务参数", description = "任务参数")
+    @Schema(title = "任务参数", description = "任务参数", maxLength=100, nullable=true )
     private String taskParam;
 
     /**
      * 任务所有人
      */
     @ColumnMeta(columnName="task_owner", dataType="String", dataSize=500, nullable=true)
-    @Schema(title = "任务所有人", description = "任务所有人")
+    @Schema(title = "任务所有人", description = "任务所有人", maxLength=500, nullable=true )
     private String taskOwner;
 
     /**
      * cron表达式
      */
     @ColumnMeta(columnName="task_cron", dataType="String", dataSize=100, nullable=true)
-    @Schema(title = "cron表达式", description = "cron表达式")
+    @Schema(title = "cron表达式", description = "cron表达式", maxLength=100, nullable=true )
     private String taskCron;
 
     /**
      * 运行类型
      */
     @ColumnMeta(columnName="run_type", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "运行类型", description = "运行类型")
+    @Schema(title = "运行类型", description = "运行类型", maxLength=10, nullable=true )
     private int runType;
 
     /**
      * 运行目标
      */
     @ColumnMeta(columnName="run_target", dataType="String", dataSize=100, nullable=true)
-    @Schema(title = "运行目标", description = "运行目标")
+    @Schema(title = "运行目标", description = "运行目标", maxLength=100, nullable=true )
     private String runTarget;
 
     /**
      * 日志类型
      */
     @ColumnMeta(columnName="log_level", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "日志类型", description = "日志类型")
+    @Schema(title = "日志类型", description = "日志类型", maxLength=10, nullable=true )
     private int logLevel;
 
     /**
      * 日志长度限制
      */
     @ColumnMeta(columnName="log_limit_size", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "日志长度限制", description = "日志长度限制")
+    @Schema(title = "日志长度限制", description = "日志长度限制", maxLength=10, nullable=true )
     private int logLimitSize;
 
     /**
      * 下次执行时间
      */
     @ColumnMeta(columnName="next_run_date", dataType="java.util.Date", dataSize=19, nullable=true)
-    @Schema(title = "下次执行时间", description = "下次执行时间")
+    @Schema(title = "下次执行时间", description = "下次执行时间", maxLength=19, nullable=true )
     private java.util.Date nextRunDate;
 
     /**
      * 最后统计时间
      */
     @ColumnMeta(columnName="stats_date", dataType="java.util.Date", dataSize=19, nullable=true)
-    @Schema(title = "最后统计时间", description = "最后统计时间")
+    @Schema(title = "最后统计时间", description = "最后统计时间", maxLength=19, nullable=true )
     private java.util.Date statsDate;
 
     /**
      * 统计运行次数
      */
     @ColumnMeta(columnName="stats_run_num", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "统计运行次数", description = "统计运行次数")
+    @Schema(title = "统计运行次数", description = "统计运行次数", maxLength=10, nullable=true )
     private int statsRunNum;
 
     /**
      * 统计运行失败次数
      */
     @ColumnMeta(columnName="stats_fail_num", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "统计运行失败次数", description = "统计运行失败次数")
+    @Schema(title = "统计运行失败次数", description = "统计运行失败次数", maxLength=10, nullable=true )
     private int statsFailNum;
 
     /**
      * 统计总时间毫秒数
      */
     @ColumnMeta(columnName="stats_run_time", dataType="long", dataSize=19, nullable=true)
-    @Schema(title = "统计总时间毫秒数", description = "统计总时间毫秒数")
+    @Schema(title = "统计总时间毫秒数", description = "统计总时间毫秒数", maxLength=19, nullable=true )
     private long statsRunTime;
 
     /**
      * 失败率
      */
     @ColumnMeta(columnName="alert_fail_rate", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "失败率", description = "失败率")
+    @Schema(title = "失败率", description = "失败率", maxLength=10, nullable=true )
     private int alertFailRate;
 
     /**
      * 接口失败率
      */
     @ColumnMeta(columnName="alert_fail_partner_rate", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "接口失败率", description = "接口失败率")
+    @Schema(title = "接口失败率", description = "接口失败率", maxLength=10, nullable=true )
     private int alertFailPartnerRate;
 
     /**
      * 数据失败率
      */
     @ColumnMeta(columnName="alert_fail_data_rate", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "数据失败率", description = "数据失败率")
+    @Schema(title = "数据失败率", description = "数据失败率", maxLength=10, nullable=true )
     private int alertFailDataRate;
 
     /**
      * 程序失败率
      */
     @ColumnMeta(columnName="alert_fail_program_rate", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "程序失败率", description = "程序失败率")
+    @Schema(title = "程序失败率", description = "程序失败率", maxLength=10, nullable=true )
     private int alertFailProgramRate;
 
     /**
      * 等待超时
      */
     @ColumnMeta(columnName="alert_wait_timeout", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "等待超时", description = "等待超时")
+    @Schema(title = "等待超时", description = "等待超时", maxLength=10, nullable=true )
     private int alertWaitTimeout;
 
     /**
      * 运行超时
      */
     @ColumnMeta(columnName="alert_run_timeout", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "运行超时", description = "运行超时")
+    @Schema(title = "运行超时", description = "运行超时", maxLength=10, nullable=true )
     private int alertRunTimeout;
 
     /**
      * 我方联系信息
      */
     @ColumnMeta(columnName="task_link_our", dataType="String", dataSize=500, nullable=true)
-    @Schema(title = "我方联系信息", description = "我方联系信息")
+    @Schema(title = "我方联系信息", description = "我方联系信息", maxLength=500, nullable=true )
     private String taskLinkOur;
 
     /**
      * 商户联系信息
      */
     @ColumnMeta(columnName="task_link_mch", dataType="String", dataSize=500, nullable=true)
-    @Schema(title = "商户联系信息", description = "商户联系信息")
+    @Schema(title = "商户联系信息", description = "商户联系信息", maxLength=500, nullable=true )
     private String taskLinkMch;
 
     /**
      * 创建时间
      */
     @ColumnMeta(columnName="create_date", dataType="java.util.Date", dataSize=23, nullable=true)
-    @Schema(title = "创建时间", description = "创建时间")
+    @Schema(title = "创建时间", description = "创建时间", maxLength=23, nullable=true )
     private java.util.Date createDate;
 
     /**
      * 最后修改时间
      */
     @ColumnMeta(columnName="modify_date", dataType="java.util.Date", dataSize=23, nullable=true)
-    @Schema(title = "最后修改时间", description = "最后修改时间")
+    @Schema(title = "最后修改时间", description = "最后修改时间", maxLength=23, nullable=true )
     private java.util.Date modifyDate;
 
     /**
      * 状态1正常，0暂停，-1标记删除
      */
     @ColumnMeta(columnName="state", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "状态1正常，0暂停，-1标记删除", description = "状态1正常，0暂停，-1标记删除")
+    @Schema(title = "状态1正常，0暂停，-1标记删除", description = "状态1正常，0暂停，-1标记删除", maxLength=10, nullable=true )
     private int state;
 
     /**
@@ -220,6 +220,32 @@ public class TaskCronerInfo implements DataEntity,Serializable{
      * 更新的信息.
      */
     private transient StringBuilder UPDATED_INFO = null;
+
+
+    /**
+     * 获得实体的表名。
+     */
+    @Override
+    public String ENTITY_TABLE(){
+         return "task_croner_info";
+       }
+
+    /**
+     * 获得实体的表注释。
+     */
+    @Override
+    public String ENTITY_NAME(){
+          return "定时任务配置";
+       }
+
+    /**
+     * 获得主键
+     */
+    @Override
+    public Serializable ENTITY_ID(){
+          return getId();
+       }
+
 
     /**
      * 获取更改的字段列表.
@@ -459,10 +485,18 @@ public class TaskCronerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("id");
-            this.UPDATED_INFO.append("id:\"" + this.id+ "\"=>\"" + id + "\"\r\n");
+            this.UPDATED_INFO.append("id:\"").append(this.id).append("\"=>\"").append(id).append("\"\n");
             this.id = id;
         }
     }
+
+    /**
+     *  设置id链式调用。
+     */
+    public TaskCronerInfo id(long id){
+        setId(id);
+        return this;
+        }
 
     /**
      * 设置任务名称。
@@ -473,10 +507,18 @@ public class TaskCronerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("task_name");
-            this.UPDATED_INFO.append("task_name:\"" + this.taskName+ "\"=>\"" + taskName + "\"\r\n");
+            this.UPDATED_INFO.append("task_name:\"").append(this.taskName).append("\"=>\"").append(taskName).append("\"\n");
             this.taskName = taskName;
         }
     }
+
+    /**
+     *  设置任务名称链式调用。
+     */
+    public TaskCronerInfo taskName(String taskName){
+        setTaskName(taskName);
+        return this;
+        }
 
     /**
      * 设置任务描述。
@@ -487,10 +529,18 @@ public class TaskCronerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("task_desc");
-            this.UPDATED_INFO.append("task_desc:\"" + this.taskDesc+ "\"=>\"" + taskDesc + "\"\r\n");
+            this.UPDATED_INFO.append("task_desc:\"").append(this.taskDesc).append("\"=>\"").append(taskDesc).append("\"\n");
             this.taskDesc = taskDesc;
         }
     }
+
+    /**
+     *  设置任务描述链式调用。
+     */
+    public TaskCronerInfo taskDesc(String taskDesc){
+        setTaskDesc(taskDesc);
+        return this;
+        }
 
     /**
      * 设置执行类信息。
@@ -501,10 +551,18 @@ public class TaskCronerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("task_class");
-            this.UPDATED_INFO.append("task_class:\"" + this.taskClass+ "\"=>\"" + taskClass + "\"\r\n");
+            this.UPDATED_INFO.append("task_class:\"").append(this.taskClass).append("\"=>\"").append(taskClass).append("\"\n");
             this.taskClass = taskClass;
         }
     }
+
+    /**
+     *  设置执行类信息链式调用。
+     */
+    public TaskCronerInfo taskClass(String taskClass){
+        setTaskClass(taskClass);
+        return this;
+        }
 
     /**
      * 设置任务参数。
@@ -515,10 +573,18 @@ public class TaskCronerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("task_param");
-            this.UPDATED_INFO.append("task_param:\"" + this.taskParam+ "\"=>\"" + taskParam + "\"\r\n");
+            this.UPDATED_INFO.append("task_param:\"").append(this.taskParam).append("\"=>\"").append(taskParam).append("\"\n");
             this.taskParam = taskParam;
         }
     }
+
+    /**
+     *  设置任务参数链式调用。
+     */
+    public TaskCronerInfo taskParam(String taskParam){
+        setTaskParam(taskParam);
+        return this;
+        }
 
     /**
      * 设置任务所有人。
@@ -529,10 +595,18 @@ public class TaskCronerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("task_owner");
-            this.UPDATED_INFO.append("task_owner:\"" + this.taskOwner+ "\"=>\"" + taskOwner + "\"\r\n");
+            this.UPDATED_INFO.append("task_owner:\"").append(this.taskOwner).append("\"=>\"").append(taskOwner).append("\"\n");
             this.taskOwner = taskOwner;
         }
     }
+
+    /**
+     *  设置任务所有人链式调用。
+     */
+    public TaskCronerInfo taskOwner(String taskOwner){
+        setTaskOwner(taskOwner);
+        return this;
+        }
 
     /**
      * 设置cron表达式。
@@ -543,10 +617,18 @@ public class TaskCronerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("task_cron");
-            this.UPDATED_INFO.append("task_cron:\"" + this.taskCron+ "\"=>\"" + taskCron + "\"\r\n");
+            this.UPDATED_INFO.append("task_cron:\"").append(this.taskCron).append("\"=>\"").append(taskCron).append("\"\n");
             this.taskCron = taskCron;
         }
     }
+
+    /**
+     *  设置cron表达式链式调用。
+     */
+    public TaskCronerInfo taskCron(String taskCron){
+        setTaskCron(taskCron);
+        return this;
+        }
 
     /**
      * 设置运行类型。
@@ -557,10 +639,18 @@ public class TaskCronerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("run_type");
-            this.UPDATED_INFO.append("run_type:\"" + this.runType+ "\"=>\"" + runType + "\"\r\n");
+            this.UPDATED_INFO.append("run_type:\"").append(this.runType).append("\"=>\"").append(runType).append("\"\n");
             this.runType = runType;
         }
     }
+
+    /**
+     *  设置运行类型链式调用。
+     */
+    public TaskCronerInfo runType(int runType){
+        setRunType(runType);
+        return this;
+        }
 
     /**
      * 设置运行目标。
@@ -571,10 +661,18 @@ public class TaskCronerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("run_target");
-            this.UPDATED_INFO.append("run_target:\"" + this.runTarget+ "\"=>\"" + runTarget + "\"\r\n");
+            this.UPDATED_INFO.append("run_target:\"").append(this.runTarget).append("\"=>\"").append(runTarget).append("\"\n");
             this.runTarget = runTarget;
         }
     }
+
+    /**
+     *  设置运行目标链式调用。
+     */
+    public TaskCronerInfo runTarget(String runTarget){
+        setRunTarget(runTarget);
+        return this;
+        }
 
     /**
      * 设置日志类型。
@@ -585,10 +683,18 @@ public class TaskCronerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("log_level");
-            this.UPDATED_INFO.append("log_level:\"" + this.logLevel+ "\"=>\"" + logLevel + "\"\r\n");
+            this.UPDATED_INFO.append("log_level:\"").append(this.logLevel).append("\"=>\"").append(logLevel).append("\"\n");
             this.logLevel = logLevel;
         }
     }
+
+    /**
+     *  设置日志类型链式调用。
+     */
+    public TaskCronerInfo logLevel(int logLevel){
+        setLogLevel(logLevel);
+        return this;
+        }
 
     /**
      * 设置日志长度限制。
@@ -599,10 +705,18 @@ public class TaskCronerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("log_limit_size");
-            this.UPDATED_INFO.append("log_limit_size:\"" + this.logLimitSize+ "\"=>\"" + logLimitSize + "\"\r\n");
+            this.UPDATED_INFO.append("log_limit_size:\"").append(this.logLimitSize).append("\"=>\"").append(logLimitSize).append("\"\n");
             this.logLimitSize = logLimitSize;
         }
     }
+
+    /**
+     *  设置日志长度限制链式调用。
+     */
+    public TaskCronerInfo logLimitSize(int logLimitSize){
+        setLogLimitSize(logLimitSize);
+        return this;
+        }
 
     /**
      * 设置下次执行时间。
@@ -613,10 +727,18 @@ public class TaskCronerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("next_run_date");
-            this.UPDATED_INFO.append("next_run_date:\"" + this.nextRunDate+ "\"=>\"" + nextRunDate + "\"\r\n");
+            this.UPDATED_INFO.append("next_run_date:\"").append(this.nextRunDate).append("\"=>\"").append(nextRunDate).append("\"\n");
             this.nextRunDate = nextRunDate;
         }
     }
+
+    /**
+     *  设置下次执行时间链式调用。
+     */
+    public TaskCronerInfo nextRunDate(java.util.Date nextRunDate){
+        setNextRunDate(nextRunDate);
+        return this;
+        }
 
     /**
      * 设置最后统计时间。
@@ -627,10 +749,18 @@ public class TaskCronerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("stats_date");
-            this.UPDATED_INFO.append("stats_date:\"" + this.statsDate+ "\"=>\"" + statsDate + "\"\r\n");
+            this.UPDATED_INFO.append("stats_date:\"").append(this.statsDate).append("\"=>\"").append(statsDate).append("\"\n");
             this.statsDate = statsDate;
         }
     }
+
+    /**
+     *  设置最后统计时间链式调用。
+     */
+    public TaskCronerInfo statsDate(java.util.Date statsDate){
+        setStatsDate(statsDate);
+        return this;
+        }
 
     /**
      * 设置统计运行次数。
@@ -641,10 +771,18 @@ public class TaskCronerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("stats_run_num");
-            this.UPDATED_INFO.append("stats_run_num:\"" + this.statsRunNum+ "\"=>\"" + statsRunNum + "\"\r\n");
+            this.UPDATED_INFO.append("stats_run_num:\"").append(this.statsRunNum).append("\"=>\"").append(statsRunNum).append("\"\n");
             this.statsRunNum = statsRunNum;
         }
     }
+
+    /**
+     *  设置统计运行次数链式调用。
+     */
+    public TaskCronerInfo statsRunNum(int statsRunNum){
+        setStatsRunNum(statsRunNum);
+        return this;
+        }
 
     /**
      * 设置统计运行失败次数。
@@ -655,10 +793,18 @@ public class TaskCronerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("stats_fail_num");
-            this.UPDATED_INFO.append("stats_fail_num:\"" + this.statsFailNum+ "\"=>\"" + statsFailNum + "\"\r\n");
+            this.UPDATED_INFO.append("stats_fail_num:\"").append(this.statsFailNum).append("\"=>\"").append(statsFailNum).append("\"\n");
             this.statsFailNum = statsFailNum;
         }
     }
+
+    /**
+     *  设置统计运行失败次数链式调用。
+     */
+    public TaskCronerInfo statsFailNum(int statsFailNum){
+        setStatsFailNum(statsFailNum);
+        return this;
+        }
 
     /**
      * 设置统计总时间毫秒数。
@@ -669,10 +815,18 @@ public class TaskCronerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("stats_run_time");
-            this.UPDATED_INFO.append("stats_run_time:\"" + this.statsRunTime+ "\"=>\"" + statsRunTime + "\"\r\n");
+            this.UPDATED_INFO.append("stats_run_time:\"").append(this.statsRunTime).append("\"=>\"").append(statsRunTime).append("\"\n");
             this.statsRunTime = statsRunTime;
         }
     }
+
+    /**
+     *  设置统计总时间毫秒数链式调用。
+     */
+    public TaskCronerInfo statsRunTime(long statsRunTime){
+        setStatsRunTime(statsRunTime);
+        return this;
+        }
 
     /**
      * 设置失败率。
@@ -683,10 +837,18 @@ public class TaskCronerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("alert_fail_rate");
-            this.UPDATED_INFO.append("alert_fail_rate:\"" + this.alertFailRate+ "\"=>\"" + alertFailRate + "\"\r\n");
+            this.UPDATED_INFO.append("alert_fail_rate:\"").append(this.alertFailRate).append("\"=>\"").append(alertFailRate).append("\"\n");
             this.alertFailRate = alertFailRate;
         }
     }
+
+    /**
+     *  设置失败率链式调用。
+     */
+    public TaskCronerInfo alertFailRate(int alertFailRate){
+        setAlertFailRate(alertFailRate);
+        return this;
+        }
 
     /**
      * 设置接口失败率。
@@ -697,10 +859,18 @@ public class TaskCronerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("alert_fail_partner_rate");
-            this.UPDATED_INFO.append("alert_fail_partner_rate:\"" + this.alertFailPartnerRate+ "\"=>\"" + alertFailPartnerRate + "\"\r\n");
+            this.UPDATED_INFO.append("alert_fail_partner_rate:\"").append(this.alertFailPartnerRate).append("\"=>\"").append(alertFailPartnerRate).append("\"\n");
             this.alertFailPartnerRate = alertFailPartnerRate;
         }
     }
+
+    /**
+     *  设置接口失败率链式调用。
+     */
+    public TaskCronerInfo alertFailPartnerRate(int alertFailPartnerRate){
+        setAlertFailPartnerRate(alertFailPartnerRate);
+        return this;
+        }
 
     /**
      * 设置数据失败率。
@@ -711,10 +881,18 @@ public class TaskCronerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("alert_fail_data_rate");
-            this.UPDATED_INFO.append("alert_fail_data_rate:\"" + this.alertFailDataRate+ "\"=>\"" + alertFailDataRate + "\"\r\n");
+            this.UPDATED_INFO.append("alert_fail_data_rate:\"").append(this.alertFailDataRate).append("\"=>\"").append(alertFailDataRate).append("\"\n");
             this.alertFailDataRate = alertFailDataRate;
         }
     }
+
+    /**
+     *  设置数据失败率链式调用。
+     */
+    public TaskCronerInfo alertFailDataRate(int alertFailDataRate){
+        setAlertFailDataRate(alertFailDataRate);
+        return this;
+        }
 
     /**
      * 设置程序失败率。
@@ -725,10 +903,18 @@ public class TaskCronerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("alert_fail_program_rate");
-            this.UPDATED_INFO.append("alert_fail_program_rate:\"" + this.alertFailProgramRate+ "\"=>\"" + alertFailProgramRate + "\"\r\n");
+            this.UPDATED_INFO.append("alert_fail_program_rate:\"").append(this.alertFailProgramRate).append("\"=>\"").append(alertFailProgramRate).append("\"\n");
             this.alertFailProgramRate = alertFailProgramRate;
         }
     }
+
+    /**
+     *  设置程序失败率链式调用。
+     */
+    public TaskCronerInfo alertFailProgramRate(int alertFailProgramRate){
+        setAlertFailProgramRate(alertFailProgramRate);
+        return this;
+        }
 
     /**
      * 设置等待超时。
@@ -739,10 +925,18 @@ public class TaskCronerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("alert_wait_timeout");
-            this.UPDATED_INFO.append("alert_wait_timeout:\"" + this.alertWaitTimeout+ "\"=>\"" + alertWaitTimeout + "\"\r\n");
+            this.UPDATED_INFO.append("alert_wait_timeout:\"").append(this.alertWaitTimeout).append("\"=>\"").append(alertWaitTimeout).append("\"\n");
             this.alertWaitTimeout = alertWaitTimeout;
         }
     }
+
+    /**
+     *  设置等待超时链式调用。
+     */
+    public TaskCronerInfo alertWaitTimeout(int alertWaitTimeout){
+        setAlertWaitTimeout(alertWaitTimeout);
+        return this;
+        }
 
     /**
      * 设置运行超时。
@@ -753,10 +947,18 @@ public class TaskCronerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("alert_run_timeout");
-            this.UPDATED_INFO.append("alert_run_timeout:\"" + this.alertRunTimeout+ "\"=>\"" + alertRunTimeout + "\"\r\n");
+            this.UPDATED_INFO.append("alert_run_timeout:\"").append(this.alertRunTimeout).append("\"=>\"").append(alertRunTimeout).append("\"\n");
             this.alertRunTimeout = alertRunTimeout;
         }
     }
+
+    /**
+     *  设置运行超时链式调用。
+     */
+    public TaskCronerInfo alertRunTimeout(int alertRunTimeout){
+        setAlertRunTimeout(alertRunTimeout);
+        return this;
+        }
 
     /**
      * 设置我方联系信息。
@@ -767,10 +969,18 @@ public class TaskCronerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("task_link_our");
-            this.UPDATED_INFO.append("task_link_our:\"" + this.taskLinkOur+ "\"=>\"" + taskLinkOur + "\"\r\n");
+            this.UPDATED_INFO.append("task_link_our:\"").append(this.taskLinkOur).append("\"=>\"").append(taskLinkOur).append("\"\n");
             this.taskLinkOur = taskLinkOur;
         }
     }
+
+    /**
+     *  设置我方联系信息链式调用。
+     */
+    public TaskCronerInfo taskLinkOur(String taskLinkOur){
+        setTaskLinkOur(taskLinkOur);
+        return this;
+        }
 
     /**
      * 设置商户联系信息。
@@ -781,10 +991,18 @@ public class TaskCronerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("task_link_mch");
-            this.UPDATED_INFO.append("task_link_mch:\"" + this.taskLinkMch+ "\"=>\"" + taskLinkMch + "\"\r\n");
+            this.UPDATED_INFO.append("task_link_mch:\"").append(this.taskLinkMch).append("\"=>\"").append(taskLinkMch).append("\"\n");
             this.taskLinkMch = taskLinkMch;
         }
     }
+
+    /**
+     *  设置商户联系信息链式调用。
+     */
+    public TaskCronerInfo taskLinkMch(String taskLinkMch){
+        setTaskLinkMch(taskLinkMch);
+        return this;
+        }
 
     /**
      * 设置创建时间。
@@ -795,10 +1013,18 @@ public class TaskCronerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("create_date");
-            this.UPDATED_INFO.append("create_date:\"" + this.createDate+ "\"=>\"" + createDate + "\"\r\n");
+            this.UPDATED_INFO.append("create_date:\"").append(this.createDate).append("\"=>\"").append(createDate).append("\"\n");
             this.createDate = createDate;
         }
     }
+
+    /**
+     *  设置创建时间链式调用。
+     */
+    public TaskCronerInfo createDate(java.util.Date createDate){
+        setCreateDate(createDate);
+        return this;
+        }
 
     /**
      * 设置最后修改时间。
@@ -809,10 +1035,18 @@ public class TaskCronerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("modify_date");
-            this.UPDATED_INFO.append("modify_date:\"" + this.modifyDate+ "\"=>\"" + modifyDate + "\"\r\n");
+            this.UPDATED_INFO.append("modify_date:\"").append(this.modifyDate).append("\"=>\"").append(modifyDate).append("\"\n");
             this.modifyDate = modifyDate;
         }
     }
+
+    /**
+     *  设置最后修改时间链式调用。
+     */
+    public TaskCronerInfo modifyDate(java.util.Date modifyDate){
+        setModifyDate(modifyDate);
+        return this;
+        }
 
     /**
      * 设置状态1正常，0暂停，-1标记删除。
@@ -823,10 +1057,18 @@ public class TaskCronerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("state");
-            this.UPDATED_INFO.append("state:\"" + this.state+ "\"=>\"" + state + "\"\r\n");
+            this.UPDATED_INFO.append("state:\"").append(this.state).append("\"=>\"").append(state).append("\"\n");
             this.state = state;
         }
     }
+
+    /**
+     *  设置状态1正常，0暂停，-1标记删除链式调用。
+     */
+    public TaskCronerInfo state(int state){
+        setState(state);
+        return this;
+        }
 
     /**
      * 重载toString方法.

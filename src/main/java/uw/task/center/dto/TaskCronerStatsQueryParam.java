@@ -42,7 +42,14 @@ public class TaskCronerStatsQueryParam extends PageQueryParam{
     @QueryMeta(expr = "id=?")
     @Schema(title="id", description = "id")
     private Long id;
-	
+
+    /**
+    * ID数组。
+    */
+    @QueryMeta(expr = "id in (?)")
+    @Schema(title="ID数组", description = "ID数组，可同时匹配多个。")
+    private Long[] ids;
+
     /**
     * 任务配置id。
     */
@@ -159,25 +166,47 @@ public class TaskCronerStatsQueryParam extends PageQueryParam{
     /**
     * 获取id。
     */
-    public Long getId(){
+    public Long getId() {
         return this.id;
     }
 
     /**
     * 设置id。
     */
-    public void setId(Long id){
+    public void setId(Long id) {
         this.id = id;
     }
-	
+
     /**
     * 设置id链式调用。
     */
-	public TaskCronerStatsQueryParam id(Long id){
+    public TaskCronerStatsQueryParam id(Long id) {
         setId(id);
         return this;
     }
-	
+
+    /**
+    * 获取ID数组。
+    */
+    public Long[] getIds() {
+        return this.ids;
+    }
+
+    /**
+    * 设置ID数组。
+    */
+    public void setIds(Long[] ids) {
+        this.ids = ids;
+    }
+
+    /**
+    * 设置ID数组链式调用。
+    */
+    public TaskCronerStatsQueryParam ids(Long[] ids) {
+        setIds(ids);
+        return this;
+    }
+
     /**
     * 获取任务配置id。
     */

@@ -26,266 +26,266 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
      * id
      */
     @ColumnMeta(columnName="id", dataType="long", dataSize=19, nullable=false, primaryKey=true)
-    @Schema(title = "id", description = "id")
+    @Schema(title = "id", description = "id", maxLength=19, nullable=false )
     private long id;
 
     /**
      * 任务名称
      */
     @ColumnMeta(columnName="task_name", dataType="String", dataSize=200, nullable=true)
-    @Schema(title = "任务名称", description = "任务名称")
+    @Schema(title = "任务名称", description = "任务名称", maxLength=200, nullable=true )
     private String taskName;
 
     /**
      * 任务描述
      */
     @ColumnMeta(columnName="task_desc", dataType="String", dataSize=1000, nullable=true)
-    @Schema(title = "任务描述", description = "任务描述")
+    @Schema(title = "任务描述", description = "任务描述", maxLength=1000, nullable=true )
     private String taskDesc;
 
     /**
      * 执行类信息
      */
     @ColumnMeta(columnName="task_class", dataType="String", dataSize=200, nullable=true)
-    @Schema(title = "执行类信息", description = "执行类信息")
+    @Schema(title = "执行类信息", description = "执行类信息", maxLength=200, nullable=true )
     private String taskClass;
 
     /**
      * 任务所有人
      */
     @ColumnMeta(columnName="task_owner", dataType="String", dataSize=200, nullable=true)
-    @Schema(title = "任务所有人", description = "任务所有人")
+    @Schema(title = "任务所有人", description = "任务所有人", maxLength=200, nullable=true )
     private String taskOwner;
 
     /**
      * 运行标签
      */
     @ColumnMeta(columnName="task_tag", dataType="String", dataSize=100, nullable=true)
-    @Schema(title = "运行标签", description = "运行标签")
+    @Schema(title = "运行标签", description = "运行标签", maxLength=100, nullable=true )
     private String taskTag;
 
     /**
      * 队列类型
      */
     @ColumnMeta(columnName="queue_type", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "队列类型", description = "队列类型")
+    @Schema(title = "队列类型", description = "队列类型", maxLength=10, nullable=true )
     private int queueType;
 
     /**
      * 延迟类型
      */
     @ColumnMeta(columnName="delay_type", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "延迟类型", description = "延迟类型")
+    @Schema(title = "延迟类型", description = "延迟类型", maxLength=10, nullable=true )
     private int delayType;
 
     /**
      * 日志类型
      */
     @ColumnMeta(columnName="log_level", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "日志类型", description = "日志类型")
+    @Schema(title = "日志类型", description = "日志类型", maxLength=10, nullable=true )
     private int logLevel;
 
     /**
      * 日志长度限制
      */
     @ColumnMeta(columnName="log_limit_size", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "日志长度限制", description = "日志长度限制")
+    @Schema(title = "日志长度限制", description = "日志长度限制", maxLength=10, nullable=true )
     private int logLimitSize;
 
     /**
      * 运行类型
      */
     @ColumnMeta(columnName="run_type", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "运行类型", description = "运行类型")
+    @Schema(title = "运行类型", description = "运行类型", maxLength=10, nullable=true )
     private int runType;
 
     /**
      * 运行目标
      */
     @ColumnMeta(columnName="run_target", dataType="String", dataSize=100, nullable=true)
-    @Schema(title = "运行目标", description = "运行目标")
+    @Schema(title = "运行目标", description = "运行目标", maxLength=100, nullable=true )
     private String runTarget;
 
     /**
      * 消费者的数量
      */
     @ColumnMeta(columnName="consumer_num", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "消费者的数量", description = "消费者的数量")
+    @Schema(title = "消费者的数量", description = "消费者的数量", maxLength=10, nullable=true )
     private int consumerNum;
 
     /**
      * 队列预取数量
      */
     @ColumnMeta(columnName="prefetch_num", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "队列预取数量", description = "队列预取数量")
+    @Schema(title = "队列预取数量", description = "队列预取数量", maxLength=10, nullable=true )
     private int prefetchNum;
 
     /**
      * 限速类型
      */
     @ColumnMeta(columnName="rate_limit_type", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "限速类型", description = "限速类型")
+    @Schema(title = "限速类型", description = "限速类型", maxLength=10, nullable=true )
     private int rateLimitType;
 
     /**
      * 流量限定数值，默认为60次
      */
     @ColumnMeta(columnName="rate_limit_value", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "流量限定数值，默认为60次", description = "流量限定数值，默认为60次")
+    @Schema(title = "流量限定数值，默认为60次", description = "流量限定数值，默认为60次", maxLength=10, nullable=true )
     private int rateLimitValue;
 
     /**
      * 流量限定时间(S)，默认为60秒
      */
     @ColumnMeta(columnName="rate_limit_time", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "流量限定时间(S)，默认为60秒", description = "流量限定时间(S)，默认为60秒")
+    @Schema(title = "流量限定时间(S)，默认为60秒", description = "流量限定时间(S)，默认为60秒", maxLength=10, nullable=true )
     private int rateLimitTime;
 
     /**
      * 当发生流量限制时，等待的秒数
      */
     @ColumnMeta(columnName="rate_limit_wait", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "当发生流量限制时，等待的秒数", description = "当发生流量限制时，等待的秒数")
+    @Schema(title = "当发生流量限制时，等待的秒数", description = "当发生流量限制时，等待的秒数", maxLength=10, nullable=true )
     private int rateLimitWait;
 
     /**
      * 超过流量限制重试次数
      */
     @ColumnMeta(columnName="retry_times_by_overrated", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "超过流量限制重试次数", description = "超过流量限制重试次数")
+    @Schema(title = "超过流量限制重试次数", description = "超过流量限制重试次数", maxLength=10, nullable=true )
     private int retryTimesByOverrated;
 
     /**
      * 对方接口错误重试次数
      */
     @ColumnMeta(columnName="retry_times_by_partner", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "对方接口错误重试次数", description = "对方接口错误重试次数")
+    @Schema(title = "对方接口错误重试次数", description = "对方接口错误重试次数", maxLength=10, nullable=true )
     private int retryTimesByPartner;
 
     /**
      * 最后统计时间
      */
     @ColumnMeta(columnName="stats_date", dataType="java.util.Date", dataSize=19, nullable=true)
-    @Schema(title = "最后统计时间", description = "最后统计时间")
+    @Schema(title = "最后统计时间", description = "最后统计时间", maxLength=19, nullable=true )
     private java.util.Date statsDate;
 
     /**
      * 统计运行次数
      */
     @ColumnMeta(columnName="stats_run_num", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "统计运行次数", description = "统计运行次数")
+    @Schema(title = "统计运行次数", description = "统计运行次数", maxLength=10, nullable=true )
     private int statsRunNum;
 
     /**
      * 统计运行失败次数
      */
     @ColumnMeta(columnName="stats_fail_num", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "统计运行失败次数", description = "统计运行失败次数")
+    @Schema(title = "统计运行失败次数", description = "统计运行失败次数", maxLength=10, nullable=true )
     private int statsFailNum;
 
     /**
      * 统计总时间毫秒数
      */
     @ColumnMeta(columnName="stats_run_time", dataType="long", dataSize=19, nullable=true)
-    @Schema(title = "统计总时间毫秒数", description = "统计总时间毫秒数")
+    @Schema(title = "统计总时间毫秒数", description = "统计总时间毫秒数", maxLength=19, nullable=true )
     private long statsRunTime;
 
     /**
      * 失败率
      */
     @ColumnMeta(columnName="alert_fail_rate", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "失败率", description = "失败率")
+    @Schema(title = "失败率", description = "失败率", maxLength=10, nullable=true )
     private int alertFailRate;
 
     /**
      * 接口失败率
      */
     @ColumnMeta(columnName="alert_fail_partner_rate", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "接口失败率", description = "接口失败率")
+    @Schema(title = "接口失败率", description = "接口失败率", maxLength=10, nullable=true )
     private int alertFailPartnerRate;
 
     /**
      * 程序失败率
      */
     @ColumnMeta(columnName="alert_fail_program_rate", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "程序失败率", description = "程序失败率")
+    @Schema(title = "程序失败率", description = "程序失败率", maxLength=10, nullable=true )
     private int alertFailProgramRate;
 
     /**
      * 配置失败率
      */
     @ColumnMeta(columnName="alert_fail_config_rate", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "配置失败率", description = "配置失败率")
+    @Schema(title = "配置失败率", description = "配置失败率", maxLength=10, nullable=true )
     private int alertFailConfigRate;
 
     /**
      * 数据失败率
      */
     @ColumnMeta(columnName="alert_fail_data_rate", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "数据失败率", description = "数据失败率")
+    @Schema(title = "数据失败率", description = "数据失败率", maxLength=10, nullable=true )
     private int alertFailDataRate;
 
     /**
      * 队列长度限制
      */
     @ColumnMeta(columnName="alert_queue_oversize", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "队列长度限制", description = "队列长度限制")
+    @Schema(title = "队列长度限制", description = "队列长度限制", maxLength=10, nullable=true )
     private int alertQueueOversize;
 
     /**
      * 队列等待超时
      */
     @ColumnMeta(columnName="alert_queue_timeout", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "队列等待超时", description = "队列等待超时")
+    @Schema(title = "队列等待超时", description = "队列等待超时", maxLength=10, nullable=true )
     private int alertQueueTimeout;
 
     /**
      * 等待超时
      */
     @ColumnMeta(columnName="alert_wait_timeout", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "等待超时", description = "等待超时")
+    @Schema(title = "等待超时", description = "等待超时", maxLength=10, nullable=true )
     private int alertWaitTimeout;
 
     /**
      * 运行超时
      */
     @ColumnMeta(columnName="alert_run_timeout", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "运行超时", description = "运行超时")
+    @Schema(title = "运行超时", description = "运行超时", maxLength=10, nullable=true )
     private int alertRunTimeout;
 
     /**
      * 我方联系信息
      */
     @ColumnMeta(columnName="task_link_our", dataType="String", dataSize=500, nullable=true)
-    @Schema(title = "我方联系信息", description = "我方联系信息")
+    @Schema(title = "我方联系信息", description = "我方联系信息", maxLength=500, nullable=true )
     private String taskLinkOur;
 
     /**
      * 商户联系信息
      */
     @ColumnMeta(columnName="task_link_mch", dataType="String", dataSize=500, nullable=true)
-    @Schema(title = "商户联系信息", description = "商户联系信息")
+    @Schema(title = "商户联系信息", description = "商户联系信息", maxLength=500, nullable=true )
     private String taskLinkMch;
 
     /**
      * 创建日期
      */
     @ColumnMeta(columnName="create_date", dataType="java.util.Date", dataSize=23, nullable=true)
-    @Schema(title = "创建日期", description = "创建日期")
+    @Schema(title = "创建日期", description = "创建日期", maxLength=23, nullable=true )
     private java.util.Date createDate;
 
     /**
      * 最后修改日期
      */
     @ColumnMeta(columnName="modify_date", dataType="java.util.Date", dataSize=23, nullable=true)
-    @Schema(title = "最后修改日期", description = "最后修改日期")
+    @Schema(title = "最后修改日期", description = "最后修改日期", maxLength=23, nullable=true )
     private java.util.Date modifyDate;
 
     /**
      * 状态1正常，0暂停，-1标记删除
      */
     @ColumnMeta(columnName="state", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "状态1正常，0暂停，-1标记删除", description = "状态1正常，0暂停，-1标记删除")
+    @Schema(title = "状态1正常，0暂停，-1标记删除", description = "状态1正常，0暂停，-1标记删除", maxLength=10, nullable=true )
     private int state;
 
     /**
@@ -297,6 +297,32 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
      * 更新的信息.
      */
     private transient StringBuilder UPDATED_INFO = null;
+
+
+    /**
+     * 获得实体的表名。
+     */
+    @Override
+    public String ENTITY_TABLE(){
+         return "task_runner_info";
+       }
+
+    /**
+     * 获得实体的表注释。
+     */
+    @Override
+    public String ENTITY_NAME(){
+          return "队列任务配置";
+       }
+
+    /**
+     * 获得主键
+     */
+    @Override
+    public Serializable ENTITY_ID(){
+          return getId();
+       }
+
 
     /**
      * 获取更改的字段列表.
@@ -613,10 +639,18 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("id");
-            this.UPDATED_INFO.append("id:\"" + this.id+ "\"=>\"" + id + "\"\r\n");
+            this.UPDATED_INFO.append("id:\"").append(this.id).append("\"=>\"").append(id).append("\"\n");
             this.id = id;
         }
     }
+
+    /**
+     *  设置id链式调用。
+     */
+    public TaskRunnerInfo id(long id){
+        setId(id);
+        return this;
+        }
 
     /**
      * 设置任务名称。
@@ -627,10 +661,18 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("task_name");
-            this.UPDATED_INFO.append("task_name:\"" + this.taskName+ "\"=>\"" + taskName + "\"\r\n");
+            this.UPDATED_INFO.append("task_name:\"").append(this.taskName).append("\"=>\"").append(taskName).append("\"\n");
             this.taskName = taskName;
         }
     }
+
+    /**
+     *  设置任务名称链式调用。
+     */
+    public TaskRunnerInfo taskName(String taskName){
+        setTaskName(taskName);
+        return this;
+        }
 
     /**
      * 设置任务描述。
@@ -641,10 +683,18 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("task_desc");
-            this.UPDATED_INFO.append("task_desc:\"" + this.taskDesc+ "\"=>\"" + taskDesc + "\"\r\n");
+            this.UPDATED_INFO.append("task_desc:\"").append(this.taskDesc).append("\"=>\"").append(taskDesc).append("\"\n");
             this.taskDesc = taskDesc;
         }
     }
+
+    /**
+     *  设置任务描述链式调用。
+     */
+    public TaskRunnerInfo taskDesc(String taskDesc){
+        setTaskDesc(taskDesc);
+        return this;
+        }
 
     /**
      * 设置执行类信息。
@@ -655,10 +705,18 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("task_class");
-            this.UPDATED_INFO.append("task_class:\"" + this.taskClass+ "\"=>\"" + taskClass + "\"\r\n");
+            this.UPDATED_INFO.append("task_class:\"").append(this.taskClass).append("\"=>\"").append(taskClass).append("\"\n");
             this.taskClass = taskClass;
         }
     }
+
+    /**
+     *  设置执行类信息链式调用。
+     */
+    public TaskRunnerInfo taskClass(String taskClass){
+        setTaskClass(taskClass);
+        return this;
+        }
 
     /**
      * 设置任务所有人。
@@ -669,10 +727,18 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("task_owner");
-            this.UPDATED_INFO.append("task_owner:\"" + this.taskOwner+ "\"=>\"" + taskOwner + "\"\r\n");
+            this.UPDATED_INFO.append("task_owner:\"").append(this.taskOwner).append("\"=>\"").append(taskOwner).append("\"\n");
             this.taskOwner = taskOwner;
         }
     }
+
+    /**
+     *  设置任务所有人链式调用。
+     */
+    public TaskRunnerInfo taskOwner(String taskOwner){
+        setTaskOwner(taskOwner);
+        return this;
+        }
 
     /**
      * 设置运行标签。
@@ -683,10 +749,18 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("task_tag");
-            this.UPDATED_INFO.append("task_tag:\"" + this.taskTag+ "\"=>\"" + taskTag + "\"\r\n");
+            this.UPDATED_INFO.append("task_tag:\"").append(this.taskTag).append("\"=>\"").append(taskTag).append("\"\n");
             this.taskTag = taskTag;
         }
     }
+
+    /**
+     *  设置运行标签链式调用。
+     */
+    public TaskRunnerInfo taskTag(String taskTag){
+        setTaskTag(taskTag);
+        return this;
+        }
 
     /**
      * 设置队列类型。
@@ -697,10 +771,18 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("queue_type");
-            this.UPDATED_INFO.append("queue_type:\"" + this.queueType+ "\"=>\"" + queueType + "\"\r\n");
+            this.UPDATED_INFO.append("queue_type:\"").append(this.queueType).append("\"=>\"").append(queueType).append("\"\n");
             this.queueType = queueType;
         }
     }
+
+    /**
+     *  设置队列类型链式调用。
+     */
+    public TaskRunnerInfo queueType(int queueType){
+        setQueueType(queueType);
+        return this;
+        }
 
     /**
      * 设置延迟类型。
@@ -711,10 +793,18 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("delay_type");
-            this.UPDATED_INFO.append("delay_type:\"" + this.delayType+ "\"=>\"" + delayType + "\"\r\n");
+            this.UPDATED_INFO.append("delay_type:\"").append(this.delayType).append("\"=>\"").append(delayType).append("\"\n");
             this.delayType = delayType;
         }
     }
+
+    /**
+     *  设置延迟类型链式调用。
+     */
+    public TaskRunnerInfo delayType(int delayType){
+        setDelayType(delayType);
+        return this;
+        }
 
     /**
      * 设置日志类型。
@@ -725,10 +815,18 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("log_level");
-            this.UPDATED_INFO.append("log_level:\"" + this.logLevel+ "\"=>\"" + logLevel + "\"\r\n");
+            this.UPDATED_INFO.append("log_level:\"").append(this.logLevel).append("\"=>\"").append(logLevel).append("\"\n");
             this.logLevel = logLevel;
         }
     }
+
+    /**
+     *  设置日志类型链式调用。
+     */
+    public TaskRunnerInfo logLevel(int logLevel){
+        setLogLevel(logLevel);
+        return this;
+        }
 
     /**
      * 设置日志长度限制。
@@ -739,10 +837,18 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("log_limit_size");
-            this.UPDATED_INFO.append("log_limit_size:\"" + this.logLimitSize+ "\"=>\"" + logLimitSize + "\"\r\n");
+            this.UPDATED_INFO.append("log_limit_size:\"").append(this.logLimitSize).append("\"=>\"").append(logLimitSize).append("\"\n");
             this.logLimitSize = logLimitSize;
         }
     }
+
+    /**
+     *  设置日志长度限制链式调用。
+     */
+    public TaskRunnerInfo logLimitSize(int logLimitSize){
+        setLogLimitSize(logLimitSize);
+        return this;
+        }
 
     /**
      * 设置运行类型。
@@ -753,10 +859,18 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("run_type");
-            this.UPDATED_INFO.append("run_type:\"" + this.runType+ "\"=>\"" + runType + "\"\r\n");
+            this.UPDATED_INFO.append("run_type:\"").append(this.runType).append("\"=>\"").append(runType).append("\"\n");
             this.runType = runType;
         }
     }
+
+    /**
+     *  设置运行类型链式调用。
+     */
+    public TaskRunnerInfo runType(int runType){
+        setRunType(runType);
+        return this;
+        }
 
     /**
      * 设置运行目标。
@@ -767,10 +881,18 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("run_target");
-            this.UPDATED_INFO.append("run_target:\"" + this.runTarget+ "\"=>\"" + runTarget + "\"\r\n");
+            this.UPDATED_INFO.append("run_target:\"").append(this.runTarget).append("\"=>\"").append(runTarget).append("\"\n");
             this.runTarget = runTarget;
         }
     }
+
+    /**
+     *  设置运行目标链式调用。
+     */
+    public TaskRunnerInfo runTarget(String runTarget){
+        setRunTarget(runTarget);
+        return this;
+        }
 
     /**
      * 设置消费者的数量。
@@ -781,10 +903,18 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("consumer_num");
-            this.UPDATED_INFO.append("consumer_num:\"" + this.consumerNum+ "\"=>\"" + consumerNum + "\"\r\n");
+            this.UPDATED_INFO.append("consumer_num:\"").append(this.consumerNum).append("\"=>\"").append(consumerNum).append("\"\n");
             this.consumerNum = consumerNum;
         }
     }
+
+    /**
+     *  设置消费者的数量链式调用。
+     */
+    public TaskRunnerInfo consumerNum(int consumerNum){
+        setConsumerNum(consumerNum);
+        return this;
+        }
 
     /**
      * 设置队列预取数量。
@@ -795,10 +925,18 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("prefetch_num");
-            this.UPDATED_INFO.append("prefetch_num:\"" + this.prefetchNum+ "\"=>\"" + prefetchNum + "\"\r\n");
+            this.UPDATED_INFO.append("prefetch_num:\"").append(this.prefetchNum).append("\"=>\"").append(prefetchNum).append("\"\n");
             this.prefetchNum = prefetchNum;
         }
     }
+
+    /**
+     *  设置队列预取数量链式调用。
+     */
+    public TaskRunnerInfo prefetchNum(int prefetchNum){
+        setPrefetchNum(prefetchNum);
+        return this;
+        }
 
     /**
      * 设置限速类型。
@@ -809,10 +947,18 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("rate_limit_type");
-            this.UPDATED_INFO.append("rate_limit_type:\"" + this.rateLimitType+ "\"=>\"" + rateLimitType + "\"\r\n");
+            this.UPDATED_INFO.append("rate_limit_type:\"").append(this.rateLimitType).append("\"=>\"").append(rateLimitType).append("\"\n");
             this.rateLimitType = rateLimitType;
         }
     }
+
+    /**
+     *  设置限速类型链式调用。
+     */
+    public TaskRunnerInfo rateLimitType(int rateLimitType){
+        setRateLimitType(rateLimitType);
+        return this;
+        }
 
     /**
      * 设置流量限定数值，默认为60次。
@@ -823,10 +969,18 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("rate_limit_value");
-            this.UPDATED_INFO.append("rate_limit_value:\"" + this.rateLimitValue+ "\"=>\"" + rateLimitValue + "\"\r\n");
+            this.UPDATED_INFO.append("rate_limit_value:\"").append(this.rateLimitValue).append("\"=>\"").append(rateLimitValue).append("\"\n");
             this.rateLimitValue = rateLimitValue;
         }
     }
+
+    /**
+     *  设置流量限定数值，默认为60次链式调用。
+     */
+    public TaskRunnerInfo rateLimitValue(int rateLimitValue){
+        setRateLimitValue(rateLimitValue);
+        return this;
+        }
 
     /**
      * 设置流量限定时间(S)，默认为60秒。
@@ -837,10 +991,18 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("rate_limit_time");
-            this.UPDATED_INFO.append("rate_limit_time:\"" + this.rateLimitTime+ "\"=>\"" + rateLimitTime + "\"\r\n");
+            this.UPDATED_INFO.append("rate_limit_time:\"").append(this.rateLimitTime).append("\"=>\"").append(rateLimitTime).append("\"\n");
             this.rateLimitTime = rateLimitTime;
         }
     }
+
+    /**
+     *  设置流量限定时间(S)，默认为60秒链式调用。
+     */
+    public TaskRunnerInfo rateLimitTime(int rateLimitTime){
+        setRateLimitTime(rateLimitTime);
+        return this;
+        }
 
     /**
      * 设置当发生流量限制时，等待的秒数。
@@ -851,10 +1013,18 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("rate_limit_wait");
-            this.UPDATED_INFO.append("rate_limit_wait:\"" + this.rateLimitWait+ "\"=>\"" + rateLimitWait + "\"\r\n");
+            this.UPDATED_INFO.append("rate_limit_wait:\"").append(this.rateLimitWait).append("\"=>\"").append(rateLimitWait).append("\"\n");
             this.rateLimitWait = rateLimitWait;
         }
     }
+
+    /**
+     *  设置当发生流量限制时，等待的秒数链式调用。
+     */
+    public TaskRunnerInfo rateLimitWait(int rateLimitWait){
+        setRateLimitWait(rateLimitWait);
+        return this;
+        }
 
     /**
      * 设置超过流量限制重试次数。
@@ -865,10 +1035,18 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("retry_times_by_overrated");
-            this.UPDATED_INFO.append("retry_times_by_overrated:\"" + this.retryTimesByOverrated+ "\"=>\"" + retryTimesByOverrated + "\"\r\n");
+            this.UPDATED_INFO.append("retry_times_by_overrated:\"").append(this.retryTimesByOverrated).append("\"=>\"").append(retryTimesByOverrated).append("\"\n");
             this.retryTimesByOverrated = retryTimesByOverrated;
         }
     }
+
+    /**
+     *  设置超过流量限制重试次数链式调用。
+     */
+    public TaskRunnerInfo retryTimesByOverrated(int retryTimesByOverrated){
+        setRetryTimesByOverrated(retryTimesByOverrated);
+        return this;
+        }
 
     /**
      * 设置对方接口错误重试次数。
@@ -879,10 +1057,18 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("retry_times_by_partner");
-            this.UPDATED_INFO.append("retry_times_by_partner:\"" + this.retryTimesByPartner+ "\"=>\"" + retryTimesByPartner + "\"\r\n");
+            this.UPDATED_INFO.append("retry_times_by_partner:\"").append(this.retryTimesByPartner).append("\"=>\"").append(retryTimesByPartner).append("\"\n");
             this.retryTimesByPartner = retryTimesByPartner;
         }
     }
+
+    /**
+     *  设置对方接口错误重试次数链式调用。
+     */
+    public TaskRunnerInfo retryTimesByPartner(int retryTimesByPartner){
+        setRetryTimesByPartner(retryTimesByPartner);
+        return this;
+        }
 
     /**
      * 设置最后统计时间。
@@ -893,10 +1079,18 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("stats_date");
-            this.UPDATED_INFO.append("stats_date:\"" + this.statsDate+ "\"=>\"" + statsDate + "\"\r\n");
+            this.UPDATED_INFO.append("stats_date:\"").append(this.statsDate).append("\"=>\"").append(statsDate).append("\"\n");
             this.statsDate = statsDate;
         }
     }
+
+    /**
+     *  设置最后统计时间链式调用。
+     */
+    public TaskRunnerInfo statsDate(java.util.Date statsDate){
+        setStatsDate(statsDate);
+        return this;
+        }
 
     /**
      * 设置统计运行次数。
@@ -907,10 +1101,18 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("stats_run_num");
-            this.UPDATED_INFO.append("stats_run_num:\"" + this.statsRunNum+ "\"=>\"" + statsRunNum + "\"\r\n");
+            this.UPDATED_INFO.append("stats_run_num:\"").append(this.statsRunNum).append("\"=>\"").append(statsRunNum).append("\"\n");
             this.statsRunNum = statsRunNum;
         }
     }
+
+    /**
+     *  设置统计运行次数链式调用。
+     */
+    public TaskRunnerInfo statsRunNum(int statsRunNum){
+        setStatsRunNum(statsRunNum);
+        return this;
+        }
 
     /**
      * 设置统计运行失败次数。
@@ -921,10 +1123,18 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("stats_fail_num");
-            this.UPDATED_INFO.append("stats_fail_num:\"" + this.statsFailNum+ "\"=>\"" + statsFailNum + "\"\r\n");
+            this.UPDATED_INFO.append("stats_fail_num:\"").append(this.statsFailNum).append("\"=>\"").append(statsFailNum).append("\"\n");
             this.statsFailNum = statsFailNum;
         }
     }
+
+    /**
+     *  设置统计运行失败次数链式调用。
+     */
+    public TaskRunnerInfo statsFailNum(int statsFailNum){
+        setStatsFailNum(statsFailNum);
+        return this;
+        }
 
     /**
      * 设置统计总时间毫秒数。
@@ -935,10 +1145,18 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("stats_run_time");
-            this.UPDATED_INFO.append("stats_run_time:\"" + this.statsRunTime+ "\"=>\"" + statsRunTime + "\"\r\n");
+            this.UPDATED_INFO.append("stats_run_time:\"").append(this.statsRunTime).append("\"=>\"").append(statsRunTime).append("\"\n");
             this.statsRunTime = statsRunTime;
         }
     }
+
+    /**
+     *  设置统计总时间毫秒数链式调用。
+     */
+    public TaskRunnerInfo statsRunTime(long statsRunTime){
+        setStatsRunTime(statsRunTime);
+        return this;
+        }
 
     /**
      * 设置失败率。
@@ -949,10 +1167,18 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("alert_fail_rate");
-            this.UPDATED_INFO.append("alert_fail_rate:\"" + this.alertFailRate+ "\"=>\"" + alertFailRate + "\"\r\n");
+            this.UPDATED_INFO.append("alert_fail_rate:\"").append(this.alertFailRate).append("\"=>\"").append(alertFailRate).append("\"\n");
             this.alertFailRate = alertFailRate;
         }
     }
+
+    /**
+     *  设置失败率链式调用。
+     */
+    public TaskRunnerInfo alertFailRate(int alertFailRate){
+        setAlertFailRate(alertFailRate);
+        return this;
+        }
 
     /**
      * 设置接口失败率。
@@ -963,10 +1189,18 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("alert_fail_partner_rate");
-            this.UPDATED_INFO.append("alert_fail_partner_rate:\"" + this.alertFailPartnerRate+ "\"=>\"" + alertFailPartnerRate + "\"\r\n");
+            this.UPDATED_INFO.append("alert_fail_partner_rate:\"").append(this.alertFailPartnerRate).append("\"=>\"").append(alertFailPartnerRate).append("\"\n");
             this.alertFailPartnerRate = alertFailPartnerRate;
         }
     }
+
+    /**
+     *  设置接口失败率链式调用。
+     */
+    public TaskRunnerInfo alertFailPartnerRate(int alertFailPartnerRate){
+        setAlertFailPartnerRate(alertFailPartnerRate);
+        return this;
+        }
 
     /**
      * 设置程序失败率。
@@ -977,10 +1211,18 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("alert_fail_program_rate");
-            this.UPDATED_INFO.append("alert_fail_program_rate:\"" + this.alertFailProgramRate+ "\"=>\"" + alertFailProgramRate + "\"\r\n");
+            this.UPDATED_INFO.append("alert_fail_program_rate:\"").append(this.alertFailProgramRate).append("\"=>\"").append(alertFailProgramRate).append("\"\n");
             this.alertFailProgramRate = alertFailProgramRate;
         }
     }
+
+    /**
+     *  设置程序失败率链式调用。
+     */
+    public TaskRunnerInfo alertFailProgramRate(int alertFailProgramRate){
+        setAlertFailProgramRate(alertFailProgramRate);
+        return this;
+        }
 
     /**
      * 设置配置失败率。
@@ -991,10 +1233,18 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("alert_fail_config_rate");
-            this.UPDATED_INFO.append("alert_fail_config_rate:\"" + this.alertFailConfigRate+ "\"=>\"" + alertFailConfigRate + "\"\r\n");
+            this.UPDATED_INFO.append("alert_fail_config_rate:\"").append(this.alertFailConfigRate).append("\"=>\"").append(alertFailConfigRate).append("\"\n");
             this.alertFailConfigRate = alertFailConfigRate;
         }
     }
+
+    /**
+     *  设置配置失败率链式调用。
+     */
+    public TaskRunnerInfo alertFailConfigRate(int alertFailConfigRate){
+        setAlertFailConfigRate(alertFailConfigRate);
+        return this;
+        }
 
     /**
      * 设置数据失败率。
@@ -1005,10 +1255,18 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("alert_fail_data_rate");
-            this.UPDATED_INFO.append("alert_fail_data_rate:\"" + this.alertFailDataRate+ "\"=>\"" + alertFailDataRate + "\"\r\n");
+            this.UPDATED_INFO.append("alert_fail_data_rate:\"").append(this.alertFailDataRate).append("\"=>\"").append(alertFailDataRate).append("\"\n");
             this.alertFailDataRate = alertFailDataRate;
         }
     }
+
+    /**
+     *  设置数据失败率链式调用。
+     */
+    public TaskRunnerInfo alertFailDataRate(int alertFailDataRate){
+        setAlertFailDataRate(alertFailDataRate);
+        return this;
+        }
 
     /**
      * 设置队列长度限制。
@@ -1019,10 +1277,18 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("alert_queue_oversize");
-            this.UPDATED_INFO.append("alert_queue_oversize:\"" + this.alertQueueOversize+ "\"=>\"" + alertQueueOversize + "\"\r\n");
+            this.UPDATED_INFO.append("alert_queue_oversize:\"").append(this.alertQueueOversize).append("\"=>\"").append(alertQueueOversize).append("\"\n");
             this.alertQueueOversize = alertQueueOversize;
         }
     }
+
+    /**
+     *  设置队列长度限制链式调用。
+     */
+    public TaskRunnerInfo alertQueueOversize(int alertQueueOversize){
+        setAlertQueueOversize(alertQueueOversize);
+        return this;
+        }
 
     /**
      * 设置队列等待超时。
@@ -1033,10 +1299,18 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("alert_queue_timeout");
-            this.UPDATED_INFO.append("alert_queue_timeout:\"" + this.alertQueueTimeout+ "\"=>\"" + alertQueueTimeout + "\"\r\n");
+            this.UPDATED_INFO.append("alert_queue_timeout:\"").append(this.alertQueueTimeout).append("\"=>\"").append(alertQueueTimeout).append("\"\n");
             this.alertQueueTimeout = alertQueueTimeout;
         }
     }
+
+    /**
+     *  设置队列等待超时链式调用。
+     */
+    public TaskRunnerInfo alertQueueTimeout(int alertQueueTimeout){
+        setAlertQueueTimeout(alertQueueTimeout);
+        return this;
+        }
 
     /**
      * 设置等待超时。
@@ -1047,10 +1321,18 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("alert_wait_timeout");
-            this.UPDATED_INFO.append("alert_wait_timeout:\"" + this.alertWaitTimeout+ "\"=>\"" + alertWaitTimeout + "\"\r\n");
+            this.UPDATED_INFO.append("alert_wait_timeout:\"").append(this.alertWaitTimeout).append("\"=>\"").append(alertWaitTimeout).append("\"\n");
             this.alertWaitTimeout = alertWaitTimeout;
         }
     }
+
+    /**
+     *  设置等待超时链式调用。
+     */
+    public TaskRunnerInfo alertWaitTimeout(int alertWaitTimeout){
+        setAlertWaitTimeout(alertWaitTimeout);
+        return this;
+        }
 
     /**
      * 设置运行超时。
@@ -1061,10 +1343,18 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("alert_run_timeout");
-            this.UPDATED_INFO.append("alert_run_timeout:\"" + this.alertRunTimeout+ "\"=>\"" + alertRunTimeout + "\"\r\n");
+            this.UPDATED_INFO.append("alert_run_timeout:\"").append(this.alertRunTimeout).append("\"=>\"").append(alertRunTimeout).append("\"\n");
             this.alertRunTimeout = alertRunTimeout;
         }
     }
+
+    /**
+     *  设置运行超时链式调用。
+     */
+    public TaskRunnerInfo alertRunTimeout(int alertRunTimeout){
+        setAlertRunTimeout(alertRunTimeout);
+        return this;
+        }
 
     /**
      * 设置我方联系信息。
@@ -1075,10 +1365,18 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("task_link_our");
-            this.UPDATED_INFO.append("task_link_our:\"" + this.taskLinkOur+ "\"=>\"" + taskLinkOur + "\"\r\n");
+            this.UPDATED_INFO.append("task_link_our:\"").append(this.taskLinkOur).append("\"=>\"").append(taskLinkOur).append("\"\n");
             this.taskLinkOur = taskLinkOur;
         }
     }
+
+    /**
+     *  设置我方联系信息链式调用。
+     */
+    public TaskRunnerInfo taskLinkOur(String taskLinkOur){
+        setTaskLinkOur(taskLinkOur);
+        return this;
+        }
 
     /**
      * 设置商户联系信息。
@@ -1089,10 +1387,18 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("task_link_mch");
-            this.UPDATED_INFO.append("task_link_mch:\"" + this.taskLinkMch+ "\"=>\"" + taskLinkMch + "\"\r\n");
+            this.UPDATED_INFO.append("task_link_mch:\"").append(this.taskLinkMch).append("\"=>\"").append(taskLinkMch).append("\"\n");
             this.taskLinkMch = taskLinkMch;
         }
     }
+
+    /**
+     *  设置商户联系信息链式调用。
+     */
+    public TaskRunnerInfo taskLinkMch(String taskLinkMch){
+        setTaskLinkMch(taskLinkMch);
+        return this;
+        }
 
     /**
      * 设置创建日期。
@@ -1103,10 +1409,18 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("create_date");
-            this.UPDATED_INFO.append("create_date:\"" + this.createDate+ "\"=>\"" + createDate + "\"\r\n");
+            this.UPDATED_INFO.append("create_date:\"").append(this.createDate).append("\"=>\"").append(createDate).append("\"\n");
             this.createDate = createDate;
         }
     }
+
+    /**
+     *  设置创建日期链式调用。
+     */
+    public TaskRunnerInfo createDate(java.util.Date createDate){
+        setCreateDate(createDate);
+        return this;
+        }
 
     /**
      * 设置最后修改日期。
@@ -1117,10 +1431,18 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("modify_date");
-            this.UPDATED_INFO.append("modify_date:\"" + this.modifyDate+ "\"=>\"" + modifyDate + "\"\r\n");
+            this.UPDATED_INFO.append("modify_date:\"").append(this.modifyDate).append("\"=>\"").append(modifyDate).append("\"\n");
             this.modifyDate = modifyDate;
         }
     }
+
+    /**
+     *  设置最后修改日期链式调用。
+     */
+    public TaskRunnerInfo modifyDate(java.util.Date modifyDate){
+        setModifyDate(modifyDate);
+        return this;
+        }
 
     /**
      * 设置状态1正常，0暂停，-1标记删除。
@@ -1131,10 +1453,18 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
                 _INIT_UPDATE_INFO();
             }
             this.UPDATED_COLUMN.add("state");
-            this.UPDATED_INFO.append("state:\"" + this.state+ "\"=>\"" + state + "\"\r\n");
+            this.UPDATED_INFO.append("state:\"").append(this.state).append("\"=>\"").append(state).append("\"\n");
             this.state = state;
         }
     }
+
+    /**
+     *  设置状态1正常，0暂停，-1标记删除链式调用。
+     */
+    public TaskRunnerInfo state(int state){
+        setState(state);
+        return this;
+        }
 
     /**
      * 重载toString方法.

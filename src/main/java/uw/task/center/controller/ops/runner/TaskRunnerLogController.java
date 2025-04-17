@@ -14,7 +14,7 @@ import uw.auth.service.annotation.MscPermDeclare;
 import uw.auth.service.constant.ActionLog;
 import uw.auth.service.constant.AuthType;
 import uw.auth.service.constant.UserType;
-import uw.dao.DaoFactory;
+import uw.dao.DaoManager;
 import uw.dao.PageQueryParam;
 import uw.dao.vo.QueryParamResult;
 import uw.log.es.LogClient;
@@ -34,7 +34,7 @@ public class TaskRunnerLogController {
 
     private static final Logger log = LoggerFactory.getLogger( TaskRunnerLogController.class );
     private static final String INDEX_NAME = "uw.task.runner.log";
-    private final DaoFactory dao = DaoFactory.getInstance();
+    private final DaoManager dao = DaoManager.getInstance();
     private final LogClient logClient;
 
     @Autowired

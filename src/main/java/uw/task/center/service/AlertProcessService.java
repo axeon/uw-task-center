@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import uw.common.app.constant.CommonState;
 import uw.common.util.JsonUtils;
 import uw.common.util.SystemClock;
-import uw.dao.DaoFactory;
+import uw.dao.DaoManager;
 import uw.dao.DataList;
 import uw.dao.TransactionException;
 import uw.task.center.entity.*;
@@ -28,23 +28,23 @@ import java.util.concurrent.locks.StampedLock;
 @EnableScheduling
 public class AlertProcessService {
 
-    private static final Logger log = LoggerFactory.getLogger( AlertProcessService.class );
+    private static final Logger log = LoggerFactory.getLogger(AlertProcessService.class);
     /**
      * 失败类型映射关系。
      */
     private static final Map<String, String> FAIL_TYPE_TRANSLATE_MAP = new HashMap<>();
 
     static {
-        FAIL_TYPE_TRANSLATE_MAP.put( "failRate", "总错误率" );
-        FAIL_TYPE_TRANSLATE_MAP.put( "failPartnerRate", "接口错误率" );
-        FAIL_TYPE_TRANSLATE_MAP.put( "failProgramRate", "程序错误率" );
-        FAIL_TYPE_TRANSLATE_MAP.put( "failConfigRate", "配置错误率" );
-        FAIL_TYPE_TRANSLATE_MAP.put( "failDataRate", "数据错误率" );
-        FAIL_TYPE_TRANSLATE_MAP.put( "queueTimeout", "排队超时" );
-        FAIL_TYPE_TRANSLATE_MAP.put( "waitTimeout", "限速超时" );
-        FAIL_TYPE_TRANSLATE_MAP.put( "runTimeout", "运行超时" );
-        FAIL_TYPE_TRANSLATE_MAP.put( "queueSize", "队列长度超限" );
-        FAIL_TYPE_TRANSLATE_MAP.put( "cronerTimeOut", "定时任务未在计划时间运行" );
+        FAIL_TYPE_TRANSLATE_MAP.put("failRate", "总错误率");
+        FAIL_TYPE_TRANSLATE_MAP.put("failPartnerRate", "接口错误率");
+        FAIL_TYPE_TRANSLATE_MAP.put("failProgramRate", "程序错误率");
+        FAIL_TYPE_TRANSLATE_MAP.put("failConfigRate", "配置错误率");
+        FAIL_TYPE_TRANSLATE_MAP.put("failDataRate", "数据错误率");
+        FAIL_TYPE_TRANSLATE_MAP.put("queueTimeout", "排队超时");
+        FAIL_TYPE_TRANSLATE_MAP.put("waitTimeout", "限速超时");
+        FAIL_TYPE_TRANSLATE_MAP.put("runTimeout", "运行超时");
+        FAIL_TYPE_TRANSLATE_MAP.put("queueSize", "队列长度超限");
+        FAIL_TYPE_TRANSLATE_MAP.put("cronerTimeOut", "定时任务未在计划时间运行");
     }
 
     /**
@@ -55,25 +55,25 @@ public class AlertProcessService {
      * runner锁。
      */
     private final StampedLock cronerMapLocker = new StampedLock();
-    private final DaoFactory dao = DaoFactory.getInstance();
+    private final DaoManager dao = DaoManager.getInstance();
     /**
      * 日期格式化。
      */
-    private final FastDateFormat dateFormat = FastDateFormat.getInstance( "yyyy-MM-dd HH:mm:ss" );
+    private final FastDateFormat dateFormat = FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss");
     /**
      * 百分比格式化。
      */
-    private final DecimalFormat percentFormat = new DecimalFormat( "#.##" );
+    private final DecimalFormat percentFormat = new DecimalFormat("#.##");
     /**
      * 定时任务检查服务。
      */
-    private final ExecutorService cronerProcessService = new ThreadPoolExecutor( 1, 10, 30L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(),
-            new ThreadFactoryBuilder().setDaemon( true ).setNameFormat( "CronerProcessService-%d" ).build() );
+    private final ExecutorService cronerProcessService = new ThreadPoolExecutor(1, 10, 30L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(),
+            new ThreadFactoryBuilder().setDaemon(true).setNameFormat("CronerProcessService-%d").build());
     /**
      * 队列任务检查服务。
      */
-    private final ExecutorService runnerProcessService = new ThreadPoolExecutor( 1, 10, 30L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(),
-            new ThreadFactoryBuilder().setDaemon( true ).setNameFormat( "RunnerProcessService-%d" ).build() );
+    private final ExecutorService runnerProcessService = new ThreadPoolExecutor(1, 10, 30L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(),
+            new ThreadFactoryBuilder().setDaemon(true).setNameFormat("RunnerProcessService-%d").build());
     /**
      * 队列任务缓存。
      */
@@ -89,10 +89,10 @@ public class AlertProcessService {
      * @param statsList 查询的结果
      */
     public void processRunnerStats(List<TaskRunnerStats> statsList) {
-        runnerProcessService.submit( () -> {
+        runnerProcessService.submit(() -> {
             if (statsList != null && statsList.size() > 0) {
                 for (TaskRunnerStats stats : statsList) {
-                    TaskRunnerInfo config = getFitRunnerConfig( stats.getTaskId() );
+                    TaskRunnerInfo config = getFitRunnerConfig(stats.getTaskId());
                     if (config != null) {
                         ArrayList<AlertData> alerts = new ArrayList<>();
                         int numAll = stats.getNumAll();
@@ -109,69 +109,69 @@ public class AlertProcessService {
                         if (numFail > 0 && config.getAlertFailRate() > 0) {
                             double v = (double) numFail / numAll * 100;
                             if (v > config.getAlertFailRate()) {
-                                alerts.add( new AlertData( "failRate", percentFormat.format( config.getAlertFailRate() ) + "%",
-                                        percentFormat.format( v ) + "%(" + numFail + ")" ) );
+                                alerts.add(new AlertData("failRate", percentFormat.format(config.getAlertFailRate()) + "%",
+                                        percentFormat.format(v) + "%(" + numFail + ")"));
                             }
                         }
                         if (numFailProgram > 0 && config.getAlertFailProgramRate() > 0) {
                             double v = (double) numFailProgram / numAll * 100;
                             if (v > config.getAlertFailProgramRate()) {
-                                alerts.add( new AlertData( "failProgramRate", percentFormat.format( config.getAlertFailProgramRate() ) + "%", percentFormat.format( v ) + "%" +
-                                        "(" + numFailProgram + ")" ) );
+                                alerts.add(new AlertData("failProgramRate", percentFormat.format(config.getAlertFailProgramRate()) + "%", percentFormat.format(v) + "%" +
+                                        "(" + numFailProgram + ")"));
                             }
                         }
                         if (numFailPartner > 0 && config.getAlertFailPartnerRate() > 0) {
                             double v = (double) numFailPartner / numAll * 100;
                             if (v > config.getAlertFailPartnerRate()) {
-                                alerts.add( new AlertData( "failPartnerRate", percentFormat.format( config.getAlertFailPartnerRate() ) + "%", percentFormat.format( v ) + "%" +
-                                        "(" + numFailPartner + ")" ) );
+                                alerts.add(new AlertData("failPartnerRate", percentFormat.format(config.getAlertFailPartnerRate()) + "%", percentFormat.format(v) + "%" +
+                                        "(" + numFailPartner + ")"));
                             }
                         }
                         if (numFailConfig > 0 && config.getAlertFailConfigRate() > 0) {
                             double v = (double) numFailConfig / numAll * 100;
                             if (v > config.getAlertFailConfigRate()) {
-                                alerts.add( new AlertData( "failConfigRate", percentFormat.format( config.getAlertFailConfigRate() ) + "%",
-                                        percentFormat.format( v ) + "%(" + numFailConfig + ")" ) );
+                                alerts.add(new AlertData("failConfigRate", percentFormat.format(config.getAlertFailConfigRate()) + "%",
+                                        percentFormat.format(v) + "%(" + numFailConfig + ")"));
                             }
                         }
                         if (numFailData > 0 && config.getAlertFailDataRate() > 0) {
                             double v = (double) numFailData / numAll * 100;
                             if (v > config.getAlertFailDataRate()) {
-                                alerts.add( new AlertData( "failDataRate", percentFormat.format( config.getAlertFailDataRate() ) + "%",
-                                        percentFormat.format( v ) + "%(" + numFailData + ")" ) );
+                                alerts.add(new AlertData("failDataRate", percentFormat.format(config.getAlertFailDataRate()) + "%",
+                                        percentFormat.format(v) + "%(" + numFailData + ")"));
                             }
                         }
                         if (timeWaitQueue > 0 && config.getAlertQueueTimeout() > 0) {
                             long averageTime = timeWaitQueue / numAll;
                             if (averageTime > config.getAlertQueueTimeout()) {
-                                alerts.add( new AlertData( "queueTimeout", config.getAlertQueueTimeout() + "ms", averageTime + "ms" ) );
+                                alerts.add(new AlertData("queueTimeout", config.getAlertQueueTimeout() + "ms", averageTime + "ms"));
                             }
                         }
                         if (timeWaitDelay > 0 && config.getAlertWaitTimeout() > 0) {
                             long averageTime = timeWaitDelay / numAll;
                             if (averageTime > config.getAlertWaitTimeout()) {
-                                alerts.add( new AlertData( "waitTimeout", config.getAlertWaitTimeout() + "ms", averageTime + "ms" ) );
+                                alerts.add(new AlertData("waitTimeout", config.getAlertWaitTimeout() + "ms", averageTime + "ms"));
                             }
                         }
                         if (timeRun > 0 && config.getAlertRunTimeout() > 0) {
                             long averageTime = timeRun / numAll;
                             if (averageTime > config.getAlertRunTimeout()) {
-                                alerts.add( new AlertData( "runTimeout", config.getAlertRunTimeout() + "ms", averageTime + "ms" ) );
+                                alerts.add(new AlertData("runTimeout", config.getAlertRunTimeout() + "ms", averageTime + "ms"));
                             }
                         }
                         if (queueSize > 0 && config.getAlertQueueOversize() > 0) {
                             if (queueSize > config.getAlertRunTimeout()) {
-                                alerts.add( new AlertData( "queueSize", config.getAlertQueueOversize() + "", queueSize + "" ) );
+                                alerts.add(new AlertData("queueSize", config.getAlertQueueOversize() + "", queueSize + ""));
                             }
                         }
                         if (alerts.size() > 0) {
-                            processAlertInfo( "runner", config.getId(), config.getTaskName(), numAll, alerts, config.getTaskOwner(), config.getTaskLinkOur(),
-                                    config.getTaskLinkMch() );
+                            processAlertInfo("runner", config.getId(), config.getTaskName(), numAll, alerts, config.getTaskOwner(), config.getTaskLinkOur(),
+                                    config.getTaskLinkMch());
                         }
                     }
                 }
             }
-        } );
+        });
     }
 
     /**
@@ -181,10 +181,10 @@ public class AlertProcessService {
      * @throws Exception
      */
     public void processCronerStats(List<TaskCronerStats> statsList) {
-        cronerProcessService.submit( () -> {
+        cronerProcessService.submit(() -> {
             if (statsList != null && statsList.size() > 0) {
                 for (TaskCronerStats stats : statsList) {
-                    TaskCronerInfo config = getFitCronerConfig( stats.getTaskId() );
+                    TaskCronerInfo config = getFitCronerConfig(stats.getTaskId());
                     if (config != null) {
                         ArrayList<AlertData> alerts = new ArrayList<>();
                         long numAll = stats.getNumAll();
@@ -198,52 +198,52 @@ public class AlertProcessService {
                         if (numFail > 0 && config.getAlertFailRate() > 0) {
                             double v = (double) numFail / numAll * 100;
                             if (v > config.getAlertFailRate()) {
-                                alerts.add( new AlertData( "failRate", percentFormat.format( config.getAlertFailRate() ) + "%",
-                                        percentFormat.format( v ) + "%(" + numFail + ")" ) );
+                                alerts.add(new AlertData("failRate", percentFormat.format(config.getAlertFailRate()) + "%",
+                                        percentFormat.format(v) + "%(" + numFail + ")"));
                             }
                         }
                         if (numFailProgram > 0 && config.getAlertFailProgramRate() > 0) {
                             double v = (double) numFailProgram / numAll * 100;
                             if (v > config.getAlertFailProgramRate()) {
-                                alerts.add( new AlertData( "failProgramRate", percentFormat.format( config.getAlertFailProgramRate() ) + "%", percentFormat.format( v ) + "%" +
-                                        "(" + numFailProgram + ")" ) );
+                                alerts.add(new AlertData("failProgramRate", percentFormat.format(config.getAlertFailProgramRate()) + "%", percentFormat.format(v) + "%" +
+                                        "(" + numFailProgram + ")"));
                             }
                         }
                         if (numFailPartner > 0 && config.getAlertFailPartnerRate() > 0) {
                             double v = (double) numFailPartner / numAll * 100;
                             if (v > config.getAlertFailPartnerRate()) {
-                                alerts.add( new AlertData( "failPartnerRate", percentFormat.format( config.getAlertFailPartnerRate() ) + "%", percentFormat.format( v ) + "%" +
-                                        "(" + numFailPartner + ")" ) );
+                                alerts.add(new AlertData("failPartnerRate", percentFormat.format(config.getAlertFailPartnerRate()) + "%", percentFormat.format(v) + "%" +
+                                        "(" + numFailPartner + ")"));
                             }
                         }
                         if (numFailData > 0 && config.getAlertFailDataRate() > 0) {
                             double v = (double) numFailData / numAll * 100;
                             if (v > config.getAlertFailDataRate()) {
-                                alerts.add( new AlertData( "failDataRate", percentFormat.format( config.getAlertFailDataRate() ) + "%",
-                                        percentFormat.format( v ) + "%(" + numFailData + ")" ) );
+                                alerts.add(new AlertData("failDataRate", percentFormat.format(config.getAlertFailDataRate()) + "%",
+                                        percentFormat.format(v) + "%(" + numFailData + ")"));
                             }
                         }
                         if (timeWait > 0 && config.getAlertWaitTimeout() > 0) {
                             long averageTime = timeWait / numAll;
                             if (averageTime > config.getAlertWaitTimeout()) {
-                                alerts.add( new AlertData( "waitTimeout", config.getAlertWaitTimeout() + "ms", averageTime + "ms" ) );
+                                alerts.add(new AlertData("waitTimeout", config.getAlertWaitTimeout() + "ms", averageTime + "ms"));
                             }
                         }
                         if (timeRun > 0 && config.getAlertRunTimeout() > 0) {
                             long averageTime = timeRun / numAll;
                             if (averageTime > config.getAlertRunTimeout()) {
-                                alerts.add( new AlertData( "runTimeout", config.getAlertRunTimeout() + "ms", averageTime + "ms" ) );
+                                alerts.add(new AlertData("runTimeout", config.getAlertRunTimeout() + "ms", averageTime + "ms"));
                             }
                         }
 
                         if (alerts.size() > 0) {
-                            processAlertInfo( "croner", config.getId(), config.getTaskName(), numAll, alerts, config.getTaskOwner(), config.getTaskLinkOur(),
-                                    config.getTaskLinkMch() );
+                            processAlertInfo("croner", config.getId(), config.getTaskName(), numAll, alerts, config.getTaskOwner(), config.getTaskLinkOur(),
+                                    config.getTaskLinkMch());
                         }
                     }
                 }
             }
-        } );
+        });
     }
 
 
@@ -256,9 +256,9 @@ public class AlertProcessService {
     private TaskRunnerInfo getFitRunnerConfig(long taskId) {
         long stamp = runnerMapLocker.readLock();
         try {
-            return runnerMap.get( taskId );
+            return runnerMap.get(taskId);
         } finally {
-            runnerMapLocker.unlockRead( stamp );
+            runnerMapLocker.unlockRead(stamp);
         }
     }
 
@@ -271,9 +271,9 @@ public class AlertProcessService {
     private TaskCronerInfo getFitCronerConfig(long taskId) {
         long stamp = cronerMapLocker.readLock();
         try {
-            return cronerMap.get( taskId );
+            return cronerMap.get(taskId);
         } finally {
-            cronerMapLocker.unlockRead( stamp );
+            cronerMapLocker.unlockRead(stamp);
         }
     }
 
@@ -290,59 +290,44 @@ public class AlertProcessService {
         Map<Long, TaskRunnerInfo> runnerMap = new ConcurrentHashMap<>();
         DataList<TaskCronerInfo> cronerList = null;
         DataList<TaskRunnerInfo> runnerList = null;
-        try {
-            runnerList = dao.list( TaskRunnerInfo.class, runnerSql, 0, 0, false );
-            for (TaskRunnerInfo runner : runnerList) {
-                runnerMap.put( runner.getId(), runner );
+        dao.list(TaskRunnerInfo.class, runnerSql).onSuccess(list -> {
+            for (TaskRunnerInfo runner : list) {
+                runnerMap.put(runner.getId(), runner);
             }
             long stamp = runnerMapLocker.writeLock();
             try {
                 this.runnerMap = runnerMap;
             } finally {
-                runnerMapLocker.unlockWrite( stamp );
+                runnerMapLocker.unlockWrite(stamp);
             }
-        } catch (TransactionException e) {
-            log.error( e.getMessage(), e );
-        }
-        try {
-            cronerList = dao.list( TaskCronerInfo.class, connerSql, 0, 0, false );
-            for (TaskCronerInfo croner : cronerList) {
-                cronerMap.put( croner.getId(), croner );
+        });
+        dao.list(TaskCronerInfo.class, connerSql).onSuccess(list -> {
+            for (TaskCronerInfo croner : list) {
+                cronerMap.put(croner.getId(), croner);
+                // 没有执行过的，跳过
+                if (croner.getStatsRunNum() == 0) {
+                    continue;
+                }
+                // 没有规划下次执行时间的，跳过。
+                if (croner.getNextRunDate() == null) {
+                    continue;
+                }
+                // 如果超过约定时间还未执行，就要报警了。
+                if ((croner.getNextRunDate().getTime() + (croner.getStatsRunTime() / croner.getStatsRunNum()) + 300_000L) < SystemClock.now()) {
+                    ArrayList<AlertData> alertList = new ArrayList<>();
+                    alertList.add(new AlertData("cronerTimeOut", dateFormat.format(croner.getNextRunDate()), dateFormat.format(new Date())));
+                    processAlertInfo("croner", croner.getId(), croner.getTaskName(), 0, alertList, croner.getTaskOwner(), croner.getTaskLinkOur(), croner.getTaskLinkMch());
+                    // 更新下次执行时间为NULL
+                    dao.executeCommand("update task_croner_info set next_run_date=NULL where id=?", new Object[]{croner.getId()});
+                }
             }
             long stamp = cronerMapLocker.writeLock();
             try {
                 this.cronerMap = cronerMap;
             } finally {
-                cronerMapLocker.unlockWrite( stamp );
+                cronerMapLocker.unlockWrite(stamp);
             }
-        } catch (TransactionException e) {
-            log.error( e.getMessage(), e );
-        }
-        if (cronerList != null) {
-            // 检测任务超时。
-            for (TaskCronerInfo config : cronerList) {
-                // 没有执行过的，跳过
-                if (config.getStatsRunNum() == 0) {
-                    continue;
-                }
-                // 没有规划下次执行时间的，跳过。
-                if (config.getNextRunDate() == null) {
-                    continue;
-                }
-                // 如果超过约定时间还未执行，就要报警了。
-                if ((config.getNextRunDate().getTime() + (config.getStatsRunTime() / config.getStatsRunNum()) + 300_000L) < SystemClock.now()) {
-                    ArrayList<AlertData> list = new ArrayList<>();
-                    list.add( new AlertData( "cronerTimeOut", dateFormat.format( config.getNextRunDate() ), dateFormat.format( new Date() ) ) );
-                    processAlertInfo( "croner", config.getId(), config.getTaskName(), 0, list, config.getTaskOwner(), config.getTaskLinkOur(), config.getTaskLinkMch() );
-                    // 更新下次执行时间为NULL
-                    try {
-                        dao.executeCommand( "update task_croner_info set next_run_date=NULL where id=?", new Object[]{config.getId()} );
-                    } catch (TransactionException e) {
-                        log.error( e.getMessage(), e );
-                    }
-                }
-            }
-        }
+        });
     }
 
     /**
@@ -351,24 +336,24 @@ public class AlertProcessService {
     private void processAlertInfo(String type, long taskId, String taskName, long runTimes, List<AlertData> alertList, String taskOwner, String taskLinkOur, String taskLinkMch) {
         // 检测报警通知范围。
         HashSet<String> links = new HashSet<>();
-        links.add( taskOwner );
+        links.add(taskOwner);
         for (AlertData ad : alertList) {
-            if (ad.getColumn().contains( "partner" )) {
+            if (ad.getColumn().contains("partner")) {
                 // 此时必须通知商户和自己人。
-                links.add( taskLinkOur );
-                links.add( taskLinkMch );
+                links.add(taskLinkOur);
+                links.add(taskLinkMch);
                 break;
             }
-            if ("failRate".equals( ad.getColumn() ) || "runTimeout".equals( ad.getColumn() )) {
+            if ("failRate".equals(ad.getColumn()) || "runTimeout".equals(ad.getColumn())) {
                 // 此时必须通知自己人。
-                links.add( taskLinkOur );
+                links.add(taskLinkOur);
             }
         }
-        List<TaskAlertContact> taskAlertContactList = getTaskAlertContactList( links.toArray( new String[0] ) );
+        List<TaskAlertContact> taskAlertContactList = getTaskAlertContactList(links.toArray(new String[0]));
         // 报警信息
-        TaskAlertInfo info = saveAlertInfo( type, taskId, taskName, runTimes, alertList );
+        TaskAlertInfo info = saveAlertInfo(type, taskId, taskName, runTimes, alertList);
         //保存报警通知信息
-        saveAlertNotify( taskAlertContactList, info );
+        saveAlertNotify(taskAlertContactList, info);
 
     }
 
@@ -383,23 +368,18 @@ public class AlertProcessService {
         for (String link : taskLink) {
             if (link.length() > 2) {
                 try {
-                    HashMap map = JsonUtils.parse( link, HashMap.class );
-                    set.addAll( map.keySet() );
+                    HashMap map = JsonUtils.parse(link, HashMap.class);
+                    set.addAll(map.keySet());
                 } catch (Exception e) {
-                    log.error( e.getMessage(), e );
+                    log.error(e.getMessage(), e);
                 }
             }
         }
         if (set.isEmpty()) {
             return null;
         }
-        String ids = StringUtils.join( set, ',' );
-        try {
-            return dao.list( TaskAlertContact.class, "select * from task_alert_contact where id in (" + ids + ") and state=1" ).results();
-        } catch (TransactionException e) {
-            log.error( e.getMessage(), e );
-            return null;
-        }
+        String ids = StringUtils.join(set, ',');
+        return dao.list(TaskAlertContact.class, "select * from task_alert_contact where id in (" + ids + ") and state=1").getData().results();
     }
 
     /**
@@ -414,34 +394,26 @@ public class AlertProcessService {
         }
         for (TaskAlertContact contact : contactList) {
             TaskAlertNotify notify = new TaskAlertNotify();
-            notify.setInfoId( info.getId() );
+            notify.setInfoId(info.getId());
             // 联系人
-            notify.setContactMan( contact.getContactName() );
+            notify.setContactMan(contact.getContactName());
             // 设置为email，因为这是邮件发送 获取根据里面的设置
-            notify.setCreateDate( new Date() );
-            notify.setSentTimes( 0 );
-            notify.setState( 0 );
+            notify.setCreateDate(new Date());
+            notify.setSentTimes(0);
+            notify.setState(0);
             //写入email通知
-            if (StringUtils.isNotBlank( contact.getEmail() )) {
-                notify.setId( dao.getSequenceId( TaskAlertNotify.class ) );
-                notify.setContactType( "email" );
-                notify.setContactInfo( contact.getEmail() );
-                try {
-                    dao.save( notify );
-                } catch (TransactionException e) {
-                    log.error( e.getMessage(), e );
-                }
+            if (StringUtils.isNotBlank(contact.getEmail())) {
+                notify.setId(dao.getSequenceId(TaskAlertNotify.class));
+                notify.setContactType("email");
+                notify.setContactInfo(contact.getEmail());
+                dao.save(notify);
             }
             //写入notify通知
-            if (StringUtils.isNotBlank( contact.getNotifyUrl() )) {
-                notify.setId( dao.getSequenceId( TaskAlertNotify.class ) );
-                notify.setContactType( "notifyUrl" );
-                notify.setContactInfo( contact.getNotifyUrl() );
-                try {
-                    dao.save( notify );
-                } catch (TransactionException e) {
-                    log.error( e.getMessage(), e );
-                }
+            if (StringUtils.isNotBlank(contact.getNotifyUrl())) {
+                notify.setId(dao.getSequenceId(TaskAlertNotify.class));
+                notify.setContactType("notifyUrl");
+                notify.setContactInfo(contact.getNotifyUrl());
+                dao.save(notify);
             }
 
         }
@@ -457,47 +429,42 @@ public class AlertProcessService {
      */
     private TaskAlertInfo saveAlertInfo(String type, long taskId, String taskInfo, long runTimes, List<AlertData> alertList) {
         TaskAlertInfo info = new TaskAlertInfo();
-        info.setId( dao.getSequenceId( TaskAlertInfo.class ) );
-        info.setTaskId( taskId );
-        info.setTaskType( type );
+        info.setId(dao.getSequenceId(TaskAlertInfo.class));
+        info.setTaskId(taskId);
+        info.setTaskType(type);
         // 拼接邮件信息
         StringBuilder title = new StringBuilder();
-        title.append( "#" ).append( info.getId() ).append( "报警" );
-        title.append( "[" ).append( taskInfo ).append( "]" );
-        title.append( ":" );
+        title.append("#").append(info.getId()).append("报警");
+        title.append("[").append(taskInfo).append("]");
+        title.append(":");
         for (AlertData ad : alertList) {
-            title.append( FAIL_TYPE_TRANSLATE_MAP.get( ad.getColumn() ) ).append( "," );
+            title.append(FAIL_TYPE_TRANSLATE_MAP.get(ad.getColumn())).append(",");
         }
-        if (title.charAt( title.length() - 1 ) == ',') {
-            title.deleteCharAt( title.length() - 1 );
+        if (title.charAt(title.length() - 1) == ',') {
+            title.deleteCharAt(title.length() - 1);
         }
-        title.append( "运行超限!" );
+        title.append("运行超限!");
         StringBuilder content = new StringBuilder();
         if (runTimes > 0) {
-            content.append( "[#" ).append( taskId ).append( taskInfo ).append( "]最近1分钟内执行" ).append( runTimes ).append( "次：" );
+            content.append("[#").append(taskId).append(taskInfo).append("]最近1分钟内执行").append(runTimes).append("次：");
         } else {
-            content.append( "[#" ).append( taskId ).append( taskInfo ).append( "]最近1分钟内执行异常：" );
+            content.append("[#").append(taskId).append(taskInfo).append("]最近1分钟内执行异常：");
         }
         for (AlertData ad : alertList) {
-            if ("cronerTimeOut".equals( ad.getColumn() )) {
-                content.append( FAIL_TYPE_TRANSLATE_MAP.get( ad.getColumn() ) ).append( ", 当前时间:" ).append( ad.getValue() ).append( ", 计划运行时间:" ).append( ad.getConfig() ).append( "; 已延误超5分钟！\n" );
+            if ("cronerTimeOut".equals(ad.getColumn())) {
+                content.append(FAIL_TYPE_TRANSLATE_MAP.get(ad.getColumn())).append(", 当前时间:").append(ad.getValue()).append(", 计划运行时间:").append(ad.getConfig()).append("; 已延误超5分钟！\n");
             } else {
-                content.append( FAIL_TYPE_TRANSLATE_MAP.get( ad.getColumn() ) ).append( ", 运行值:" ).append( ad.getValue() ).append( "! 报警阀值:" ).append( ad.getConfig() ).append(
-                        "!\n" );
+                content.append(FAIL_TYPE_TRANSLATE_MAP.get(ad.getColumn())).append(", 运行值:").append(ad.getValue()).append("! 报警阀值:").append(ad.getConfig()).append(
+                        "!\n");
             }
         }
 
         // 邮件错误类型
-        info.setAlertTitle( title.toString() );
-        info.setAlertBody( content.toString() );
-        info.setCreateDate( new Date() );
-        info.setState( CommonState.ENABLED.getValue() );
-
-        try {
-            dao.save( info );
-        } catch (TransactionException e) {
-            log.error( e.getMessage(), e );
-        }
+        info.setAlertTitle(title.toString());
+        info.setAlertBody(content.toString());
+        info.setCreateDate(new Date());
+        info.setState(CommonState.ENABLED.getValue());
+        dao.save(info);
         return info;
     }
 

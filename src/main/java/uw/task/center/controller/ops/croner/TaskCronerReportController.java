@@ -12,8 +12,10 @@ import uw.auth.service.annotation.MscPermDeclare;
 import uw.auth.service.constant.ActionLog;
 import uw.auth.service.constant.AuthType;
 import uw.auth.service.constant.UserType;
+import uw.common.dto.ResponseData;
 import uw.common.util.SystemClock;
-import uw.dao.DaoFactory;
+import uw.dao.DaoManager;
+import uw.dao.DataList;
 import uw.dao.TransactionException;
 import uw.dao.annotation.ColumnMeta;
 import uw.dao.annotation.TableMeta;
@@ -32,7 +34,7 @@ import java.util.List;
 @MscPermDeclare(user = UserType.OPS)
 public class TaskCronerReportController {
 
-    private final DaoFactory dao = DaoFactory.getInstance();
+    private final DaoManager dao = DaoManager.getInstance();
 
 
     /**
@@ -46,10 +48,10 @@ public class TaskCronerReportController {
     @GetMapping("/statsDateSummary")
     @Operation(summary = "分时段汇总报表", description = "分时段数据汇总报表，如果指定taskId，则显示该任务的报表，否则显示全部报表。")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM,log = ActionLog.REQUEST)
-    public List<CronerStatsVo> statsDateSummary(@Parameter(description = "开始日期") @RequestParam(required = false) Date startDate,
-                                                @Parameter(description = "结束日期") @RequestParam(required = false) Date endDate,
-                                                @Parameter(description = "聚合类型。0自动1按日2按时3按分") @RequestParam(required = false, defaultValue = "0") int dateType,
-                                                @Parameter(description = "任务id") @RequestParam(required = false, defaultValue = "0") long taskId) throws TransactionException {
+    public ResponseData<DataList<CronerStatsVo>> statsDateSummary(@Parameter(description = "开始日期") @RequestParam(required = false) Date startDate,
+                                                                  @Parameter(description = "结束日期") @RequestParam(required = false) Date endDate,
+                                                                  @Parameter(description = "聚合类型。0自动1按日2按时3按分") @RequestParam(required = false, defaultValue = "0") int dateType,
+                                                                  @Parameter(description = "任务id") @RequestParam(required = false, defaultValue = "0") long taskId) {
 
         //判断自动类型。
         if (startDate == null) {
@@ -70,21 +72,13 @@ public class TaskCronerReportController {
         }
         String tableName = ShardingTableUtils.getTableNameByDate( "task_croner_stats", startDate );
         List<Object> param = new ArrayList<>();
-        String sql;
+        String sql = switch (dateType) {
+            case 1 -> "SELECT LEFT(create_date,10) AS stats_date,";
+            case 2 -> "SELECT LEFT(create_date,13) AS stats_date,";
+            case 3 -> "SELECT LEFT(create_date,15) AS stats_date,";
+            default -> throw new IllegalArgumentException("dateType is error :" + dateType);
+        };
         // 1按日 2按时 3按10分
-        switch (dateType) {
-            case 1:
-                sql = "SELECT LEFT(create_date,10) AS stats_date,";
-                break;
-            case 2:
-                sql = "SELECT LEFT(create_date,13) AS stats_date,";
-                break;
-            case 3:
-                sql = "SELECT LEFT(create_date,15) AS stats_date,";
-                break;
-            default:
-                throw new IllegalArgumentException( "dateType is error :" + dateType );
-        }
         sql += " sum(num_all) as num_all ,sum(num_fail_program) as num_fail_program ,sum(num_fail_config) as num_fail_config ,sum(num_fail_data) as num_fail_data,sum" +
                 "(num_fail_partner) as num_fail_partner,sum(time_wait) as time_wait,sum(time_run) as time_run FROM " + tableName;
         sql += " WHERE  create_date >= ? AND create_date <= ? ";
@@ -96,8 +90,7 @@ public class TaskCronerReportController {
         }
         sql += " group by stats_date";
         sql += " ORDER BY stats_date ASC";
-        List<CronerStatsVo> cronerStatsList = dao.list( CronerStatsVo.class, sql, param.toArray() ).results();
-        return cronerStatsList;
+        return dao.list( CronerStatsVo.class, sql, param.toArray() );
     }
 
     /**
@@ -110,9 +103,9 @@ public class TaskCronerReportController {
     @GetMapping("/taskStatsList")
     @Operation(summary = "任务汇总报表", description = "分任务的汇总数据，不分时。可以显示出任务名、运行目标、运行类等关键信息")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM,log = ActionLog.REQUEST)
-    public List<CronerStatsDetailVo> taskStatsList(@Parameter(description = "开始日期") @RequestParam(required = false) Date startDate,
-                                                   @Parameter(description = "结束日期") @RequestParam(required = false) Date endDate,
-                                                   @Parameter(description = "聚合类型。0自动1按日2按时3按分") @RequestParam(required = false, defaultValue = "0") int dateType) throws TransactionException {
+    public ResponseData<DataList<CronerStatsDetailVo>> taskStatsList(@Parameter(description = "开始日期") @RequestParam(required = false) Date startDate,
+                                                                     @Parameter(description = "结束日期") @RequestParam(required = false) Date endDate,
+                                                                     @Parameter(description = "聚合类型。0自动1按日2按时3按分") @RequestParam(required = false, defaultValue = "0") int dateType) {
         //判断自动类型。
         if (startDate == null) {
             startDate = new Date( SystemClock.now() - 86400_000L );
@@ -133,29 +126,21 @@ public class TaskCronerReportController {
 
         String tableName = ShardingTableUtils.getTableNameByDate( "task_croner_stats", startDate );
         List<Object> param = new ArrayList<>();
-        String sql = "select tcs.*,tcc.task_name,tcc.run_target,tcc.task_class, tcc.task_param, tcc.task_owner, tcc.task_cron, tcc.run_type";
         // 1按日 2按时 3按10分
-        switch (dateType) {
-            case 1:
-                sql = sql + ", LEFT(create_date,10) AS stats_date";
-                break;
-            case 2:
-                sql = sql + ", LEFT(create_date,13) AS stats_date";
-                break;
-            case 3:
-                sql = sql + ", LEFT(create_date,15) AS stats_date";
-                break;
-            default:
-                throw new IllegalArgumentException( "dateType is error :" + dateType );
-        }
+        String sql = switch (dateType) {
+            case 1 -> "SELECT LEFT(create_date,10) AS stats_date,";
+            case 2 -> "SELECT LEFT(create_date,13) AS stats_date,";
+            case 3 -> "SELECT LEFT(create_date,15) AS stats_date,";
+            default -> throw new IllegalArgumentException("dateType is error :" + dateType);
+        };
+        sql += " tcs.*,tcc.task_name,tcc.run_target,tcc.task_class, tcc.task_param, tcc.task_owner, tcc.task_cron, tcc.run_type";
         sql += " from (SELECT task_id ,sum(num_all) as num_all ,sum(num_fail_program) as num_fail_program ,sum(num_fail_config) as num_fail_config ,sum(num_fail_data) as " +
                 "num_fail_data,sum(num_fail_partner) as num_fail_partner,sum(time_wait) as time_wait,sum(time_run) as time_run FROM " + tableName;
         sql += " WHERE create_date >= ? AND create_date <= ? ";
         sql += " group by task_id order by num_all desc) tcs left join task_croner_info tcc on tcs.task_id =tcc.id ";
         param.add( startDate );
         param.add( endDate );
-        List<CronerStatsDetailVo> cronerStatsDetailList = dao.list( CronerStatsDetailVo.class, sql, param.toArray() ).results();
-        return cronerStatsDetailList;
+        return dao.list( CronerStatsDetailVo.class, sql, param.toArray() );
     }
 
     /**
