@@ -2,7 +2,6 @@ package uw.task.center.entity;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.swagger.v3.oas.annotations.media.Schema;
-import uw.dao.DataEntity;
 import uw.dao.annotation.ColumnMeta;
 import uw.dao.annotation.TableMeta;
 import uw.log.es.vo.LogBaseVo;
@@ -10,8 +9,6 @@ import uw.task.center.util.JsonAsStringDeserializer;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * taskRunnerLog实体类。
@@ -21,7 +18,7 @@ import java.util.Set;
  */
 @Schema(title = "队列任务ES实体类", description = "队列任务ES实体类")
 @TableMeta(tableName = "\\\"uw.task.runner.log\\\"")
-public class TaskRunnerESLog extends LogBaseVo implements Serializable {
+public class TaskRunnerEsLog extends LogBaseVo implements Serializable {
 
     /**
      * id

@@ -20,8 +20,8 @@ import uw.dao.vo.QueryParamResult;
 import uw.log.es.LogClient;
 import uw.log.es.vo.ESDataList;
 import uw.log.es.vo.SearchResponse;
-import uw.task.center.dto.TaskRunnerLogQueryParam;
-import uw.task.center.entity.TaskRunnerESLog;
+import uw.task.center.dto.TaskRunnerEsLogQueryParam;
+import uw.task.center.entity.TaskRunnerEsLog;
 
 /**
  * 队列任务日志表：增删改查
@@ -49,16 +49,16 @@ public class TaskRunnerLogController {
     @GetMapping("/list")
     @Operation(summary = "列表队列任务日志", description = "列表队列任务日志")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public ESDataList<TaskRunnerESLog> list(TaskRunnerLogQueryParam queryParam) throws Exception {
-        AuthServiceHelper.logRef( TaskRunnerESLog.class );
+    public ESDataList<TaskRunnerEsLog> list(TaskRunnerEsLogQueryParam queryParam) throws Exception {
+        AuthServiceHelper.logRef( TaskRunnerEsLog.class );
         //钉死关键参数
         queryParam.SORT_NAME( "@timestamp" );
         queryParam.SORT_TYPE( PageQueryParam.SORT_DESC );
 
-        QueryParamResult result = dao.parseQueryParam( TaskRunnerESLog.class, queryParam );
+        QueryParamResult result = dao.parseQueryParam( TaskRunnerEsLog.class, queryParam );
 
         String dsl = logClient.translateSqlToDsl( result.genFullSql(), queryParam.START_INDEX(), queryParam.RESULT_NUM(), queryParam.CHECK_AUTO_COUNT() );
-        return logClient.mapQueryResponseToEDataList( logClient.dslQuery( TaskRunnerESLog.class, INDEX_NAME, dsl ), queryParam.START_INDEX(), queryParam.RESULT_NUM() );
+        return logClient.mapQueryResponseToEDataList( logClient.dslQuery( TaskRunnerEsLog.class, INDEX_NAME, dsl ), queryParam.START_INDEX(), queryParam.RESULT_NUM() );
     }
 
     /**
@@ -67,14 +67,14 @@ public class TaskRunnerLogController {
     @GetMapping("/load")
     @Operation(summary = "查询队列任务日志", description = "查询队列任务日志")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public TaskRunnerESLog load(@Parameter(description = "主键") long id) throws Exception {
-        AuthServiceHelper.logRef( TaskRunnerESLog.class, id );
+    public TaskRunnerEsLog load(@Parameter(description = "主键") long id) throws Exception {
+        AuthServiceHelper.logRef( TaskRunnerEsLog.class, id );
         String dsl = logClient.translateSqlToDsl( "select * from \\\"" + INDEX_NAME + "\\\" where id=" + id, 0, 1, false );
-        SearchResponse<TaskRunnerESLog> response = logClient.dslQuery( TaskRunnerESLog.class, INDEX_NAME, dsl );
+        SearchResponse<TaskRunnerEsLog> response = logClient.dslQuery( TaskRunnerEsLog.class, INDEX_NAME, dsl );
         if (response == null) {
             return null;
         }
-        SearchResponse.HitsResponse<TaskRunnerESLog> hisResponse = response.getHitsResponse();
+        SearchResponse.HitsResponse<TaskRunnerEsLog> hisResponse = response.getHitsResponse();
         return hisResponse.getHits().getFirst().getSource();
     }
 

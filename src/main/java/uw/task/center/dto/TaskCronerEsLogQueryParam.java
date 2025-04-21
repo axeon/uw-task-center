@@ -11,7 +11,7 @@ import java.util.Map;
  * 定时任务配置列表查询参数。
  */
 @Schema(title = "定时任务配置列表查询参数", description = "定时任务配置列表查询参数")
-public class TaskRunnerLogQueryParam extends PageQueryParam {
+public class TaskCronerEsLogQueryParam extends PageQueryParam {
 
     /**
      * id
@@ -23,37 +23,16 @@ public class TaskRunnerLogQueryParam extends PageQueryParam {
     /**
      * id
      */
-    @QueryMeta(expr = "taskId=?")
-    @Schema(title = "任务ID", description = "任务ID")
-    private Long taskId;
-
-    /**
-     * 关联ID
-     */
     @QueryMeta(expr = "refId=?")
-    @Schema(title = "关联ID", description = "关联ID")
+    @Schema(title = "refId", description = "refId")
     private Long refId;
 
     /**
-     * 关联子ID
+     * id
      */
-    @QueryMeta(expr = "refSubId=?")
-    @Schema(title = "关联子ID", description = "关联子ID")
-    private Long refSubId;
-
-    /**
-     * 关联tag
-     */
-    @QueryMeta(expr = "refTag=?")
-    @Schema(title = "关联tag", description = "关联tag")
-    private String refTag;
-
-    /**
-     * 任务标签
-     */
-    @QueryMeta(expr = "taskTag=?")
-    @Schema(title = "任务标签", description = "任务标签")
-    private String taskTag;
+    @QueryMeta(expr = "taskId=?")
+    @Schema(title = "定时任务id", description = "定时任务id")
+    private Long taskId;
 
     /**
      * 执行类信息
@@ -61,6 +40,13 @@ public class TaskRunnerLogQueryParam extends PageQueryParam {
     @QueryMeta(expr = "taskClass like ?")
     @Schema(title = "执行类信息", description = "执行类信息")
     private String taskClass;
+
+    /**
+     * 任务参数
+     */
+    @QueryMeta(expr = "taskParam=?")
+    @Schema(title = "任务参数", description = "任务参数")
+    private String taskParam;
 
     /**
      * 运行类型
@@ -77,32 +63,18 @@ public class TaskRunnerLogQueryParam extends PageQueryParam {
     private String runTarget;
 
     /**
-     * 队列类型
+     * 应用信息
      */
-    @QueryMeta(expr = "queueType=?")
-    @Schema(title = "队列类型", description = "队列类型")
-    private Integer queueType;
+    @QueryMeta(expr = "hostIp=?")
+    @Schema(title = "应用信息", description = "应用信息")
+    private String appInfo;
 
     /**
-     * 重试类型
+     * 应用主机
      */
-    @QueryMeta(expr = "retryType=?")
-    @Schema(title = "重试类型", description = "重试类型")
-    private Integer retryType;
-
-    /**
-     * 流量限速TAG
-     */
-    @QueryMeta(expr = "rateLimitTag=?")
-    @Schema(title = "流量限速TAG", description = "流量限速TAG")
-    private String rateLimitTag;
-
-    /**
-     * 队列时间范围
-     */
-    @QueryMeta(expr = "queueDate between ? and ?")
-    @Schema(title = "队列时间范围", description = "队列时间范围")
-    private Long[] queueDateRange;
+    @QueryMeta(expr = "appHost=?")
+    @Schema(title = "应用主机", description = "应用主机")
+    private String appHost;
 
     /**
      * 运行时间范围
@@ -161,14 +133,6 @@ public class TaskRunnerLogQueryParam extends PageQueryParam {
         this.id = id;
     }
 
-    public Long getTaskId() {
-        return taskId;
-    }
-
-    public void setTaskId(Long taskId) {
-        this.taskId = taskId;
-    }
-
     public Long getRefId() {
         return refId;
     }
@@ -177,28 +141,12 @@ public class TaskRunnerLogQueryParam extends PageQueryParam {
         this.refId = refId;
     }
 
-    public Long getRefSubId() {
-        return refSubId;
+    public Long getTaskId() {
+        return taskId;
     }
 
-    public void setRefSubId(Long refSubId) {
-        this.refSubId = refSubId;
-    }
-
-    public String getRefTag() {
-        return refTag;
-    }
-
-    public void setRefTag(String refTag) {
-        this.refTag = refTag;
-    }
-
-    public String getTaskTag() {
-        return taskTag;
-    }
-
-    public void setTaskTag(String taskTag) {
-        this.taskTag = taskTag;
+    public void setTaskId(Long taskId) {
+        this.taskId = taskId;
     }
 
     public String getTaskClass() {
@@ -207,6 +155,14 @@ public class TaskRunnerLogQueryParam extends PageQueryParam {
 
     public void setTaskClass(String taskClass) {
         this.taskClass = taskClass;
+    }
+
+    public String getTaskParam() {
+        return taskParam;
+    }
+
+    public void setTaskParam(String taskParam) {
+        this.taskParam = taskParam;
     }
 
     public Integer getRunType() {
@@ -225,36 +181,20 @@ public class TaskRunnerLogQueryParam extends PageQueryParam {
         this.runTarget = runTarget;
     }
 
-    public Integer getQueueType() {
-        return queueType;
+    public String getAppInfo() {
+        return appInfo;
     }
 
-    public void setQueueType(Integer queueType) {
-        this.queueType = queueType;
+    public void setAppInfo(String appInfo) {
+        this.appInfo = appInfo;
     }
 
-    public Integer getRetryType() {
-        return retryType;
+    public String getAppHost() {
+        return appHost;
     }
 
-    public void setRetryType(Integer retryType) {
-        this.retryType = retryType;
-    }
-
-    public String getRateLimitTag() {
-        return rateLimitTag;
-    }
-
-    public void setRateLimitTag(String rateLimitTag) {
-        this.rateLimitTag = rateLimitTag;
-    }
-
-    public Long[] getQueueDateRange() {
-        return queueDateRange;
-    }
-
-    public void setQueueDateRange(Long[] queueDateRange) {
-        this.queueDateRange = queueDateRange;
+    public void setAppHost(String appHost) {
+        this.appHost = appHost;
     }
 
     public Long[] getRunDateRange() {
@@ -265,35 +205,60 @@ public class TaskRunnerLogQueryParam extends PageQueryParam {
         this.runDateRange = runDateRange;
     }
 
+    /**
+     * 获取状态。
+     */
     public Integer getState() {
-        return state;
+        return this.state;
     }
 
+    /**
+     * 设置状态。
+     */
     public void setState(Integer state) {
         this.state = state;
     }
 
+    /**
+     * 获取数组状态。
+     */
     public Integer[] getStates() {
-        return states;
+        return this.states;
     }
 
+    /**
+     * 设置数组状态。
+     */
     public void setStates(Integer[] states) {
         this.states = states;
     }
 
+    /**
+     * 获取大于等于状态。
+     */
     public Integer getStateGte() {
-        return stateGte;
+        return this.stateGte;
     }
 
+    /**
+     * 设置大于等于状态。
+     */
     public void setStateGte(Integer stateGte) {
         this.stateGte = stateGte;
     }
 
+    /**
+     * 获取小于等于状态。
+     */
     public Integer getStateLte() {
-        return stateLte;
+        return this.stateLte;
     }
 
+    /**
+     * 获取小于等于状态。
+     */
     public void setStateLte(Integer stateLte) {
         this.stateLte = stateLte;
     }
+
 }

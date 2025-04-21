@@ -5,7 +5,6 @@ import uw.dao.annotation.ColumnMeta;
 import uw.dao.annotation.TableMeta;
 import uw.log.es.vo.LogBaseVo;
 
-import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -17,7 +16,7 @@ import java.util.Date;
  */
 @Schema(title = "定时任务ES实体类", description = "定时任务ES实体类")
 @TableMeta(tableName = "\\\"uw.task.croner.log\\\"")
-public class TaskCronerESLog extends LogBaseVo implements Serializable {
+public class TaskCronerEsLog extends LogBaseVo implements Serializable {
 
     /**
      * id
