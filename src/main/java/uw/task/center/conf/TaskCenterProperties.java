@@ -2,7 +2,6 @@ package uw.task.center.conf;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * 任务配置类。

@@ -16,7 +16,6 @@ import uw.common.dto.ResponseData;
 import uw.common.util.SystemClock;
 import uw.dao.DaoManager;
 import uw.dao.DataList;
-import uw.dao.TransactionException;
 import uw.dao.annotation.ColumnMeta;
 import uw.dao.annotation.TableMeta;
 import uw.dao.util.ShardingTableUtils;
