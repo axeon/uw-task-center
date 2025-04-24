@@ -1,14 +1,15 @@
 package uw.task.center.entity;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-import uw.dao.DataEntity;
-import uw.dao.annotation.ColumnMeta;
-import uw.dao.annotation.TableMeta;
-
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonRawValue;
+import io.swagger.v3.oas.annotations.media.Schema;
+import uw.dao.DataEntity;
+import uw.dao.annotation.ColumnMeta;
+import uw.dao.annotation.TableMeta;
 
 /**
  * TaskAlertInfo实体类
@@ -73,12 +74,18 @@ public class TaskAlertInfo implements DataEntity,Serializable{
     /**
      * 轻量级状态下更新列表list.
      */
-    private transient Set<String> UPDATED_COLUMN = null;
+    private transient Set<String> _UPDATED_COLUMN = null;
 
     /**
      * 更新的信息.
      */
-    private transient StringBuilder UPDATED_INFO = null;
+    private transient StringBuilder _UPDATED_INFO = null;
+
+
+    /**
+     * 是否加载完成.
+     */
+    private transient boolean _IS_LOADED;
 
 
     /**
@@ -86,24 +93,24 @@ public class TaskAlertInfo implements DataEntity,Serializable{
      */
     @Override
     public String ENTITY_TABLE(){
-         return "task_alert_info";
-       }
+        return "task_alert_info";
+    }
 
     /**
      * 获得实体的表注释。
      */
     @Override
     public String ENTITY_NAME(){
-          return "报警信息";
-       }
+        return "报警信息";
+    }
 
     /**
      * 获得主键
      */
     @Override
     public Serializable ENTITY_ID(){
-          return getId();
-       }
+        return getId();
+    }
 
 
     /**
@@ -111,7 +118,7 @@ public class TaskAlertInfo implements DataEntity,Serializable{
      */
     @Override
     public Set<String> GET_UPDATED_COLUMN() {
-        return UPDATED_COLUMN;
+        return _UPDATED_COLUMN;
     }
 
     /**
@@ -119,10 +126,10 @@ public class TaskAlertInfo implements DataEntity,Serializable{
      */
     @Override
     public String GET_UPDATED_INFO() {
-        if (this.UPDATED_INFO == null) {
+        if (this._UPDATED_INFO == null) {
             return null;
         } else {
-            return this.UPDATED_INFO.toString();
+            return this._UPDATED_INFO.toString();
         }
     }
 
@@ -131,16 +138,16 @@ public class TaskAlertInfo implements DataEntity,Serializable{
      */
     @Override
     public void CLEAR_UPDATED_INFO() {
-        UPDATED_COLUMN = null;
-        UPDATED_INFO = null;
+        _UPDATED_COLUMN = null;
+        _UPDATED_INFO = null;
     }
 
     /**
      * 初始化set相关的信息.
      */
     private void _INIT_UPDATE_INFO() {
-        this.UPDATED_COLUMN = new HashSet<String>();
-        this.UPDATED_INFO = new StringBuilder("表task_alert_info主键\"" + 
+        this._UPDATED_COLUMN = new HashSet<String>();
+        this._UPDATED_INFO = new StringBuilder("表task_alert_info主键\"" + 
         this.id+ "\"更新为:\r\n");
     }
 
@@ -199,12 +206,12 @@ public class TaskAlertInfo implements DataEntity,Serializable{
      * 设置id。
      */
     public void setId(long id){
-        if (!Objects.equals(this.id, id)){
-            if (this.UPDATED_COLUMN == null) {
+        if (!_IS_LOADED||!Objects.equals(this.id, id)){
+            if (this._UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
-            this.UPDATED_COLUMN.add("id");
-            this.UPDATED_INFO.append("id:\"").append(this.id).append("\"=>\"").append(id).append("\"\n");
+            this._UPDATED_COLUMN.add("id");
+            this._UPDATED_INFO.append("id:\"").append(this.id).append("\"=>\"").append(id).append("\"\n");
             this.id = id;
         }
     }
@@ -221,12 +228,12 @@ public class TaskAlertInfo implements DataEntity,Serializable{
      * 设置任务类型。1croner2runner。
      */
     public void setTaskType(String taskType){
-        if (!Objects.equals(this.taskType, taskType)){
-            if (this.UPDATED_COLUMN == null) {
+        if (!_IS_LOADED||!Objects.equals(this.taskType, taskType)){
+            if (this._UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
-            this.UPDATED_COLUMN.add("task_type");
-            this.UPDATED_INFO.append("task_type:\"").append(this.taskType).append("\"=>\"").append(taskType).append("\"\n");
+            this._UPDATED_COLUMN.add("task_type");
+            this._UPDATED_INFO.append("task_type:\"").append(this.taskType).append("\"=>\"").append(taskType).append("\"\n");
             this.taskType = taskType;
         }
     }
@@ -243,12 +250,12 @@ public class TaskAlertInfo implements DataEntity,Serializable{
      * 设置任务配置ID。
      */
     public void setTaskId(long taskId){
-        if (!Objects.equals(this.taskId, taskId)){
-            if (this.UPDATED_COLUMN == null) {
+        if (!_IS_LOADED||!Objects.equals(this.taskId, taskId)){
+            if (this._UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
-            this.UPDATED_COLUMN.add("task_id");
-            this.UPDATED_INFO.append("task_id:\"").append(this.taskId).append("\"=>\"").append(taskId).append("\"\n");
+            this._UPDATED_COLUMN.add("task_id");
+            this._UPDATED_INFO.append("task_id:\"").append(this.taskId).append("\"=>\"").append(taskId).append("\"\n");
             this.taskId = taskId;
         }
     }
@@ -265,12 +272,12 @@ public class TaskAlertInfo implements DataEntity,Serializable{
      * 设置报警标题。
      */
     public void setAlertTitle(String alertTitle){
-        if (!Objects.equals(this.alertTitle, alertTitle)){
-            if (this.UPDATED_COLUMN == null) {
+        if (!_IS_LOADED||!Objects.equals(this.alertTitle, alertTitle)){
+            if (this._UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
-            this.UPDATED_COLUMN.add("alert_title");
-            this.UPDATED_INFO.append("alert_title:\"").append(this.alertTitle).append("\"=>\"").append(alertTitle).append("\"\n");
+            this._UPDATED_COLUMN.add("alert_title");
+            this._UPDATED_INFO.append("alert_title:\"").append(this.alertTitle).append("\"=>\"").append(alertTitle).append("\"\n");
             this.alertTitle = alertTitle;
         }
     }
@@ -287,12 +294,12 @@ public class TaskAlertInfo implements DataEntity,Serializable{
      * 设置报警信息。
      */
     public void setAlertBody(String alertBody){
-        if (!Objects.equals(this.alertBody, alertBody)){
-            if (this.UPDATED_COLUMN == null) {
+        if (!_IS_LOADED||!Objects.equals(this.alertBody, alertBody)){
+            if (this._UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
-            this.UPDATED_COLUMN.add("alert_body");
-            this.UPDATED_INFO.append("alert_body:\"").append(this.alertBody).append("\"=>\"").append(alertBody).append("\"\n");
+            this._UPDATED_COLUMN.add("alert_body");
+            this._UPDATED_INFO.append("alert_body:\"").append(this.alertBody).append("\"=>\"").append(alertBody).append("\"\n");
             this.alertBody = alertBody;
         }
     }
@@ -309,12 +316,12 @@ public class TaskAlertInfo implements DataEntity,Serializable{
      * 设置创建时间。
      */
     public void setCreateDate(java.util.Date createDate){
-        if (!Objects.equals(this.createDate, createDate)){
-            if (this.UPDATED_COLUMN == null) {
+        if (!_IS_LOADED||!Objects.equals(this.createDate, createDate)){
+            if (this._UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
-            this.UPDATED_COLUMN.add("create_date");
-            this.UPDATED_INFO.append("create_date:\"").append(this.createDate).append("\"=>\"").append(createDate).append("\"\n");
+            this._UPDATED_COLUMN.add("create_date");
+            this._UPDATED_INFO.append("create_date:\"").append(this.createDate).append("\"=>\"").append(createDate).append("\"\n");
             this.createDate = createDate;
         }
     }
@@ -331,12 +338,12 @@ public class TaskAlertInfo implements DataEntity,Serializable{
      * 设置状态。
      */
     public void setState(int state){
-        if (!Objects.equals(this.state, state)){
-            if (this.UPDATED_COLUMN == null) {
+        if (!_IS_LOADED||!Objects.equals(this.state, state)){
+            if (this._UPDATED_COLUMN == null) {
                 _INIT_UPDATE_INFO();
             }
-            this.UPDATED_COLUMN.add("state");
-            this.UPDATED_INFO.append("state:\"").append(this.state).append("\"=>\"").append(state).append("\"\n");
+            this._UPDATED_COLUMN.add("state");
+            this._UPDATED_INFO.append("state:\"").append(this.state).append("\"=>\"").append(state).append("\"\n");
             this.state = state;
         }
     }
