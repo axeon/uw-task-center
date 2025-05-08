@@ -44,7 +44,7 @@ public class DashboardController {
      */
     @GetMapping("/taskStats")
     @Operation(summary = "任务统计", description = "")
-    @MscPermDeclare(user = UserType.OPS, auth = AuthType.USER, log = ActionLog.NONE)
+    @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.NONE)
     public TaskStatsVo taskStats() {
         TaskStatsVo taskStatsVo = new TaskStatsVo();
         // 当前运行主机定义:last_update时间在当前系统时间一分钟内的都视为运行中的主机
@@ -65,7 +65,7 @@ public class DashboardController {
      */
     @GetMapping("/listNewAlert")
     @Operation(summary = "报警日志NEW", description = "")
-    @MscPermDeclare(user = UserType.OPS, auth = AuthType.USER, log = ActionLog.NONE)
+    @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.NONE)
     public ResponseData<DataList<TaskAlertInfo>> listNewAlert() {
         // 获取七天之内的最新10条邮件信息记录回显
         return dao.list( TaskAlertInfo.class, "select * from task_alert_info order by id desc", 0, 10, false );
@@ -81,7 +81,7 @@ public class DashboardController {
      */
     @GetMapping("/taskReport")
     @Operation(summary = "任务折线图", description = "任务折线图")
-    @MscPermDeclare(user = UserType.OPS, auth = AuthType.USER, log = ActionLog.NONE)
+    @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.NONE)
     public TaskReportVo taskReport(@Parameter(description = "开始日期") @RequestParam(required = false) Date startDate,
                                    @Parameter(description = "结束日期") @RequestParam(required = false) Date endDate,
                                    @Parameter(description = "聚合类型。0自动1按日2按时3按分") @RequestParam(required = false, defaultValue = "0") int dateType) {
