@@ -32,7 +32,7 @@ import uw.task.center.entity.TaskRunnerEsLog;
 @MscPermDeclare(user = UserType.OPS)
 public class TaskRunnerLogController {
 
-    private static final Logger log = LoggerFactory.getLogger( TaskRunnerLogController.class );
+    private static final Logger log = LoggerFactory.getLogger(TaskRunnerLogController.class);
     private static final String INDEX_NAME = "uw.task.runner.log";
     private final DaoManager dao = DaoManager.getInstance();
     private final LogClient logClient;
@@ -50,15 +50,15 @@ public class TaskRunnerLogController {
     @Operation(summary = "列表队列任务日志", description = "列表队列任务日志")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
     public ESDataList<TaskRunnerEsLog> list(TaskRunnerEsLogQueryParam queryParam) throws Exception {
-        AuthServiceHelper.logRef( TaskRunnerEsLog.class );
+        AuthServiceHelper.logRef(TaskRunnerEsLog.class);
         //钉死关键参数
-        queryParam.SORT_NAME( "@timestamp" );
-        queryParam.SORT_TYPE( PageQueryParam.SORT_DESC );
+        queryParam.SORT_NAME("@timestamp");
+        queryParam.SORT_TYPE(PageQueryParam.SORT_DESC);
 
-        QueryParamResult result = dao.parseQueryParam( TaskRunnerEsLog.class, queryParam );
+        QueryParamResult result = dao.parseQueryParam(TaskRunnerEsLog.class, queryParam);
 
-        String dsl = logClient.translateSqlToDsl( result.genFullSql(), queryParam.START_INDEX(), queryParam.RESULT_NUM(), queryParam.CHECK_AUTO_COUNT() );
-        return logClient.mapQueryResponseToEDataList( logClient.dslQuery( TaskRunnerEsLog.class, INDEX_NAME, dsl ), queryParam.START_INDEX(), queryParam.RESULT_NUM() );
+        String dsl = logClient.translateSqlToDsl(result.genFullSql(), queryParam.START_INDEX(), queryParam.RESULT_NUM(), queryParam.CHECK_AUTO_COUNT());
+        return logClient.mapQueryResponseToEDataList(logClient.dslQuery(TaskRunnerEsLog.class, INDEX_NAME, dsl), queryParam.START_INDEX(), queryParam.RESULT_NUM());
     }
 
     /**
@@ -68,13 +68,13 @@ public class TaskRunnerLogController {
     @Operation(summary = "查询队列任务日志", description = "查询队列任务日志")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
     public TaskRunnerEsLog load(@Parameter(description = "主键") long id) throws Exception {
-        AuthServiceHelper.logRef( TaskRunnerEsLog.class, id );
-        String dsl = logClient.translateSqlToDsl( "select * from \\\"" + INDEX_NAME + "\\\" where id=" + id, 0, 1, false );
-        SearchResponse<TaskRunnerEsLog> response = logClient.dslQuery( TaskRunnerEsLog.class, INDEX_NAME, dsl );
+        AuthServiceHelper.logRef(TaskRunnerEsLog.class, id);
+        String dsl = logClient.translateSqlToDsl("select * from \\\"" + INDEX_NAME + "\\\" where id=" + id, 0, 1, false);
+        SearchResponse<TaskRunnerEsLog> response = logClient.dslQuery(TaskRunnerEsLog.class, INDEX_NAME, dsl);
         if (response == null) {
             return null;
         }
-        SearchResponse.HitsResponse<TaskRunnerEsLog> hisResponse = response.getHitsResponse();
+        SearchResponse.HitResponse<TaskRunnerEsLog> hisResponse = response.getHitResponse();
         return hisResponse.getHits().getFirst().getSource();
     }
 

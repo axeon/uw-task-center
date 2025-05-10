@@ -73,7 +73,7 @@ public class TaskCronerLogController {
         if (response == null) {
             return null;
         }
-        SearchResponse.HitsResponse<TaskCronerEsLog> hisResponse = response.getHitsResponse();
+        SearchResponse.HitResponse<TaskCronerEsLog> hisResponse = response.getHitResponse();
         return hisResponse.getHits().getFirst().getSource();
     }
 
