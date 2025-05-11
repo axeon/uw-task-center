@@ -61,22 +61,5 @@ public class TaskRunnerLogController {
         return logClient.mapQueryResponseToEDataList(logClient.dslQuery(TaskRunnerEsLog.class, INDEX_NAME, dsl), queryParam.START_INDEX(), queryParam.RESULT_NUM());
     }
 
-    /**
-     * 查询队列任务日志
-     */
-    @GetMapping("/load")
-    @Operation(summary = "查询队列任务日志", description = "查询队列任务日志")
-    @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public TaskRunnerEsLog load(@Parameter(description = "主键") long id) throws Exception {
-        AuthServiceHelper.logRef(TaskRunnerEsLog.class, id);
-        String dsl = logClient.translateSqlToDsl("select * from \\\"" + INDEX_NAME + "\\\" where id=" + id, 0, 1, false);
-        SearchResponse<TaskRunnerEsLog> response = logClient.dslQuery(TaskRunnerEsLog.class, INDEX_NAME, dsl);
-        if (response == null) {
-            return null;
-        }
-        SearchResponse.HitResponse<TaskRunnerEsLog> hisResponse = response.getHitResponse();
-        return hisResponse.getHits().getFirst().getSource();
-    }
-
 
 }
