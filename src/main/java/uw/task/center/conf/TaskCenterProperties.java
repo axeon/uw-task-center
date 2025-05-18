@@ -14,12 +14,12 @@ public class TaskCenterProperties{
     /**
      * 系统名称。
      */
-    private String centerName;
+    private String centerName = "任务管理中心";
 
     /**
      * 报警的钉钉通知。
      */
-    private DingConfig alertDing = new DingConfig();
+    private DingConfig alertDing = new DingConfig("","TASK");
 
     public String getCenterName() {
         return centerName;
@@ -37,6 +37,9 @@ public class TaskCenterProperties{
         this.alertDing = alertDing;
     }
 
+    /**
+     * 钉钉通知配置。
+     */
     public static class DingConfig {
 
         /**
@@ -48,6 +51,22 @@ public class TaskCenterProperties{
          * 通知key。
          */
         private String notifyKey;
+
+        /**
+         * 构造函数。
+         * @param notifyUrl
+         * @param notifyKey
+         */
+        public DingConfig(String notifyUrl, String notifyKey) {
+            this.notifyUrl = notifyUrl;
+            this.notifyKey = notifyKey;
+        }
+
+        /**
+         * 构造函数。
+         */
+        public DingConfig() {
+        }
 
         /**
          * 检查配置是否符合。
