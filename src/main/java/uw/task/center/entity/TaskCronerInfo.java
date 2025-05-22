@@ -1,15 +1,15 @@
 package uw.task.center.entity;
 
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
-
 import com.fasterxml.jackson.annotation.JsonRawValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import uw.common.util.JsonUtils;
 import uw.dao.DataEntity;
+import uw.dao.DataUpdateInfo;
 import uw.dao.annotation.ColumnMeta;
 import uw.dao.annotation.TableMeta;
+
+import java.io.Serializable;
+
 
 /**
  * TaskCronerInfo实体类
@@ -212,21 +212,14 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     private int state;
 
     /**
-     * 轻量级状态下更新列表list.
+     * 数据更新信息.
      */
-    private transient Set<String> _UPDATED_COLUMN = null;
-
-    /**
-     * 更新的信息.
-     */
-    private transient StringBuilder _UPDATED_INFO = null;
-
+    private transient DataUpdateInfo _UPDATED_INFO = null;
 
     /**
      * 是否加载完成.
      */
     private transient boolean _IS_LOADED;
-
 
     /**
      * 获得实体的表名。
@@ -252,25 +245,12 @@ public class TaskCronerInfo implements DataEntity,Serializable{
         return getId();
     }
 
-
     /**
-     * 获取更改的字段列表.
+     * 获取更新信息.
      */
     @Override
-    public Set<String> GET_UPDATED_COLUMN() {
-        return _UPDATED_COLUMN;
-    }
-
-    /**
-     * 获取文本更新信息.
-     */
-    @Override
-    public String GET_UPDATED_INFO() {
-        if (this._UPDATED_INFO == null) {
-            return null;
-        } else {
-            return this._UPDATED_INFO.toString();
-        }
+    public DataUpdateInfo GET_UPDATED_INFO() {
+        return this._UPDATED_INFO;
     }
 
     /**
@@ -278,17 +258,7 @@ public class TaskCronerInfo implements DataEntity,Serializable{
      */
     @Override
     public void CLEAR_UPDATED_INFO() {
-        _UPDATED_COLUMN = null;
         _UPDATED_INFO = null;
-    }
-
-    /**
-     * 初始化set相关的信息.
-     */
-    private void _INIT_UPDATE_INFO() {
-        this._UPDATED_COLUMN = new HashSet<String>();
-        this._UPDATED_INFO = new StringBuilder("表task_croner_info主键\"" + 
-        this.id+ "\"更新为:\r\n");
     }
 
 
@@ -486,14 +456,8 @@ public class TaskCronerInfo implements DataEntity,Serializable{
      * 设置id。
      */
     public void setId(long id){
-        if (!_IS_LOADED||!Objects.equals(this.id, id)){
-            if (this._UPDATED_COLUMN == null) {
-                _INIT_UPDATE_INFO();
-            }
-            this._UPDATED_COLUMN.add("id");
-            this._UPDATED_INFO.append("id:\"").append(this.id).append("\"=>\"").append(id).append("\"\n");
-            this.id = id;
-        }
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "id", this.id, id, !_IS_LOADED );
+        this.id = id;
     }
 
     /**
@@ -502,20 +466,14 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     public TaskCronerInfo id(long id){
         setId(id);
         return this;
-        }
+    }
 
     /**
      * 设置任务名称。
      */
     public void setTaskName(String taskName){
-        if (!_IS_LOADED||!Objects.equals(this.taskName, taskName)){
-            if (this._UPDATED_COLUMN == null) {
-                _INIT_UPDATE_INFO();
-            }
-            this._UPDATED_COLUMN.add("task_name");
-            this._UPDATED_INFO.append("task_name:\"").append(this.taskName).append("\"=>\"").append(taskName).append("\"\n");
-            this.taskName = taskName;
-        }
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "taskName", this.taskName, taskName, !_IS_LOADED );
+        this.taskName = taskName;
     }
 
     /**
@@ -524,20 +482,14 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     public TaskCronerInfo taskName(String taskName){
         setTaskName(taskName);
         return this;
-        }
+    }
 
     /**
      * 设置任务描述。
      */
     public void setTaskDesc(String taskDesc){
-        if (!_IS_LOADED||!Objects.equals(this.taskDesc, taskDesc)){
-            if (this._UPDATED_COLUMN == null) {
-                _INIT_UPDATE_INFO();
-            }
-            this._UPDATED_COLUMN.add("task_desc");
-            this._UPDATED_INFO.append("task_desc:\"").append(this.taskDesc).append("\"=>\"").append(taskDesc).append("\"\n");
-            this.taskDesc = taskDesc;
-        }
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "taskDesc", this.taskDesc, taskDesc, !_IS_LOADED );
+        this.taskDesc = taskDesc;
     }
 
     /**
@@ -546,20 +498,14 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     public TaskCronerInfo taskDesc(String taskDesc){
         setTaskDesc(taskDesc);
         return this;
-        }
+    }
 
     /**
      * 设置执行类信息。
      */
     public void setTaskClass(String taskClass){
-        if (!_IS_LOADED||!Objects.equals(this.taskClass, taskClass)){
-            if (this._UPDATED_COLUMN == null) {
-                _INIT_UPDATE_INFO();
-            }
-            this._UPDATED_COLUMN.add("task_class");
-            this._UPDATED_INFO.append("task_class:\"").append(this.taskClass).append("\"=>\"").append(taskClass).append("\"\n");
-            this.taskClass = taskClass;
-        }
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "taskClass", this.taskClass, taskClass, !_IS_LOADED );
+        this.taskClass = taskClass;
     }
 
     /**
@@ -568,20 +514,14 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     public TaskCronerInfo taskClass(String taskClass){
         setTaskClass(taskClass);
         return this;
-        }
+    }
 
     /**
      * 设置任务参数。
      */
     public void setTaskParam(String taskParam){
-        if (!_IS_LOADED||!Objects.equals(this.taskParam, taskParam)){
-            if (this._UPDATED_COLUMN == null) {
-                _INIT_UPDATE_INFO();
-            }
-            this._UPDATED_COLUMN.add("task_param");
-            this._UPDATED_INFO.append("task_param:\"").append(this.taskParam).append("\"=>\"").append(taskParam).append("\"\n");
-            this.taskParam = taskParam;
-        }
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "taskParam", this.taskParam, taskParam, !_IS_LOADED );
+        this.taskParam = taskParam;
     }
 
     /**
@@ -590,20 +530,14 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     public TaskCronerInfo taskParam(String taskParam){
         setTaskParam(taskParam);
         return this;
-        }
+    }
 
     /**
      * 设置任务所有人。
      */
     public void setTaskOwner(String taskOwner){
-        if (!_IS_LOADED||!Objects.equals(this.taskOwner, taskOwner)){
-            if (this._UPDATED_COLUMN == null) {
-                _INIT_UPDATE_INFO();
-            }
-            this._UPDATED_COLUMN.add("task_owner");
-            this._UPDATED_INFO.append("task_owner:\"").append(this.taskOwner).append("\"=>\"").append(taskOwner).append("\"\n");
-            this.taskOwner = taskOwner;
-        }
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "taskOwner", this.taskOwner, taskOwner, !_IS_LOADED );
+        this.taskOwner = taskOwner;
     }
 
     /**
@@ -612,20 +546,14 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     public TaskCronerInfo taskOwner(String taskOwner){
         setTaskOwner(taskOwner);
         return this;
-        }
+    }
 
     /**
      * 设置cron表达式。
      */
     public void setTaskCron(String taskCron){
-        if (!_IS_LOADED||!Objects.equals(this.taskCron, taskCron)){
-            if (this._UPDATED_COLUMN == null) {
-                _INIT_UPDATE_INFO();
-            }
-            this._UPDATED_COLUMN.add("task_cron");
-            this._UPDATED_INFO.append("task_cron:\"").append(this.taskCron).append("\"=>\"").append(taskCron).append("\"\n");
-            this.taskCron = taskCron;
-        }
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "taskCron", this.taskCron, taskCron, !_IS_LOADED );
+        this.taskCron = taskCron;
     }
 
     /**
@@ -634,20 +562,14 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     public TaskCronerInfo taskCron(String taskCron){
         setTaskCron(taskCron);
         return this;
-        }
+    }
 
     /**
      * 设置运行类型。
      */
     public void setRunType(int runType){
-        if (!_IS_LOADED||!Objects.equals(this.runType, runType)){
-            if (this._UPDATED_COLUMN == null) {
-                _INIT_UPDATE_INFO();
-            }
-            this._UPDATED_COLUMN.add("run_type");
-            this._UPDATED_INFO.append("run_type:\"").append(this.runType).append("\"=>\"").append(runType).append("\"\n");
-            this.runType = runType;
-        }
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "runType", this.runType, runType, !_IS_LOADED );
+        this.runType = runType;
     }
 
     /**
@@ -656,20 +578,14 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     public TaskCronerInfo runType(int runType){
         setRunType(runType);
         return this;
-        }
+    }
 
     /**
      * 设置运行目标。
      */
     public void setRunTarget(String runTarget){
-        if (!_IS_LOADED||!Objects.equals(this.runTarget, runTarget)){
-            if (this._UPDATED_COLUMN == null) {
-                _INIT_UPDATE_INFO();
-            }
-            this._UPDATED_COLUMN.add("run_target");
-            this._UPDATED_INFO.append("run_target:\"").append(this.runTarget).append("\"=>\"").append(runTarget).append("\"\n");
-            this.runTarget = runTarget;
-        }
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "runTarget", this.runTarget, runTarget, !_IS_LOADED );
+        this.runTarget = runTarget;
     }
 
     /**
@@ -678,20 +594,14 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     public TaskCronerInfo runTarget(String runTarget){
         setRunTarget(runTarget);
         return this;
-        }
+    }
 
     /**
      * 设置日志类型。
      */
     public void setLogLevel(int logLevel){
-        if (!_IS_LOADED||!Objects.equals(this.logLevel, logLevel)){
-            if (this._UPDATED_COLUMN == null) {
-                _INIT_UPDATE_INFO();
-            }
-            this._UPDATED_COLUMN.add("log_level");
-            this._UPDATED_INFO.append("log_level:\"").append(this.logLevel).append("\"=>\"").append(logLevel).append("\"\n");
-            this.logLevel = logLevel;
-        }
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "logLevel", this.logLevel, logLevel, !_IS_LOADED );
+        this.logLevel = logLevel;
     }
 
     /**
@@ -700,20 +610,14 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     public TaskCronerInfo logLevel(int logLevel){
         setLogLevel(logLevel);
         return this;
-        }
+    }
 
     /**
      * 设置日志长度限制。
      */
     public void setLogLimitSize(int logLimitSize){
-        if (!_IS_LOADED||!Objects.equals(this.logLimitSize, logLimitSize)){
-            if (this._UPDATED_COLUMN == null) {
-                _INIT_UPDATE_INFO();
-            }
-            this._UPDATED_COLUMN.add("log_limit_size");
-            this._UPDATED_INFO.append("log_limit_size:\"").append(this.logLimitSize).append("\"=>\"").append(logLimitSize).append("\"\n");
-            this.logLimitSize = logLimitSize;
-        }
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "logLimitSize", this.logLimitSize, logLimitSize, !_IS_LOADED );
+        this.logLimitSize = logLimitSize;
     }
 
     /**
@@ -722,20 +626,14 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     public TaskCronerInfo logLimitSize(int logLimitSize){
         setLogLimitSize(logLimitSize);
         return this;
-        }
+    }
 
     /**
      * 设置下次执行时间。
      */
     public void setNextRunDate(java.util.Date nextRunDate){
-        if (!_IS_LOADED||!Objects.equals(this.nextRunDate, nextRunDate)){
-            if (this._UPDATED_COLUMN == null) {
-                _INIT_UPDATE_INFO();
-            }
-            this._UPDATED_COLUMN.add("next_run_date");
-            this._UPDATED_INFO.append("next_run_date:\"").append(this.nextRunDate).append("\"=>\"").append(nextRunDate).append("\"\n");
-            this.nextRunDate = nextRunDate;
-        }
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "nextRunDate", this.nextRunDate, nextRunDate, !_IS_LOADED );
+        this.nextRunDate = nextRunDate;
     }
 
     /**
@@ -744,20 +642,14 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     public TaskCronerInfo nextRunDate(java.util.Date nextRunDate){
         setNextRunDate(nextRunDate);
         return this;
-        }
+    }
 
     /**
      * 设置最后统计时间。
      */
     public void setStatsDate(java.util.Date statsDate){
-        if (!_IS_LOADED||!Objects.equals(this.statsDate, statsDate)){
-            if (this._UPDATED_COLUMN == null) {
-                _INIT_UPDATE_INFO();
-            }
-            this._UPDATED_COLUMN.add("stats_date");
-            this._UPDATED_INFO.append("stats_date:\"").append(this.statsDate).append("\"=>\"").append(statsDate).append("\"\n");
-            this.statsDate = statsDate;
-        }
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "statsDate", this.statsDate, statsDate, !_IS_LOADED );
+        this.statsDate = statsDate;
     }
 
     /**
@@ -766,20 +658,14 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     public TaskCronerInfo statsDate(java.util.Date statsDate){
         setStatsDate(statsDate);
         return this;
-        }
+    }
 
     /**
      * 设置统计运行次数。
      */
     public void setStatsRunNum(int statsRunNum){
-        if (!_IS_LOADED||!Objects.equals(this.statsRunNum, statsRunNum)){
-            if (this._UPDATED_COLUMN == null) {
-                _INIT_UPDATE_INFO();
-            }
-            this._UPDATED_COLUMN.add("stats_run_num");
-            this._UPDATED_INFO.append("stats_run_num:\"").append(this.statsRunNum).append("\"=>\"").append(statsRunNum).append("\"\n");
-            this.statsRunNum = statsRunNum;
-        }
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "statsRunNum", this.statsRunNum, statsRunNum, !_IS_LOADED );
+        this.statsRunNum = statsRunNum;
     }
 
     /**
@@ -788,20 +674,14 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     public TaskCronerInfo statsRunNum(int statsRunNum){
         setStatsRunNum(statsRunNum);
         return this;
-        }
+    }
 
     /**
      * 设置统计运行失败次数。
      */
     public void setStatsFailNum(int statsFailNum){
-        if (!_IS_LOADED||!Objects.equals(this.statsFailNum, statsFailNum)){
-            if (this._UPDATED_COLUMN == null) {
-                _INIT_UPDATE_INFO();
-            }
-            this._UPDATED_COLUMN.add("stats_fail_num");
-            this._UPDATED_INFO.append("stats_fail_num:\"").append(this.statsFailNum).append("\"=>\"").append(statsFailNum).append("\"\n");
-            this.statsFailNum = statsFailNum;
-        }
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "statsFailNum", this.statsFailNum, statsFailNum, !_IS_LOADED );
+        this.statsFailNum = statsFailNum;
     }
 
     /**
@@ -810,20 +690,14 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     public TaskCronerInfo statsFailNum(int statsFailNum){
         setStatsFailNum(statsFailNum);
         return this;
-        }
+    }
 
     /**
      * 设置统计总时间毫秒数。
      */
     public void setStatsRunTime(long statsRunTime){
-        if (!_IS_LOADED||!Objects.equals(this.statsRunTime, statsRunTime)){
-            if (this._UPDATED_COLUMN == null) {
-                _INIT_UPDATE_INFO();
-            }
-            this._UPDATED_COLUMN.add("stats_run_time");
-            this._UPDATED_INFO.append("stats_run_time:\"").append(this.statsRunTime).append("\"=>\"").append(statsRunTime).append("\"\n");
-            this.statsRunTime = statsRunTime;
-        }
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "statsRunTime", this.statsRunTime, statsRunTime, !_IS_LOADED );
+        this.statsRunTime = statsRunTime;
     }
 
     /**
@@ -832,20 +706,14 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     public TaskCronerInfo statsRunTime(long statsRunTime){
         setStatsRunTime(statsRunTime);
         return this;
-        }
+    }
 
     /**
      * 设置失败率。
      */
     public void setAlertFailRate(int alertFailRate){
-        if (!_IS_LOADED||!Objects.equals(this.alertFailRate, alertFailRate)){
-            if (this._UPDATED_COLUMN == null) {
-                _INIT_UPDATE_INFO();
-            }
-            this._UPDATED_COLUMN.add("alert_fail_rate");
-            this._UPDATED_INFO.append("alert_fail_rate:\"").append(this.alertFailRate).append("\"=>\"").append(alertFailRate).append("\"\n");
-            this.alertFailRate = alertFailRate;
-        }
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "alertFailRate", this.alertFailRate, alertFailRate, !_IS_LOADED );
+        this.alertFailRate = alertFailRate;
     }
 
     /**
@@ -854,20 +722,14 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     public TaskCronerInfo alertFailRate(int alertFailRate){
         setAlertFailRate(alertFailRate);
         return this;
-        }
+    }
 
     /**
      * 设置接口失败率。
      */
     public void setAlertFailPartnerRate(int alertFailPartnerRate){
-        if (!_IS_LOADED||!Objects.equals(this.alertFailPartnerRate, alertFailPartnerRate)){
-            if (this._UPDATED_COLUMN == null) {
-                _INIT_UPDATE_INFO();
-            }
-            this._UPDATED_COLUMN.add("alert_fail_partner_rate");
-            this._UPDATED_INFO.append("alert_fail_partner_rate:\"").append(this.alertFailPartnerRate).append("\"=>\"").append(alertFailPartnerRate).append("\"\n");
-            this.alertFailPartnerRate = alertFailPartnerRate;
-        }
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "alertFailPartnerRate", this.alertFailPartnerRate, alertFailPartnerRate, !_IS_LOADED );
+        this.alertFailPartnerRate = alertFailPartnerRate;
     }
 
     /**
@@ -876,20 +738,14 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     public TaskCronerInfo alertFailPartnerRate(int alertFailPartnerRate){
         setAlertFailPartnerRate(alertFailPartnerRate);
         return this;
-        }
+    }
 
     /**
      * 设置数据失败率。
      */
     public void setAlertFailDataRate(int alertFailDataRate){
-        if (!_IS_LOADED||!Objects.equals(this.alertFailDataRate, alertFailDataRate)){
-            if (this._UPDATED_COLUMN == null) {
-                _INIT_UPDATE_INFO();
-            }
-            this._UPDATED_COLUMN.add("alert_fail_data_rate");
-            this._UPDATED_INFO.append("alert_fail_data_rate:\"").append(this.alertFailDataRate).append("\"=>\"").append(alertFailDataRate).append("\"\n");
-            this.alertFailDataRate = alertFailDataRate;
-        }
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "alertFailDataRate", this.alertFailDataRate, alertFailDataRate, !_IS_LOADED );
+        this.alertFailDataRate = alertFailDataRate;
     }
 
     /**
@@ -898,20 +754,14 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     public TaskCronerInfo alertFailDataRate(int alertFailDataRate){
         setAlertFailDataRate(alertFailDataRate);
         return this;
-        }
+    }
 
     /**
      * 设置程序失败率。
      */
     public void setAlertFailProgramRate(int alertFailProgramRate){
-        if (!_IS_LOADED||!Objects.equals(this.alertFailProgramRate, alertFailProgramRate)){
-            if (this._UPDATED_COLUMN == null) {
-                _INIT_UPDATE_INFO();
-            }
-            this._UPDATED_COLUMN.add("alert_fail_program_rate");
-            this._UPDATED_INFO.append("alert_fail_program_rate:\"").append(this.alertFailProgramRate).append("\"=>\"").append(alertFailProgramRate).append("\"\n");
-            this.alertFailProgramRate = alertFailProgramRate;
-        }
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "alertFailProgramRate", this.alertFailProgramRate, alertFailProgramRate, !_IS_LOADED );
+        this.alertFailProgramRate = alertFailProgramRate;
     }
 
     /**
@@ -920,20 +770,14 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     public TaskCronerInfo alertFailProgramRate(int alertFailProgramRate){
         setAlertFailProgramRate(alertFailProgramRate);
         return this;
-        }
+    }
 
     /**
      * 设置等待超时。
      */
     public void setAlertWaitTimeout(int alertWaitTimeout){
-        if (!_IS_LOADED||!Objects.equals(this.alertWaitTimeout, alertWaitTimeout)){
-            if (this._UPDATED_COLUMN == null) {
-                _INIT_UPDATE_INFO();
-            }
-            this._UPDATED_COLUMN.add("alert_wait_timeout");
-            this._UPDATED_INFO.append("alert_wait_timeout:\"").append(this.alertWaitTimeout).append("\"=>\"").append(alertWaitTimeout).append("\"\n");
-            this.alertWaitTimeout = alertWaitTimeout;
-        }
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "alertWaitTimeout", this.alertWaitTimeout, alertWaitTimeout, !_IS_LOADED );
+        this.alertWaitTimeout = alertWaitTimeout;
     }
 
     /**
@@ -942,20 +786,14 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     public TaskCronerInfo alertWaitTimeout(int alertWaitTimeout){
         setAlertWaitTimeout(alertWaitTimeout);
         return this;
-        }
+    }
 
     /**
      * 设置运行超时。
      */
     public void setAlertRunTimeout(int alertRunTimeout){
-        if (!_IS_LOADED||!Objects.equals(this.alertRunTimeout, alertRunTimeout)){
-            if (this._UPDATED_COLUMN == null) {
-                _INIT_UPDATE_INFO();
-            }
-            this._UPDATED_COLUMN.add("alert_run_timeout");
-            this._UPDATED_INFO.append("alert_run_timeout:\"").append(this.alertRunTimeout).append("\"=>\"").append(alertRunTimeout).append("\"\n");
-            this.alertRunTimeout = alertRunTimeout;
-        }
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "alertRunTimeout", this.alertRunTimeout, alertRunTimeout, !_IS_LOADED );
+        this.alertRunTimeout = alertRunTimeout;
     }
 
     /**
@@ -964,20 +802,14 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     public TaskCronerInfo alertRunTimeout(int alertRunTimeout){
         setAlertRunTimeout(alertRunTimeout);
         return this;
-        }
+    }
 
     /**
      * 设置我方联系信息。
      */
     public void setTaskLinkOur(String taskLinkOur){
-        if (!_IS_LOADED||!Objects.equals(this.taskLinkOur, taskLinkOur)){
-            if (this._UPDATED_COLUMN == null) {
-                _INIT_UPDATE_INFO();
-            }
-            this._UPDATED_COLUMN.add("task_link_our");
-            this._UPDATED_INFO.append("task_link_our:\"").append(this.taskLinkOur).append("\"=>\"").append(taskLinkOur).append("\"\n");
-            this.taskLinkOur = taskLinkOur;
-        }
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "taskLinkOur", this.taskLinkOur, taskLinkOur, !_IS_LOADED );
+        this.taskLinkOur = taskLinkOur;
     }
 
     /**
@@ -986,20 +818,14 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     public TaskCronerInfo taskLinkOur(String taskLinkOur){
         setTaskLinkOur(taskLinkOur);
         return this;
-        }
+    }
 
     /**
      * 设置商户联系信息。
      */
     public void setTaskLinkMch(String taskLinkMch){
-        if (!_IS_LOADED||!Objects.equals(this.taskLinkMch, taskLinkMch)){
-            if (this._UPDATED_COLUMN == null) {
-                _INIT_UPDATE_INFO();
-            }
-            this._UPDATED_COLUMN.add("task_link_mch");
-            this._UPDATED_INFO.append("task_link_mch:\"").append(this.taskLinkMch).append("\"=>\"").append(taskLinkMch).append("\"\n");
-            this.taskLinkMch = taskLinkMch;
-        }
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "taskLinkMch", this.taskLinkMch, taskLinkMch, !_IS_LOADED );
+        this.taskLinkMch = taskLinkMch;
     }
 
     /**
@@ -1008,20 +834,14 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     public TaskCronerInfo taskLinkMch(String taskLinkMch){
         setTaskLinkMch(taskLinkMch);
         return this;
-        }
+    }
 
     /**
      * 设置创建时间。
      */
     public void setCreateDate(java.util.Date createDate){
-        if (!_IS_LOADED||!Objects.equals(this.createDate, createDate)){
-            if (this._UPDATED_COLUMN == null) {
-                _INIT_UPDATE_INFO();
-            }
-            this._UPDATED_COLUMN.add("create_date");
-            this._UPDATED_INFO.append("create_date:\"").append(this.createDate).append("\"=>\"").append(createDate).append("\"\n");
-            this.createDate = createDate;
-        }
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "createDate", this.createDate, createDate, !_IS_LOADED );
+        this.createDate = createDate;
     }
 
     /**
@@ -1030,20 +850,14 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     public TaskCronerInfo createDate(java.util.Date createDate){
         setCreateDate(createDate);
         return this;
-        }
+    }
 
     /**
      * 设置最后修改时间。
      */
     public void setModifyDate(java.util.Date modifyDate){
-        if (!_IS_LOADED||!Objects.equals(this.modifyDate, modifyDate)){
-            if (this._UPDATED_COLUMN == null) {
-                _INIT_UPDATE_INFO();
-            }
-            this._UPDATED_COLUMN.add("modify_date");
-            this._UPDATED_INFO.append("modify_date:\"").append(this.modifyDate).append("\"=>\"").append(modifyDate).append("\"\n");
-            this.modifyDate = modifyDate;
-        }
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "modifyDate", this.modifyDate, modifyDate, !_IS_LOADED );
+        this.modifyDate = modifyDate;
     }
 
     /**
@@ -1052,20 +866,14 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     public TaskCronerInfo modifyDate(java.util.Date modifyDate){
         setModifyDate(modifyDate);
         return this;
-        }
+    }
 
     /**
      * 设置状态1正常，0暂停，-1标记删除。
      */
     public void setState(int state){
-        if (!_IS_LOADED||!Objects.equals(this.state, state)){
-            if (this._UPDATED_COLUMN == null) {
-                _INIT_UPDATE_INFO();
-            }
-            this._UPDATED_COLUMN.add("state");
-            this._UPDATED_INFO.append("state:\"").append(this.state).append("\"=>\"").append(state).append("\"\n");
-            this.state = state;
-        }
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "state", this.state, state, !_IS_LOADED );
+        this.state = state;
     }
 
     /**
@@ -1074,42 +882,14 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     public TaskCronerInfo state(int state){
         setState(state);
         return this;
-        }
+    }
 
     /**
      * 重载toString方法.
      */
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("id:\"" + this.id + "\"\r\n");
-        sb.append("task_name:\"" + this.taskName + "\"\r\n");
-        sb.append("task_desc:\"" + this.taskDesc + "\"\r\n");
-        sb.append("task_class:\"" + this.taskClass + "\"\r\n");
-        sb.append("task_param:\"" + this.taskParam + "\"\r\n");
-        sb.append("task_owner:\"" + this.taskOwner + "\"\r\n");
-        sb.append("task_cron:\"" + this.taskCron + "\"\r\n");
-        sb.append("run_type:\"" + this.runType + "\"\r\n");
-        sb.append("run_target:\"" + this.runTarget + "\"\r\n");
-        sb.append("log_level:\"" + this.logLevel + "\"\r\n");
-        sb.append("log_limit_size:\"" + this.logLimitSize + "\"\r\n");
-        sb.append("next_run_date:\"" + this.nextRunDate + "\"\r\n");
-        sb.append("stats_date:\"" + this.statsDate + "\"\r\n");
-        sb.append("stats_run_num:\"" + this.statsRunNum + "\"\r\n");
-        sb.append("stats_fail_num:\"" + this.statsFailNum + "\"\r\n");
-        sb.append("stats_run_time:\"" + this.statsRunTime + "\"\r\n");
-        sb.append("alert_fail_rate:\"" + this.alertFailRate + "\"\r\n");
-        sb.append("alert_fail_partner_rate:\"" + this.alertFailPartnerRate + "\"\r\n");
-        sb.append("alert_fail_data_rate:\"" + this.alertFailDataRate + "\"\r\n");
-        sb.append("alert_fail_program_rate:\"" + this.alertFailProgramRate + "\"\r\n");
-        sb.append("alert_wait_timeout:\"" + this.alertWaitTimeout + "\"\r\n");
-        sb.append("alert_run_timeout:\"" + this.alertRunTimeout + "\"\r\n");
-        sb.append("task_link_our:\"" + this.taskLinkOur + "\"\r\n");
-        sb.append("task_link_mch:\"" + this.taskLinkMch + "\"\r\n");
-        sb.append("create_date:\"" + this.createDate + "\"\r\n");
-        sb.append("modify_date:\"" + this.modifyDate + "\"\r\n");
-        sb.append("state:\"" + this.state + "\"\r\n");
-        return sb.toString();
+        return JsonUtils.toString(this);
     }
 
 }

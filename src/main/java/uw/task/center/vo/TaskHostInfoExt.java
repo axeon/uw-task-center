@@ -1,4 +1,8 @@
-package uw.task.center.entity;
+package uw.task.center.vo;
+
+import uw.task.center.entity.TaskCronerStats;
+import uw.task.center.entity.TaskHostInfo;
+import uw.task.center.entity.TaskRunnerStats;
 
 import java.util.List;
 

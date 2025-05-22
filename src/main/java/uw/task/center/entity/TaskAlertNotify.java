@@ -1,15 +1,15 @@
 package uw.task.center.entity;
 
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
-
 import com.fasterxml.jackson.annotation.JsonRawValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import uw.common.util.JsonUtils;
 import uw.dao.DataEntity;
+import uw.dao.DataUpdateInfo;
 import uw.dao.annotation.ColumnMeta;
 import uw.dao.annotation.TableMeta;
+
+import java.io.Serializable;
+
 
 /**
  * TaskAlertNotify实体类
@@ -86,21 +86,14 @@ public class TaskAlertNotify implements DataEntity,Serializable{
     private int state;
 
     /**
-     * 轻量级状态下更新列表list.
+     * 数据更新信息.
      */
-    private transient Set<String> _UPDATED_COLUMN = null;
-
-    /**
-     * 更新的信息.
-     */
-    private transient StringBuilder _UPDATED_INFO = null;
-
+    private transient DataUpdateInfo _UPDATED_INFO = null;
 
     /**
      * 是否加载完成.
      */
     private transient boolean _IS_LOADED;
-
 
     /**
      * 获得实体的表名。
@@ -126,25 +119,12 @@ public class TaskAlertNotify implements DataEntity,Serializable{
         return getId();
     }
 
-
     /**
-     * 获取更改的字段列表.
+     * 获取更新信息.
      */
     @Override
-    public Set<String> GET_UPDATED_COLUMN() {
-        return _UPDATED_COLUMN;
-    }
-
-    /**
-     * 获取文本更新信息.
-     */
-    @Override
-    public String GET_UPDATED_INFO() {
-        if (this._UPDATED_INFO == null) {
-            return null;
-        } else {
-            return this._UPDATED_INFO.toString();
-        }
+    public DataUpdateInfo GET_UPDATED_INFO() {
+        return this._UPDATED_INFO;
     }
 
     /**
@@ -152,17 +132,7 @@ public class TaskAlertNotify implements DataEntity,Serializable{
      */
     @Override
     public void CLEAR_UPDATED_INFO() {
-        _UPDATED_COLUMN = null;
         _UPDATED_INFO = null;
-    }
-
-    /**
-     * 初始化set相关的信息.
-     */
-    private void _INIT_UPDATE_INFO() {
-        this._UPDATED_COLUMN = new HashSet<String>();
-        this._UPDATED_INFO = new StringBuilder("表task_alert_notify主键\"" + 
-        this.id+ "\"更新为:\r\n");
     }
 
 
@@ -234,14 +204,8 @@ public class TaskAlertNotify implements DataEntity,Serializable{
      * 设置。
      */
     public void setId(long id){
-        if (!_IS_LOADED||!Objects.equals(this.id, id)){
-            if (this._UPDATED_COLUMN == null) {
-                _INIT_UPDATE_INFO();
-            }
-            this._UPDATED_COLUMN.add("id");
-            this._UPDATED_INFO.append("id:\"").append(this.id).append("\"=>\"").append(id).append("\"\n");
-            this.id = id;
-        }
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "id", this.id, id, !_IS_LOADED );
+        this.id = id;
     }
 
     /**
@@ -250,20 +214,14 @@ public class TaskAlertNotify implements DataEntity,Serializable{
     public TaskAlertNotify id(long id){
         setId(id);
         return this;
-        }
+    }
 
     /**
      * 设置报警信息ID。
      */
     public void setInfoId(long infoId){
-        if (!_IS_LOADED||!Objects.equals(this.infoId, infoId)){
-            if (this._UPDATED_COLUMN == null) {
-                _INIT_UPDATE_INFO();
-            }
-            this._UPDATED_COLUMN.add("info_id");
-            this._UPDATED_INFO.append("info_id:\"").append(this.infoId).append("\"=>\"").append(infoId).append("\"\n");
-            this.infoId = infoId;
-        }
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "infoId", this.infoId, infoId, !_IS_LOADED );
+        this.infoId = infoId;
     }
 
     /**
@@ -272,20 +230,14 @@ public class TaskAlertNotify implements DataEntity,Serializable{
     public TaskAlertNotify infoId(long infoId){
         setInfoId(infoId);
         return this;
-        }
+    }
 
     /**
      * 设置联系人。
      */
     public void setContactMan(String contactMan){
-        if (!_IS_LOADED||!Objects.equals(this.contactMan, contactMan)){
-            if (this._UPDATED_COLUMN == null) {
-                _INIT_UPDATE_INFO();
-            }
-            this._UPDATED_COLUMN.add("contact_man");
-            this._UPDATED_INFO.append("contact_man:\"").append(this.contactMan).append("\"=>\"").append(contactMan).append("\"\n");
-            this.contactMan = contactMan;
-        }
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "contactMan", this.contactMan, contactMan, !_IS_LOADED );
+        this.contactMan = contactMan;
     }
 
     /**
@@ -294,20 +246,14 @@ public class TaskAlertNotify implements DataEntity,Serializable{
     public TaskAlertNotify contactMan(String contactMan){
         setContactMan(contactMan);
         return this;
-        }
+    }
 
     /**
      * 设置联系人信息类型,mobile,qq,wx,email。
      */
     public void setContactType(String contactType){
-        if (!_IS_LOADED||!Objects.equals(this.contactType, contactType)){
-            if (this._UPDATED_COLUMN == null) {
-                _INIT_UPDATE_INFO();
-            }
-            this._UPDATED_COLUMN.add("contact_type");
-            this._UPDATED_INFO.append("contact_type:\"").append(this.contactType).append("\"=>\"").append(contactType).append("\"\n");
-            this.contactType = contactType;
-        }
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "contactType", this.contactType, contactType, !_IS_LOADED );
+        this.contactType = contactType;
     }
 
     /**
@@ -316,20 +262,14 @@ public class TaskAlertNotify implements DataEntity,Serializable{
     public TaskAlertNotify contactType(String contactType){
         setContactType(contactType);
         return this;
-        }
+    }
 
     /**
      * 设置联系人信息。
      */
     public void setContactInfo(String contactInfo){
-        if (!_IS_LOADED||!Objects.equals(this.contactInfo, contactInfo)){
-            if (this._UPDATED_COLUMN == null) {
-                _INIT_UPDATE_INFO();
-            }
-            this._UPDATED_COLUMN.add("contact_info");
-            this._UPDATED_INFO.append("contact_info:\"").append(this.contactInfo).append("\"=>\"").append(contactInfo).append("\"\n");
-            this.contactInfo = contactInfo;
-        }
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "contactInfo", this.contactInfo, contactInfo, !_IS_LOADED );
+        this.contactInfo = contactInfo;
     }
 
     /**
@@ -338,20 +278,14 @@ public class TaskAlertNotify implements DataEntity,Serializable{
     public TaskAlertNotify contactInfo(String contactInfo){
         setContactInfo(contactInfo);
         return this;
-        }
+    }
 
     /**
      * 设置创建时间。
      */
     public void setCreateDate(java.util.Date createDate){
-        if (!_IS_LOADED||!Objects.equals(this.createDate, createDate)){
-            if (this._UPDATED_COLUMN == null) {
-                _INIT_UPDATE_INFO();
-            }
-            this._UPDATED_COLUMN.add("create_date");
-            this._UPDATED_INFO.append("create_date:\"").append(this.createDate).append("\"=>\"").append(createDate).append("\"\n");
-            this.createDate = createDate;
-        }
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "createDate", this.createDate, createDate, !_IS_LOADED );
+        this.createDate = createDate;
     }
 
     /**
@@ -360,20 +294,14 @@ public class TaskAlertNotify implements DataEntity,Serializable{
     public TaskAlertNotify createDate(java.util.Date createDate){
         setCreateDate(createDate);
         return this;
-        }
+    }
 
     /**
      * 设置发送时间。
      */
     public void setSentDate(java.util.Date sentDate){
-        if (!_IS_LOADED||!Objects.equals(this.sentDate, sentDate)){
-            if (this._UPDATED_COLUMN == null) {
-                _INIT_UPDATE_INFO();
-            }
-            this._UPDATED_COLUMN.add("sent_date");
-            this._UPDATED_INFO.append("sent_date:\"").append(this.sentDate).append("\"=>\"").append(sentDate).append("\"\n");
-            this.sentDate = sentDate;
-        }
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "sentDate", this.sentDate, sentDate, !_IS_LOADED );
+        this.sentDate = sentDate;
     }
 
     /**
@@ -382,20 +310,14 @@ public class TaskAlertNotify implements DataEntity,Serializable{
     public TaskAlertNotify sentDate(java.util.Date sentDate){
         setSentDate(sentDate);
         return this;
-        }
+    }
 
     /**
      * 设置发送次数。
      */
     public void setSentTimes(int sentTimes){
-        if (!_IS_LOADED||!Objects.equals(this.sentTimes, sentTimes)){
-            if (this._UPDATED_COLUMN == null) {
-                _INIT_UPDATE_INFO();
-            }
-            this._UPDATED_COLUMN.add("sent_times");
-            this._UPDATED_INFO.append("sent_times:\"").append(this.sentTimes).append("\"=>\"").append(sentTimes).append("\"\n");
-            this.sentTimes = sentTimes;
-        }
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "sentTimes", this.sentTimes, sentTimes, !_IS_LOADED );
+        this.sentTimes = sentTimes;
     }
 
     /**
@@ -404,20 +326,14 @@ public class TaskAlertNotify implements DataEntity,Serializable{
     public TaskAlertNotify sentTimes(int sentTimes){
         setSentTimes(sentTimes);
         return this;
-        }
+    }
 
     /**
      * 设置状态。
      */
     public void setState(int state){
-        if (!_IS_LOADED||!Objects.equals(this.state, state)){
-            if (this._UPDATED_COLUMN == null) {
-                _INIT_UPDATE_INFO();
-            }
-            this._UPDATED_COLUMN.add("state");
-            this._UPDATED_INFO.append("state:\"").append(this.state).append("\"=>\"").append(state).append("\"\n");
-            this.state = state;
-        }
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "state", this.state, state, !_IS_LOADED );
+        this.state = state;
     }
 
     /**
@@ -426,24 +342,14 @@ public class TaskAlertNotify implements DataEntity,Serializable{
     public TaskAlertNotify state(int state){
         setState(state);
         return this;
-        }
+    }
 
     /**
      * 重载toString方法.
      */
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("id:\"" + this.id + "\"\r\n");
-        sb.append("info_id:\"" + this.infoId + "\"\r\n");
-        sb.append("contact_man:\"" + this.contactMan + "\"\r\n");
-        sb.append("contact_type:\"" + this.contactType + "\"\r\n");
-        sb.append("contact_info:\"" + this.contactInfo + "\"\r\n");
-        sb.append("create_date:\"" + this.createDate + "\"\r\n");
-        sb.append("sent_date:\"" + this.sentDate + "\"\r\n");
-        sb.append("sent_times:\"" + this.sentTimes + "\"\r\n");
-        sb.append("state:\"" + this.state + "\"\r\n");
-        return sb.toString();
+        return JsonUtils.toString(this);
     }
 
 }

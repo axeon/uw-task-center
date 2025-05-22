@@ -20,6 +20,7 @@ import uw.dao.util.ShardingTableUtils;
 import uw.task.center.entity.*;
 import uw.task.center.service.AlertProcessService;
 import uw.task.center.vo.HostReportResponse;
+import uw.task.center.vo.TaskHostInfoExt;
 
 import java.util.*;
 
