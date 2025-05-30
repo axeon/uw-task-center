@@ -401,13 +401,13 @@ public class AlertProcessService {
             notify.setCreateDate(new Date());
             notify.setSentTimes(0);
             notify.setState(0);
-            //写入email通知
-            if (StringUtils.isNotBlank(contact.getEmail())) {
-                notify.setId(dao.getSequenceId(TaskAlertNotify.class));
-                notify.setContactType("email");
-                notify.setContactInfo(contact.getEmail());
-                dao.save(notify);
-            }
+//            //写入email通知
+//            if (StringUtils.isNotBlank(contact.getEmail())) {
+//                notify.setId(dao.getSequenceId(TaskAlertNotify.class));
+//                notify.setContactType("email");
+//                notify.setContactInfo(contact.getEmail());
+//                dao.save(notify);
+//            }
             //写入notify通知
             if (StringUtils.isNotBlank(contact.getNotifyUrl())) {
                 notify.setId(dao.getSequenceId(TaskAlertNotify.class));

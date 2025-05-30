@@ -47,20 +47,9 @@ public class AlertNotifyScanCroner extends TaskCroner {
      */
     private final TaskCenterProperties taskCenterProperties;
 
-    /**
-     * 邮件发送者.
-     */
-    private final JavaMailSender mailSender;
-
-    /**
-     * 邮件发送者.
-     */
-    @Value("${spring.mail.username}")
-    private String fromEmail;
 
     @Autowired
-    public AlertNotifyScanCroner(TaskCenterProperties taskCenterProperties, JavaMailSender mailSender) {
-        this.mailSender = mailSender;
+    public AlertNotifyScanCroner(TaskCenterProperties taskCenterProperties) {
         this.taskCenterProperties = taskCenterProperties;
     }
 
@@ -118,20 +107,20 @@ public class AlertNotifyScanCroner extends TaskCroner {
             });
         }
 
-        // 按照信息构造要发送的信息。
-        for (Map.Entry<String, String> kv : emailMap.entrySet()) {
-            String contactInfo = kv.getKey();
-            String infoIds = kv.getValue();
-            dao.list( TaskAlertInfo.class, "select * from task_alert_info where id in (" + infoIds + ")" ).onSuccess( list -> {
-                String title = "!!!收到" + list.size() + "条任务报警信息!";
-                StringBuilder content = new StringBuilder();
-                for (TaskAlertInfo info : list) {
-                    content.append( "报警时间:" ).append( dateFormat.format( info.getCreateDate() ) ).append( "\n\n" );
-                    content.append( "报警内容:" ).append( info.getAlertBody() ).append( "\n\n" );
-                }
-                sendEmail( contactInfo, title, content.toString() );
-            });
-        }
+//        // 按照信息构造要发送的信息。
+//        for (Map.Entry<String, String> kv : emailMap.entrySet()) {
+//            String contactInfo = kv.getKey();
+//            String infoIds = kv.getValue();
+//            dao.list( TaskAlertInfo.class, "select * from task_alert_info where id in (" + infoIds + ")" ).onSuccess( list -> {
+//                String title = "!!!收到" + list.size() + "条任务报警信息!";
+//                StringBuilder content = new StringBuilder();
+//                for (TaskAlertInfo info : list) {
+//                    content.append( "报警时间:" ).append( dateFormat.format( info.getCreateDate() ) ).append( "\n\n" );
+//                    content.append( "报警内容:" ).append( info.getAlertBody() ).append( "\n\n" );
+//                }
+//                sendEmail( contactInfo, title, content.toString() );
+//            });
+//        }
 
         //发送通知信息。
         for (Map.Entry<String, String> kv : notifyMap.entrySet()) {
@@ -192,24 +181,6 @@ public class AlertNotifyScanCroner extends TaskCroner {
     @Override
     public TaskContact initContact() {
         return ContactUtils.getTaskContact();
-    }
-
-    /**
-     * 发送邮件
-     *
-     * @param toEmail 收件人集合
-     * @param title   邮件标题
-     * @param content 邮件内容
-     */
-    private void sendEmail(String toEmail, String title, String content) {
-        if (StringUtils.isNotBlank( fromEmail ) && StringUtils.isNotBlank( toEmail )) {
-            SimpleMailMessage email = new SimpleMailMessage();
-            email.setFrom( fromEmail );// 发件人
-            email.setTo( toEmail );// 收件人地址
-            email.setSubject( title );// 邮件标题
-            email.setText( content );// 邮件信息
-            mailSender.send( email );
-        }
     }
 
     /**
