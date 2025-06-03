@@ -17,13 +17,12 @@ import uw.common.app.entity.SysCritLog;
 import uw.common.app.entity.SysDataHistory;
 import uw.common.app.helper.SysDataHistoryHelper;
 import uw.common.dto.ResponseData;
+import uw.common.util.SystemClock;
 import uw.dao.DaoManager;
 import uw.dao.DataList;
 import uw.dao.TransactionException;
 import uw.task.center.dto.TaskAlertContactQueryParam;
 import uw.task.center.entity.TaskAlertContact;
-
-import java.util.Date;
 
 /**
  * 报警联系人配置表：增删改查
@@ -107,7 +106,7 @@ public class TaskAlertContactController {
         long id = dao.getSequenceId( TaskAlertContact.class );
         AuthServiceHelper.logRef( TaskAlertContact.class, id );
         taskAlertContact.setId( id );
-        taskAlertContact.setCreateDate( new Date() );
+        taskAlertContact.setCreateDate( SystemClock.nowDate() );
         taskAlertContact.setModifyDate( null );
         taskAlertContact.setState( CommonState.ENABLED.getValue() );
         //保存历史记录
@@ -137,7 +136,7 @@ public class TaskAlertContactController {
             taskAlertContactDb.setIm(taskAlertContact.getIm());
             taskAlertContactDb.setNotifyUrl(taskAlertContact.getNotifyUrl());
             taskAlertContactDb.setRemark(taskAlertContact.getRemark());
-            taskAlertContactDb.setModifyDate(new Date());
+            taskAlertContactDb.setModifyDate(SystemClock.nowDate());
             return dao.update( taskAlertContactDb ).onSuccess(updatedEntity -> {
                 SysDataHistoryHelper.saveHistory( taskAlertContactDb,remark );
             } );
@@ -155,7 +154,7 @@ public class TaskAlertContactController {
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
     public ResponseData enable(@Parameter(description = "主键ID") @RequestParam long id, @Parameter(description = "备注") @RequestParam String remark){
         AuthServiceHelper.logInfo(TaskAlertContact.class,id,remark);
-        return dao.update(new TaskAlertContact().modifyDate(new Date()).state(CommonState.ENABLED.getValue()), new IdStateQueryParam(id, CommonState.DISABLED.getValue()));
+        return dao.update(new TaskAlertContact().modifyDate(SystemClock.nowDate()).state(CommonState.ENABLED.getValue()), new IdStateQueryParam(id, CommonState.DISABLED.getValue()));
     }
 
     /**
@@ -169,7 +168,7 @@ public class TaskAlertContactController {
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
     public ResponseData disable(@Parameter(description = "主键ID") @RequestParam long id, @Parameter(description = "备注") @RequestParam String remark){
         AuthServiceHelper.logInfo(TaskAlertContact.class,id,remark);
-        return dao.update(new TaskAlertContact().modifyDate(new Date()).state(CommonState.DISABLED.getValue()), new IdStateQueryParam(id, CommonState.ENABLED.getValue()));
+        return dao.update(new TaskAlertContact().modifyDate(SystemClock.nowDate()).state(CommonState.DISABLED.getValue()), new IdStateQueryParam(id, CommonState.ENABLED.getValue()));
     }
 
     /**
@@ -183,7 +182,7 @@ public class TaskAlertContactController {
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
     public ResponseData delete(@Parameter(description = "主键ID") @RequestParam long id, @Parameter(description = "备注") @RequestParam String remark){
         AuthServiceHelper.logInfo(TaskAlertContact.class,id,remark);
-        return dao.update(new TaskAlertContact().modifyDate(new Date()).state(CommonState.DELETED.getValue()), new IdStateQueryParam(id, CommonState.DISABLED.getValue()));
+        return dao.update(new TaskAlertContact().modifyDate(SystemClock.nowDate()).state(CommonState.DELETED.getValue()), new IdStateQueryParam(id, CommonState.DISABLED.getValue()));
     }
 
 }

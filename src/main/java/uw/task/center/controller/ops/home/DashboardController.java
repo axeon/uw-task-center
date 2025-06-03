@@ -90,7 +90,7 @@ public class DashboardController {
             startDate = new Date( SystemClock.now() - 10 * 86400_000L );
         }
         if (endDate == null) {
-            endDate = new Date();
+            endDate = SystemClock.nowDate();
         }
         if (dateType == 0) {
             int hourDiff = (int) ((endDate.getTime() - startDate.getTime()) / 3600_000L);

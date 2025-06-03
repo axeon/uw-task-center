@@ -18,13 +18,12 @@ import uw.common.app.entity.SysCritLog;
 import uw.common.app.entity.SysDataHistory;
 import uw.common.app.helper.SysDataHistoryHelper;
 import uw.common.dto.ResponseData;
+import uw.common.util.SystemClock;
 import uw.dao.DaoManager;
 import uw.dao.DataList;
 import uw.dao.TransactionException;
 import uw.task.center.dto.TaskRunnerInfoQueryParam;
 import uw.task.center.entity.TaskRunnerInfo;
-
-import java.util.Date;
 
 /**
  * 队列任务配置表：增删改查
@@ -119,7 +118,7 @@ public class TaskRunnerInfoController {
         long id = dao.getSequenceId(TaskRunnerInfo.class);
         AuthServiceHelper.logRef(TaskRunnerInfo.class, id);
         taskRunnerInfo.setId(id);
-        taskRunnerInfo.setCreateDate(new Date());
+        taskRunnerInfo.setCreateDate(SystemClock.nowDate());
         taskRunnerInfo.setModifyDate(null);
         taskRunnerInfo.setState(CommonState.ENABLED.getValue());
         //保存历史记录
@@ -174,7 +173,7 @@ public class TaskRunnerInfoController {
             taskRunnerInfoDb.setAlertRunTimeout(taskRunnerInfo.getAlertRunTimeout());
             taskRunnerInfoDb.setTaskLinkOur(taskRunnerInfo.getTaskLinkOur());
             taskRunnerInfoDb.setTaskLinkMch(taskRunnerInfo.getTaskLinkMch());
-            taskRunnerInfoDb.setModifyDate(new Date());
+            taskRunnerInfoDb.setModifyDate(SystemClock.nowDate());
             return dao.update(taskRunnerInfoDb).onSuccess(updatedEntity -> {
                 SysDataHistoryHelper.saveHistory(taskRunnerInfoDb, remark);
             });
@@ -191,7 +190,7 @@ public class TaskRunnerInfoController {
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
     public ResponseData enable(@Parameter(description = "主键ID") @RequestParam long id, @Parameter(description = "备注") @RequestParam String remark) {
         AuthServiceHelper.logInfo(TaskRunnerInfo.class, id, remark);
-        return dao.update(new TaskRunnerInfo().modifyDate(new Date()).state(CommonState.ENABLED.getValue()), new IdStateQueryParam(id, CommonState.DISABLED.getValue()));
+        return dao.update(new TaskRunnerInfo().modifyDate(SystemClock.nowDate()).state(CommonState.ENABLED.getValue()), new IdStateQueryParam(id, CommonState.DISABLED.getValue()));
     }
 
     /**
@@ -204,7 +203,7 @@ public class TaskRunnerInfoController {
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
     public ResponseData disable(@Parameter(description = "主键ID") @RequestParam long id, @Parameter(description = "备注") @RequestParam String remark) {
         AuthServiceHelper.logInfo(TaskRunnerInfo.class, id, remark);
-        return dao.update(new TaskRunnerInfo().modifyDate(new Date()).state(CommonState.DISABLED.getValue()), new IdStateQueryParam(id, CommonState.ENABLED.getValue()));
+        return dao.update(new TaskRunnerInfo().modifyDate(SystemClock.nowDate()).state(CommonState.DISABLED.getValue()), new IdStateQueryParam(id, CommonState.ENABLED.getValue()));
     }
 
     /**
@@ -217,7 +216,7 @@ public class TaskRunnerInfoController {
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
     public ResponseData delete(@Parameter(description = "主键ID") @RequestParam long id, @Parameter(description = "备注") @RequestParam String remark) {
         AuthServiceHelper.logInfo(TaskRunnerInfo.class, id, remark);
-        return dao.update(new TaskRunnerInfo().modifyDate(new Date()).state(CommonState.DELETED.getValue()), new IdStateQueryParam(id, CommonState.DISABLED.getValue()));
+        return dao.update(new TaskRunnerInfo().modifyDate(SystemClock.nowDate()).state(CommonState.DELETED.getValue()), new IdStateQueryParam(id, CommonState.DISABLED.getValue()));
     }
 
     /**

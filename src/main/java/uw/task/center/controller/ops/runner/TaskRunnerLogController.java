@@ -1,7 +1,6 @@
 package uw.task.center.controller.ops.runner;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +18,6 @@ import uw.dao.PageQueryParam;
 import uw.dao.vo.QueryParamResult;
 import uw.log.es.LogClient;
 import uw.log.es.vo.ESDataList;
-import uw.log.es.vo.SearchResponse;
 import uw.task.center.dto.TaskRunnerEsLogQueryParam;
 import uw.task.center.entity.TaskRunnerEsLog;
 

@@ -57,7 +57,7 @@ public class TaskCronerReportController {
             startDate = new Date( SystemClock.now() - 86400_000L );
         }
         if (endDate == null) {
-            endDate = new Date();
+            endDate = SystemClock.nowDate();
         }
         if (dateType == 0) {
             int hourDiff = (int) ((endDate.getTime() - startDate.getTime()) / 3600_000L);
@@ -110,7 +110,7 @@ public class TaskCronerReportController {
             startDate = new Date( SystemClock.now() - 86400_000L );
         }
         if (endDate == null) {
-            endDate = new Date();
+            endDate = SystemClock.nowDate();
         }
         if (dateType == 0) {
             int hourDiff = (int) ((endDate.getTime() - startDate.getTime()) / 3600_000L);

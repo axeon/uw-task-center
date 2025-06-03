@@ -315,7 +315,7 @@ public class AlertProcessService {
                 // 如果超过约定时间还未执行，就要报警了。
                 if ((croner.getNextRunDate().getTime() + (croner.getStatsRunTime() / croner.getStatsRunNum()) + 300_000L) < SystemClock.now()) {
                     ArrayList<AlertData> alertList = new ArrayList<>();
-                    alertList.add(new AlertData("cronerTimeOut", dateFormat.format(croner.getNextRunDate()), dateFormat.format(new Date())));
+                    alertList.add(new AlertData("cronerTimeOut", dateFormat.format(croner.getNextRunDate()), dateFormat.format(SystemClock.nowDate())));
                     processAlertInfo("croner", croner.getId(), croner.getTaskName(), 0, alertList, croner.getTaskOwner(), croner.getTaskLinkOur(), croner.getTaskLinkMch());
                     // 更新下次执行时间为NULL
                     dao.executeCommand("update task_croner_info set next_run_date=NULL where id=?", new Object[]{croner.getId()});
@@ -398,7 +398,7 @@ public class AlertProcessService {
             // 联系人
             notify.setContactMan(contact.getContactName());
             // 设置为email，因为这是邮件发送 获取根据里面的设置
-            notify.setCreateDate(new Date());
+            notify.setCreateDate(SystemClock.nowDate());
             notify.setSentTimes(0);
             notify.setState(0);
 //            //写入email通知
@@ -462,7 +462,7 @@ public class AlertProcessService {
         // 邮件错误类型
         info.setAlertTitle(title.toString());
         info.setAlertBody(content.toString());
-        info.setCreateDate(new Date());
+        info.setCreateDate(SystemClock.nowDate());
         info.setState(CommonState.ENABLED.getValue());
         dao.save(info);
         return info;

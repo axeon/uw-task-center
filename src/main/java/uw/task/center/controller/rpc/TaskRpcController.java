@@ -12,6 +12,7 @@ import uw.auth.service.annotation.MscPermDeclare;
 import uw.auth.service.annotation.ResponseAdviceIgnore;
 import uw.auth.service.constant.UserType;
 import uw.common.app.constant.CommonState;
+import uw.common.util.SystemClock;
 import uw.dao.BatchUpdateManager;
 import uw.dao.DaoFactory;
 import uw.dao.DaoManager;
@@ -98,7 +99,7 @@ public class TaskRpcController {
         bum.setBatchSize( 1000 );
 
         //开始循环插入统计数据
-        Date createDate = new Date();
+        Date createDate = SystemClock.nowDate();
         String cronerTable = ShardingTableUtils.getTableNameByDate( "task_croner_stats", createDate );
         String runnerTable = ShardingTableUtils.getTableNameByDate( "task_runner_stats", createDate );
         try {
@@ -278,7 +279,7 @@ public class TaskRpcController {
                     config.setTaskOwner( "" );
                     config.setTaskLinkMch( "" );
                     config.setTaskLinkOur( "" );
-                    config.setCreateDate( new Date() );
+                    config.setCreateDate( SystemClock.nowDate() );
                     config.setState( CommonState.ENABLED.getValue() );
                     dao.save( config );
                 }
@@ -311,7 +312,7 @@ public class TaskRpcController {
                     config.setTaskOwner( "" );
                     config.setTaskLinkMch( "" );
                     config.setTaskLinkOur( "" );
-                    config.setCreateDate( new Date() );
+                    config.setCreateDate( SystemClock.nowDate() );
                     config.setState( CommonState.ENABLED.getValue() );
                     dao.save( config );
                 }
@@ -345,7 +346,7 @@ public class TaskRpcController {
                     taskAlertContact.setIm( contactData.get( "im" ) );
                     taskAlertContact.setNotifyUrl( contactData.get( "notifyUrl" ) );
                     taskAlertContact.setRemark( contactData.get( "remark" ) );
-                    taskAlertContact.setCreateDate( new Date() );
+                    taskAlertContact.setCreateDate( SystemClock.nowDate() );
                     taskAlertContact.setState( CommonState.ENABLED.getValue() );
                     dao.save( taskAlertContact );
                     // 更新任务负责人和任务报警负责人
