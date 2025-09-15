@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.umtone</groupId>
     <artifactId>uw-task-center</artifactId>
-    <version>5.1.5</version>
+    <version>5.1.6</version>
     <packaging>jar</packaging>
 
     <name>uw-task-center</name>
@@ -12,7 +12,7 @@
     <parent>
         <groupId>com.umtone</groupId>
         <artifactId>uw-base</artifactId>
-        <version>2025.0801.0002</version>
+        <version>2025.0901.0000</version>
         <relativePath/>
     </parent>
     <dependencies>
