@@ -24,7 +24,7 @@ public class EnumController {
 
     @GetMapping("/getAllEnumMap")
     @Operation(summary = "获取所有枚举", description = "获取所有枚举")
-    public Map<String, Object> getAllEnumMap() throws Exception {
+    public Map<String, Map<String, Enum<?>>> getAllEnumMap() throws Exception {
         return EnumUtils.getEnumMap(BASE_PACKAGE);
     }
 
