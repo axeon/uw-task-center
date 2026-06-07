@@ -14,15 +14,7 @@ import java.util.Map;
 @Schema(title = "定时任务统计信息列表查询参数", description = "定时任务统计信息列表查询参数")
 public class TaskCronerStatsQueryParam extends PageQueryParam{
 
-    /**
-     * 允许的排序属性。
-     * key:排序名 value:排序字段
-     *
-     * @return
-     */
-    @Override
-    public Map<String, String> ALLOWED_SORT_PROPERTY() {
-        return new HashMap<>() {{
+    private static final Map<String, String> ALLOWED_SORT_PROPERTY = new HashMap<>() {{
             put( "id", "id" );
             put( "taskId", "task_id" );
             put( "numAll", "num_all" );
@@ -33,7 +25,16 @@ public class TaskCronerStatsQueryParam extends PageQueryParam{
             put( "timeWait", "time_wait" );
             put( "timeRun", "time_run" );
             put( "createDate", "create_date" );
-        }};
+    }};
+
+    /**
+     * 允许的排序属性。
+     *
+     * @return
+     */
+    @Override
+    public Map<String, String> ALLOWED_SORT_PROPERTY() {
+        return ALLOWED_SORT_PROPERTY;
     }
 
     /**

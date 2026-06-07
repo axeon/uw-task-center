@@ -111,18 +111,19 @@ public class TaskCronerEsLogQueryParam extends PageQueryParam {
     @Schema(title = "小于等于状态", description = "小于等于状态")
     private Integer stateLte;
 
+    private static final Map<String, String> ALLOWED_SORT_PROPERTY = new HashMap<>() {{
+            put( "id", "id" );
+            put( "@timestamp", "\\\"@timestamp\\\"" );
+    }};
+
     /**
      * 允许的排序属性。
-     * key:排序名 value:排序字段
      *
      * @return
      */
     @Override
     public Map<String, String> ALLOWED_SORT_PROPERTY() {
-        return new HashMap<>() {{
-            put( "id", "id" );
-            put( "@timestamp", "\\\"@timestamp\\\"" );
-        }};
+        return ALLOWED_SORT_PROPERTY;
     }
 
     public Long getId() {

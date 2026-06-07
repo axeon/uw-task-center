@@ -14,15 +14,7 @@ import java.util.Map;
 @Schema(title = "报警信息通知列表查询参数", description = "报警信息通知列表查询参数")
 public class TaskAlertNotifyQueryParam extends PageQueryParam{
 
-    /**
-     * 允许的排序属性。
-     * key:排序名 value:排序字段
-     *
-     * @return
-     */
-    @Override
-    public Map<String, String> ALLOWED_SORT_PROPERTY() {
-        return new HashMap<>() {{
+    private static final Map<String, String> ALLOWED_SORT_PROPERTY = new HashMap<>() {{
             put( "id", "id" );
             put( "infoId", "info_id" );
             put( "contactMan", "contact_man" );
@@ -32,7 +24,16 @@ public class TaskAlertNotifyQueryParam extends PageQueryParam{
             put( "sentDate", "sent_date" );
             put( "sentTimes", "sent_times" );
             put( "state", "state" );
-        }};
+    }};
+
+    /**
+     * 允许的排序属性。
+     *
+     * @return
+     */
+    @Override
+    public Map<String, String> ALLOWED_SORT_PROPERTY() {
+        return ALLOWED_SORT_PROPERTY;
     }
 
     /**

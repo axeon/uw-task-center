@@ -14,15 +14,7 @@ import java.util.Map;
 @Schema(title = "队列任务配置列表查询参数", description = "队列任务配置列表查询参数")
 public class TaskRunnerInfoQueryParam extends PageQueryParam{
 
-    /**
-     * 允许的排序属性。
-     * key:排序名 value:排序字段
-     *
-     * @return
-     */
-    @Override
-    public Map<String, String> ALLOWED_SORT_PROPERTY() {
-        return new HashMap<>() {{
+    private static final Map<String, String> ALLOWED_SORT_PROPERTY = new HashMap<>() {{
             put( "id", "id" );
             put( "taskName", "task_name" );
             put( "taskClass", "task_class" );
@@ -60,7 +52,16 @@ public class TaskRunnerInfoQueryParam extends PageQueryParam{
             put( "createDate", "create_date" );
             put( "modifyDate", "modify_date" );
             put( "state", "state" );
-        }};
+    }};
+
+    /**
+     * 允许的排序属性。
+     *
+     * @return
+     */
+    @Override
+    public Map<String, String> ALLOWED_SORT_PROPERTY() {
+        return ALLOWED_SORT_PROPERTY;
     }
 
     /**
