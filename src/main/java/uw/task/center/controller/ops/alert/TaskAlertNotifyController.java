@@ -12,6 +12,7 @@ import uw.auth.service.annotation.MscPermDeclare;
 import uw.auth.service.constant.ActionLog;
 import uw.auth.service.constant.AuthType;
 import uw.auth.service.constant.UserType;
+import uw.common.dto.ResponseData;
 import uw.dao.DaoManager;
 import uw.dao.DataList;
 import uw.dao.TransactionException;
@@ -39,9 +40,9 @@ public class TaskAlertNotifyController {
     @GetMapping("/list")
     @Operation(summary = "列表报警信息通知", description = "列表报警信息通知")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public DataList<TaskAlertNotify> list(TaskAlertNotifyQueryParam queryParam) {
+    public ResponseData<DataList<TaskAlertNotify>> list(TaskAlertNotifyQueryParam queryParam) {
         AuthServiceHelper.logRef( TaskAlertNotify.class );
-        return dao.list( TaskAlertNotify.class, queryParam ).getData();
+        return dao.list( TaskAlertNotify.class, queryParam );
     }
 
     /**
@@ -53,9 +54,9 @@ public class TaskAlertNotifyController {
     @GetMapping("/load")
     @Operation(summary = "加载报警信息通知", description = "加载报警信息通知")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public TaskAlertNotify load(@Parameter(description = "主键ID", required = true) @RequestParam long id) {
+    public ResponseData<TaskAlertNotify> load(@Parameter(description = "主键ID", required = true) @RequestParam long id) {
         AuthServiceHelper.logRef( TaskAlertNotify.class, id );
-        return dao.load( TaskAlertNotify.class, id ).getData();
+        return dao.load( TaskAlertNotify.class, id );
     }
 
 }

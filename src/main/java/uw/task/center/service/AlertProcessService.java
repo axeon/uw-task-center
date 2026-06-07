@@ -12,14 +12,12 @@ import uw.common.app.constant.CommonState;
 import uw.common.util.JsonUtils;
 import uw.common.util.SystemClock;
 import uw.dao.DaoManager;
-import uw.dao.DataList;
 import uw.dao.TransactionException;
 import uw.task.center.entity.*;
 
-import java.text.DecimalFormat;
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.concurrent.locks.StampedLock;
+import java.text.DecimalFormat;
 
 /**
  * 对比报警信息进行处理。
@@ -50,38 +48,28 @@ public class AlertProcessService {
     /**
      * runner锁。
      */
-    private final StampedLock runnerMapLocker = new StampedLock();
+    private volatile Map<Long, TaskRunnerInfo> runnerMap = new ConcurrentHashMap<>();
     /**
-     * runner锁。
+     * croner缓存。
      */
-    private final StampedLock cronerMapLocker = new StampedLock();
+    private volatile Map<Long, TaskCronerInfo> cronerMap = new ConcurrentHashMap<>();
     private final DaoManager dao = DaoManager.getInstance();
     /**
      * 日期格式化。
      */
     private final FastDateFormat dateFormat = FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss");
     /**
-     * 百分比格式化。
-     */
-    private final DecimalFormat percentFormat = new DecimalFormat("#.##");
-    /**
      * 定时任务检查服务。
      */
-    private final ExecutorService cronerProcessService = new ThreadPoolExecutor(1, 10, 30L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(),
-            new ThreadFactoryBuilder().setDaemon(true).setNameFormat("CronerProcessService-%d").build());
+    private final ExecutorService cronerProcessService = new ThreadPoolExecutor(1, 10, 30L, TimeUnit.SECONDS, new ArrayBlockingQueue<>(200),
+            new ThreadFactoryBuilder().setDaemon(true).setNameFormat("CronerProcessService-%d").build(),
+            new ThreadPoolExecutor.CallerRunsPolicy());
     /**
      * 队列任务检查服务。
      */
-    private final ExecutorService runnerProcessService = new ThreadPoolExecutor(1, 10, 30L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(),
-            new ThreadFactoryBuilder().setDaemon(true).setNameFormat("RunnerProcessService-%d").build());
-    /**
-     * 队列任务缓存。
-     */
-    private Map<Long, TaskRunnerInfo> runnerMap = new ConcurrentHashMap<>();
-    /**
-     * 定时任务缓存。
-     */
-    private Map<Long, TaskCronerInfo> cronerMap = new ConcurrentHashMap<>();
+    private final ExecutorService runnerProcessService = new ThreadPoolExecutor(1, 10, 30L, TimeUnit.SECONDS, new ArrayBlockingQueue<>(200),
+            new ThreadFactoryBuilder().setDaemon(true).setNameFormat("RunnerProcessService-%d").build(),
+            new ThreadPoolExecutor.CallerRunsPolicy());
 
     /**
      * 处理队列任务统计信息。
@@ -105,62 +93,62 @@ public class AlertProcessService {
                         int timeWaitQueue = stats.getTimeWaitQueue();
                         int timeRun = stats.getTimeRun();
                         int queueSize = stats.getQueueSize();
-                        // 没有值，直接返回
-                        if (numFail > 0 && config.getAlertFailRate() > 0) {
+                        DecimalFormat percentFormat = new DecimalFormat("#.##");
+                        if (numFail > 0 && numAll > 0 && config.getAlertFailRate() > 0) {
                             double v = (double) numFail / numAll * 100;
                             if (v > config.getAlertFailRate()) {
                                 alerts.add(new AlertData("failRate", percentFormat.format(config.getAlertFailRate()) + "%",
                                         percentFormat.format(v) + "%(" + numFail + ")"));
                             }
                         }
-                        if (numFailProgram > 0 && config.getAlertFailProgramRate() > 0) {
+                        if (numFailProgram > 0 && numAll > 0 && config.getAlertFailProgramRate() > 0) {
                             double v = (double) numFailProgram / numAll * 100;
                             if (v > config.getAlertFailProgramRate()) {
                                 alerts.add(new AlertData("failProgramRate", percentFormat.format(config.getAlertFailProgramRate()) + "%", percentFormat.format(v) + "%" +
                                         "(" + numFailProgram + ")"));
                             }
                         }
-                        if (numFailPartner > 0 && config.getAlertFailPartnerRate() > 0) {
+                        if (numFailPartner > 0 && numAll > 0 && config.getAlertFailPartnerRate() > 0) {
                             double v = (double) numFailPartner / numAll * 100;
                             if (v > config.getAlertFailPartnerRate()) {
                                 alerts.add(new AlertData("failPartnerRate", percentFormat.format(config.getAlertFailPartnerRate()) + "%", percentFormat.format(v) + "%" +
                                         "(" + numFailPartner + ")"));
                             }
                         }
-                        if (numFailConfig > 0 && config.getAlertFailConfigRate() > 0) {
+                        if (numFailConfig > 0 && numAll > 0 && config.getAlertFailConfigRate() > 0) {
                             double v = (double) numFailConfig / numAll * 100;
                             if (v > config.getAlertFailConfigRate()) {
                                 alerts.add(new AlertData("failConfigRate", percentFormat.format(config.getAlertFailConfigRate()) + "%",
                                         percentFormat.format(v) + "%(" + numFailConfig + ")"));
                             }
                         }
-                        if (numFailData > 0 && config.getAlertFailDataRate() > 0) {
+                        if (numFailData > 0 && numAll > 0 && config.getAlertFailDataRate() > 0) {
                             double v = (double) numFailData / numAll * 100;
                             if (v > config.getAlertFailDataRate()) {
                                 alerts.add(new AlertData("failDataRate", percentFormat.format(config.getAlertFailDataRate()) + "%",
                                         percentFormat.format(v) + "%(" + numFailData + ")"));
                             }
                         }
-                        if (timeWaitQueue > 0 && config.getAlertQueueTimeout() > 0) {
+                        if (timeWaitQueue > 0 && numAll > 0 && config.getAlertQueueTimeout() > 0) {
                             long averageTime = timeWaitQueue / numAll;
                             if (averageTime > config.getAlertQueueTimeout()) {
                                 alerts.add(new AlertData("queueTimeout", config.getAlertQueueTimeout() + "ms", averageTime + "ms"));
                             }
                         }
-                        if (timeWaitDelay > 0 && config.getAlertWaitTimeout() > 0) {
+                        if (timeWaitDelay > 0 && numAll > 0 && config.getAlertWaitTimeout() > 0) {
                             long averageTime = timeWaitDelay / numAll;
                             if (averageTime > config.getAlertWaitTimeout()) {
                                 alerts.add(new AlertData("waitTimeout", config.getAlertWaitTimeout() + "ms", averageTime + "ms"));
                             }
                         }
-                        if (timeRun > 0 && config.getAlertRunTimeout() > 0) {
+                        if (timeRun > 0 && numAll > 0 && config.getAlertRunTimeout() > 0) {
                             long averageTime = timeRun / numAll;
                             if (averageTime > config.getAlertRunTimeout()) {
                                 alerts.add(new AlertData("runTimeout", config.getAlertRunTimeout() + "ms", averageTime + "ms"));
                             }
                         }
                         if (queueSize > 0 && config.getAlertQueueOversize() > 0) {
-                            if (queueSize > config.getAlertRunTimeout()) {
+                            if (queueSize > config.getAlertQueueOversize()) {
                                 alerts.add(new AlertData("queueSize", config.getAlertQueueOversize() + "", queueSize + ""));
                             }
                         }
@@ -195,41 +183,42 @@ public class AlertProcessService {
                         long numFail = numFailConfig + numFailProgram + numFailPartner + numFailData;
                         long timeWait = stats.getTimeWait();
                         long timeRun = stats.getTimeRun();
-                        if (numFail > 0 && config.getAlertFailRate() > 0) {
+                        DecimalFormat percentFormat = new DecimalFormat("#.##");
+                        if (numFail > 0 && numAll > 0 && config.getAlertFailRate() > 0) {
                             double v = (double) numFail / numAll * 100;
                             if (v > config.getAlertFailRate()) {
                                 alerts.add(new AlertData("failRate", percentFormat.format(config.getAlertFailRate()) + "%",
                                         percentFormat.format(v) + "%(" + numFail + ")"));
                             }
                         }
-                        if (numFailProgram > 0 && config.getAlertFailProgramRate() > 0) {
+                        if (numFailProgram > 0 && numAll > 0 && config.getAlertFailProgramRate() > 0) {
                             double v = (double) numFailProgram / numAll * 100;
                             if (v > config.getAlertFailProgramRate()) {
                                 alerts.add(new AlertData("failProgramRate", percentFormat.format(config.getAlertFailProgramRate()) + "%", percentFormat.format(v) + "%" +
                                         "(" + numFailProgram + ")"));
                             }
                         }
-                        if (numFailPartner > 0 && config.getAlertFailPartnerRate() > 0) {
+                        if (numFailPartner > 0 && numAll > 0 && config.getAlertFailPartnerRate() > 0) {
                             double v = (double) numFailPartner / numAll * 100;
                             if (v > config.getAlertFailPartnerRate()) {
                                 alerts.add(new AlertData("failPartnerRate", percentFormat.format(config.getAlertFailPartnerRate()) + "%", percentFormat.format(v) + "%" +
                                         "(" + numFailPartner + ")"));
                             }
                         }
-                        if (numFailData > 0 && config.getAlertFailDataRate() > 0) {
+                        if (numFailData > 0 && numAll > 0 && config.getAlertFailDataRate() > 0) {
                             double v = (double) numFailData / numAll * 100;
                             if (v > config.getAlertFailDataRate()) {
                                 alerts.add(new AlertData("failDataRate", percentFormat.format(config.getAlertFailDataRate()) + "%",
                                         percentFormat.format(v) + "%(" + numFailData + ")"));
                             }
                         }
-                        if (timeWait > 0 && config.getAlertWaitTimeout() > 0) {
+                        if (timeWait > 0 && numAll > 0 && config.getAlertWaitTimeout() > 0) {
                             long averageTime = timeWait / numAll;
                             if (averageTime > config.getAlertWaitTimeout()) {
                                 alerts.add(new AlertData("waitTimeout", config.getAlertWaitTimeout() + "ms", averageTime + "ms"));
                             }
                         }
-                        if (timeRun > 0 && config.getAlertRunTimeout() > 0) {
+                        if (timeRun > 0 && numAll > 0 && config.getAlertRunTimeout() > 0) {
                             long averageTime = timeRun / numAll;
                             if (averageTime > config.getAlertRunTimeout()) {
                                 alerts.add(new AlertData("runTimeout", config.getAlertRunTimeout() + "ms", averageTime + "ms"));
@@ -254,12 +243,7 @@ public class AlertProcessService {
      * @return
      */
     private TaskRunnerInfo getFitRunnerConfig(long taskId) {
-        long stamp = runnerMapLocker.readLock();
-        try {
-            return runnerMap.get(taskId);
-        } finally {
-            runnerMapLocker.unlockRead(stamp);
-        }
+        return runnerMap.get(taskId);
     }
 
     /**
@@ -269,12 +253,7 @@ public class AlertProcessService {
      * @return
      */
     private TaskCronerInfo getFitCronerConfig(long taskId) {
-        long stamp = cronerMapLocker.readLock();
-        try {
-            return cronerMap.get(taskId);
-        } finally {
-            cronerMapLocker.unlockRead(stamp);
-        }
+        return cronerMap.get(taskId);
     }
 
     /**
@@ -288,18 +267,11 @@ public class AlertProcessService {
         String runnerSql = "select * from task_runner_info where state=1";
         Map<Long, TaskCronerInfo> cronerMap = new ConcurrentHashMap<>();
         Map<Long, TaskRunnerInfo> runnerMap = new ConcurrentHashMap<>();
-        DataList<TaskCronerInfo> cronerList = null;
-        DataList<TaskRunnerInfo> runnerList = null;
         dao.list(TaskRunnerInfo.class, runnerSql).onSuccess(list -> {
             for (TaskRunnerInfo runner : list) {
                 runnerMap.put(runner.getId(), runner);
             }
-            long stamp = runnerMapLocker.writeLock();
-            try {
-                this.runnerMap = runnerMap;
-            } finally {
-                runnerMapLocker.unlockWrite(stamp);
-            }
+            this.runnerMap = runnerMap;
         });
         dao.list(TaskCronerInfo.class, connerSql).onSuccess(list -> {
             for (TaskCronerInfo croner : list) {
@@ -321,12 +293,7 @@ public class AlertProcessService {
                     dao.executeCommand("update task_croner_info set next_run_date=NULL where id=?", new Object[]{croner.getId()});
                 }
             }
-            long stamp = cronerMapLocker.writeLock();
-            try {
-                this.cronerMap = cronerMap;
-            } finally {
-                cronerMapLocker.unlockWrite(stamp);
-            }
+            this.cronerMap = cronerMap;
         });
     }
 

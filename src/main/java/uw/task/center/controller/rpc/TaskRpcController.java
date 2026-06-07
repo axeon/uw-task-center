@@ -133,18 +133,14 @@ public class TaskRpcController {
                 stats.setCreateDate( createDate );
                 batchDao.save( stats, runnerTable );
             }
+            bum.submit();
+            tm.commit();
         } catch (Throwable e) {
             log.error( "Batch save host metrics error! {}", e.getMessage(), e );
-        } finally {
             try {
-                bum.submit();
-            } catch (Throwable e) {
-                log.error( "BatchUpdateManager error! {}", e.getMessage(), e );
-            }
-            try {
-                tm.commit();
-            } catch (Throwable e) {
-                log.error( "TransactionManager error! {}", e.getMessage(), e );
+                tm.rollback();
+            } catch (Throwable re) {
+                log.error( "TransactionManager rollback error! {}", re.getMessage(), re );
             }
         }
 

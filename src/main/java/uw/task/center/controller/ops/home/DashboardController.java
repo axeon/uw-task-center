@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,8 +23,11 @@ import uw.dao.util.ShardingTableUtils;
 import uw.task.center.entity.TaskAlertInfo;
 
 import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 @RestController
@@ -102,10 +104,15 @@ public class DashboardController {
                 dateType = 1;
             }
         }
-        String runnerTableNameA = ShardingTableUtils.getTableNameByDate( "task_runner_stats", startDate );
-        String cronerTableNameA = ShardingTableUtils.getTableNameByDate( "task_croner_stats", startDate );
-        String runnerTableNameB = ShardingTableUtils.getTableNameByDate( "task_runner_stats", endDate );
-        String cronerTableNameB = ShardingTableUtils.getTableNameByDate( "task_croner_stats", endDate );
+        // 收集日期范围内所有不同的分表名
+        HashSet<String> runnerTables = new HashSet<>();
+        HashSet<String> cronerTables = new HashSet<>();
+        LocalDate startLocal = startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate endLocal = endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        for (LocalDate d = startLocal; !d.isAfter(endLocal); d = d.plusDays(1)) {
+            runnerTables.add(ShardingTableUtils.getTableNameByDate("task_runner_stats", d));
+            cronerTables.add(ShardingTableUtils.getTableNameByDate("task_croner_stats", d));
+        }
         // 1按日 2按時 3按分 4按秒
         String selectSql = switch (dateType) {
             case 1 -> "SELECT LEFT(create_date,10) AS stats_date,";
@@ -124,19 +131,17 @@ public class DashboardController {
         param.add( endDate );
         ArrayList<TaskReportDetail> cronerReportList = new ArrayList<>();
         ArrayList<TaskReportDetail> runnerReportList = new ArrayList<>();
-        dao.list( TaskReportDetail.class, String.format( runnerCommand, runnerTableNameA ), param.toArray()).onSuccess(list->{
-            runnerReportList.addAll( list.results() );
-        });
-        dao.list( TaskReportDetail.class, String.format( cornerCommand, cronerTableNameA ), param.toArray()).onSuccess(list->{
-           cronerReportList.addAll( list.results() );
-        });
-        if (!StringUtils.equals( runnerTableNameA, runnerTableNameB )) {
-            dao.list( TaskReportDetail.class, String.format( runnerCommand, runnerTableNameB ), param.toArray()).onSuccess(list->{
-                runnerReportList.addAll( list.results() );
-            });
-            dao.list( TaskReportDetail.class, String.format( cornerCommand, cronerTableNameB ), param.toArray()).onSuccess(list->{
-                cronerReportList.addAll( list.results() );
-            });
+        for (String tableName : runnerTables) {
+            DataList<TaskReportDetail> result = dao.list(TaskReportDetail.class, String.format(runnerCommand, tableName), param.toArray()).getData();
+            if (result != null) {
+                runnerReportList.addAll(result.results());
+            }
+        }
+        for (String tableName : cronerTables) {
+            DataList<TaskReportDetail> result = dao.list(TaskReportDetail.class, String.format(cornerCommand, tableName), param.toArray()).getData();
+            if (result != null) {
+                cronerReportList.addAll(result.results());
+            }
         }
 
         TaskReportVo taskReportVo = new TaskReportVo();
