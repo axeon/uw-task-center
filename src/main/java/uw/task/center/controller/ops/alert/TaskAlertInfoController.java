@@ -12,9 +12,9 @@ import uw.auth.service.annotation.MscPermDeclare;
 import uw.auth.service.constant.ActionLog;
 import uw.auth.service.constant.AuthType;
 import uw.auth.service.constant.UserType;
-import uw.common.dto.ResponseData;
+import uw.common.response.ResponseData;
 import uw.dao.DaoManager;
-import uw.dao.DataList;
+import uw.common.data.PageList;
 import uw.dao.TransactionException;
 import uw.task.center.dto.TaskAlertInfoQueryParam;
 import uw.task.center.entity.TaskAlertInfo;
@@ -39,7 +39,7 @@ public class TaskAlertInfoController {
     @GetMapping("/list")
     @Operation(summary = "列表报警信息", description = "列表报警信息")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public ResponseData<DataList<TaskAlertInfo>> list(TaskAlertInfoQueryParam queryParam) {
+    public ResponseData<PageList<TaskAlertInfo>> list(TaskAlertInfoQueryParam queryParam) {
         AuthServiceHelper.logRef( TaskAlertInfo.class );
         return dao.list( TaskAlertInfo.class, queryParam );
     }

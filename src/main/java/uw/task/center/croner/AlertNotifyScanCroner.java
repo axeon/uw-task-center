@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uw.dao.DaoManager;
-import uw.dao.DataList;
+import uw.common.data.PageList;
 import uw.task.TaskCroner;
 import uw.task.center.conf.TaskCenterProperties;
 import uw.task.center.entity.TaskAlertInfo;
@@ -53,15 +53,15 @@ public class AlertNotifyScanCroner extends TaskCroner {
     @Override
     public String runTask(TaskCronerLog taskCronerLog){
         // 先更新到处理中状态
-        int effectedNum = dao.executeCommand( "update task_alert_notify set state=1 where state=0 and sent_times=0" ).getData();
+        int effectedNum = dao.execute( "update task_alert_notify set state=1 where state=0 and sent_times=0" ).getData();
         if (effectedNum < 1) {
             return "本次执行无数据!";
         }
-        DataList<TaskAlertNotify> notifyList = dao.list( TaskAlertNotify.class, "select * from task_alert_notify where state=1 and sent_times=0" ).getData();
+        PageList<TaskAlertNotify> notifyList = dao.list( TaskAlertNotify.class, "select * from task_alert_notify where state=1 and sent_times=0" ).getData();
         if (notifyList == null){
             return "本次执行无数据!";
         }
-        effectedNum = dao.executeCommand( "update task_alert_notify set sent_date=now(),sent_times=1 where state=1 and sent_times=0" ).getData();
+        effectedNum = dao.execute( "update task_alert_notify set sent_date=now(),sent_times=1 where state=1 and sent_times=0" ).getData();
         if (effectedNum < 1) {
             return "本次执行无数据!";
         }

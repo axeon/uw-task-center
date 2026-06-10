@@ -290,7 +290,7 @@ public class AlertProcessService {
                     alertList.add(new AlertData("cronerTimeOut", dateFormat.format(croner.getNextRunDate()), dateFormat.format(SystemClock.nowDate())));
                     processAlertInfo("croner", croner.getId(), croner.getTaskName(), 0, alertList, croner.getTaskOwner(), croner.getTaskLinkOur(), croner.getTaskLinkMch());
                     // 更新下次执行时间为NULL
-                    dao.executeCommand("update task_croner_info set next_run_date=NULL where id=?", new Object[]{croner.getId()});
+                    dao.execute("update task_croner_info set next_run_date=NULL where id=?", new Object[]{croner.getId()});
                 }
             }
             this.cronerMap = cronerMap;
@@ -346,7 +346,7 @@ public class AlertProcessService {
             return null;
         }
         String ids = StringUtils.join(set, ',');
-        return dao.list(TaskAlertContact.class, "select * from task_alert_contact where id in (" + ids + ") and state=1").getData().results();
+        return dao.list(TaskAlertContact.class, "select * from task_alert_contact where id in (" + ids + ") and state=1").getData().list();
     }
 
     /**

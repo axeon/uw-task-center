@@ -16,10 +16,10 @@ import uw.common.app.dto.SysDataHistoryQueryParam;
 import uw.common.app.entity.SysCritLog;
 import uw.common.app.entity.SysDataHistory;
 import uw.common.app.helper.SysDataHistoryHelper;
-import uw.common.dto.ResponseData;
+import uw.common.response.ResponseData;
 import uw.common.util.SystemClock;
 import uw.dao.DaoManager;
-import uw.dao.DataList;
+import uw.common.data.PageList;
 import uw.dao.TransactionException;
 import uw.task.center.dto.TaskAlertContactQueryParam;
 import uw.task.center.entity.TaskAlertContact;
@@ -43,7 +43,7 @@ public class TaskAlertContactController {
     @GetMapping("/liteList")
     @Operation(summary = "轻量级列表报警联系信息", description = "轻量级列表报警联系信息，一般用于select控件。")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.USER, log = ActionLog.NONE)
-    public ResponseData<DataList<TaskAlertContact>> liteList(TaskAlertContactQueryParam queryParam) {
+    public ResponseData<PageList<TaskAlertContact>> liteList(TaskAlertContactQueryParam queryParam) {
         queryParam.SELECT_SQL( "SELECT id,contact_type,contact_name,mobile,email,wechat,im,notify_url,remark,create_date,modify_date,state from task_alert_contact " );
         return dao.list(TaskAlertContact.class, queryParam);
     }
@@ -71,7 +71,7 @@ public class TaskAlertContactController {
     @GetMapping("/listDataHistory")
     @Operation(summary = "查询数据历史", description = "查询数据历史")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public ResponseData<DataList<SysDataHistory>> listDataHistory(SysDataHistoryQueryParam queryParam) {
+    public ResponseData<PageList<SysDataHistory>> listDataHistory(SysDataHistoryQueryParam queryParam) {
         AuthServiceHelper.logRef(TaskAlertContact.class, queryParam.getEntityId());
         queryParam.setEntityClass(TaskAlertContact.class);
         return dao.list(SysDataHistory.class, queryParam);
@@ -86,7 +86,7 @@ public class TaskAlertContactController {
     @GetMapping("/listCritLog")
     @Operation(summary = "查询操作日志", description = "查询操作日志")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public ResponseData<DataList<SysCritLog>> listCritLog(SysCritLogQueryParam queryParam) {
+    public ResponseData<PageList<SysCritLog>> listCritLog(SysCritLogQueryParam queryParam) {
         AuthServiceHelper.logRef(TaskAlertContact.class, queryParam.getBizId());
         queryParam.setBizTypeClass(TaskAlertContact.class);
         return dao.list(SysCritLog.class, queryParam);

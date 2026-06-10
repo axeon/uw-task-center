@@ -17,10 +17,10 @@ import uw.common.app.dto.SysDataHistoryQueryParam;
 import uw.common.app.entity.SysCritLog;
 import uw.common.app.entity.SysDataHistory;
 import uw.common.app.helper.SysDataHistoryHelper;
-import uw.common.dto.ResponseData;
+import uw.common.response.ResponseData;
 import uw.common.util.SystemClock;
 import uw.dao.DaoManager;
-import uw.dao.DataList;
+import uw.common.data.PageList;
 import uw.dao.TransactionException;
 import uw.task.center.dto.TaskCronerInfoQueryParam;
 import uw.task.center.entity.TaskCronerInfo;
@@ -45,7 +45,7 @@ public class TaskCronerInfoController {
     @GetMapping("/list")
     @Operation(summary = "列表定时任务配置", description = "列表定时任务配置")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public ResponseData<DataList<TaskCronerInfo>> list(TaskCronerInfoQueryParam queryParam) {
+    public ResponseData<PageList<TaskCronerInfo>> list(TaskCronerInfoQueryParam queryParam) {
         AuthServiceHelper.logRef(TaskCronerInfo.class);
         return dao.list(TaskCronerInfo.class, queryParam);
     }
@@ -58,7 +58,7 @@ public class TaskCronerInfoController {
     @GetMapping("/liteList")
     @Operation(summary = "轻量级列表定时任务配置", description = "轻量级列表定时任务配置，一般用于select控件。")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.USER, log = ActionLog.NONE)
-    public ResponseData<DataList<TaskCronerInfo>> liteList(TaskCronerInfoQueryParam queryParam) {
+    public ResponseData<PageList<TaskCronerInfo>> liteList(TaskCronerInfoQueryParam queryParam) {
         queryParam.SELECT_SQL("SELECT id,task_name,task_class,task_param,task_owner,task_cron,run_type,run_target,log_level,log_limit_size,next_run_date,stats_date,stats_run_num,stats_fail_num,stats_run_time,alert_fail_rate,alert_fail_partner_rate,alert_fail_data_rate,alert_fail_program_rate,alert_wait_timeout,alert_run_timeout,task_link_our,task_link_mch,create_date,modify_date,state from task_croner_info ");
         return dao.list(TaskCronerInfo.class, queryParam);
     }
@@ -85,7 +85,7 @@ public class TaskCronerInfoController {
     @GetMapping("/listDataHistory")
     @Operation(summary = "查询数据历史", description = "查询数据历史")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public ResponseData<DataList<SysDataHistory>> listDataHistory(SysDataHistoryQueryParam queryParam) {
+    public ResponseData<PageList<SysDataHistory>> listDataHistory(SysDataHistoryQueryParam queryParam) {
         AuthServiceHelper.logRef(TaskCronerInfo.class, queryParam.getEntityId());
         queryParam.setEntityClass(TaskCronerInfo.class);
         return dao.list(SysDataHistory.class, queryParam);
@@ -100,7 +100,7 @@ public class TaskCronerInfoController {
     @GetMapping("/listCritLog")
     @Operation(summary = "查询操作日志", description = "查询操作日志")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public ResponseData<DataList<SysCritLog>> listCritLog(SysCritLogQueryParam queryParam) {
+    public ResponseData<PageList<SysCritLog>> listCritLog(SysCritLogQueryParam queryParam) {
         AuthServiceHelper.logRef(TaskCronerInfo.class, queryParam.getBizId());
         queryParam.setBizTypeClass(TaskCronerInfo.class);
         return dao.list(SysCritLog.class, queryParam);

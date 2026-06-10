@@ -14,10 +14,10 @@ import uw.auth.service.constant.ActionLog;
 import uw.auth.service.constant.AuthType;
 import uw.auth.service.constant.UserType;
 import uw.dao.DaoManager;
-import uw.dao.PageQueryParam;
 import uw.dao.vo.QueryParamResult;
 import uw.log.es.LogClient;
-import uw.log.es.vo.ESDataList;
+import uw.common.data.PageList;
+import uw.common.dto.PageQueryParam;
 import uw.task.center.dto.TaskRunnerEsLogQueryParam;
 import uw.task.center.entity.TaskRunnerEsLog;
 
@@ -47,7 +47,7 @@ public class TaskRunnerLogController {
     @GetMapping("/list")
     @Operation(summary = "列表队列任务日志", description = "列表队列任务日志")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public ESDataList<TaskRunnerEsLog> list(TaskRunnerEsLogQueryParam queryParam) throws Exception {
+    public PageList<TaskRunnerEsLog> list(TaskRunnerEsLogQueryParam queryParam) throws Exception {
         AuthServiceHelper.logRef(TaskRunnerEsLog.class);
         //钉死关键参数
         queryParam.SORT_NAME("@timestamp");
@@ -56,7 +56,7 @@ public class TaskRunnerLogController {
         QueryParamResult result = dao.parseQueryParam(TaskRunnerEsLog.class, queryParam);
 
         String dsl = logClient.translateSqlToDsl(result.genFullSql(), queryParam.START_INDEX(), queryParam.RESULT_NUM(), queryParam.CHECK_AUTO_COUNT());
-        return logClient.mapQueryResponseToEDataList(logClient.dslQuery(TaskRunnerEsLog.class, INDEX_NAME, dsl), queryParam.START_INDEX(), queryParam.RESULT_NUM());
+        return logClient.mapQueryResponseToPageList(logClient.dslQuery(TaskRunnerEsLog.class, INDEX_NAME, dsl), queryParam.START_INDEX(), queryParam.RESULT_NUM());
     }
 
 

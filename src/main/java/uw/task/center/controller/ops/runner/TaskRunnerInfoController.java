@@ -17,10 +17,10 @@ import uw.common.app.dto.SysDataHistoryQueryParam;
 import uw.common.app.entity.SysCritLog;
 import uw.common.app.entity.SysDataHistory;
 import uw.common.app.helper.SysDataHistoryHelper;
-import uw.common.dto.ResponseData;
+import uw.common.response.ResponseData;
 import uw.common.util.SystemClock;
 import uw.dao.DaoManager;
-import uw.dao.DataList;
+import uw.common.data.PageList;
 import uw.dao.TransactionException;
 import uw.task.center.dto.TaskRunnerInfoQueryParam;
 import uw.task.center.entity.TaskRunnerInfo;
@@ -44,7 +44,7 @@ public class TaskRunnerInfoController {
     @GetMapping("/list")
     @Operation(summary = "列表队列任务配置", description = "列表队列任务配置")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public ResponseData<DataList<TaskRunnerInfo>> list(TaskRunnerInfoQueryParam queryParam) {
+    public ResponseData<PageList<TaskRunnerInfo>> list(TaskRunnerInfoQueryParam queryParam) {
         AuthServiceHelper.logRef(TaskRunnerInfo.class);
         return dao.list(TaskRunnerInfo.class, queryParam);
     }
@@ -57,7 +57,7 @@ public class TaskRunnerInfoController {
     @GetMapping("/liteList")
     @Operation(summary = "轻量级列表队列任务配置", description = "轻量级列表队列任务配置，一般用于select控件。")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.USER, log = ActionLog.NONE)
-    public ResponseData<DataList<TaskRunnerInfo>> liteList(TaskRunnerInfoQueryParam queryParam) {
+    public ResponseData<PageList<TaskRunnerInfo>> liteList(TaskRunnerInfoQueryParam queryParam) {
         queryParam.SELECT_SQL("SELECT id,task_name,task_class,task_owner,task_tag,queue_type,delay_type,log_level,log_limit_size,run_type,run_target,consumer_num,prefetch_num,rate_limit_type,rate_limit_value,rate_limit_time,rate_limit_wait,retry_times_by_overrated,retry_times_by_partner,stats_date,stats_run_num,stats_fail_num,stats_run_time,alert_fail_rate,alert_fail_partner_rate,alert_fail_program_rate,alert_fail_config_rate,alert_fail_data_rate,alert_queue_oversize,alert_queue_timeout,alert_wait_timeout,alert_run_timeout,task_link_our,task_link_mch,create_date,modify_date,state from task_runner_info ");
         return dao.list(TaskRunnerInfo.class, queryParam);
     }
@@ -84,7 +84,7 @@ public class TaskRunnerInfoController {
     @GetMapping("/listDataHistory")
     @Operation(summary = "查询数据历史", description = "查询数据历史")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public ResponseData<DataList<SysDataHistory>> listDataHistory(SysDataHistoryQueryParam queryParam) {
+    public ResponseData<PageList<SysDataHistory>> listDataHistory(SysDataHistoryQueryParam queryParam) {
         AuthServiceHelper.logRef(TaskRunnerInfo.class, queryParam.getEntityId());
         queryParam.setEntityClass(TaskRunnerInfo.class);
         return dao.list(SysDataHistory.class, queryParam);
@@ -99,7 +99,7 @@ public class TaskRunnerInfoController {
     @GetMapping("/listCritLog")
     @Operation(summary = "查询操作日志", description = "查询操作日志")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public ResponseData<DataList<SysCritLog>> listCritLog(SysCritLogQueryParam queryParam) {
+    public ResponseData<PageList<SysCritLog>> listCritLog(SysCritLogQueryParam queryParam) {
         AuthServiceHelper.logRef(TaskRunnerInfo.class, queryParam.getBizId());
         queryParam.setBizTypeClass(TaskRunnerInfo.class);
         return dao.list(SysCritLog.class, queryParam);

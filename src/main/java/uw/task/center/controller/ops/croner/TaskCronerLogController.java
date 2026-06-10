@@ -14,10 +14,10 @@ import uw.auth.service.constant.ActionLog;
 import uw.auth.service.constant.AuthType;
 import uw.auth.service.constant.UserType;
 import uw.dao.DaoManager;
-import uw.dao.PageQueryParam;
 import uw.dao.vo.QueryParamResult;
 import uw.log.es.LogClient;
-import uw.log.es.vo.ESDataList;
+import uw.common.data.PageList;
+import uw.common.dto.PageQueryParam;
 import uw.task.center.dto.TaskCronerEsLogQueryParam;
 import uw.task.center.entity.TaskCronerEsLog;
 
@@ -46,14 +46,14 @@ public class TaskCronerLogController {
     @GetMapping("/list")
     @Operation(summary = "列表定时任务日志", description = "列表定时任务日志")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public ESDataList<TaskCronerEsLog> list(TaskCronerEsLogQueryParam queryParam) throws Exception {
+    public PageList<TaskCronerEsLog> list(TaskCronerEsLogQueryParam queryParam) throws Exception {
         AuthServiceHelper.logRef( TaskCronerEsLog.class );
         //钉死关键参数
         queryParam.SORT_NAME( "@timestamp" );
         queryParam.SORT_TYPE( PageQueryParam.SORT_DESC );
         QueryParamResult result = dao.parseQueryParam( TaskCronerEsLog.class, queryParam );
         String dsl = logClient.translateSqlToDsl( result.genFullSql(), queryParam.START_INDEX(), queryParam.RESULT_NUM(), queryParam.CHECK_AUTO_COUNT() );
-        return logClient.mapQueryResponseToEDataList( logClient.dslQuery( TaskCronerEsLog.class, INDEX_NAME, dsl ), queryParam.START_INDEX(), queryParam.RESULT_NUM() );
+        return logClient.mapQueryResponseToPageList( logClient.dslQuery( TaskCronerEsLog.class, INDEX_NAME, dsl ), queryParam.START_INDEX(), queryParam.RESULT_NUM() );
     }
 
 }

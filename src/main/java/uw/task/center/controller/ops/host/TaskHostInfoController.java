@@ -11,10 +11,10 @@ import uw.auth.service.constant.AuthType;
 import uw.auth.service.constant.UserType;
 import uw.common.app.constant.CommonState;
 import uw.common.app.dto.IdStateQueryParam;
-import uw.common.dto.ResponseData;
+import uw.common.response.ResponseData;
 import uw.common.util.SystemClock;
 import uw.dao.DaoManager;
-import uw.dao.DataList;
+import uw.common.data.PageList;
 import uw.dao.TransactionException;
 import uw.task.center.dto.TaskHostInfoQueryParam;
 import uw.task.center.entity.TaskHostInfo;
@@ -40,7 +40,7 @@ public class TaskHostInfoController {
     @GetMapping("/list")
     @Operation(summary = "列表task主机信息", description = "列表task主机信息")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public ResponseData<DataList<TaskHostInfo>> list(TaskHostInfoQueryParam queryParam) {
+    public ResponseData<PageList<TaskHostInfo>> list(TaskHostInfoQueryParam queryParam) {
         AuthServiceHelper.logRef(TaskHostInfo.class);
         return dao.list(TaskHostInfo.class, queryParam);
     }

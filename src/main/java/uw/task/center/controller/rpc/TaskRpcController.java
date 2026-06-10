@@ -9,12 +9,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 import uw.auth.service.AuthServiceHelper;
 import uw.auth.service.annotation.MscPermDeclare;
-import uw.auth.service.annotation.ResponseAdviceIgnore;
 import uw.auth.service.constant.UserType;
 import uw.common.app.constant.CommonState;
+import uw.common.response.ResponseData;
 import uw.common.util.SystemClock;
 import uw.dao.BatchUpdateManager;
 import uw.dao.DaoFactory;
+import uw.common.data.PageList;
 import uw.dao.DaoManager;
 import uw.dao.TransactionManager;
 import uw.dao.util.ShardingTableUtils;
@@ -34,7 +35,6 @@ import java.util.*;
 @RequestMapping("/rpc/task")
 @Tag(name = "任务RPC接口", description = "任务RPC接口")
 @MscPermDeclare(user = UserType.RPC)
-@ResponseAdviceIgnore
 public class TaskRpcController {
 
     private static final Logger log = LoggerFactory.getLogger( TaskRpcController.class );
@@ -68,7 +68,7 @@ public class TaskRpcController {
     @PostMapping("/host/report")
     @Operation(summary = "更新主机当前状态", description = "更新主机当前状态")
     @MscPermDeclare(user = UserType.RPC)
-    public HostReportResponse report(@RequestBody TaskHostInfoExt taskHostInfoExt) {
+    public ResponseData<HostReportResponse> report(@RequestBody TaskHostInfoExt taskHostInfoExt) {
         //构造返回数据。
         HostReportResponse reportResponse = new HostReportResponse();
         String ip = AuthServiceHelper.getRemoteIp();
@@ -78,11 +78,15 @@ public class TaskRpcController {
         TaskHostInfoExt taskHostInfoDb = null;
         if (taskHostInfoExt.getId() > 0) {
             reportResponse.setId( taskHostInfoExt.getId() );
-            taskHostInfoDb = dao.load( TaskHostInfoExt.class, taskHostInfoExt.getId() ).getData();
+            ResponseData<TaskHostInfoExt> loadResult = dao.load( TaskHostInfoExt.class, taskHostInfoExt.getId() );
+            if (loadResult.isNotSuccess()) {
+                return loadResult.raw();
+            }
+            taskHostInfoDb = loadResult.getData();
             //处理屏蔽状态
             if (taskHostInfoDb != null && taskHostInfoDb.getState() == 0) {
                 reportResponse.setState( 0 );
-                return reportResponse;
+                return ResponseData.success(reportResponse);
             }
         }
         //任务执行汇总统计信息
@@ -114,7 +118,7 @@ public class TaskRpcController {
                 cronerRunTime += stats.getTimeRun();
                 cronerFailNum += numFail;
                 //更新任务统计信息。
-                batchDao.executeCommand( UPDATE_CRONER_STATS, new Object[]{createDate, stats.getNumAll(), numFail, stats.getTimeRun(), stats.getTaskId()} );
+                batchDao.execute( UPDATE_CRONER_STATS, new Object[]{createDate, stats.getNumAll(), numFail, stats.getTimeRun(), stats.getTaskId()} );
                 //保存stats。
                 stats.setId( dao.getSequenceId( TaskCronerStats.class ) );
                 stats.setCreateDate( createDate );
@@ -127,7 +131,7 @@ public class TaskRpcController {
                 runnerRunTime += stats.getTimeRun();
                 runnerFailNum += numFail;
                 //更新任务统计信息。
-                batchDao.executeCommand( UPDATE_RUNNER_STATS, new Object[]{createDate, stats.getNumAll(), numFail, stats.getTimeRun(), stats.getTaskId()} );
+                batchDao.execute( UPDATE_RUNNER_STATS, new Object[]{createDate, stats.getNumAll(), numFail, stats.getTimeRun(), stats.getTaskId()} );
                 //保存stats。
                 stats.setId( dao.getSequenceId( TaskRunnerStats.class ) );
                 stats.setCreateDate( createDate );
@@ -153,13 +157,16 @@ public class TaskRpcController {
                         "=croner_run_time+?, runner_num=?, runner_run_num=runner_run_num+?, runner_fail_num=runner_fail_num+?, runner_run_time=runner_run_time+?, " +
                         "jvm_mem_max=?, jvm_mem_total=?, jvm_mem_free=?, thread_active=?, thread_peak=?, thread_daemon=?, thread_started=?, last_update=? WHERE id=? and " +
                         "host_ip=? and app_host=? and app_port=? and app_name=? and app_version=? and task_project=? and run_target=?";
-                int effectNum = dao.executeCommand( updateHostSql, new Object[]{taskHostInfoExt.getCronerNum(), cronerRunNum, cronerFailNum, cronerRunTime,
+                ResponseData<Integer> updateResult = dao.execute( updateHostSql, new Object[]{taskHostInfoExt.getCronerNum(), cronerRunNum, cronerFailNum, cronerRunTime,
                         taskHostInfoExt.getRunnerNum(), runnerRunNum, runnerFailNum, runnerRunTime, taskHostInfoExt.getJvmMemMax(), taskHostInfoExt.getJvmMemTotal(),
                         taskHostInfoExt.getJvmMemFree(), taskHostInfoExt.getThreadActive(), taskHostInfoExt.getThreadPeak(), taskHostInfoExt.getThreadDaemon(),
                         taskHostInfoExt.getThreadStarted(), createDate, taskHostInfoExt.getId(), taskHostInfoExt.getHostIp(), taskHostInfoExt.getAppHost(),
                         taskHostInfoExt.getAppPort(), taskHostInfoExt.getAppName(), taskHostInfoExt.getAppVersion(), taskHostInfoExt.getTaskProject(),
-                        taskHostInfoExt.getRunTarget()} ).getData();
-                isNewInfo = effectNum == 0;
+                        taskHostInfoExt.getRunTarget()} );
+                if (updateResult.isNotSuccess()) {
+                    return updateResult.raw();
+                }
+                isNewInfo = updateResult.getData() == 0;
             }
             if (isNewInfo) {
                 //对应新增操作。
@@ -173,22 +180,25 @@ public class TaskRpcController {
                 taskHostInfoExt.setCreateDate( createDate );
                 taskHostInfoExt.setLastUpdate( createDate );
                 taskHostInfoExt.setState( CommonState.ENABLED.getValue() );
-                dao.save( taskHostInfoExt );
+                ResponseData<TaskHostInfo> saveResult = dao.save( taskHostInfoExt );
+                if (saveResult.isNotSuccess()) {
+                    return saveResult.raw();
+                }
                 reportResponse.setId( taskHostInfoExt.getId() );
             }
         } catch (Throwable e) {
             log.error( "taskHostInfoExt update exception: {}", e.getMessage(), e );
         }
-        return reportResponse;
+        return ResponseData.success(reportResponse);
     }
 
     /**
-     * 获取队列任务列表
+     * 获取定时任务列表
      */
     @GetMapping("/croner/list")
     @Operation(summary = "获取定时任务列表", description = "获取定时任务列表")
     @MscPermDeclare(user = UserType.RPC)
-    public List<TaskCronerInfo> getCronerConfigList(@Parameter(description = "运行目标", example = "default") String runTarget,
+    public ResponseData<List<TaskCronerInfo>> getCronerConfigList(@Parameter(description = "运行目标", example = "default") String runTarget,
                                                     @Parameter(description = "任务项目", example = "任务项目") String taskProject,
                                                     @Parameter(description = "上一次更新时间", example = "0") Long lastUpdateTime) {
         StringBuilder sql = new StringBuilder( 256 );
@@ -206,7 +216,11 @@ public class TaskRpcController {
             sql.append( "and modify_date>=? " );
             params.add( new Date( lastUpdateTime ) );
         }
-        return dao.list( TaskCronerInfo.class, sql.toString(), params.toArray(), 0, 0, false ).getData().results();
+        ResponseData<PageList<TaskCronerInfo>> result = dao.list( TaskCronerInfo.class, sql.toString(), params.toArray(), 0, 0, false );
+        if (result.isNotSuccess()) {
+            return result.raw();
+        }
+        return ResponseData.success(result.getData().list());
     }
 
     /**
@@ -215,7 +229,7 @@ public class TaskRpcController {
     @GetMapping("/runner/list")
     @Operation(summary = "获取队列任务列表", description = "获取队列任务列表")
     @MscPermDeclare(user = UserType.RPC)
-    public List<TaskRunnerInfo> getRunnerConfigList(@Parameter(description = "运行目标", example = "default") String runTarget,
+    public ResponseData<List<TaskRunnerInfo>> getRunnerConfigList(@Parameter(description = "运行目标", example = "default") String runTarget,
                                                     @Parameter(description = "任务项目", example = "任务项目") String taskProject,
                                                     @Parameter(description = "上一次更新时间", example = "0") Long lastUpdateTime) {
         StringBuilder sql = new StringBuilder( 256 );
@@ -233,7 +247,11 @@ public class TaskRpcController {
             sql.append( "and modify_date>=? " );
             params.add( new Date( lastUpdateTime ) );
         }
-        return dao.list( TaskRunnerInfo.class, sql.toString(), params.toArray(), 0, 0, false ).getData().results();
+        ResponseData<PageList<TaskRunnerInfo>> result = dao.list( TaskRunnerInfo.class, sql.toString(), params.toArray(), 0, 0, false );
+        if (result.isNotSuccess()) {
+            return result.raw();
+        }
+        return ResponseData.success(result.getData().list());
     }
 
     /**
@@ -246,9 +264,13 @@ public class TaskRpcController {
     @PutMapping("/croner/tick")
     @Operation(summary = "更新定时任务下次执行时间", description = "更新定时任务下次执行时间")
     @MscPermDeclare(user = UserType.RPC)
-    public int updateCronerLog(@Parameter(description = "主键") @RequestParam(required = false) long id, @Parameter(description = "下一个日期", example = "0") @RequestParam(required =
+    public ResponseData<Integer> updateCronerLog(@Parameter(description = "主键") @RequestParam(required = false) long id, @Parameter(description = "下一个日期", example = "0") @RequestParam(required =
             false) long nextDate) {
-        return dao.executeCommand( "update task_croner_info set next_run_date=? where id=? ", new Object[]{new Date( nextDate ), id} ).getData();
+        ResponseData<Integer> result = dao.execute( "update task_croner_info set next_run_date=? where id=? ", new Object[]{new Date( nextDate ), id} );
+        if (result.isNotSuccess()) {
+            return result;
+        }
+        return ResponseData.success(result.getData());
     }
 
     /**
@@ -257,7 +279,7 @@ public class TaskRpcController {
     @PostMapping("/runner/init")
     @Operation(summary = "初始化队列任务配置", description = "初始化队列任务配置")
     @MscPermDeclare(user = UserType.RPC)
-    public TaskRunnerInfo initRunnerConfig(@RequestBody TaskRunnerInfo config) {
+    public ResponseData<TaskRunnerInfo> initRunnerConfig(@RequestBody TaskRunnerInfo config) {
         if (config != null) {
             String taskClass = config.getTaskClass();
             if (config.getRunTarget() == null) {
@@ -267,21 +289,27 @@ public class TaskRpcController {
                 config.setTaskTag( "" );
             }
             if (StringUtils.isNotBlank( taskClass )) {
-                // 再次检查，并创建配置
-                TaskRunnerInfo testOpt = dao.queryForSingleObject( TaskRunnerInfo.class, "select * from task_runner_info where task_class=? and run_target=? and state>=0",
-                        new Object[]{taskClass, config.getRunTarget()} ).getData();
-                if (Objects.isNull( testOpt )) {
+                ResponseData<TaskRunnerInfo> queryResult = dao.queryForObject( TaskRunnerInfo.class, "select * from task_runner_info where task_class=? and run_target=? and state>=0",
+                        new Object[]{taskClass, config.getRunTarget()} );
+                if (queryResult.isNotSuccess()) {
+                    return queryResult;
+                }
+                TaskRunnerInfo testOpt = queryResult.getData();
+                if (testOpt == null) {
                     config.setId( dao.getSequenceId( TaskRunnerInfo.class ) );
                     config.setTaskOwner( "" );
                     config.setTaskLinkMch( "" );
                     config.setTaskLinkOur( "" );
                     config.setCreateDate( SystemClock.nowDate() );
                     config.setState( CommonState.ENABLED.getValue() );
-                    dao.save( config );
+                    ResponseData<TaskRunnerInfo> saveResult = dao.save( config );
+                    if (saveResult.isNotSuccess()) {
+                        return saveResult;
+                    }
                 }
             }
         }
-        return config;
+        return ResponseData.success(config);
     }
 
     /**
@@ -290,7 +318,7 @@ public class TaskRpcController {
     @PostMapping("/croner/init")
     @Operation(summary = "初始化定时任务配置", description = "初始化定时任务配置")
     @MscPermDeclare(user = UserType.RPC)
-    public TaskCronerInfo initCronerConfig(@RequestBody TaskCronerInfo config) {
+    public ResponseData<TaskCronerInfo> initCronerConfig(@RequestBody TaskCronerInfo config) {
         if (config != null) {
             String taskClass = config.getTaskClass();
             if (config.getRunTarget() == null) {
@@ -300,21 +328,27 @@ public class TaskRpcController {
                 config.setTaskParam( "" );
             }
             if (StringUtils.isNotBlank( taskClass )) {
-                // 再次检查，并创建配置
-                TaskCronerInfo testOpt = dao.queryForSingleObject( TaskCronerInfo.class, "select * from task_croner_info where task_class=? and run_target=? and state>=0",
-                        new Object[]{taskClass, config.getRunTarget()} ).getData();
-                if (Objects.isNull( testOpt )) {
+                ResponseData<TaskCronerInfo> queryResult = dao.queryForObject( TaskCronerInfo.class, "select * from task_croner_info where task_class=? and run_target=? and state>=0",
+                        new Object[]{taskClass, config.getRunTarget()} );
+                if (queryResult.isNotSuccess()) {
+                    return queryResult;
+                }
+                TaskCronerInfo testOpt = queryResult.getData();
+                if (testOpt == null) {
                     config.setId( dao.getSequenceId( TaskCronerInfo.class ) );
                     config.setTaskOwner( "" );
                     config.setTaskLinkMch( "" );
                     config.setTaskLinkOur( "" );
                     config.setCreateDate( SystemClock.nowDate() );
                     config.setState( CommonState.ENABLED.getValue() );
-                    dao.save( config );
+                    ResponseData<TaskCronerInfo> saveResult = dao.save( config );
+                    if (saveResult.isNotSuccess()) {
+                        return saveResult;
+                    }
                 }
             }
         }
-        return config;
+        return ResponseData.success(config);
     }
 
     /**
@@ -323,16 +357,18 @@ public class TaskRpcController {
     @PostMapping("/contact/init")
     @Operation(summary = "初始化任务联系人信息", description = "初始化任务联系人信息")
     @MscPermDeclare(user = UserType.RPC)
-    public void initRunnerConfig(@RequestBody Map<String, String> contactData) {
+    public ResponseData<Void> initTaskContact(@RequestBody Map<String, String> contactData) {
         if (contactData != null) {
             String contactName = contactData.get( "contactName" );
             if (StringUtils.isNotBlank( contactName )) {
-                // 再次检查，并创建配置
-                TaskAlertContact taskAlertContact = dao.queryForSingleObject( TaskAlertContact.class, "select * from task_alert_contact where contact_name=? and state=1",
-                        new Object[]{contactName} ).getData();
-                if (Objects.isNull( taskAlertContact )) {
+                ResponseData<TaskAlertContact> queryResult = dao.queryForObject( TaskAlertContact.class, "select * from task_alert_contact where contact_name=? and state=1",
+                        new Object[]{contactName} );
+                if (queryResult.isNotSuccess()) {
+                    return queryResult.raw();
+                }
+                TaskAlertContact taskAlertContact = queryResult.getData();
+                if (taskAlertContact == null) {
                     taskAlertContact = new TaskAlertContact();
-                    // 再次检查，并创建报警配置
                     taskAlertContact.setId( dao.getSequenceId( TaskAlertContact.class ) );
                     taskAlertContact.setContactType( 0 );// 任务负责人
                     taskAlertContact.setContactName( contactName );
@@ -344,17 +380,19 @@ public class TaskRpcController {
                     taskAlertContact.setRemark( contactData.get( "remark" ) );
                     taskAlertContact.setCreateDate( SystemClock.nowDate() );
                     taskAlertContact.setState( CommonState.ENABLED.getValue() );
-                    dao.save( taskAlertContact );
-                    // 更新任务负责人和任务报警负责人
+                    ResponseData<TaskAlertContact> saveResult = dao.save( taskAlertContact );
+                    if (saveResult.isNotSuccess()) {
+                        return saveResult.raw();
+                    }
                 }
                 String linkData = "{\"" + taskAlertContact.getId() + "\":" + "\"" + taskAlertContact.getContactName() + "\"}";
                 String taskClass = contactData.get( "taskClass" );
                 if (StringUtils.isNotBlank( taskClass )) {
-                    if (dao.executeCommand( "update task_runner_info set task_owner=? where task_class=? and task_owner='' and state=1", new Object[]{linkData, taskClass} ).getData() < 1) {
-                        dao.executeCommand( "update task_croner_info set task_owner=? where task_class=? and task_owner='' and state=1", new Object[]{linkData, taskClass} );
-                    }
+                    dao.execute( "update task_runner_info set task_owner=? where task_class=? and task_owner='' and state=1", new Object[]{linkData, taskClass} );
+                    dao.execute( "update task_croner_info set task_owner=? where task_class=? and task_owner='' and state=1", new Object[]{linkData, taskClass} );
                 }
             }
         }
+        return ResponseData.success();
     }
 }

@@ -12,10 +12,10 @@ import uw.auth.service.annotation.MscPermDeclare;
 import uw.auth.service.constant.ActionLog;
 import uw.auth.service.constant.AuthType;
 import uw.auth.service.constant.UserType;
-import uw.common.dto.ResponseData;
+import uw.common.response.ResponseData;
 import uw.common.util.SystemClock;
 import uw.dao.DaoManager;
-import uw.dao.DataList;
+import uw.common.data.PageList;
 import uw.dao.annotation.ColumnMeta;
 import uw.dao.annotation.TableMeta;
 import uw.dao.util.ShardingTableUtils;
@@ -47,7 +47,7 @@ public class TaskRunnerReportController {
     @GetMapping("/statsDateSummary")
     @Operation(summary = "分时段汇总报表", description = "分时段数据汇总报表，如果指定taskId，则显示该任务的报表，否则显示全部报表。")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public ResponseData<DataList<RunnerStatsVo>> statsDateSummary(@Parameter(description = "开始日期") @RequestParam(required = false) Date startDate,
+    public ResponseData<PageList<RunnerStatsVo>> statsDateSummary(@Parameter(description = "开始日期") @RequestParam(required = false) Date startDate,
                                                                   @Parameter(description = "结束日期") @RequestParam(required = false) Date endDate,
                                                                   @Parameter(description = "聚合类型。0自动1按日2按时3按分") @RequestParam(required = false, defaultValue = "0") int dateType,
                                                                   @Parameter(description = "任务id") @RequestParam(required = false, defaultValue = "0") long taskId) {
@@ -101,7 +101,7 @@ public class TaskRunnerReportController {
     @GetMapping("/taskStatsList")
     @Operation(summary = "任务汇总报表", description = "分任务的汇总数据，不分时。可以显示出任务名、运行目标、运行类等关键信息")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public ResponseData<DataList<RunnerStatsDetailVo>> taskStatsList(@Parameter(description = "开始日期") @RequestParam(required = false) Date startDate,
+    public ResponseData<PageList<RunnerStatsDetailVo>> taskStatsList(@Parameter(description = "开始日期") @RequestParam(required = false) Date startDate,
                                                                      @Parameter(description = "结束日期") @RequestParam(required = false) Date endDate, @Parameter(description =
             "聚合类型。0自动1按日2按时3" + "按分") @RequestParam(required = false, defaultValue = "0") int dateType) {
         //判断自动类型。

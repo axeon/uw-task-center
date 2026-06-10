@@ -12,10 +12,10 @@ import uw.auth.service.annotation.MscPermDeclare;
 import uw.auth.service.constant.ActionLog;
 import uw.auth.service.constant.AuthType;
 import uw.auth.service.constant.UserType;
-import uw.common.dto.ResponseData;
+import uw.common.response.ResponseData;
 import uw.common.util.SystemClock;
 import uw.dao.DaoManager;
-import uw.dao.DataList;
+import uw.common.data.PageList;
 import uw.dao.TransactionException;
 import uw.dao.annotation.ColumnMeta;
 import uw.dao.annotation.TableMeta;
@@ -50,11 +50,11 @@ public class DashboardController {
     public TaskStatsVo taskStats() {
         TaskStatsVo taskStatsVo = new TaskStatsVo();
         // 当前运行主机定义:last_update时间在当前系统时间一分钟内的都视为运行中的主机
-        Integer taskHostStatusNum = dao.queryForSingleValue( Integer.class, "select count(1) from task_host_info where state=1 " ).getData();
+        Integer taskHostStatusNum = dao.queryForValue( Integer.class, "select count(1) from task_host_info where state=1 " ).getData();
         taskStatsVo.setTaskHostStatusNum( taskHostStatusNum );
-        Integer taskCronerConfigNum = dao.queryForSingleValue( Integer.class, "select count(1) from task_croner_info where state = 1" ).getData();
+        Integer taskCronerConfigNum = dao.queryForValue( Integer.class, "select count(1) from task_croner_info where state = 1" ).getData();
         taskStatsVo.setTaskCronerConfigNum( taskCronerConfigNum );
-        Integer taskRunnerConfigNum = dao.queryForSingleValue( Integer.class, "select count(1) from task_runner_info where state = 1" ).getData();
+        Integer taskRunnerConfigNum = dao.queryForValue( Integer.class, "select count(1) from task_runner_info where state = 1" ).getData();
         taskStatsVo.setTaskRunnerConfigNum( taskRunnerConfigNum );
         return taskStatsVo;
     }
@@ -68,7 +68,7 @@ public class DashboardController {
     @GetMapping("/listNewAlert")
     @Operation(summary = "报警日志NEW", description = "")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.NONE)
-    public ResponseData<DataList<TaskAlertInfo>> listNewAlert() {
+    public ResponseData<PageList<TaskAlertInfo>> listNewAlert() {
         // 获取七天之内的最新10条邮件信息记录回显
         return dao.list( TaskAlertInfo.class, "select * from task_alert_info order by id desc", 0, 10, false );
     }
@@ -132,15 +132,15 @@ public class DashboardController {
         ArrayList<TaskReportDetail> cronerReportList = new ArrayList<>();
         ArrayList<TaskReportDetail> runnerReportList = new ArrayList<>();
         for (String tableName : runnerTables) {
-            DataList<TaskReportDetail> result = dao.list(TaskReportDetail.class, String.format(runnerCommand, tableName), param.toArray()).getData();
+            PageList<TaskReportDetail> result = dao.list(TaskReportDetail.class, String.format(runnerCommand, tableName), param.toArray()).getData();
             if (result != null) {
-                runnerReportList.addAll(result.results());
+                runnerReportList.addAll(result.list());
             }
         }
         for (String tableName : cronerTables) {
-            DataList<TaskReportDetail> result = dao.list(TaskReportDetail.class, String.format(cornerCommand, tableName), param.toArray()).getData();
+            PageList<TaskReportDetail> result = dao.list(TaskReportDetail.class, String.format(cornerCommand, tableName), param.toArray()).getData();
             if (result != null) {
-                cronerReportList.addAll(result.results());
+                cronerReportList.addAll(result.list());
             }
         }
 
