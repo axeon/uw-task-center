@@ -5,7 +5,6 @@ import uw.common.dto.PageQueryParam;
 import uw.dao.annotation.QueryMeta;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -14,21 +13,21 @@ import java.util.Map;
 @Schema(title = "队列任务统计信息列表查询参数", description = "队列任务统计信息列表查询参数")
 public class TaskRunnerStatsQueryParam extends PageQueryParam{
 
-    private static final Map<String, String> ALLOWED_SORT_PROPERTY = new HashMap<>() {{
-            put( "id", "id" );
-            put( "taskId", "task_id" );
-            put( "numAll", "num_all" );
-            put( "numFailProgram", "num_fail_program" );
-            put( "numFailConfig", "num_fail_config" );
-            put( "numFailData", "num_fail_data" );
-            put( "numFailPartner", "num_fail_partner" );
-            put( "timeWaitQueue", "time_wait_queue" );
-            put( "timeWaitDelay", "time_wait_delay" );
-            put( "timeRun", "time_run" );
-            put( "queueSize", "queue_size" );
-            put( "consumerNum", "consumer_num" );
-            put( "createDate", "create_date" );
-    }};
+    private static final Map<String, String> ALLOWED_SORT_PROPERTY = Map.ofEntries(
+        Map.entry("id", "id"),
+        Map.entry("taskId", "task_id"),
+        Map.entry("numAll", "num_all"),
+        Map.entry("numFailProgram", "num_fail_program"),
+        Map.entry("numFailConfig", "num_fail_config"),
+        Map.entry("numFailData", "num_fail_data"),
+        Map.entry("numFailPartner", "num_fail_partner"),
+        Map.entry("timeWaitQueue", "time_wait_queue"),
+        Map.entry("timeWaitDelay", "time_wait_delay"),
+        Map.entry("timeRun", "time_run"),
+        Map.entry("queueSize", "queue_size"),
+        Map.entry("consumerNum", "consumer_num"),
+        Map.entry("createDate", "create_date")
+);
 
     /**
      * 允许的排序属性。

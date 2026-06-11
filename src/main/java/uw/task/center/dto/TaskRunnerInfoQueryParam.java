@@ -5,7 +5,6 @@ import uw.common.dto.PageQueryParam;
 import uw.dao.annotation.QueryMeta;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -14,45 +13,45 @@ import java.util.Map;
 @Schema(title = "队列任务配置列表查询参数", description = "队列任务配置列表查询参数")
 public class TaskRunnerInfoQueryParam extends PageQueryParam{
 
-    private static final Map<String, String> ALLOWED_SORT_PROPERTY = new HashMap<>() {{
-            put( "id", "id" );
-            put( "taskName", "task_name" );
-            put( "taskClass", "task_class" );
-            put( "taskOwner", "task_owner" );
-            put( "taskTag", "task_tag" );
-            put( "queueType", "queue_type" );
-            put( "delayType", "delay_type" );
-            put( "logLevel", "log_level" );
-            put( "logLimitSize", "log_limit_size" );
-            put( "runType", "run_type" );
-            put( "runTarget", "run_target" );
-            put( "consumerNum", "consumer_num" );
-            put( "prefetchNum", "prefetch_num" );
-            put( "rateLimitType", "rate_limit_type" );
-            put( "rateLimitValue", "rate_limit_value" );
-            put( "rateLimitTime", "rate_limit_time" );
-            put( "rateLimitWait", "rate_limit_wait" );
-            put( "retryTimesByOverrated", "retry_times_by_overrated" );
-            put( "retryTimesByPartner", "retry_times_by_partner" );
-            put( "statsDate", "stats_date" );
-            put( "statsRunNum", "stats_run_num" );
-            put( "statsFailNum", "stats_fail_num" );
-            put( "statsRunTime", "stats_run_time" );
-            put( "alertFailRate", "alert_fail_rate" );
-            put( "alertFailPartnerRate", "alert_fail_partner_rate" );
-            put( "alertFailProgramRate", "alert_fail_program_rate" );
-            put( "alertFailConfigRate", "alert_fail_config_rate" );
-            put( "alertFailDataRate", "alert_fail_data_rate" );
-            put( "alertQueueOversize", "alert_queue_oversize" );
-            put( "alertQueueTimeout", "alert_queue_timeout" );
-            put( "alertWaitTimeout", "alert_wait_timeout" );
-            put( "alertRunTimeout", "alert_run_timeout" );
-            put( "taskLinkOur", "task_link_our" );
-            put( "taskLinkMch", "task_link_mch" );
-            put( "createDate", "create_date" );
-            put( "modifyDate", "modify_date" );
-            put( "state", "state" );
-    }};
+    private static final Map<String, String> ALLOWED_SORT_PROPERTY = Map.ofEntries(
+        Map.entry("id", "id"),
+        Map.entry("taskName", "task_name"),
+        Map.entry("taskClass", "task_class"),
+        Map.entry("taskOwner", "task_owner"),
+        Map.entry("taskTag", "task_tag"),
+        Map.entry("queueType", "queue_type"),
+        Map.entry("delayType", "delay_type"),
+        Map.entry("logLevel", "log_level"),
+        Map.entry("logLimitSize", "log_limit_size"),
+        Map.entry("runType", "run_type"),
+        Map.entry("runTarget", "run_target"),
+        Map.entry("consumerNum", "consumer_num"),
+        Map.entry("prefetchNum", "prefetch_num"),
+        Map.entry("rateLimitType", "rate_limit_type"),
+        Map.entry("rateLimitValue", "rate_limit_value"),
+        Map.entry("rateLimitTime", "rate_limit_time"),
+        Map.entry("rateLimitWait", "rate_limit_wait"),
+        Map.entry("retryTimesByOverrated", "retry_times_by_overrated"),
+        Map.entry("retryTimesByPartner", "retry_times_by_partner"),
+        Map.entry("statsDate", "stats_date"),
+        Map.entry("statsRunNum", "stats_run_num"),
+        Map.entry("statsFailNum", "stats_fail_num"),
+        Map.entry("statsRunTime", "stats_run_time"),
+        Map.entry("alertFailRate", "alert_fail_rate"),
+        Map.entry("alertFailPartnerRate", "alert_fail_partner_rate"),
+        Map.entry("alertFailProgramRate", "alert_fail_program_rate"),
+        Map.entry("alertFailConfigRate", "alert_fail_config_rate"),
+        Map.entry("alertFailDataRate", "alert_fail_data_rate"),
+        Map.entry("alertQueueOversize", "alert_queue_oversize"),
+        Map.entry("alertQueueTimeout", "alert_queue_timeout"),
+        Map.entry("alertWaitTimeout", "alert_wait_timeout"),
+        Map.entry("alertRunTimeout", "alert_run_timeout"),
+        Map.entry("taskLinkOur", "task_link_our"),
+        Map.entry("taskLinkMch", "task_link_mch"),
+        Map.entry("createDate", "create_date"),
+        Map.entry("modifyDate", "modify_date"),
+        Map.entry("state", "state")
+);
 
     /**
      * 允许的排序属性。

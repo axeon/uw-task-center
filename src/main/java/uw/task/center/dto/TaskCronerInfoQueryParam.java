@@ -5,7 +5,6 @@ import uw.common.dto.PageQueryParam;
 import uw.dao.annotation.QueryMeta;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -14,34 +13,34 @@ import java.util.Map;
 @Schema(title = "定时任务配置列表查询参数", description = "定时任务配置列表查询参数")
 public class TaskCronerInfoQueryParam extends PageQueryParam{
 
-    private static final Map<String, String> ALLOWED_SORT_PROPERTY = new HashMap<>() {{
-            put( "id", "id" );
-            put( "taskName", "task_name" );
-            put( "taskClass", "task_class" );
-            put( "taskParam", "task_param" );
-            put( "taskOwner", "task_owner" );
-            put( "taskCron", "task_cron" );
-            put( "runType", "run_type" );
-            put( "runTarget", "run_target" );
-            put( "logLevel", "log_level" );
-            put( "logLimitSize", "log_limit_size" );
-            put( "nextRunDate", "next_run_date" );
-            put( "statsDate", "stats_date" );
-            put( "statsRunNum", "stats_run_num" );
-            put( "statsFailNum", "stats_fail_num" );
-            put( "statsRunTime", "stats_run_time" );
-            put( "alertFailRate", "alert_fail_rate" );
-            put( "alertFailPartnerRate", "alert_fail_partner_rate" );
-            put( "alertFailDataRate", "alert_fail_data_rate" );
-            put( "alertFailProgramRate", "alert_fail_program_rate" );
-            put( "alertWaitTimeout", "alert_wait_timeout" );
-            put( "alertRunTimeout", "alert_run_timeout" );
-            put( "taskLinkOur", "task_link_our" );
-            put( "taskLinkMch", "task_link_mch" );
-            put( "createDate", "create_date" );
-            put( "modifyDate", "modify_date" );
-            put( "state", "state" );
-    }};
+    private static final Map<String, String> ALLOWED_SORT_PROPERTY = Map.ofEntries(
+        Map.entry("id", "id"),
+        Map.entry("taskName", "task_name"),
+        Map.entry("taskClass", "task_class"),
+        Map.entry("taskParam", "task_param"),
+        Map.entry("taskOwner", "task_owner"),
+        Map.entry("taskCron", "task_cron"),
+        Map.entry("runType", "run_type"),
+        Map.entry("runTarget", "run_target"),
+        Map.entry("logLevel", "log_level"),
+        Map.entry("logLimitSize", "log_limit_size"),
+        Map.entry("nextRunDate", "next_run_date"),
+        Map.entry("statsDate", "stats_date"),
+        Map.entry("statsRunNum", "stats_run_num"),
+        Map.entry("statsFailNum", "stats_fail_num"),
+        Map.entry("statsRunTime", "stats_run_time"),
+        Map.entry("alertFailRate", "alert_fail_rate"),
+        Map.entry("alertFailPartnerRate", "alert_fail_partner_rate"),
+        Map.entry("alertFailDataRate", "alert_fail_data_rate"),
+        Map.entry("alertFailProgramRate", "alert_fail_program_rate"),
+        Map.entry("alertWaitTimeout", "alert_wait_timeout"),
+        Map.entry("alertRunTimeout", "alert_run_timeout"),
+        Map.entry("taskLinkOur", "task_link_our"),
+        Map.entry("taskLinkMch", "task_link_mch"),
+        Map.entry("createDate", "create_date"),
+        Map.entry("modifyDate", "modify_date"),
+        Map.entry("state", "state")
+);
 
     /**
      * 允许的排序属性。

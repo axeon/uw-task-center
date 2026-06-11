@@ -5,7 +5,6 @@ import uw.common.dto.PageQueryParam;
 import uw.dao.annotation.QueryMeta;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -14,20 +13,20 @@ import java.util.Map;
 @Schema(title = "报警联系信息列表查询参数", description = "报警联系信息列表查询参数")
 public class TaskAlertContactQueryParam extends PageQueryParam{
 
-    private static final Map<String, String> ALLOWED_SORT_PROPERTY = new HashMap<>() {{
-            put( "id", "id" );
-            put( "contactType", "contact_type" );
-            put( "contactName", "contact_name" );
-            put( "mobile", "mobile" );
-            put( "email", "email" );
-            put( "wechat", "wechat" );
-            put( "im", "im" );
-            put( "notifyUrl", "notify_url" );
-            put( "remark", "remark" );
-            put( "createDate", "create_date" );
-            put( "modifyDate", "modify_date" );
-            put( "state", "state" );
-    }};
+    private static final Map<String, String> ALLOWED_SORT_PROPERTY = Map.ofEntries(
+        Map.entry("id", "id"),
+        Map.entry("contactType", "contact_type"),
+        Map.entry("contactName", "contact_name"),
+        Map.entry("mobile", "mobile"),
+        Map.entry("email", "email"),
+        Map.entry("wechat", "wechat"),
+        Map.entry("im", "im"),
+        Map.entry("notifyUrl", "notify_url"),
+        Map.entry("remark", "remark"),
+        Map.entry("createDate", "create_date"),
+        Map.entry("modifyDate", "modify_date"),
+        Map.entry("state", "state")
+);
 
     /**
      * 允许的排序属性。

@@ -5,7 +5,6 @@ import uw.common.dto.PageQueryParam;
 import uw.dao.annotation.QueryMeta;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -14,35 +13,35 @@ import java.util.Map;
 @Schema(title = "task主机信息列表查询参数", description = "task主机信息列表查询参数")
 public class TaskHostInfoQueryParam extends PageQueryParam{
 
-    private static final Map<String, String> ALLOWED_SORT_PROPERTY = new HashMap<>() {{
-            put( "id", "id" );
-            put( "hostIp", "host_ip" );
-            put( "appName", "app_name" );
-            put( "appVersion", "app_version" );
-            put( "appHost", "app_host" );
-            put( "appPort", "app_port" );
-            put( "taskProject", "task_project" );
-            put( "runTarget", "run_target" );
-            put( "cronerNum", "croner_num" );
-            put( "cronerRunNum", "croner_run_num" );
-            put( "cronerFailNum", "croner_fail_num" );
-            put( "cronerRunTime", "croner_run_time" );
-            put( "runnerNum", "runner_num" );
-            put( "runnerRunNum", "runner_run_num" );
-            put( "runnerFailNum", "runner_fail_num" );
-            put( "runnerRunTime", "runner_run_time" );
-            put( "jvmMemMax", "jvm_mem_max" );
-            put( "jvmMemTotal", "jvm_mem_total" );
-            put( "jvmMemFree", "jvm_mem_free" );
-            put( "threadActive", "thread_active" );
-            put( "threadPeak", "thread_peak" );
-            put( "threadDaemon", "thread_daemon" );
-            put( "threadStarted", "thread_started" );
-            put( "createDate", "create_date" );
-            put( "modifyDate", "modify_date" );
-            put( "lastUpdate", "last_update" );
-            put( "state", "state" );
-    }};
+    private static final Map<String, String> ALLOWED_SORT_PROPERTY = Map.ofEntries(
+        Map.entry("id", "id"),
+        Map.entry("hostIp", "host_ip"),
+        Map.entry("appName", "app_name"),
+        Map.entry("appVersion", "app_version"),
+        Map.entry("appHost", "app_host"),
+        Map.entry("appPort", "app_port"),
+        Map.entry("taskProject", "task_project"),
+        Map.entry("runTarget", "run_target"),
+        Map.entry("cronerNum", "croner_num"),
+        Map.entry("cronerRunNum", "croner_run_num"),
+        Map.entry("cronerFailNum", "croner_fail_num"),
+        Map.entry("cronerRunTime", "croner_run_time"),
+        Map.entry("runnerNum", "runner_num"),
+        Map.entry("runnerRunNum", "runner_run_num"),
+        Map.entry("runnerFailNum", "runner_fail_num"),
+        Map.entry("runnerRunTime", "runner_run_time"),
+        Map.entry("jvmMemMax", "jvm_mem_max"),
+        Map.entry("jvmMemTotal", "jvm_mem_total"),
+        Map.entry("jvmMemFree", "jvm_mem_free"),
+        Map.entry("threadActive", "thread_active"),
+        Map.entry("threadPeak", "thread_peak"),
+        Map.entry("threadDaemon", "thread_daemon"),
+        Map.entry("threadStarted", "thread_started"),
+        Map.entry("createDate", "create_date"),
+        Map.entry("modifyDate", "modify_date"),
+        Map.entry("lastUpdate", "last_update"),
+        Map.entry("state", "state")
+);
 
     /**
      * 允许的排序属性。
