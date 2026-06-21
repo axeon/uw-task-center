@@ -20,7 +20,11 @@ import uw.task.center.dto.TaskHostInfoQueryParam;
 import uw.task.center.entity.TaskHostInfo;
 
 /**
- * 主机状态管理
+ * 任务主机状态管理接口。
+ *
+ * <p>查询任务执行主机的注册信息与运行指标，支持启用/禁用/删除主机记录。</p>
+ *
+ * @author axeon
  */
 @RestController
 @RequestMapping("/ops/host/info")

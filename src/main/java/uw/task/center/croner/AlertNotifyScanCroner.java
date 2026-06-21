@@ -67,19 +67,20 @@ public class AlertNotifyScanCroner extends TaskCroner {
      */
     @Override
     public String runTask(TaskCronerLog taskCronerLog){
-        // 先更新到处理中状态
+        // 先以原子条件推进 state 0->1：仅本实例抢到的行才会被发送，
+        // 避免多任务中心实例并发对同一批通知重复发送（钉钉告警刷屏）。
         int effectedNum = dao.execute( "update task_alert_notify set state=1 where state=0 and sent_times=0" ).getData();
         if (effectedNum < 1) {
             return "本次执行无数据!";
         }
         PageList<TaskAlertNotify> notifyList = dao.list( TaskAlertNotify.class, "select * from task_alert_notify where state=1 and sent_times=0" ).getData();
-        if (notifyList == null){
+        if (notifyList == null || notifyList.isEmpty()){
             return "本次执行无数据!";
         }
-        effectedNum = dao.execute( "update task_alert_notify set sent_date=now(),sent_times=1 where state=1 and sent_times=0" ).getData();
-        if (effectedNum < 1) {
-            return "本次执行无数据!";
-        }
+        // 标记 sent_times=1：因 state 已被本实例原子抢占（0->1），其他实例不会重复发送。
+        // 注：发送为同步 HTTP 调用，理论上仍存在"标记成功但发送异常"的丢通知窗口，
+        // 当前钉钉/notifyUrl 发送失败仅记日志不抛出，保持与原行为一致，避免无限重试刷屏。
+        dao.execute( "update task_alert_notify set sent_date=now(),sent_times=1 where state=1 and sent_times=0" );
 
         // 先按照用户收敛.key=email value=infoIdList
         Map<String, String> emailMap = new HashMap<>();

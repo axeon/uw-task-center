@@ -26,7 +26,12 @@ import uw.task.center.dto.TaskRunnerInfoQueryParam;
 import uw.task.center.entity.TaskRunnerInfo;
 
 /**
- * 队列任务配置表：增删改查
+ * 队列任务配置管理接口。
+ *
+ * <p>维护队列任务（task_runner_info）的服务端配置：消费并发、限速、重试、各类告警阈值、联系人等，
+ * 支持配置历史与操作日志回溯。任务执行主机通过 RPC 增量拉取这些配置。</p>
+ *
+ * @author axeon
  */
 @RestController
 @RequestMapping("/ops/runner/info")

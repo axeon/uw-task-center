@@ -13,8 +13,10 @@ public class ContactUtils {
 
     /**
      * 默认联系人（开发者），供任务中心内部 croner 使用。
+     * <p>手机号留空：原硬编码 13800138000 在生产未覆盖配置时会向该号码误发告警。
+     * 实际通知走钉钉 notifyUrl（由 TaskCenterProperties.alertDing 配置），此处仅占位。</p>
      */
-    private static final TaskContact AXEON = new TaskContact("axeon", "13800138000", "", "", "", "", "");
+    private static final TaskContact AXEON = new TaskContact("axeon", "", "", "", "", "", "");
 
     /**
      * 获取默认任务联系人信息。

@@ -20,7 +20,12 @@ import uw.task.center.dto.TaskAlertInfoQueryParam;
 import uw.task.center.entity.TaskAlertInfo;
 
 /**
- * 报警发送信息表：增删改查
+ * 报警信息管理接口。
+ *
+ * <p>管理告警事件记录（task_alert_info）的查询，记录由 {@link uw.task.center.service.AlertProcessService}
+ * 在检测到阈值越限时生成，包含告警标题、正文与触发时间。</p>
+ *
+ * @author axeon
  */
 @RestController
 @RequestMapping("/ops/alert/info")

@@ -144,9 +144,9 @@ public class DingUtils {
             private String[] atUserIds;
 
             /**
-             * 是否 @ 全员，默认 true。
+             * 是否 @ 全员，默认 false（避免每次告警 @ 全员造成刷屏）。
              */
-            private boolean isAtAll = true;
+            private boolean isAtAll = false;
 
             public String[] getAtMobiles() {
                 return atMobiles;

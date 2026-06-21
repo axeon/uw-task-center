@@ -25,7 +25,12 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 定时任务报表
+ * 定时任务报表接口。
+ *
+ * <p>基于分表统计数据（task_croner_stats）提供分时段汇总、分任务汇总两类报表，
+ * 聚合粒度按时间跨度自动选择（按日/按时/按分）。</p>
+ *
+ * @author axeon
  */
 @RestController
 @RequestMapping("/ops/croner/report")

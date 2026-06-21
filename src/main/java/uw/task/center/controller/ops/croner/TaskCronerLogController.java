@@ -22,7 +22,12 @@ import uw.task.center.dto.TaskCronerEsLogQueryParam;
 import uw.task.center.entity.TaskCronerEsLog;
 
 /**
- * 定时任务日志表：增删改查
+ * 定时任务运行日志查询接口。
+ *
+ * <p>日志数据来源于 ES（索引 {@value #INDEX_NAME}），由任务执行主机通过 logback-es 异步写入。
+ * 本接口仅提供按条件检索，不支持写入。</p>
+ *
+ * @author axeon
  */
 @RestController
 @RequestMapping("/ops/croner/log")
@@ -31,17 +36,32 @@ import uw.task.center.entity.TaskCronerEsLog;
 public class TaskCronerLogController {
 
     private static final Logger log = LoggerFactory.getLogger( TaskCronerLogController.class );
+    /**
+     * 定时任务日志在 ES 中的索引名。
+     */
     private static final String INDEX_NAME = "uw.task.croner.log";
     private final DaoManager dao = DaoManager.getInstance();
+    /**
+     * ES 日志客户端。
+     */
     private final LogClient logClient;
 
+    /**
+     * @param logClient ES 日志客户端
+     */
     @Autowired
     public TaskCronerLogController(final LogClient logClient) {
         this.logClient = logClient;
     }
 
     /**
-     * 列表定时任务日志
+     * 分页查询定时任务运行日志。
+     *
+     * <p>强制按 {@code @timestamp} 倒序，将查询参数翻译为 ES DSL 后执行检索。</p>
+     *
+     * @param queryParam 查询参数（含分页、排序、过滤条件）
+     * @return 命中的日志分页列表
+     * @throws Exception DSL 翻译或 ES 查询失败时抛出
      */
     @GetMapping("/list")
     @Operation(summary = "列表定时任务日志", description = "列表定时任务日志")

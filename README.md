@@ -1,5 +1,142 @@
 [TOC]
 
+# uw-task-center 任务管理中心
+
+## 项目简介
+
+**uw-task-center** 是 [uw-task](#uw-task-客户端框架使用文档) 分布式任务框架的**服务端管理中心**。
+
+它本身不执行业务任务，而是作为整个任务体系的"大脑"，承担三类职责：
+
+1. **配置中心**：维护定时任务（croner）、队列任务（runner）的服务端配置（cron 表达式、并发、限速、重试、告警阈值、联系人等），任务执行主机通过 RPC 增量拉取。
+2. **运维监控**：接收各执行主机上报的运行统计与主机指标，提供仪表盘、分时段/分任务报表、ES 日志检索。
+3. **告警中枢**：按任务配置的阈值（失败率、等待/运行超时、队列堆积、定时任务未按时执行等）判定并生成告警，经钉钉/notifyUrl 推送给责任人。
+
+> 本仓库是**服务端**。uw-task **客户端框架**（在业务应用中继承 `TaskCroner` / `TaskRunner` 编写任务）的使用文档见文末[附录](#uw-task-客户端框架使用文档)。
+
+## 技术栈
+
+- **Spring Boot** + **Spring Cloud Alibaba (Nacos)**：服务注册与配置中心。
+- **MySQL**：存储任务配置、主机信息、告警数据；统计明细按日分表（`task_runner_stats` / `task_croner_stats`）。
+- **Elasticsearch**：存储任务运行日志（`uw.task.runner.log` / `uw.task.croner.log`），由执行主机经 logback-es 异步写入。
+- **Redis**：全局限速、缓存。
+- **RabbitMQ**：uw-task 客户端的队列任务通道（中心本身不直连 MQ）。
+- **钉钉 webhook / notifyUrl**：告警推送通道。
+
+## 模块结构
+
+```
+uw.task.center
+├── UwTaskCenterApplication        # 启动入口
+├── conf/                          # 自动配置、Swagger、Properties
+│   ├── TaskCenterAutoConfiguration
+│   ├── TaskCenterProperties       # uw.task.center.* 配置（centerName、alertDing 钉钉通知）
+│   └── SwaggerConfig              # debug/dev 环境的 OpenAPI 文档
+├── controller/
+│   ├── rpc/TaskRpcController      # 供 uw-task 客户端调用的 RPC 接口（UserType.RPC）
+│   ├── ops/                       # OPS 管理端接口（UserType.OPS）
+│   │   ├── home/                  # 仪表盘
+│   │   ├── host/                  # 主机管理
+│   │   ├── croner/                # 定时任务配置/报表/日志
+│   │   ├── runner/                # 队列任务配置/报表/日志
+│   │   ├── alert/                 # 告警信息/通知/联系人
+│   │   └── log/                   # 操作日志/数据历史
+│   └── open/EnumController        # 枚举导出（debug/dev）
+├── service/AlertProcessService    # 告警判定与生成核心服务
+├── croner/                        # 中心内部定时任务
+│   ├── AlertNotifyScanCroner      # 扫描并发送未送达告警（每 3 分钟）
+│   └── TaskHostCleanCroner        # 清理失联主机（每 5 分钟）
+├── entity/                        # 数据库实体
+├── dto/                           # 查询参数
+├── vo/                            # 视图对象
+└── util/                          # DingUtils 钉钉通知、ContactUtils 等
+```
+
+## 数据表
+
+| 表名 | 说明 |
+|---|---|
+| `task_croner_info` | 定时任务配置（cron、运行目标、告警阈值、联系人） |
+| `task_runner_info` | 队列任务配置（并发、限速、重试、告警阈值、联系人） |
+| `task_host_info` | 任务执行主机注册信息与累计运行指标 |
+| `task_croner_stats` | 定时任务运行统计明细（按日分表） |
+| `task_runner_stats` | 队列任务运行统计明细（按日分表） |
+| `task_alert_info` | 告警事件记录（标题、正文、触发时间） |
+| `task_alert_notify` | 告警通知记录（待发送/已发送） |
+| `task_alert_contact` | 告警联系人（邮箱、钉钉 notifyUrl 等） |
+| `sys_crit_log` / `sys_data_history` / `sys_seq` | 操作日志 / 数据历史 / 序列号（公共表） |
+
+建表脚本见 [`database/ddl.sql`](database/ddl.sql)。
+
+## 部署
+
+### 环境变量
+
+启动依赖 Nacos，通过环境变量注入连接信息：
+
+| 变量 | 说明 |
+|---|---|
+| `NACOS_SERVER` | Nacos 地址 |
+| `NACOS_USERNAME` / `NACOS_PASSWORD` | Nacos 账号密码 |
+| `NACOS_NAMESPACE` | Nacos 命名空间 |
+| `APP_HOST` | 注册 IP（可选，默认自动探测） |
+
+### 中心自身配置（Nacos 中的 yaml）
+
+```yaml
+uw:
+  task:
+    center:
+      # 中心名称，会拼到告警标题前缀
+      center-name: 任务管理中心
+      # 全局告警钉钉机器人（留空则不通过全局钉钉发送）
+      alert-ding:
+        notify-url: https://oapi.dingtalk.com/robot/send?access_token=xxx
+        notify-key: TASK
+```
+
+其余 MySQL / Redis / ES 连接由 Nacos 统一配置，遵循 uw-base 约定。
+
+### 构建
+
+```bash
+mvn clean package
+java -jar target/uw-task-center-<version>.jar
+```
+
+## RPC 接口（供 uw-task 客户端调用）
+
+基路径 `/rpc/task`，要求 `UserType.RPC` 身份。
+
+| 方法 | 路径 | 说明 |
+|---|---|---|
+| POST | `/host/report` | 主机状态上报：更新 JVM/线程指标与累计统计、写入分表统计明细、触发告警判定，返回主机 id/状态 |
+| GET | `/croner/list` | 拉取定时任务配置（按 runTarget/taskProject 前缀/增量时间过滤） |
+| GET | `/runner/list` | 拉取队列任务配置（同上） |
+| PUT | `/croner/tick` | 心跳：更新定时任务下次执行时间 |
+| POST | `/croner/init` | 首次注册定时任务默认配置（taskClass+taskParam+runTarget 幂等） |
+| POST | `/runner/init` | 首次注册队列任务默认配置（taskClass+taskTag+runTarget 幂等） |
+| POST | `/contact/init` | 上传任务默认联系人信息 |
+
+## 告警机制
+
+`AlertProcessService` 接收主机上报的统计后，异步判定以下阈值（任一越限即生成告警）：
+
+| 类型 | 含义 |
+|---|---|
+| `failRate` / `failProgramRate` / `failPartnerRate` / `failConfigRate` / `failDataRate` | 总/程序/接口/配置/数据 失败率（%） |
+| `queueTimeout` / `waitTimeout` / `runTimeout` | 排队/限速等待/运行 平均耗时超限（ms） |
+| `queueSize` | 队列堆积超限 |
+| `cronerTimeOut` | 定时任务超过计划时间 5 分钟仍未执行 |
+
+告警生成 → 落库 `task_alert_info` / `task_alert_notify` → `AlertNotifyScanCroner` 每 3 分钟扫描合并，经钉钉/notifyUrl 推送。
+
+---
+
+# uw-task 客户端框架使用文档
+
+> 以下内容面向**业务应用开发者**：如何在应用中引入 uw-task 客户端、编写定时/队列任务。这部分配置发生在**执行主机**（业务应用）一侧，不是 uw-task-center 服务端的配置。
+
 ## 简介
 
 uw-task是一个分布式任务框架，通过uw-task可以快速构建分布式任务体系，支持定时任务和队列任务，同时支持任务运维监控和报警设置。

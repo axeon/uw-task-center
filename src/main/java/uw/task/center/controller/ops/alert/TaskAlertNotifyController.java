@@ -20,7 +20,12 @@ import uw.task.center.dto.TaskAlertNotifyQueryParam;
 import uw.task.center.entity.TaskAlertNotify;
 
 /**
- * 报警信息通知表：增删改查
+ * 报警通知管理接口。
+ *
+ * <p>管理告警通知记录（task_alert_notify）的查询，记录由 {@link uw.task.center.service.AlertProcessService}
+ * 在触发告警时生成，由 {@link uw.task.center.croner.AlertNotifyScanCroner} 定时扫描并发送。</p>
+ *
+ * @author axeon
  */
 
 @RestController

@@ -26,7 +26,12 @@ import uw.task.center.dto.TaskCronerInfoQueryParam;
 import uw.task.center.entity.TaskCronerInfo;
 
 /**
- * 定时任务配置表：增删改查
+ * 定时任务配置管理接口。
+ *
+ * <p>维护定时任务（task_croner_info）的服务端配置：cron 表达式、运行目标、各类告警阈值、联系人等，
+ * 支持配置历史与操作日志回溯。任务执行主机通过 RPC 增量拉取这些配置。</p>
+ *
+ * @author axeon
  */
 
 @RestController

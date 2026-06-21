@@ -7,17 +7,22 @@ import uw.task.center.entity.TaskRunnerStats;
 import java.util.List;
 
 /**
- * task主机信息扩展类。
+ * task 主机信息扩展类。
+ *
+ * <p>在 {@link TaskHostInfo} 基础上附带主机本次上报的 croner / runner 统计明细列表，
+ * 作为 {@code /rpc/task/host/report} 接口的请求体。</p>
+ *
+ * @author axeon
  */
 public class TaskHostInfoExt extends TaskHostInfo {
 
     /**
-     * croner运行统计信息。
+     * 本次上报的定时任务统计信息列表。
      */
     private List<TaskCronerStats> taskCronerStatsList;
 
     /**
-     * runner运行统计信息。
+     * 本次上报的队列任务统计信息列表。
      */
     private List<TaskRunnerStats> taskRunnerStatsList;
 

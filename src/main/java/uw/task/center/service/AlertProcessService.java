@@ -1,6 +1,7 @@
 package uw.task.center.service;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import jakarta.annotation.PreDestroy;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.slf4j.Logger;
@@ -9,15 +10,18 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import uw.common.app.constant.CommonState;
+import uw.common.data.PageList;
+import uw.common.response.ResponseData;
 import uw.common.util.JsonUtils;
 import uw.common.util.SystemClock;
 import uw.dao.DaoManager;
 import uw.dao.TransactionException;
 import uw.task.center.entity.*;
 
+import java.text.DecimalFormat;
 import java.util.*;
 import java.util.concurrent.*;
-import java.text.DecimalFormat;
+import java.util.stream.Collectors;
 
 /**
  * 任务告警处理服务。
@@ -81,6 +85,28 @@ public class AlertProcessService {
             new ThreadPoolExecutor.CallerRunsPolicy());
 
     /**
+     * 进程关闭时优雅关闭告警处理线程池，尽量保证在途告警落库。
+     */
+    @PreDestroy
+    public void shutdown() {
+        shutdownPool(cronerProcessService, "CronerProcessService");
+        shutdownPool(runnerProcessService, "RunnerProcessService");
+    }
+
+    private void shutdownPool(ExecutorService pool, String name) {
+        pool.shutdown();
+        try {
+            if (!pool.awaitTermination(10, TimeUnit.SECONDS)) {
+                log.warn("{} 仍有任务未完成，强制关闭", name);
+                pool.shutdownNow();
+            }
+        } catch (InterruptedException e) {
+            pool.shutdownNow();
+            Thread.currentThread().interrupt();
+        }
+    }
+
+    /**
      * 处理队列任务统计信息。
      *
      * @param statsList 查询的结果
@@ -92,16 +118,17 @@ public class AlertProcessService {
                     TaskRunnerInfo config = getFitRunnerConfig(stats.getTaskId());
                     if (config != null) {
                         ArrayList<AlertData> alerts = new ArrayList<>();
-                        int numAll = stats.getNumAll();
-                        int numFailConfig = stats.getNumFailConfig();
-                        int numFailProgram = stats.getNumFailProgram();
-                        int numFailPartner = stats.getNumFailPartner();
-                        int numFailData = stats.getNumFailData();
-                        int numFail = (numFailConfig + numFailProgram + numFailPartner + numFailData);
-                        int timeWaitDelay = stats.getTimeWaitDelay();
-                        int timeWaitQueue = stats.getTimeWaitQueue();
-                        int timeRun = stats.getTimeRun();
-                        int queueSize = stats.getQueueSize();
+                        // 注意：累计时间/计数用 long 持有，避免高 QPS 长期累计后 int 溢出。
+                        long numAll = stats.getNumAll();
+                        long numFailConfig = stats.getNumFailConfig();
+                        long numFailProgram = stats.getNumFailProgram();
+                        long numFailPartner = stats.getNumFailPartner();
+                        long numFailData = stats.getNumFailData();
+                        long numFail = (numFailConfig + numFailProgram + numFailPartner + numFailData);
+                        long timeWaitDelay = stats.getTimeWaitDelay();
+                        long timeWaitQueue = stats.getTimeWaitQueue();
+                        long timeRun = stats.getTimeRun();
+                        long queueSize = stats.getQueueSize();
                         DecimalFormat percentFormat = new DecimalFormat("#.##");
                         if (numFail > 0 && numAll > 0 && config.getAlertFailRate() > 0) {
                             double v = (double) numFail / numAll * 100;
@@ -295,11 +322,19 @@ public class AlertProcessService {
                 }
                 // 如果超过约定时间还未执行，就要报警了。
                 if ((croner.getNextRunDate().getTime() + (croner.getStatsRunTime() / croner.getStatsRunNum()) + 300_000L) < SystemClock.now()) {
-                    ArrayList<AlertData> alertList = new ArrayList<>();
-                    alertList.add(new AlertData("cronerTimeOut", dateFormat.format(croner.getNextRunDate()), dateFormat.format(SystemClock.nowDate())));
-                    processAlertInfo("croner", croner.getId(), croner.getTaskName(), 0, alertList, croner.getTaskOwner(), croner.getTaskLinkOur(), croner.getTaskLinkMch());
-                    // 更新下次执行时间为NULL
-                    dao.execute("update task_croner_info set next_run_date=NULL where id=?", new Object[]{croner.getId()});
+                    // 先以 next_run_date 为条件推进为 NULL，仅当本实例抢到（影响行数>0）时才发告警，
+                    // 避免多任务中心实例并发对同一个 croner 重复告警。
+                    ResponseData<Integer> claim = dao.execute("update task_croner_info set next_run_date=NULL where id=? and next_run_date=?",
+                            new Object[]{croner.getId(), croner.getNextRunDate()});
+                    claim.onNotSuccess(d -> {
+                        log.error("claim croner timeout update failed, id={}, code={}, msg={}", croner.getId(), claim.getCode(), claim.getMsg());
+                    });
+                    Integer claimed = claim.getData();
+                    if (claimed != null && claimed > 0) {
+                        ArrayList<AlertData> alertList = new ArrayList<>();
+                        alertList.add(new AlertData("cronerTimeOut", dateFormat.format(croner.getNextRunDate()), dateFormat.format(SystemClock.nowDate())));
+                        processAlertInfo("croner", croner.getId(), croner.getTaskName(), 0, alertList, croner.getTaskOwner(), croner.getTaskLinkOur(), croner.getTaskLinkMch());
+                    }
                 }
             }
             this.cronerMap = cronerMap;
@@ -326,8 +361,11 @@ public class AlertProcessService {
             }
         }
         List<TaskAlertContact> taskAlertContactList = getTaskAlertContactList(links.toArray(new String[0]));
-        // 报警信息
+        // 报警信息（落库失败则不生成通知，避免悬空外键）
         TaskAlertInfo info = saveAlertInfo(type, taskId, taskName, runTimes, alertList);
+        if (info == null) {
+            return;
+        }
         //保存报警通知信息
         saveAlertNotify(taskAlertContactList, info);
 
@@ -336,26 +374,47 @@ public class AlertProcessService {
     /**
      * 获取联系方式列表。
      *
+     * <p>link 内容形如 {@code {"<contactId>":"<contactName>"}}，其 key 来自 task_owner/task_link_*
+     * 等 OPS 可写的 String 列。为防止二阶 SQL 注入，这里对 key 逐个做 Long 解析，
+     * 只保留合法数字 id，并用参数占位符拼接，不把原始字符串直接拼进 SQL。</p>
+     *
      * @param taskLink
      * @return
      */
     private List<TaskAlertContact> getTaskAlertContactList(String... taskLink) {
-        HashSet<String> set = new HashSet<>();
+        LinkedHashSet<Long> idSet = new LinkedHashSet<>();
         for (String link : taskLink) {
-            if (link.length() > 2) {
-                try {
-                    HashMap map = JsonUtils.parse(link, HashMap.class);
-                    set.addAll(map.keySet());
-                } catch (Exception e) {
-                    log.error(e.getMessage(), e);
+            if (link == null || link.length() <= 2) {
+                continue;
+            }
+            try {
+                HashMap map = JsonUtils.parse(link, HashMap.class);
+                for (Object key : map.keySet()) {
+                    try {
+                        idSet.add(Long.parseLong(key.toString()));
+                    } catch (NumberFormatException e) {
+                        // 非数字 key 直接丢弃，既防注入也容忍脏数据。
+                    }
                 }
+            } catch (Exception e) {
+                log.error("parse taskLink json failed, err={}", e.toString());
             }
         }
-        if (set.isEmpty()) {
+        if (idSet.isEmpty()) {
             return null;
         }
-        String ids = StringUtils.join(set, ',');
-        return dao.list(TaskAlertContact.class, "select * from task_alert_contact where id in (" + ids + ") and state=1").getData().list();
+        // 用与 id 数量相同的占位符做参数化查询，杜绝 SQL 注入。
+        String placeholders = idSet.stream().map(x -> "?").collect(Collectors.joining(","));
+        ResponseData<PageList<TaskAlertContact>> result = dao.list(TaskAlertContact.class,
+                "select * from task_alert_contact where id in (" + placeholders + ") and state=1", idSet.toArray());
+        result.onNotSuccess(d -> {
+            log.error("query task_alert_contact failed, ids={}, code={}, msg={}", idSet, result.getCode(), result.getMsg());
+        });
+        if (result.isNotSuccess()) {
+            return null;
+        }
+        PageList<TaskAlertContact> page = result.getData();
+        return page == null ? null : page.list();
     }
 
     /**
@@ -382,14 +441,21 @@ public class AlertProcessService {
 //                notify.setId(dao.getSequenceId(TaskAlertNotify.class));
 //                notify.setContactType("email");
 //                notify.setContactInfo(contact.getEmail());
-//                dao.save(notify);
+//                ResponseData<?> emailResult = dao.save(notify);
+//                if (emailResult.isNotSuccess()) {
+//                    log.error("saveAlertNotify(email) failed, err={}", emailResult.toString());
+//                }
 //            }
             //写入notify通知
             if (StringUtils.isNotBlank(contact.getNotifyUrl())) {
                 notify.setId(dao.getSequenceId(TaskAlertNotify.class));
                 notify.setContactType("notifyUrl");
                 notify.setContactInfo(contact.getNotifyUrl());
-                dao.save(notify);
+                ResponseData<TaskAlertNotify> notifyResult = dao.save(notify);
+                notifyResult.onNotSuccess(d -> {
+                    log.error("saveAlertNotify(notifyUrl) failed, infoId={}, contact={}, code={}, msg={}",
+                            info.getId(), contact.getContactName(), notifyResult.getCode(), notifyResult.getMsg());
+                });
             }
 
         }
@@ -440,8 +506,12 @@ public class AlertProcessService {
         info.setAlertBody(content.toString());
         info.setCreateDate(SystemClock.nowDate());
         info.setState(CommonState.ENABLED.getValue());
-        dao.save(info);
-        return info;
+        ResponseData<TaskAlertInfo> saveResult = dao.save(info);
+        // 落库失败则记录日志并不生成通知，避免悬空外键。
+        saveResult.onNotSuccess(d -> {
+            log.error("saveAlertInfo failed, taskId={}, taskType={}, code={}, msg={}", taskId, type, saveResult.getCode(), saveResult.getMsg());
+        });
+        return saveResult.isNotSuccess() ? null : info;
     }
 
 

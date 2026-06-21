@@ -12,6 +12,7 @@ import uw.auth.service.annotation.MscPermDeclare;
 import uw.auth.service.constant.UserType;
 import uw.common.app.constant.CommonState;
 import uw.common.response.ResponseData;
+import uw.common.util.JsonUtils;
 import uw.common.util.SystemClock;
 import uw.dao.BatchUpdateManager;
 import uw.dao.DaoFactory;
@@ -289,8 +290,13 @@ public class TaskRpcController {
     @PutMapping("/croner/tick")
     @Operation(summary = "更新定时任务下次执行时间", description = "更新定时任务下次执行时间")
     @MscPermDeclare(user = UserType.RPC)
-    public ResponseData<Integer> updateCronerLog(@Parameter(description = "主键") @RequestParam(required = false) long id, @Parameter(description = "下一个日期", example = "0") @RequestParam(required =
-            false) long nextDate) {
+    public ResponseData<Integer> updateCronerLog(@Parameter(description = "主键") @RequestParam(required = false) Long id, @Parameter(description = "下一个日期", example = "0") @RequestParam(required =
+            false) Long nextDate) {
+        // 用包装类型接收，避免 required=false + 原始类型 long 在缺参时抛 400；
+        // 仅当任一关键参数缺失时才报错，保留对 id=0 等历史调用的兼容（update 命中 0 行即无操作）。
+        if (id == null || nextDate == null) {
+            return ResponseData.errorCode("400", "id and nextDate are required.");
+        }
         ResponseData<Integer> result = dao.execute( "update task_croner_info set next_run_date=? where id=? ", new Object[]{new Date( nextDate ), id} );
         if (result.isNotSuccess()) {
             return result;
@@ -427,7 +433,12 @@ public class TaskRpcController {
                         return saveResult.raw();
                     }
                 }
-                String linkData = "{\"" + taskAlertContact.getId() + "\":" + "\"" + taskAlertContact.getContactName() + "\"}";
+                // 用 JSON 库安全构造 linkData：原写法直接把 contactName 拼进字符串，
+                // 若 contactName 含 " 或 \ 会生成非法 JSON，导致后续告警链路 JsonUtils.parse 失败、
+                // 该任务所有告警都无法匹配联系人。
+                HashMap<String, String> linkMap = new HashMap<>();
+                linkMap.put( String.valueOf( taskAlertContact.getId() ), taskAlertContact.getContactName() );
+                String linkData = JsonUtils.toString( linkMap );
                 String taskClass = contactData.get( "taskClass" );
                 if (StringUtils.isNotBlank( taskClass )) {
                     dao.execute( "update task_runner_info set task_owner=? where task_class=? and task_owner='' and state=1", new Object[]{linkData, taskClass} );

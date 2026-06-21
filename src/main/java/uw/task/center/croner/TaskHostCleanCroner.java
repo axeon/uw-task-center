@@ -1,5 +1,7 @@
 package uw.task.center.croner;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import uw.common.response.ResponseData;
 import uw.common.util.SystemClock;
@@ -19,6 +21,11 @@ import java.util.Date;
 public class TaskHostCleanCroner extends TaskCroner {
 
     /**
+     * 日志器。
+     */
+    private static final Logger logger = LoggerFactory.getLogger(TaskHostCleanCroner.class);
+
+    /**
      * 数据库操作对象。
      */
     private final DaoManager dao = DaoManager.getInstance();
@@ -31,8 +38,13 @@ public class TaskHostCleanCroner extends TaskCroner {
      */
     @Override
     public String runTask(TaskCronerLog taskCronerLog) throws Exception {
-        ResponseData responseData = dao.execute("update task_host_info set state=-1 where last_update<? and state=1", new Object[]{new Date(SystemClock.now() - 300_000L)});
-        return "清理过期主机记录:" + responseData.getData();
+        ResponseData<Integer> result = dao.execute("update task_host_info set state=-1 where last_update<? and state=1",
+                new Object[]{new Date(SystemClock.now() - 300_000L)});
+        result.onNotSuccess(d -> {
+            logger.error("清理过期主机记录失败, code={}, msg={}", result.getCode(), result.getMsg());
+        });
+        int num = result.getData() == null ? 0 : result.getData();
+        return "清理过期主机记录:" + num;
     }
 
     /**

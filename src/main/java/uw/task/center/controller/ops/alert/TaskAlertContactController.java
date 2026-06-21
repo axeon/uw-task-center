@@ -25,7 +25,12 @@ import uw.task.center.dto.TaskAlertContactQueryParam;
 import uw.task.center.entity.TaskAlertContact;
 
 /**
- * 报警联系人配置表：增删改查
+ * 报警联系人管理接口。
+ *
+ * <p>维护告警接收人（task_alert_contact）的联系方式（邮箱、钉钉 notifyUrl 等），
+ * 任务配置通过 task_owner / task_link_* 引用联系人。</p>
+ *
+ * @author axeon
  */
 
 @RestController
