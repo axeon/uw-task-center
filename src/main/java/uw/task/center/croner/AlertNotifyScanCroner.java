@@ -31,7 +31,13 @@ import java.util.Set;
 public class AlertNotifyScanCroner extends TaskCroner {
 
 
+    /**
+     * 日志器。
+     */
     private static final Logger logger = LoggerFactory.getLogger( AlertNotifyScanCroner.class );
+    /**
+     * 数据库操作对象。
+     */
     private final DaoManager dao = DaoManager.getInstance();
 
     /**
@@ -45,11 +51,20 @@ public class AlertNotifyScanCroner extends TaskCroner {
     private final TaskCenterProperties taskCenterProperties;
 
 
+    /**
+     * @param taskCenterProperties 任务中心配置
+     */
     @Autowired
     public AlertNotifyScanCroner(TaskCenterProperties taskCenterProperties) {
         this.taskCenterProperties = taskCenterProperties;
     }
 
+    /**
+     * 扫描待发送的告警通知，按联系人收敛后通过钉钉/notifyUrl 发送。
+     *
+     * @param taskCronerLog 任务执行日志
+     * @return 本次扫描与发送的统计描述
+     */
     @Override
     public String runTask(TaskCronerLog taskCronerLog){
         // 先更新到处理中状态
@@ -138,7 +153,9 @@ public class AlertNotifyScanCroner extends TaskCroner {
     }
 
     /**
-     * 初始化配置信息。
+     * 初始化配置信息（每 3 分钟运行一次，全局单例）。
+     *
+     * @return 定时任务配置
      */
     @Override
     public TaskCronerConfig initConfig() {
@@ -173,7 +190,7 @@ public class AlertNotifyScanCroner extends TaskCroner {
     /**
      * 初始化联系人信息。
      *
-     * @return
+     * @return 联系人信息
      */
     @Override
     public TaskContact initContact() {
@@ -181,10 +198,10 @@ public class AlertNotifyScanCroner extends TaskCroner {
     }
 
     /**
-     * 发送alert。
+     * 通过全局钉钉配置发送告警。
      *
-     * @param title
-     * @param content
+     * @param title   告警标题
+     * @param content 告警正文（markdown）
      */
     private void sendDing(String title, String content) {
         TaskCenterProperties.DingConfig alertDingConfig = taskCenterProperties.getAlertDing();
@@ -204,11 +221,11 @@ public class AlertNotifyScanCroner extends TaskCroner {
 
 
     /**
-     * 发送alert。
-     * 当前只支持钉钉。。。
+     * 向指定 notifyUrl 发送告警（当前底层仅支持钉钉 webhook）。
      *
-     * @param title
-     * @param content
+     * @param notifyUrl 接收方 notifyUrl（钉钉 webhook）
+     * @param title     告警标题
+     * @param content   告警正文（markdown）
      */
     private void notifyUrl(String notifyUrl, String title, String content) {
         TaskCenterProperties.DingConfig alertDingConfig = taskCenterProperties.getAlertDing();

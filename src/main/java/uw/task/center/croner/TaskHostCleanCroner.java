@@ -18,12 +18,16 @@ import java.util.Date;
 @Component
 public class TaskHostCleanCroner extends TaskCroner {
 
+    /**
+     * 数据库操作对象。
+     */
     private final DaoManager dao = DaoManager.getInstance();
 
     /**
-     * 运行任务。
+     * 将超过 5 分钟未上报的主机记录标记为删除（state=-1）。
      *
-     * @param taskCronerLog
+     * @param taskCronerLog 任务执行日志
+     * @return 清理结果描述（含影响行数）
      */
     @Override
     public String runTask(TaskCronerLog taskCronerLog) throws Exception {
@@ -32,7 +36,9 @@ public class TaskHostCleanCroner extends TaskCroner {
     }
 
     /**
-     * 初始化配置信息。
+     * 初始化配置信息（每 5 分钟运行一次，全局单例）。
+     *
+     * @return 定时任务配置
      */
     @Override
     public TaskCronerConfig initConfig() {
@@ -67,7 +73,7 @@ public class TaskHostCleanCroner extends TaskCroner {
     /**
      * 初始化联系人信息。
      *
-     * @return
+     * @return 联系人信息
      */
     @Override
     public TaskContact initContact() {

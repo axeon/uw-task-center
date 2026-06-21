@@ -30,12 +30,22 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
+/**
+ * 任务仪表盘接口。
+ *
+ * <p>提供首页概览数据：任务统计汇总、最新告警列表、任务运行报表等。</p>
+ *
+ * @author axeon
+ */
 @RestController
 @Tag(name = "仪表盘")
 @RequestMapping("/ops/home/dashboard")
 @MscPermDeclare(user = UserType.OPS)
 public class DashboardController {
 
+    /**
+     * 数据库操作对象。
+     */
     private final DaoManager dao = DaoManager.getInstance();
 
     /**

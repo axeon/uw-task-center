@@ -115,6 +115,11 @@ public class TaskRunnerInfoController {
     @Operation(summary = "新增队列任务配置", description = "新增队列任务配置")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
     public ResponseData<TaskRunnerInfo> save(@RequestBody TaskRunnerInfo taskRunnerInfo) {
+        // 多实例区分维度：taskClass + taskTag + runTarget 三元组唯一，重复则拒绝。
+        ResponseData<TaskRunnerInfo> checkResult = checkDuplicate(taskRunnerInfo, 0);
+        if (checkResult.isNotSuccess()) {
+            return checkResult;
+        }
         long id = dao.getSequenceId(TaskRunnerInfo.class);
         AuthServiceHelper.logRef(TaskRunnerInfo.class, id);
         taskRunnerInfo.setId(id);
@@ -138,6 +143,11 @@ public class TaskRunnerInfoController {
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
     public ResponseData<TaskRunnerInfo> update(@RequestBody TaskRunnerInfo taskRunnerInfo, @Parameter(description = "备注") @RequestParam String remark) {
         AuthServiceHelper.logInfo(TaskRunnerInfo.class, taskRunnerInfo.getId(), remark);
+        // 修改时需校验新的 taskClass + taskTag + runTarget 三元组是否与他人冲突（排除自身）。
+        ResponseData<TaskRunnerInfo> checkResult = checkDuplicate(taskRunnerInfo, taskRunnerInfo.getId());
+        if (checkResult.isNotSuccess()) {
+            return checkResult;
+        }
         return dao.load(TaskRunnerInfo.class, taskRunnerInfo.getId()).onSuccess(taskRunnerInfoDb -> {
             taskRunnerInfoDb.setTaskName(taskRunnerInfo.getTaskName());
             taskRunnerInfoDb.setTaskDesc(taskRunnerInfo.getTaskDesc());
@@ -234,6 +244,34 @@ public class TaskRunnerInfoController {
         return dao.update(new TaskRunnerInfo().statsDate(null).statsRunNum(0).statsFailNum(0).statsRunTime(0), new IdQueryParam(id));
 
 
+    }
+
+    /**
+     * 校验队列任务配置是否重复。
+     * <p>多实例区分维度：taskClass + taskTag + runTarget 三元组唯一。
+     * 与 RPC 的 {@code /runner/init} 去重条件保持一致。</p>
+     *
+     * @param info       待校验配置（取 taskClass/taskTag/runTarget）
+     * @param excludeId  需要排除的自身 id（新增时传 0）
+     * @return 成功表示无重复；warn 表示已存在重复配置
+     */
+    private ResponseData<TaskRunnerInfo> checkDuplicate(TaskRunnerInfo info, long excludeId) {
+        String taskClass = info.getTaskClass();
+        String taskTag = info.getTaskTag() == null ? "" : info.getTaskTag();
+        String runTarget = info.getRunTarget() == null ? "" : info.getRunTarget();
+        if (taskClass == null || taskClass.isBlank()) {
+            return ResponseData.warn(info, "taskClass不能为空");
+        }
+        ResponseData<TaskRunnerInfo> queryResult = dao.queryForObject(TaskRunnerInfo.class,
+                "select * from task_runner_info where task_class=? and task_tag=? and run_target=? and state>=0 and id<>?",
+                new Object[]{taskClass, taskTag, runTarget, excludeId});
+        if (queryResult.isNotSuccess()) {
+            return queryResult;
+        }
+        if (queryResult.getData() != null) {
+            return ResponseData.warn(info, "队列任务配置已存在: taskClass=[" + taskClass + "], taskTag=[" + taskTag + "], runTarget=[" + runTarget + "]");
+        }
+        return ResponseData.success(info);
     }
 
 }

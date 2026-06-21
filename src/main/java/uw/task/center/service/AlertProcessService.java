@@ -20,12 +20,21 @@ import java.util.concurrent.*;
 import java.text.DecimalFormat;
 
 /**
- * 对比报警信息进行处理。
+ * 任务告警处理服务。
+ *
+ * <p>接收任务执行主机上报的 runner/croner 统计数据，按任务配置的各类阈值（失败率、等待/运行超时、队列堆积等）
+ * 判定是否触发告警，生成告警记录。处理异步提交到独立线程池（runner/croner 各一个），互不阻塞。
+ * 同时周期性扫描定时任务是否按计划时间运行（cronerTimeOut 告警）。</p>
+ *
+ * @author axeon
  **/
 @Component
 @EnableScheduling
 public class AlertProcessService {
 
+    /**
+     * 日志器。
+     */
     private static final Logger log = LoggerFactory.getLogger(AlertProcessService.class);
     /**
      * 失败类型映射关系。

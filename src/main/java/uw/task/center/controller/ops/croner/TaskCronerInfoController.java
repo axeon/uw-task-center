@@ -116,6 +116,11 @@ public class TaskCronerInfoController {
     @Operation(summary = "新增定时任务配置", description = "新增定时任务配置")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
     public ResponseData<TaskCronerInfo> save(@RequestBody TaskCronerInfo taskCronerInfo) {
+        // 多实例区分维度：taskClass + taskParam + runTarget 三元组唯一，重复则拒绝。
+        ResponseData<TaskCronerInfo> checkResult = checkDuplicate(taskCronerInfo, 0);
+        if (checkResult.isNotSuccess()) {
+            return checkResult;
+        }
         long id = dao.getSequenceId(TaskCronerInfo.class);
         AuthServiceHelper.logRef(TaskCronerInfo.class, id);
         taskCronerInfo.setId(id);
@@ -139,6 +144,11 @@ public class TaskCronerInfoController {
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
     public ResponseData<TaskCronerInfo> update(@RequestBody TaskCronerInfo taskCronerInfo, @Parameter(description = "备注") @RequestParam String remark) {
         AuthServiceHelper.logInfo(TaskCronerInfo.class, taskCronerInfo.getId(), remark);
+        // 修改时需校验新的 taskClass + taskParam + runTarget 三元组是否与他人冲突（排除自身）。
+        ResponseData<TaskCronerInfo> checkResult = checkDuplicate(taskCronerInfo, taskCronerInfo.getId());
+        if (checkResult.isNotSuccess()) {
+            return checkResult;
+        }
         return dao.load(TaskCronerInfo.class, taskCronerInfo.getId()).onSuccess(taskCronerInfoDb -> {
             taskCronerInfoDb.setTaskName(taskCronerInfo.getTaskName());
             taskCronerInfoDb.setTaskDesc(taskCronerInfo.getTaskDesc());
@@ -222,6 +232,34 @@ public class TaskCronerInfoController {
     public ResponseData resetStats(@Parameter(description = "主键") long id, @Parameter(description = "备注") @RequestParam String remark) {
         AuthServiceHelper.logInfo(TaskCronerInfo.class, id, remark);
         return dao.update(new TaskCronerInfo().statsDate(null).statsRunNum(0).statsFailNum(0).statsRunTime(0), new IdQueryParam(id));
+    }
+
+    /**
+     * 校验定时任务配置是否重复。
+     * <p>多实例区分维度：taskClass + taskParam + runTarget 三元组唯一。
+     * 与 RPC 的 {@code /croner/init} 去重条件保持一致。</p>
+     *
+     * @param info       待校验配置（取 taskClass/taskParam/runTarget）
+     * @param excludeId  需要排除的自身 id（新增时传 0）
+     * @return 成功表示无重复；warn 表示已存在重复配置
+     */
+    private ResponseData<TaskCronerInfo> checkDuplicate(TaskCronerInfo info, long excludeId) {
+        String taskClass = info.getTaskClass();
+        String taskParam = info.getTaskParam() == null ? "" : info.getTaskParam();
+        String runTarget = info.getRunTarget() == null ? "" : info.getRunTarget();
+        if (taskClass == null || taskClass.isBlank()) {
+            return ResponseData.warn(info, "taskClass不能为空");
+        }
+        ResponseData<TaskCronerInfo> queryResult = dao.queryForObject(TaskCronerInfo.class,
+                "select * from task_croner_info where task_class=? and task_param=? and run_target=? and state>=0 and id<>?",
+                new Object[]{taskClass, taskParam, runTarget, excludeId});
+        if (queryResult.isNotSuccess()) {
+            return queryResult;
+        }
+        if (queryResult.getData() != null) {
+            return ResponseData.warn(info, "定时任务配置已存在: taskClass=[" + taskClass + "], taskParam=[" + taskParam + "], runTarget=[" + runTarget + "]");
+        }
+        return ResponseData.success(info);
     }
 
 }

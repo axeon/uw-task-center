@@ -27,7 +27,10 @@ import uw.task.center.vo.TaskHostInfoExt;
 import java.util.*;
 
 /**
- * uw-task使用的接口API。
+ * uw-task 客户端调用的服务端 RPC 接口。
+ *
+ * <p>供任务执行主机（uw-task 客户端）调用：主机状态上报、任务配置初始化与增量拉取、
+ * 定时任务下次执行时间心跳更新、联系人信息上传。所有接口要求 RPC 用户身份（{@link UserType#RPC}）。</p>
  *
  * @author axeon
  */
@@ -37,6 +40,9 @@ import java.util.*;
 @MscPermDeclare(user = UserType.RPC)
 public class TaskRpcController {
 
+    /**
+     * 日志器。
+     */
     private static final Logger log = LoggerFactory.getLogger( TaskRpcController.class );
     /**
      * 更新定时任务统计信息。
@@ -58,12 +64,19 @@ public class TaskRpcController {
      */
     private final AlertProcessService alertProcessService;
 
+    /**
+     * @param alertProcessService 告警处理服务
+     */
     public TaskRpcController(AlertProcessService alertProcessService) {
         this.alertProcessService = alertProcessService;
     }
 
     /**
-     * 更新当前主机状态，并返回主机配置。
+     * 主机状态上报：更新主机 JVM/线程指标与任务执行统计，触发告警判定，并返回主机配置（id/状态）。
+     * <p>主机首次上报时自动建记录并分配 id，后续按 id+身份校验更新；统计与明细以批量事务写入分表。</p>
+     *
+     * @param taskHostInfoExt 主机状态数据（含任务统计列表）
+     * @return 主机报告响应（id、hostIp、状态）
      */
     @PostMapping("/host/report")
     @Operation(summary = "更新主机当前状态", description = "更新主机当前状态")
@@ -193,7 +206,13 @@ public class TaskRpcController {
     }
 
     /**
-     * 获取定时任务列表
+     * 拉取定时任务配置列表（供客户端增量同步配置）。
+     * <p>按 runTarget、taskProject 前缀、lastUpdateTime 过滤，仅返回 state>=0 的配置。</p>
+     *
+     * @param runTarget     运行目标（可空）
+     * @param taskProject   任务项目包名前缀（可空）
+     * @param lastUpdateTime 上次更新时间戳，>0 时仅返回此后变更的配置
+     * @return 定时任务配置列表
      */
     @GetMapping("/croner/list")
     @Operation(summary = "获取定时任务列表", description = "获取定时任务列表")
@@ -224,7 +243,13 @@ public class TaskRpcController {
     }
 
     /**
-     * 获取队列任务列表
+     * 拉取队列任务配置列表（供客户端增量同步配置）。
+     * <p>按 runTarget、taskProject 前缀、lastUpdateTime 过滤，仅返回 state>=0 的配置。</p>
+     *
+     * @param runTarget     运行目标（可空）
+     * @param taskProject   任务项目包名前缀（可空）
+     * @param lastUpdateTime 上次更新时间戳，>0 时仅返回此后变更的配置
+     * @return 队列任务配置列表
      */
     @GetMapping("/runner/list")
     @Operation(summary = "获取队列任务列表", description = "获取队列任务列表")
@@ -255,11 +280,11 @@ public class TaskRpcController {
     }
 
     /**
-     * 更新Croner定时任务下一次执行时间
+     * 更新定时任务下次执行时间（由客户端在每次执行后心跳上报）。
      *
-     * @param id       配置Id
-     * @param nextDate 下一次执行时间
-     * @return
+     * @param id       任务配置 id
+     * @param nextDate 下一次执行时间戳
+     * @return 影响行数
      */
     @PutMapping("/croner/tick")
     @Operation(summary = "更新定时任务下次执行时间", description = "更新定时任务下次执行时间")
@@ -274,7 +299,11 @@ public class TaskRpcController {
     }
 
     /**
-     * 初始化Runner配置
+     * 初始化队列任务配置（首次注册时上传默认配置）。
+     * <p>按 task_class + task_tag + run_target 三元组幂等去重：已存在则直接返回已有配置，否则新建。</p>
+     *
+     * @param config 队列任务配置
+     * @return 服务端配置（含已分配 id）
      */
     @PostMapping("/runner/init")
     @Operation(summary = "初始化队列任务配置", description = "初始化队列任务配置")
@@ -289,8 +318,11 @@ public class TaskRpcController {
                 config.setTaskTag( "" );
             }
             if (StringUtils.isNotBlank( taskClass )) {
-                ResponseData<TaskRunnerInfo> queryResult = dao.queryForObject( TaskRunnerInfo.class, "select * from task_runner_info where task_class=? and run_target=? and state>=0",
-                        new Object[]{taskClass, config.getRunTarget()} );
+                // 去重维度：task_class + task_tag + run_target。
+                // task_tag 是多实例区分维度（同一 TaskRunner 子类通过不同 taskTag 运行多份实例），
+                // 必须纳入去重，否则同 taskClass 下不同 taskTag 的实例会互相覆盖、只保留首条。
+                ResponseData<TaskRunnerInfo> queryResult = dao.queryForObject( TaskRunnerInfo.class, "select * from task_runner_info where task_class=? and task_tag=? and run_target=? and state>=0",
+                        new Object[]{taskClass, config.getTaskTag(), config.getRunTarget()} );
                 if (queryResult.isNotSuccess()) {
                     return queryResult;
                 }
@@ -313,7 +345,11 @@ public class TaskRpcController {
     }
 
     /**
-     * 初始化Croner配置
+     * 初始化定时任务配置（首次注册时上传默认配置）。
+     * <p>按 task_class + task_param + run_target 三元组幂等去重：已存在则直接返回已有配置，否则新建。</p>
+     *
+     * @param config 定时任务配置
+     * @return 服务端配置（含已分配 id）
      */
     @PostMapping("/croner/init")
     @Operation(summary = "初始化定时任务配置", description = "初始化定时任务配置")
@@ -328,8 +364,11 @@ public class TaskRpcController {
                 config.setTaskParam( "" );
             }
             if (StringUtils.isNotBlank( taskClass )) {
-                ResponseData<TaskCronerInfo> queryResult = dao.queryForObject( TaskCronerInfo.class, "select * from task_croner_info where task_class=? and run_target=? and state>=0",
-                        new Object[]{taskClass, config.getRunTarget()} );
+                // 去重维度：task_class + task_param + run_target。
+                // task_param 是多实例区分维度（同一 TaskCroner 子类通过不同 taskParam 运行多份实例），
+                // 必须纳入去重，否则同 taskClass 下不同 taskParam 的实例会互相覆盖、只保留首条。
+                ResponseData<TaskCronerInfo> queryResult = dao.queryForObject( TaskCronerInfo.class, "select * from task_croner_info where task_class=? and task_param=? and run_target=? and state>=0",
+                        new Object[]{taskClass, config.getTaskParam(), config.getRunTarget()} );
                 if (queryResult.isNotSuccess()) {
                     return queryResult;
                 }
@@ -352,7 +391,10 @@ public class TaskRpcController {
     }
 
     /**
-     * 提交报警联系人。
+     * 上传任务报警联系人信息（首次注册时提交默认联系人）。
+     *
+     * @param contactData 联系人信息（键值对，至少含 contactName）
+     * @return 空响应
      */
     @PostMapping("/contact/init")
     @Operation(summary = "初始化任务联系人信息", description = "初始化任务联系人信息")

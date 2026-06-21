@@ -9,9 +9,17 @@ import uw.httpclient.util.SSLContextUtils;
 
 /**
  * 发送钉钉通知的工具类。
+ *
+ * <p>封装钉钉机器人 webhook 的 markdown 消息发送，供告警通知使用。
+ * HTTP 客户端信任所有证书（钉钉 webhook 走 HTTPS）。</p>
+ *
+ * @author axeon
  */
 public class DingUtils {
 
+    /**
+     * 日志器。
+     */
     private static final Logger log = LoggerFactory.getLogger( DingUtils.class );
 
     private static final HttpInterface HTTP_INTERFACE = new JsonInterfaceHelper( HttpConfig.builder()
@@ -25,11 +33,11 @@ public class DingUtils {
 
 
     /**
-     * 发送钉钉通知。
+     * 向指定钉钉 webhook 发送 markdown 通知。发送失败仅记录日志，不抛异常。
      *
-     * @param noticeUrl
-     * @param title
-     * @param body
+     * @param noticeUrl 钉钉机器人 webhook 地址
+     * @param title     消息标题
+     * @param body      消息正文（markdown）
      */
     public static void send(String noticeUrl, String title, String body) {
         DingMarkdownMsg ding = new DingMarkdownMsg();
@@ -46,14 +54,23 @@ public class DingUtils {
 
 
     /**
-     * 钉钉的markdown格式信息。
+     * 钉钉的 markdown 格式消息体。
      */
     public static class DingMarkdownMsg {
 
+        /**
+         * 消息类型，固定为 markdown。
+         */
         private String msgtype = "markdown";
 
+        /**
+         * markdown 正文。
+         */
         private Markdown markdown = new Markdown();
 
+        /**
+         * @ 群成员配置。
+         */
         private At at = new At();
 
 
@@ -81,9 +98,18 @@ public class DingUtils {
             this.at = at;
         }
 
+        /**
+         * markdown 正文内容。
+         */
         private static class Markdown {
+            /**
+             * 消息标题（通知列表展示用）。
+             */
             private String title;
 
+            /**
+             * 消息正文。
+             */
             private String text;
 
             public String getTitle() {
@@ -103,11 +129,23 @@ public class DingUtils {
             }
         }
 
+        /**
+         * @ 群成员配置。
+         */
         private static class At {
+            /**
+             * 被 @ 的手机号列表。
+             */
             private String[] atMobiles;
 
+            /**
+             * 被 @ 的用户 id 列表。
+             */
             private String[] atUserIds;
 
+            /**
+             * 是否 @ 全员，默认 true。
+             */
             private boolean isAtAll = true;
 
             public String[] getAtMobiles() {
