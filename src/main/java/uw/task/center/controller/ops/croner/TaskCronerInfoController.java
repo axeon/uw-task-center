@@ -258,7 +258,8 @@ public class TaskCronerInfoController {
         ResponseData<TaskCronerInfo> queryResult = dao.queryForObject(TaskCronerInfo.class,
                 "select * from task_croner_info where task_class=? and task_param=? and run_target=? and state>=0 and id<>?",
                 new Object[]{taskClass, taskParam, runTarget, excludeId});
-        if (queryResult.isNotSuccess()) {
+        // queryForObject 查无数据返回 warn，这是"无重复"的正常情况，仅 error 才中断。
+        if (queryResult.isError()) {
             return queryResult;
         }
         if (queryResult.getData() != null) {

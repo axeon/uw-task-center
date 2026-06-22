@@ -329,7 +329,10 @@ public class TaskRpcController {
                 // 必须纳入去重，否则同 taskClass 下不同 taskTag 的实例会互相覆盖、只保留首条。
                 ResponseData<TaskRunnerInfo> queryResult = dao.queryForObject( TaskRunnerInfo.class, "select * from task_runner_info where task_class=? and task_tag=? and run_target=? and state>=0",
                         new Object[]{taskClass, config.getTaskTag(), config.getRunTarget()} );
-                if (queryResult.isNotSuccess()) {
+                // queryForObject 查无数据返回 warn（uw.dao.data.not.found.warn），这正是"需要新建"的正常分支，
+                // 不能用 isNotSuccess() 判定（它对 warn 也为 true，会把首次注册误判成失败直接 return，导致任务永远注册不进去、id 恒为 0）。
+                // 仅真正的 error 才中断。
+                if (queryResult.isError()) {
                     return queryResult;
                 }
                 TaskRunnerInfo testOpt = queryResult.getData();
@@ -375,7 +378,10 @@ public class TaskRpcController {
                 // 必须纳入去重，否则同 taskClass 下不同 taskParam 的实例会互相覆盖、只保留首条。
                 ResponseData<TaskCronerInfo> queryResult = dao.queryForObject( TaskCronerInfo.class, "select * from task_croner_info where task_class=? and task_param=? and run_target=? and state>=0",
                         new Object[]{taskClass, config.getTaskParam(), config.getRunTarget()} );
-                if (queryResult.isNotSuccess()) {
+                // queryForObject 查无数据返回 warn（uw.dao.data.not.found.warn），这正是"需要新建"的正常分支，
+                // 不能用 isNotSuccess() 判定（它对 warn 也为 true，会把首次注册误判成失败直接 return，导致任务永远注册不进去、id 恒为 0）。
+                // 仅真正的 error 才中断。
+                if (queryResult.isError()) {
                     return queryResult;
                 }
                 TaskCronerInfo testOpt = queryResult.getData();
@@ -411,7 +417,8 @@ public class TaskRpcController {
             if (StringUtils.isNotBlank( contactName )) {
                 ResponseData<TaskAlertContact> queryResult = dao.queryForObject( TaskAlertContact.class, "select * from task_alert_contact where contact_name=? and state=1",
                         new Object[]{contactName} );
-                if (queryResult.isNotSuccess()) {
+                // queryForObject 查无数据返回 warn，这是"需要新建联系人"的正常分支，仅 error 才中断。
+                if (queryResult.isError()) {
                     return queryResult.raw();
                 }
                 TaskAlertContact taskAlertContact = queryResult.getData();

@@ -270,7 +270,8 @@ public class TaskRunnerInfoController {
         ResponseData<TaskRunnerInfo> queryResult = dao.queryForObject(TaskRunnerInfo.class,
                 "select * from task_runner_info where task_class=? and task_tag=? and run_target=? and state>=0 and id<>?",
                 new Object[]{taskClass, taskTag, runTarget, excludeId});
-        if (queryResult.isNotSuccess()) {
+        // queryForObject 查无数据返回 warn，这是"无重复"的正常情况，仅 error 才中断。
+        if (queryResult.isError()) {
             return queryResult;
         }
         if (queryResult.getData() != null) {
