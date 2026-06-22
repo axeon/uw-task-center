@@ -93,7 +93,10 @@ public class TaskRpcController {
         if (taskHostInfoExt.getId() > 0) {
             reportResponse.setId( taskHostInfoExt.getId() );
             ResponseData<TaskHostInfoExt> loadResult = dao.load( TaskHostInfoExt.class, taskHostInfoExt.getId() );
-            if (loadResult.isNotSuccess()) {
+            // dao.load 查无数据返回 warn（uw.dao.data.not.found.warn），此处语义是"该 id 对应主机不存在则走新建分支"，
+            // 不能用 isNotSuccess() 判定（warn 也算 not-success，会让携带已失效旧 id 的主机上报整体失败）。
+            // 仅真正的 error 才中断；warn 时 taskHostInfoDb 保持 null，由下方 isNewInfo 逻辑新建主机记录。
+            if (loadResult.isError()) {
                 return loadResult.raw();
             }
             taskHostInfoDb = loadResult.getData();
@@ -167,17 +170,22 @@ public class TaskRpcController {
             //先检查主机是否存在，决定是更新还是插入。
             if (taskHostInfoDb != null) {
                 //更新操作。
+                // WHERE 仅按 id 定位主机记录：app_version/app_host 等字段易变（发版即漂移），
+                // 若纳入 WHERE 会导致 update 命中 0 行→误走 insert→同主机产生多条记录、
+                // croner_run_num/runner_run_num 等累计统计归零。这些易变字段改放到 SET 中随上报刷新。
                 String updateHostSql = "UPDATE task_host_info SET croner_num=?, croner_run_num=croner_run_num+?, croner_fail_num=croner_fail_num+?, " + "croner_run_time" +
                         "=croner_run_time+?, runner_num=?, runner_run_num=runner_run_num+?, runner_fail_num=runner_fail_num+?, runner_run_time=runner_run_time+?, " +
-                        "jvm_mem_max=?, jvm_mem_total=?, jvm_mem_free=?, thread_active=?, thread_peak=?, thread_daemon=?, thread_started=?, last_update=? WHERE id=? and " +
-                        "host_ip=? and app_host=? and app_port=? and app_name=? and app_version=? and task_project=? and run_target=?";
+                        "jvm_mem_max=?, jvm_mem_total=?, jvm_mem_free=?, thread_active=?, thread_peak=?, thread_daemon=?, thread_started=?, " +
+                        "host_ip=?, app_host=?, app_port=?, app_name=?, app_version=?, task_project=?, run_target=?, last_update=? WHERE id=?";
                 ResponseData<Integer> updateResult = dao.execute( updateHostSql, new Object[]{taskHostInfoExt.getCronerNum(), cronerRunNum, cronerFailNum, cronerRunTime,
                         taskHostInfoExt.getRunnerNum(), runnerRunNum, runnerFailNum, runnerRunTime, taskHostInfoExt.getJvmMemMax(), taskHostInfoExt.getJvmMemTotal(),
                         taskHostInfoExt.getJvmMemFree(), taskHostInfoExt.getThreadActive(), taskHostInfoExt.getThreadPeak(), taskHostInfoExt.getThreadDaemon(),
-                        taskHostInfoExt.getThreadStarted(), createDate, taskHostInfoExt.getId(), taskHostInfoExt.getHostIp(), taskHostInfoExt.getAppHost(),
+                        taskHostInfoExt.getThreadStarted(), taskHostInfoExt.getHostIp(), taskHostInfoExt.getAppHost(),
                         taskHostInfoExt.getAppPort(), taskHostInfoExt.getAppName(), taskHostInfoExt.getAppVersion(), taskHostInfoExt.getTaskProject(),
-                        taskHostInfoExt.getRunTarget()} );
-                if (updateResult.isNotSuccess()) {
+                        taskHostInfoExt.getRunTarget(), createDate, taskHostInfoExt.getId()} );
+                // dao.execute 影响行数<1 返回 warn（uw.dao.data.not.found.warn）。此处 id 已由上方 load 确认存在，
+                // 正常应命中 1 行；若返回 warn/error 则视为更新未生效，降级走下方新建分支兜底，避免主机统计丢失。
+                if (updateResult.isError()) {
                     return updateResult.raw();
                 }
                 isNewInfo = updateResult.getData() == 0;

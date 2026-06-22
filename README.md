@@ -729,6 +729,43 @@ public class TaskData<TP,TD> implements Serializable {
 
 - 任务可以指定运行目标，此运行目标通过服务器端配置来实现。
 
+## uw-dao 无数据语义与判定规范（重要）
+
+uw-task-center 大量使用 `uw.dao.DaoManager`（`dao.load` / `dao.queryForObject` / `dao.list` / `dao.execute` / `dao.save` / `dao.update`）与数据库交互。**理解这些方法在"无数据"时的返回语义，是正确编写注册/上报/查重逻辑的前提**——本中心曾因误判多次导致任务无法注册（id 恒为 0）、主机累计统计清零等回归。
+
+### 无数据时的返回值（源自 `DaoManager` 源码）
+
+| 方法 | 无数据 / 0 行时 | 说明 |
+|---|---|---|
+| `dao.load(Class, id)` | **`warn`**（`code=uw.dao.data.not.found.warn`，data=null） | 主键查不到 |
+| `dao.queryForObject(...)` | **`warn`**（data=null） | 单条查不到 |
+| `dao.list(...)` | **`success`**（空 `PageList`，非 null） | 列表为空仍是成功 |
+| `dao.execute(update/delete SQL)` 影响行数 < 1 | **`warn`**（data=effectedNum） | 0 行更新/删除 |
+| `dao.save(entity)` / `dao.update(entity)` 影响行数 < 1 | **`warn`** | 写入未生效 |
+
+根因：`DaoManager.responseData(null)` 对 null 统一返回 `warnCode(DATA_NOT_FOUND_WARN)`；所有写操作在 `effectedNum < 1` 时也返回该 warn。
+
+### 判定方法选择（强制）
+
+`ResponseData.isNotSuccess()` 对 **warn 和 error 都为 true**。因此：
+
+| 业务语义 | 判定方法 | 典型场景 |
+|---|---|---|
+| "查到走 A，查不到走 B（新建/判无重复）" | **`isError()`**（仅 error 才中断） | `initRunnerConfig` / `initCronerConfig` / `initTaskContact` 去重查询、`report` 的 `load` 主机 |
+| "查不到=告知调用方数据不存在" | `isNotSuccess()` 或链式 `onSuccess` | OPS 详情查询、改单前 `load`、`checkDuplicate` 的返回值 |
+| 写操作"必须成功否则中止" | `isNotSuccess()` | `save` / `update` 落库后需中断的场景 |
+| 列表查询 | `isNotSuccess()` | `list` 空结果本就是 success，安全 |
+
+> **关键陷阱**：在"查无数据需要新建"的分支用 `isNotSuccess()`，warn 会被误判为失败直接 return，**新建分支永远走不到**——首次注册的任务/联系人/主机永远建不进库，客户端拿到 id=0。详见 `TaskRpcController` 各 `init*` 方法注释。
+
+### 本中心的正确范例
+
+- RPC 注册去重（`/runner/init`、`/croner/init`、`/contact/init`）：用 `dao.queryForObject(...).isError()` 判中断，warn 时 `getData()==null` 继续走新建。
+- 主机上报（`/host/report`）：`dao.load` 用 `isError()` 判中断；update 的 WHERE **仅 `id=?`**（易变字段如 `app_version` 放 SET，否则发版漂移致 0 行→误 insert→同主机多条记录、累计清零）。
+- OPS 查重（`checkDuplicate`）：方法返回值用 `warn` 表达"已存在重复"，调用方用 `isNotSuccess()` 拒绝。
+
+---
+
 ## 常见问题
 
 **任务不能注册，无法启动任务。**
