@@ -15,7 +15,7 @@ import java.util.Date;
  * @version $Revision: 1.00 $ $Date: 2017-08-14 10:36:29
  */
 @Schema(title = "定时任务ES实体类", description = "定时任务ES实体类")
-@TableMeta(tableName = "\\\"uw.task.croner.log\\\"")
+@TableMeta(tableName = "\"uw.task.croner.log\"")
 public class TaskCronerEsLog extends LogBaseVo implements Serializable {
 
     /**
