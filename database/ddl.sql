@@ -94,7 +94,7 @@ CREATE TABLE `task_alert_contact` (
 
 CREATE TABLE `task_alert_info` (
                                    `id` bigint NOT NULL COMMENT 'id',
-                                   `task_type` varchar(20) DEFAULT NULL COMMENT '任务类型。1croner2runner',
+                                   `task_type` varchar(20) DEFAULT NULL COMMENT '任务类型：croner/runner/delayer',
                                    `task_id` bigint DEFAULT NULL COMMENT '任务配置ID',
                                    `alert_title` varchar(200) DEFAULT NULL COMMENT '报警标题',
                                    `alert_body` longtext COMMENT '报警信息',

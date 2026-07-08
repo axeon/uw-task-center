@@ -69,10 +69,9 @@ public class AlertNotifyScanCroner extends TaskCroner {
     public String runTask(TaskCronerLog taskCronerLog){
         // 先以原子条件推进 state 0->1：仅本实例抢到的行才会被发送，
         // 避免多任务中心实例并发对同一批通知重复发送（钉钉告警刷屏）。
-        int effectedNum = dao.execute( "update task_alert_notify set state=1 where state=0 and sent_times=0" ).getData();
-        if (effectedNum < 1) {
-            return "本次执行无数据!";
-        }
+        // 先以原子条件推进 state 0->1：仅本实例抢到的行才会被发送，避免多实例并发重复发送。
+        dao.execute( "update task_alert_notify set state=1 where state=0 and sent_times=0" );
+        // 无论本次是否抢占到新通知，都查 state=1且sent_times=0：含本次抢占 + 上次实例崩溃遗留的孤儿，避免孤儿永久滞留。
         PageList<TaskAlertNotify> notifyList = dao.list( TaskAlertNotify.class, "select * from task_alert_notify where state=1 and sent_times=0" ).getData();
         if (notifyList == null || notifyList.isEmpty()){
             return "本次执行无数据!";
@@ -82,21 +81,12 @@ public class AlertNotifyScanCroner extends TaskCroner {
         // 当前钉钉/notifyUrl 发送失败仅记日志不抛出，保持与原行为一致，避免无限重试刷屏。
         dao.execute( "update task_alert_notify set sent_date=now(),sent_times=1 where state=1 and sent_times=0" );
 
-        // 先按照用户收敛.key=email value=infoIdList
-        Map<String, String> emailMap = new HashMap<>();
+        // 按联系人收敛 notifyUrl：key=notifyUrl value=infoIdList（email 通道暂未启用，相关死代码已移除）
         Map<String, String> notifyMap = new HashMap<>();
         Set<Long> globalInfoIdSet = new HashSet<>();
         for (TaskAlertNotify notify : notifyList) {
             globalInfoIdSet.add( notify.getInfoId() );
-            if ("email".equals( notify.getContactType() )) {
-                String ids = emailMap.get( notify.getContactInfo() );
-                if (ids != null) {
-                    ids += "," + notify.getInfoId();
-                } else {
-                    ids = String.valueOf( notify.getInfoId() );
-                }
-                emailMap.put( notify.getContactInfo(), ids );
-            } else if ("notifyUrl".equals( notify.getContactType() )) {
+            if ("notifyUrl".equals( notify.getContactType() )) {
                 String ids = notifyMap.get( notify.getContactInfo() );
                 if (ids != null) {
                     ids += "," + notify.getInfoId();
@@ -120,21 +110,6 @@ public class AlertNotifyScanCroner extends TaskCroner {
             });
         }
 
-//        // 按照信息构造要发送的信息。
-//        for (Map.Entry<String, String> kv : emailMap.entrySet()) {
-//            String contactInfo = kv.getKey();
-//            String infoIds = kv.getValue();
-//            dao.list( TaskAlertInfo.class, "select * from task_alert_info where id in (" + infoIds + ")" ).onSuccess( list -> {
-//                String title = "!!!收到" + list.size() + "条任务报警信息!";
-//                StringBuilder content = new StringBuilder();
-//                for (TaskAlertInfo info : list) {
-//                    content.append( "报警时间:" ).append( dateFormat.format( info.getCreateDate() ) ).append( "\n\n" );
-//                    content.append( "报警内容:" ).append( info.getAlertBody() ).append( "\n\n" );
-//                }
-//                sendEmail( contactInfo, title, content.toString() );
-//            });
-//        }
-
         //发送通知信息。
         for (Map.Entry<String, String> kv : notifyMap.entrySet()) {
             String contactInfo = kv.getKey();
@@ -150,7 +125,7 @@ public class AlertNotifyScanCroner extends TaskCroner {
                 notifyUrl( contactInfo, title, content.toString() );
             });
         }
-        return "共扫描" + notifyList.size() + "条信息，合并后发送" + emailMap.size() + "条Email, " + notifyMap.size() + "条通知!";
+        return "共扫描" + notifyList.size() + "条信息，合并后发送" + notifyMap.size() + "条通知!";
     }
 
     /**

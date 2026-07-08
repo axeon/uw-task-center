@@ -1,4 +1,4 @@
-package uw.task.center.controller.ops.delay;
+package uw.task.center.controller.ops.delayer;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -50,12 +50,12 @@ public class TaskDelayerReportController {
      * @param endDate   结束时间（null 默认当前）
      * @param dateType  1=按日 2=按时 3=按分（0 自动推断）
      * @param taskId    任务配置 id（>0 时仅汇总该任务）
-     * @return 分时段统计列表（DelayStatsVo，按 stats_date 升序）
+     * @return 分时段统计列表（DelayerStatsVo，按 stats_date 升序）
      */
     @GetMapping("/statsDateSummary")
     @Operation(summary = "按日期汇总延迟任务统计", description = "按日期汇总延迟任务统计")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public ResponseData<PageList<DelayStatsVo>> statsDateSummary(
+    public ResponseData<PageList<DelayerStatsVo>> statsDateSummary(
             @Parameter(description = "开始时间") @RequestParam(required = false) Date startDate,
             @Parameter(description = "结束时间") @RequestParam(required = false) Date endDate,
             @Parameter(description = "日期类型 1日2时3分") @RequestParam(required = false, defaultValue = "0") int dateType,
@@ -91,7 +91,7 @@ public class TaskDelayerReportController {
                 + " sum(num_fail_data) as num_fail_data, sum(num_fail_partner) as num_fail_partner,"
                 + " sum(time_wait_delay) as time_wait_delay, sum(time_run) as time_run FROM (" + union + ") t"
                 + " group by stats_date order by stats_date asc";
-        return dao.list(DelayStatsVo.class, sql, param.toArray());
+        return dao.list(DelayerStatsVo.class, sql, param.toArray());
     }
 
     /**
@@ -107,12 +107,12 @@ public class TaskDelayerReportController {
      * @param startDate 开始时间（null 默认近 24h）
      * @param endDate   结束时间（null 默认当前）
      * @param dateType  忽略（任务维度不分时段，保留仅为接口签名一致）
-     * @return 任务维度统计明细列表（DelayStatsDetailVo，按 num_all 倒序）
+     * @return 任务维度统计明细列表（DelayerStatsDetailVo，按 num_all 倒序）
      */
     @GetMapping("/taskStatsList")
     @Operation(summary = "任务维度延迟任务统计列表", description = "任务维度延迟任务统计列表")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.REQUEST)
-    public ResponseData<PageList<DelayStatsDetailVo>> taskStatsList(
+    public ResponseData<PageList<DelayerStatsDetailVo>> taskStatsList(
             @Parameter(description = "开始时间") @RequestParam(required = false) Date startDate,
             @Parameter(description = "结束时间") @RequestParam(required = false) Date endDate,
             @Parameter(description = "日期类型 1日2时3分") @RequestParam(required = false, defaultValue = "0") int dateType) {
@@ -132,14 +132,14 @@ public class TaskDelayerReportController {
                 + " sum(num_fail_data) as num_fail_data, sum(num_fail_partner) as num_fail_partner, sum(time_wait_delay) as time_wait_delay, sum(time_run) as time_run"
                 + " FROM (" + union + ") raw group by task_id order by num_all desc) tcs"
                 + " left join task_delayer_info tcc on tcs.task_id = tcc.id";
-        return dao.list(DelayStatsDetailVo.class, sql, param.toArray());
+        return dao.list(DelayerStatsDetailVo.class, sql, param.toArray());
     }
 
     /**
      * 延迟任务统计聚合 VO（按时间维度汇总）。
      */
-    @TableMeta(tableName = "DelayStatsVo", tableType = "view")
-    public static class DelayStatsVo implements java.io.Serializable {
+    @TableMeta(tableName = "DelayerStatsVo", tableType = "view")
+    public static class DelayerStatsVo implements java.io.Serializable {
         /** 统计时间分桶（LEFT(create_date,N) 截取值：按日/按时/按分）。 */
         @ColumnMeta(columnName = "stats_date", dataType = "String", dataSize = 20, nullable = true)
         private String statsDate;
@@ -186,8 +186,8 @@ public class TaskDelayerReportController {
     /**
      * 延迟任务统计明细 VO（带任务信息，用于 taskStatsList）。
      */
-    @TableMeta(tableName = "DelayStatsDetailVo", tableType = "view")
-    public static class DelayStatsDetailVo extends DelayStatsVo implements java.io.Serializable {
+    @TableMeta(tableName = "DelayerStatsDetailVo", tableType = "view")
+    public static class DelayerStatsDetailVo extends DelayerStatsVo implements java.io.Serializable {
         /** 任务配置 id。 */
         @ColumnMeta(columnName = "task_id", dataType = "long", dataSize = 19, nullable = true)
         private long taskId;
@@ -198,7 +198,7 @@ public class TaskDelayerReportController {
         @ColumnMeta(columnName = "task_class", dataType = "String", dataSize = 200, nullable = true)
         private String taskClass;
         /** 任务所有人（JSON 联系人映射）。 */
-        @ColumnMeta(columnName = "task_owner", dataType = "String", dataSize = 200, nullable = true)
+        @ColumnMeta(columnName = "task_owner", dataType = "String", dataSize = 500, nullable = true)
         private String taskOwner;
         /** 运行标签（多实例区分维度）。 */
         @ColumnMeta(columnName = "task_tag", dataType = "String", dataSize = 100, nullable = true)

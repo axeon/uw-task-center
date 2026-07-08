@@ -39,7 +39,7 @@ uw.task.center
 │   │   ├── host/                  # 主机管理
 │   │   ├── croner/                # 定时任务配置/报表/日志
 │   │   ├── runner/                # 队列任务配置/报表/日志
-│   │   ├── delay/                 # 延迟任务配置/报表/日志（目录名 delay，表名 task_delayer_*）
+│   │   ├── delayer/               # 延迟任务配置/报表/日志（表名 task_delayer_*）
 │   │   ├── alert/                 # 告警信息/通知/联系人
 │   │   └── log/                   # 操作日志/数据历史
 │   └── open/EnumController        # 枚举导出（debug/dev）
@@ -133,9 +133,15 @@ java -jar target/uw-task-center-<version>.jar
 | `queueTimeout` / `waitTimeout` / `runTimeout` | 排队/限速等待/运行 平均耗时超限（ms） |
 | `queueSize` | 队列堆积超限 |
 | `cronerTimeOut` | 定时任务超过计划时间 5 分钟仍未执行 |
-| `delayOvertime` | 延迟任务（`task_type=delay`）实际执行晚于 runAt 的平均超时（ms）；延迟任务另判定 `failRate` / `failProgramRate` / `failPartnerRate` / `runTimeout` |
+| `delayOvertime` | 延迟任务（`task_type=delayer`）实际执行晚于 runAt 的平均超时（ms）；延迟任务另判定 `failRate` / `failProgramRate` / `failPartnerRate` / `runTimeout` |
 
 告警生成 → 落库 `task_alert_info` / `task_alert_notify` → `AlertNotifyScanCroner` 每 3 分钟扫描合并，经钉钉/notifyUrl 推送。
+
+## 主机禁用与客户端降级
+
+**主机禁用**（OPS）：OPS 将主机 state 置 0 → 客户端下次 `/host/report` 收到 state=0 → 停止所有任务（runner listener / croner 调度 / delayer poll），保留底层线程池以便恢复。解除禁用（state=1）→ 客户端重置配置时间戳 + 全量拉取重新启动，自动恢复（无需重启进程）。
+
+**客户端降级**（center 故障）：uw-task 客户端在 center 不可用时，三套任务用 `initConfig` 本地默认配置继续运行；center 恢复后自动同步服务端动态配置（不丢任务/数据，详见客户端 [`README.md`](../../uw-base/uw-task/README.md)「center 不可用降级与恢复」）。
 
 ---
 
@@ -416,14 +422,14 @@ public class DemoDelayTask extends TaskDelayer<DemoTaskParam, Void> {
 }
 ```
 
-投递延迟任务使用 `TaskFactory.submitDelay(taskData)`，`taskDelay` 为延迟毫秒数（框架据此计算 zset 到期 score = `queueDate + taskDelay`）：
+投递延迟任务使用 `TaskFactory.delayTask(taskData)`，`taskDelay` 为延迟毫秒数（框架据此计算 zset 到期 score = `queueDate + taskDelay`）：
 
 ```
 TaskData<DemoTaskParam, Void> taskData = TaskData.<DemoTaskParam, Void>builder(DemoDelayTask.class)
 		.taskParam(new DemoTaskParam(1))
 		.taskDelay(5000)   //5秒后执行
 		.build();
-taskFactory.submitDelay(taskData);
+taskFactory.delayTask(taskData);
 ```
 
 ## 任务内异常处理
@@ -848,5 +854,5 @@ uw-task-center 大量使用 `uw.dao.DaoManager`（`dao.load` / `dao.queryForObje
 是不是不看文档？限速类型设定为“进程内限速”了？这样所有的任务会共用一个限速器，不卡死你才怪。认真阅读文档，选择合理的限速类型！
  
  **关于uw-task的延时队列任务**
- uw-task 现提供专用的延迟任务类型 TaskDelayer（基于 Redis zset，到期即取即执行，无队头阻塞、重启不丢存量），推荐优先使用 `TaskFactory.submitDelay()` 投递延迟任务（详见 uw-task 客户端 README 的「延迟任务（TaskDelayer）」章节）。
+ uw-task 现提供专用的延迟任务类型 TaskDelayer（基于 Redis zset，到期即取即执行，无队头阻塞、重启不丢存量），推荐优先使用 `TaskFactory.delayTask()` 投递延迟任务（详见 uw-task 客户端 README 的「延迟任务（TaskDelayer）」章节）。
  队列任务（TaskRunner）的 MQ 延时（delayType=ON，基于 RabbitMQ 死信）仍保留兼容，但存在长延时阻塞短延时问题，仅建议短延时（≤60秒）且量小的场景使用。延迟任务请用 TaskDelayer，小负载也可直接轮询数据库，均可有效降低资源消耗。

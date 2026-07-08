@@ -1,4 +1,4 @@
-package uw.task.center.controller.ops.delay;
+package uw.task.center.controller.ops.delayer;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -21,7 +21,6 @@ import uw.common.app.helper.SysDataHistoryHelper;
 import uw.common.response.ResponseData;
 import uw.common.util.SystemClock;
 import uw.dao.DaoManager;
-import uw.common.data.PageList;
 import uw.task.center.dto.TaskDelayerInfoQueryParam;
 import uw.task.center.entity.TaskDelayerInfo;
 
@@ -196,7 +195,7 @@ public class TaskDelayerInfoController {
     @PutMapping("/resetStats")
     @Operation(summary = "清空统计数据", description = "清空统计数据")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
-    public ResponseData resetStats(@Parameter(description = "主键") long id, @Parameter(description = "备注") @RequestParam String remark) {
+    public ResponseData resetStats(@Parameter(description = "主键") @RequestParam long id, @Parameter(description = "备注") @RequestParam String remark) {
         AuthServiceHelper.logInfo(TaskDelayerInfo.class, id, remark);
         TaskDelayerInfo update = new TaskDelayerInfo();
         update.setStatsDate(null);
@@ -207,7 +206,7 @@ public class TaskDelayerInfoController {
     }
 
     /**
-     * 校验延迟任务配置三元组是否重复（与 RPC /delay/init 去重条件一致：state>=0，不含 id<>?）。
+     * 校验延迟任务配置三元组是否重复（与 RPC /delayer/init 去重条件一致：state>=0，不含 id<>?）。
      *
      * @param info       待校验配置
      * @param excludeId  排除的自身 id（新增传 0）

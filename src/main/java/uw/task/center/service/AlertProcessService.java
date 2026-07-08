@@ -68,7 +68,7 @@ public class AlertProcessService {
      */
     private volatile Map<Long, TaskCronerInfo> cronerMap = new ConcurrentHashMap<>();
     /**
-     * delay缓存。
+     * delayer缓存。
      */
     private volatile Map<Long, TaskDelayerInfo> delayerMap = new ConcurrentHashMap<>();
 
@@ -93,7 +93,7 @@ public class AlertProcessService {
      * 延迟任务检查服务。
      */
     private final ExecutorService delayerProcessService = new ThreadPoolExecutor(1, 10, 30L, TimeUnit.SECONDS, new ArrayBlockingQueue<>(200),
-            new ThreadFactoryBuilder().setDaemon(true).setNameFormat("DelayProcessService-%d").build(),
+            new ThreadFactoryBuilder().setDaemon(true).setNameFormat("DelayerProcessService-%d").build(),
             new ThreadPoolExecutor.CallerRunsPolicy());
 
     /**
@@ -103,7 +103,7 @@ public class AlertProcessService {
     public void shutdown() {
         shutdownPool(cronerProcessService, "CronerProcessService");
         shutdownPool(runnerProcessService, "RunnerProcessService");
-        shutdownPool(delayerProcessService, "DelayProcessService");
+        shutdownPool(delayerProcessService, "DelayerProcessService");
     }
 
     private void shutdownPool(ExecutorService pool, String name) {
@@ -264,7 +264,7 @@ public class AlertProcessService {
                             }
                         }
                         if (alerts.size() > 0) {
-                            processAlertInfo("delay", config.getId(), config.getTaskName(), numAll, alerts, config.getTaskOwner(), config.getTaskLinkOur(),
+                            processAlertInfo("delayer", config.getId(), config.getTaskName(), numAll, alerts, config.getTaskOwner(), config.getTaskLinkOur(),
                                     config.getTaskLinkMch());
                         }
                     }
@@ -389,7 +389,7 @@ public class AlertProcessService {
         String delayerSql = "select * from task_delayer_info where state=1";
         Map<Long, TaskCronerInfo> cronerMap = new ConcurrentHashMap<>();
         Map<Long, TaskRunnerInfo> runnerMap = new ConcurrentHashMap<>();
-        Map<Long, TaskDelayerInfo> delayMap = new ConcurrentHashMap<>();
+        Map<Long, TaskDelayerInfo> delayerMap = new ConcurrentHashMap<>();
         dao.list(TaskRunnerInfo.class, runnerSql).onSuccess(list -> {
             for (TaskRunnerInfo runner : list) {
                 runnerMap.put(runner.getId(), runner);
@@ -397,10 +397,10 @@ public class AlertProcessService {
             this.runnerMap = runnerMap;
         });
         dao.list(TaskDelayerInfo.class, delayerSql).onSuccess(list -> {
-            for (TaskDelayerInfo delay : list) {
-                delayMap.put(delay.getId(), delay);
+            for (TaskDelayerInfo delayer : list) {
+                delayerMap.put(delayer.getId(), delayer);
             }
-            this.delayerMap = delayMap;
+            this.delayerMap = delayerMap;
         });
         dao.list(TaskCronerInfo.class, connerSql).onSuccess(list -> {
             for (TaskCronerInfo croner : list) {
@@ -414,7 +414,7 @@ public class AlertProcessService {
                     continue;
                 }
                 // 如果超过约定时间还未执行，就要报警了。
-                if ((croner.getNextRunDate().getTime() + (croner.getStatsRunTime() / croner.getStatsRunNum()) + 300_000L) < SystemClock.now()) {
+                if ((croner.getNextRunDate().getTime() + 300_000L) < SystemClock.now()) {
                     // 先以 next_run_date 为条件推进为 NULL，仅当本实例抢到（影响行数>0）时才发告警，
                     // 避免多任务中心实例并发对同一个 croner 重复告警。
                     ResponseData<Integer> claim = dao.execute("update task_croner_info set next_run_date=NULL where id=? and next_run_date=?",

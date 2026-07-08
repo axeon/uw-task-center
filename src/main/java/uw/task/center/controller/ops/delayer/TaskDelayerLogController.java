@@ -1,4 +1,4 @@
-package uw.task.center.controller.ops.delay;
+package uw.task.center.controller.ops.delayer;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import uw.auth.service.AuthServiceHelper;
 import uw.auth.service.annotation.MscPermDeclare;
@@ -26,7 +27,7 @@ import uw.task.center.entity.TaskDelayerEsLog;
  * @author axeon
  */
 @RestController
-@org.springframework.web.bind.annotation.RequestMapping("/ops/delayer/log")
+@RequestMapping("/ops/delayer/log")
 @Tag(name = "延迟任务日志", description = "延迟任务日志")
 @MscPermDeclare(user = UserType.OPS)
 public class TaskDelayerLogController {

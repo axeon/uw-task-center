@@ -58,7 +58,7 @@ public class TaskRpcController {
     /**
      * 更新延迟任务统计信息。
      */
-    private static final String UPDATE_DELAY_STATS = "update task_delayer_info set stats_date=?,stats_run_num=stats_run_num+?,stats_fail_num=stats_fail_num+?,stats_run_time" +
+    private static final String UPDATE_DELAYER_STATS = "update task_delayer_info set stats_date=?,stats_run_num=stats_run_num+?,stats_fail_num=stats_fail_num+?,stats_run_time" +
             "=stats_run_time+? where id=?";
     /**
      * 数据库操作对象。
@@ -82,10 +82,10 @@ public class TaskRpcController {
      *
      * <p>主机首次上报时自动建记录并分配 id，后续按 id+身份校验更新；统计与明细以批量事务写入分表。</p>
      *
-     * <p>三套 stats 列表（taskCronerStatsList / taskRunnerStatsList / taskDelayStatsList）在同一个批量事务内
+     * <p>三套 stats 列表（taskCronerStatsList / taskRunnerStatsList / taskDelayerStatsList）在同一个批量事务内
      * 写入对应按天分表（task_croner_stats / task_runner_stats / task_delayer_stats）并累加更新各 info 表的
      * 累计统计字段。每套列表均做空兜底（null 时走 Collections.emptyList()）：避免任一列表为 null 导致整批
-     * 事务回滚、其余两类统计数据一并丢失。旧版本客户端无 delay 列表，由该兜底自然跳过。</p>
+     * 事务回滚、其余两类统计数据一并丢失。旧版本客户端无 delayer 列表，由该兜底自然跳过。</p>
      *
      * @param taskHostInfoExt 主机状态数据（含 JVM/线程指标与三类任务统计列表）
      * @return 主机报告响应（id、hostIp、状态）
@@ -137,14 +137,14 @@ public class TaskRpcController {
         Date createDate = SystemClock.nowDate();
         String cronerTable = ShardingTableUtils.getTableNameByDate( "task_croner_stats", createDate );
         String runnerTable = ShardingTableUtils.getTableNameByDate( "task_runner_stats", createDate );
-        String delayTable = ShardingTableUtils.getTableNameByDate( "task_delayer_stats", createDate );
+        String delayerTable = ShardingTableUtils.getTableNameByDate( "task_delayer_stats", createDate );
         try {
             //处理croner告警信息。
             alertProcessService.processCronerStats( taskHostInfoExt.getTaskCronerStatsList() );
             //处理runner告警信息。
             alertProcessService.processRunnerStats( taskHostInfoExt.getTaskRunnerStatsList() );
-            //处理delay告警信息（旧客户端无 delay list，processDelayerStats 内部判空）。
-            alertProcessService.processDelayerStats( taskHostInfoExt.getTaskDelayStatsList() );
+            //处理delayer告警信息（旧客户端无 delayer list，processDelayerStats 内部判空）。
+            alertProcessService.processDelayerStats( taskHostInfoExt.getTaskDelayerStatsList() );
             //更新croner统计信息。
             for (TaskCronerStats stats : taskHostInfoExt.getTaskCronerStatsList() != null ? taskHostInfoExt.getTaskCronerStatsList() : java.util.Collections.<TaskCronerStats>emptyList()) {
                 int numFail = stats.getNumFailConfig() + stats.getNumFailData() + stats.getNumFailPartner() + stats.getNumFailProgram();
@@ -171,17 +171,17 @@ public class TaskRpcController {
                 stats.setCreateDate( createDate );
                 batchDao.save( stats, runnerTable );
             }
-            //更新delay统计信息（旧客户端无 delay list，判空跳过）。
-            if (taskHostInfoExt.getTaskDelayStatsList() != null) {
-                for (TaskDelayerStats stats : taskHostInfoExt.getTaskDelayStatsList()) {
+            //更新delayer统计信息（旧客户端无 delayer list，判空跳过）。
+            if (taskHostInfoExt.getTaskDelayerStatsList() != null) {
+                for (TaskDelayerStats stats : taskHostInfoExt.getTaskDelayerStatsList()) {
                     int numFail = stats.getNumFailConfig() + stats.getNumFailData() + stats.getNumFailPartner() + stats.getNumFailProgram();
                     delayerRunNum += stats.getNumAll();
                     delayerRunTime += stats.getTimeRun();
                     delayerFailNum += numFail;
-                    batchDao.execute( UPDATE_DELAY_STATS, new Object[]{createDate, stats.getNumAll(), numFail, stats.getTimeRun(), stats.getTaskId()} );
+                    batchDao.execute( UPDATE_DELAYER_STATS, new Object[]{createDate, stats.getNumAll(), numFail, stats.getTimeRun(), stats.getTaskId()} );
                     stats.setId( dao.getSequenceId( TaskDelayerStats.class ) );
                     stats.setCreateDate( createDate );
-                    batchDao.save( stats, delayTable );
+                    batchDao.save( stats, delayerTable );
                 }
             }
             bum.submit();
@@ -458,7 +458,7 @@ public class TaskRpcController {
     @GetMapping("/delayer/list")
     @Operation(summary = "获取延迟任务列表", description = "获取延迟任务列表")
     @MscPermDeclare(user = UserType.RPC)
-    public ResponseData<List<TaskDelayerInfo>> getDelayConfigList(@Parameter(description = "运行目标", example = "default") String runTarget,
+    public ResponseData<List<TaskDelayerInfo>> getDelayerConfigList(@Parameter(description = "运行目标", example = "default") String runTarget,
                                                                   @Parameter(description = "任务项目", example = "任务项目") String taskProject,
                                                                   @Parameter(description = "上一次更新时间", example = "0") Long lastUpdateTime) {
         StringBuilder sql = new StringBuilder(256);
@@ -494,7 +494,7 @@ public class TaskRpcController {
     @PostMapping("/delayer/init")
     @Operation(summary = "初始化延迟任务配置", description = "初始化延迟任务配置")
     @MscPermDeclare(user = UserType.RPC)
-    public ResponseData<TaskDelayerInfo> initDelayConfig(@RequestBody TaskDelayerInfo config) {
+    public ResponseData<TaskDelayerInfo> initDelayerConfig(@RequestBody TaskDelayerInfo config) {
         if (config != null) {
             String taskClass = config.getTaskClass();
             if (config.getRunTarget() == null) {

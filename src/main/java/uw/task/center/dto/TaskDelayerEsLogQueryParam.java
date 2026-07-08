@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.Map;
 
 /**
- * 延迟任务 ES 日志查询参数（uw.task.delay.log）。
+ * 延迟任务 ES 日志查询参数（uw.task.delayer.log）。
  *
  * <p>极简版（核心过滤字段），照 TaskRunnerEsLogQueryParam 模式，建议 gencode 重生成完整版。</p>
  */
