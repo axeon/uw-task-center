@@ -5,6 +5,7 @@ import uw.common.dto.PageQueryParam;
 import uw.dao.annotation.QueryMeta;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -13,40 +14,21 @@ import java.util.Map;
 @Schema(title = "task主机信息列表查询参数", description = "task主机信息列表查询参数")
 public class TaskHostInfoQueryParam extends PageQueryParam{
 
-    private static final Map<String, String> ALLOWED_SORT_PROPERTY = Map.ofEntries(
-        Map.entry("id", "id"),
-        Map.entry("hostIp", "host_ip"),
-        Map.entry("appName", "app_name"),
-        Map.entry("appVersion", "app_version"),
-        Map.entry("appHost", "app_host"),
-        Map.entry("appPort", "app_port"),
-        Map.entry("taskProject", "task_project"),
-        Map.entry("runTarget", "run_target"),
-        Map.entry("cronerNum", "croner_num"),
-        Map.entry("cronerRunNum", "croner_run_num"),
-        Map.entry("cronerFailNum", "croner_fail_num"),
-        Map.entry("cronerRunTime", "croner_run_time"),
-        Map.entry("runnerNum", "runner_num"),
-        Map.entry("runnerRunNum", "runner_run_num"),
-        Map.entry("runnerFailNum", "runner_fail_num"),
-        Map.entry("runnerRunTime", "runner_run_time"),
-        Map.entry("jvmMemMax", "jvm_mem_max"),
-        Map.entry("jvmMemTotal", "jvm_mem_total"),
-        Map.entry("jvmMemFree", "jvm_mem_free"),
-        Map.entry("threadActive", "thread_active"),
-        Map.entry("threadPeak", "thread_peak"),
-        Map.entry("threadDaemon", "thread_daemon"),
-        Map.entry("threadStarted", "thread_started"),
-        Map.entry("createDate", "create_date"),
-        Map.entry("modifyDate", "modify_date"),
-        Map.entry("lastUpdate", "last_update"),
-        Map.entry("state", "state")
-);
 
     /**
-     * 允许的排序属性。
+     * 允许排序的属性。
+     * key:排序名 value:排序字段
      *
-     * @return
+     */
+    private static final Map<String, String> ALLOWED_SORT_PROPERTY = Map.ofEntries(
+        Map.entry( "id", "id" ),
+        Map.entry( "createDate", "create_date" ),
+        Map.entry( "modifyDate", "modify_date" )
+        );
+
+    /**
+     * 获取允许排序的属性。
+     *
      */
     @Override
     public Map<String, String> ALLOWED_SORT_PROPERTY() {
@@ -234,6 +216,62 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     @QueryMeta(expr = "runner_run_time between ? and ?")
     @Schema(title="统计总时间毫秒数范围", description = "统计总时间毫秒数范围")
     private Long[] runnerRunTimeRange;
+	
+    /**
+    * 延迟任务数量。
+    */
+    @QueryMeta(expr = "delayer_num=?")
+    @Schema(title="延迟任务数量", description = "延迟任务数量")
+    private Integer delayerNum;
+
+    /**
+    * 延迟任务数量范围。
+    */
+    @QueryMeta(expr = "delayer_num between ? and ?")
+    @Schema(title="延迟任务数量范围", description = "延迟任务数量范围")
+    private Integer[] delayerNumRange;
+	
+    /**
+    * 延迟任务统计运行次数。
+    */
+    @QueryMeta(expr = "delayer_run_num=?")
+    @Schema(title="延迟任务统计运行次数", description = "延迟任务统计运行次数")
+    private Integer delayerRunNum;
+
+    /**
+    * 延迟任务统计运行次数范围。
+    */
+    @QueryMeta(expr = "delayer_run_num between ? and ?")
+    @Schema(title="延迟任务统计运行次数范围", description = "延迟任务统计运行次数范围")
+    private Integer[] delayerRunNumRange;
+	
+    /**
+    * 延迟任务统计运行失败次数。
+    */
+    @QueryMeta(expr = "delayer_fail_num=?")
+    @Schema(title="延迟任务统计运行失败次数", description = "延迟任务统计运行失败次数")
+    private Integer delayerFailNum;
+
+    /**
+    * 延迟任务统计运行失败次数范围。
+    */
+    @QueryMeta(expr = "delayer_fail_num between ? and ?")
+    @Schema(title="延迟任务统计运行失败次数范围", description = "延迟任务统计运行失败次数范围")
+    private Integer[] delayerFailNumRange;
+	
+    /**
+    * 延迟任务统计总时间毫秒数。
+    */
+    @QueryMeta(expr = "delayer_run_time=?")
+    @Schema(title="延迟任务统计总时间毫秒数", description = "延迟任务统计总时间毫秒数")
+    private Long delayerRunTime;
+
+    /**
+    * 延迟任务统计总时间毫秒数范围。
+    */
+    @QueryMeta(expr = "delayer_run_time between ? and ?")
+    @Schema(title="延迟任务统计总时间毫秒数范围", description = "延迟任务统计总时间毫秒数范围")
+    private Long[] delayerRunTimeRange;
 	
     /**
     * jvm内存总数。
@@ -952,6 +990,182 @@ public class TaskHostInfoQueryParam extends PageQueryParam{
     */
     public TaskHostInfoQueryParam runnerRunTimeRange(Long[] runnerRunTimeRange){
         setRunnerRunTimeRange(runnerRunTimeRange);
+        return this;
+    }
+	
+    /**
+    * 获取延迟任务数量。
+    */
+    public Integer getDelayerNum(){
+        return this.delayerNum;
+    }
+
+    /**
+    * 设置延迟任务数量。
+    */
+    public void setDelayerNum(Integer delayerNum){
+        this.delayerNum = delayerNum;
+    }
+	
+    /**
+    * 设置延迟任务数量链式调用。
+    */
+    public TaskHostInfoQueryParam delayerNum(Integer delayerNum){
+        setDelayerNum(delayerNum);
+        return this;
+    }
+
+    /**
+    * 获取延迟任务数量范围。
+    */
+    public Integer[] getDelayerNumRange(){
+        return this.delayerNumRange;
+    }
+
+    /**
+    * 设置延迟任务数量范围。
+    */
+    public void setDelayerNumRange(Integer[] delayerNumRange){
+        this.delayerNumRange = delayerNumRange;
+    }
+	
+    /**
+    * 设置延迟任务数量范围链式调用。
+    */
+    public TaskHostInfoQueryParam delayerNumRange(Integer[] delayerNumRange){
+        setDelayerNumRange(delayerNumRange);
+        return this;
+    }
+	
+    /**
+    * 获取延迟任务统计运行次数。
+    */
+    public Integer getDelayerRunNum(){
+        return this.delayerRunNum;
+    }
+
+    /**
+    * 设置延迟任务统计运行次数。
+    */
+    public void setDelayerRunNum(Integer delayerRunNum){
+        this.delayerRunNum = delayerRunNum;
+    }
+	
+    /**
+    * 设置延迟任务统计运行次数链式调用。
+    */
+    public TaskHostInfoQueryParam delayerRunNum(Integer delayerRunNum){
+        setDelayerRunNum(delayerRunNum);
+        return this;
+    }
+
+    /**
+    * 获取延迟任务统计运行次数范围。
+    */
+    public Integer[] getDelayerRunNumRange(){
+        return this.delayerRunNumRange;
+    }
+
+    /**
+    * 设置延迟任务统计运行次数范围。
+    */
+    public void setDelayerRunNumRange(Integer[] delayerRunNumRange){
+        this.delayerRunNumRange = delayerRunNumRange;
+    }
+	
+    /**
+    * 设置延迟任务统计运行次数范围链式调用。
+    */
+    public TaskHostInfoQueryParam delayerRunNumRange(Integer[] delayerRunNumRange){
+        setDelayerRunNumRange(delayerRunNumRange);
+        return this;
+    }
+	
+    /**
+    * 获取延迟任务统计运行失败次数。
+    */
+    public Integer getDelayerFailNum(){
+        return this.delayerFailNum;
+    }
+
+    /**
+    * 设置延迟任务统计运行失败次数。
+    */
+    public void setDelayerFailNum(Integer delayerFailNum){
+        this.delayerFailNum = delayerFailNum;
+    }
+	
+    /**
+    * 设置延迟任务统计运行失败次数链式调用。
+    */
+    public TaskHostInfoQueryParam delayerFailNum(Integer delayerFailNum){
+        setDelayerFailNum(delayerFailNum);
+        return this;
+    }
+
+    /**
+    * 获取延迟任务统计运行失败次数范围。
+    */
+    public Integer[] getDelayerFailNumRange(){
+        return this.delayerFailNumRange;
+    }
+
+    /**
+    * 设置延迟任务统计运行失败次数范围。
+    */
+    public void setDelayerFailNumRange(Integer[] delayerFailNumRange){
+        this.delayerFailNumRange = delayerFailNumRange;
+    }
+	
+    /**
+    * 设置延迟任务统计运行失败次数范围链式调用。
+    */
+    public TaskHostInfoQueryParam delayerFailNumRange(Integer[] delayerFailNumRange){
+        setDelayerFailNumRange(delayerFailNumRange);
+        return this;
+    }
+	
+    /**
+    * 获取延迟任务统计总时间毫秒数。
+    */
+    public Long getDelayerRunTime(){
+        return this.delayerRunTime;
+    }
+
+    /**
+    * 设置延迟任务统计总时间毫秒数。
+    */
+    public void setDelayerRunTime(Long delayerRunTime){
+        this.delayerRunTime = delayerRunTime;
+    }
+	
+    /**
+    * 设置延迟任务统计总时间毫秒数链式调用。
+    */
+    public TaskHostInfoQueryParam delayerRunTime(Long delayerRunTime){
+        setDelayerRunTime(delayerRunTime);
+        return this;
+    }
+
+    /**
+    * 获取延迟任务统计总时间毫秒数范围。
+    */
+    public Long[] getDelayerRunTimeRange(){
+        return this.delayerRunTimeRange;
+    }
+
+    /**
+    * 设置延迟任务统计总时间毫秒数范围。
+    */
+    public void setDelayerRunTimeRange(Long[] delayerRunTimeRange){
+        this.delayerRunTimeRange = delayerRunTimeRange;
+    }
+	
+    /**
+    * 设置延迟任务统计总时间毫秒数范围链式调用。
+    */
+    public TaskHostInfoQueryParam delayerRunTimeRange(Long[] delayerRunTimeRange){
+        setDelayerRunTimeRange(delayerRunTimeRange);
         return this;
     }
 	

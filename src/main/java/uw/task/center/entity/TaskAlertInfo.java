@@ -1,5 +1,6 @@
 package uw.task.center.entity;
 
+import com.fasterxml.jackson.annotation.JsonRawValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import uw.common.util.JsonUtils;
 import uw.dao.DataEntity;

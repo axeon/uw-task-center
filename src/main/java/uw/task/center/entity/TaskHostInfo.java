@@ -1,5 +1,6 @@
 package uw.task.center.entity;
 
+import com.fasterxml.jackson.annotation.JsonRawValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import uw.common.util.JsonUtils;
 import uw.dao.DataEntity;
@@ -132,6 +133,34 @@ public class TaskHostInfo implements DataEntity,Serializable{
     @ColumnMeta(columnName="runner_run_time", dataType="long", dataSize=19, nullable=true)
     @Schema(title = "统计总时间毫秒数", description = "统计总时间毫秒数", maxLength=19, nullable=true )
     private long runnerRunTime;
+
+    /**
+     * 延迟任务数量
+     */
+    @ColumnMeta(columnName="delayer_num", dataType="int", dataSize=10, nullable=true)
+    @Schema(title = "延迟任务数量", description = "延迟任务数量", maxLength=10, nullable=true )
+    private int delayerNum;
+
+    /**
+     * 延迟任务统计运行次数
+     */
+    @ColumnMeta(columnName="delayer_run_num", dataType="int", dataSize=10, nullable=true)
+    @Schema(title = "延迟任务统计运行次数", description = "延迟任务统计运行次数", maxLength=10, nullable=true )
+    private int delayerRunNum;
+
+    /**
+     * 延迟任务统计运行失败次数
+     */
+    @ColumnMeta(columnName="delayer_fail_num", dataType="int", dataSize=10, nullable=true)
+    @Schema(title = "延迟任务统计运行失败次数", description = "延迟任务统计运行失败次数", maxLength=10, nullable=true )
+    private int delayerFailNum;
+
+    /**
+     * 延迟任务统计总时间毫秒数
+     */
+    @ColumnMeta(columnName="delayer_run_time", dataType="long", dataSize=19, nullable=true)
+    @Schema(title = "延迟任务统计总时间毫秒数", description = "延迟任务统计总时间毫秒数", maxLength=19, nullable=true )
+    private long delayerRunTime;
 
     /**
      * jvm内存总数
@@ -371,6 +400,34 @@ public class TaskHostInfo implements DataEntity,Serializable{
      */
     public long getRunnerRunTime(){
         return this.runnerRunTime;
+    }
+
+    /**
+     * 获取延迟任务数量。
+     */
+    public int getDelayerNum(){
+        return this.delayerNum;
+    }
+
+    /**
+     * 获取延迟任务统计运行次数。
+     */
+    public int getDelayerRunNum(){
+        return this.delayerRunNum;
+    }
+
+    /**
+     * 获取延迟任务统计运行失败次数。
+     */
+    public int getDelayerFailNum(){
+        return this.delayerFailNum;
+    }
+
+    /**
+     * 获取延迟任务统计总时间毫秒数。
+     */
+    public long getDelayerRunTime(){
+        return this.delayerRunTime;
     }
 
     /**
@@ -704,6 +761,70 @@ public class TaskHostInfo implements DataEntity,Serializable{
      */
     public TaskHostInfo runnerRunTime(long runnerRunTime){
         setRunnerRunTime(runnerRunTime);
+        return this;
+    }
+
+    /**
+     * 设置延迟任务数量。
+     */
+    public void setDelayerNum(int delayerNum){
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "delayerNum", this.delayerNum, delayerNum, !_IS_LOADED );
+        this.delayerNum = delayerNum;
+    }
+
+    /**
+     *  设置延迟任务数量链式调用。
+     */
+    public TaskHostInfo delayerNum(int delayerNum){
+        setDelayerNum(delayerNum);
+        return this;
+    }
+
+    /**
+     * 设置延迟任务统计运行次数。
+     */
+    public void setDelayerRunNum(int delayerRunNum){
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "delayerRunNum", this.delayerRunNum, delayerRunNum, !_IS_LOADED );
+        this.delayerRunNum = delayerRunNum;
+    }
+
+    /**
+     *  设置延迟任务统计运行次数链式调用。
+     */
+    public TaskHostInfo delayerRunNum(int delayerRunNum){
+        setDelayerRunNum(delayerRunNum);
+        return this;
+    }
+
+    /**
+     * 设置延迟任务统计运行失败次数。
+     */
+    public void setDelayerFailNum(int delayerFailNum){
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "delayerFailNum", this.delayerFailNum, delayerFailNum, !_IS_LOADED );
+        this.delayerFailNum = delayerFailNum;
+    }
+
+    /**
+     *  设置延迟任务统计运行失败次数链式调用。
+     */
+    public TaskHostInfo delayerFailNum(int delayerFailNum){
+        setDelayerFailNum(delayerFailNum);
+        return this;
+    }
+
+    /**
+     * 设置延迟任务统计总时间毫秒数。
+     */
+    public void setDelayerRunTime(long delayerRunTime){
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "delayerRunTime", this.delayerRunTime, delayerRunTime, !_IS_LOADED );
+        this.delayerRunTime = delayerRunTime;
+    }
+
+    /**
+     *  设置延迟任务统计总时间毫秒数链式调用。
+     */
+    public TaskHostInfo delayerRunTime(long delayerRunTime){
+        setDelayerRunTime(delayerRunTime);
         return this;
     }
 

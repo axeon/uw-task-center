@@ -56,6 +56,7 @@ public class AlertProcessService {
         FAIL_TYPE_TRANSLATE_MAP.put("runTimeout", "运行超时");
         FAIL_TYPE_TRANSLATE_MAP.put("queueSize", "队列长度超限");
         FAIL_TYPE_TRANSLATE_MAP.put("cronerTimeOut", "定时任务未在计划时间运行");
+        FAIL_TYPE_TRANSLATE_MAP.put("delayOvertime", "延迟超时");
     }
 
     /**
@@ -66,6 +67,11 @@ public class AlertProcessService {
      * croner缓存。
      */
     private volatile Map<Long, TaskCronerInfo> cronerMap = new ConcurrentHashMap<>();
+    /**
+     * delay缓存。
+     */
+    private volatile Map<Long, TaskDelayerInfo> delayerMap = new ConcurrentHashMap<>();
+
     private final DaoManager dao = DaoManager.getInstance();
     /**
      * 日期格式化。
@@ -83,6 +89,12 @@ public class AlertProcessService {
     private final ExecutorService runnerProcessService = new ThreadPoolExecutor(1, 10, 30L, TimeUnit.SECONDS, new ArrayBlockingQueue<>(200),
             new ThreadFactoryBuilder().setDaemon(true).setNameFormat("RunnerProcessService-%d").build(),
             new ThreadPoolExecutor.CallerRunsPolicy());
+    /**
+     * 延迟任务检查服务。
+     */
+    private final ExecutorService delayerProcessService = new ThreadPoolExecutor(1, 10, 30L, TimeUnit.SECONDS, new ArrayBlockingQueue<>(200),
+            new ThreadFactoryBuilder().setDaemon(true).setNameFormat("DelayProcessService-%d").build(),
+            new ThreadPoolExecutor.CallerRunsPolicy());
 
     /**
      * 进程关闭时优雅关闭告警处理线程池，尽量保证在途告警落库。
@@ -91,6 +103,7 @@ public class AlertProcessService {
     public void shutdown() {
         shutdownPool(cronerProcessService, "CronerProcessService");
         shutdownPool(runnerProcessService, "RunnerProcessService");
+        shutdownPool(delayerProcessService, "DelayProcessService");
     }
 
     private void shutdownPool(ExecutorService pool, String name) {
@@ -199,6 +212,68 @@ public class AlertProcessService {
     }
 
     /**
+     * 处理延迟任务统计信息。
+     *
+     * @param statsList 查询的结果
+     */
+    public void processDelayerStats(List<TaskDelayerStats> statsList) {
+        delayerProcessService.submit(() -> {
+            if (statsList != null && statsList.size() > 0) {
+                for (TaskDelayerStats stats : statsList) {
+                    TaskDelayerInfo config = getFitDelayerConfig(stats.getTaskId());
+                    if (config != null) {
+                        ArrayList<AlertData> alerts = new ArrayList<>();
+                        long numAll = stats.getNumAll();
+                        long numFailProgram = stats.getNumFailProgram();
+                        long numFailPartner = stats.getNumFailPartner();
+                        long numFail = numFailProgram + numFailPartner + stats.getNumFailConfig() + stats.getNumFailData();
+                        long timeWaitDelay = stats.getTimeWaitDelay();
+                        long timeRun = stats.getTimeRun();
+                        DecimalFormat percentFormat = new DecimalFormat("#.##");
+                        if (numFail > 0 && numAll > 0 && config.getAlertFailRate() > 0) {
+                            double v = (double) numFail / numAll * 100;
+                            if (v > config.getAlertFailRate()) {
+                                alerts.add(new AlertData("failRate", percentFormat.format(config.getAlertFailRate()) + "%",
+                                        percentFormat.format(v) + "%(" + numFail + ")"));
+                            }
+                        }
+                        if (numFailProgram > 0 && numAll > 0 && config.getAlertFailProgramRate() > 0) {
+                            double v = (double) numFailProgram / numAll * 100;
+                            if (v > config.getAlertFailProgramRate()) {
+                                alerts.add(new AlertData("failProgramRate", percentFormat.format(config.getAlertFailProgramRate()) + "%",
+                                        percentFormat.format(v) + "%(" + numFailProgram + ")"));
+                            }
+                        }
+                        if (numFailPartner > 0 && numAll > 0 && config.getAlertFailPartnerRate() > 0) {
+                            double v = (double) numFailPartner / numAll * 100;
+                            if (v > config.getAlertFailPartnerRate()) {
+                                alerts.add(new AlertData("failPartnerRate", percentFormat.format(config.getAlertFailPartnerRate()) + "%",
+                                        percentFormat.format(v) + "%(" + numFailPartner + ")"));
+                            }
+                        }
+                        if (timeRun > 0 && numAll > 0 && config.getAlertRunTimeout() > 0) {
+                            long averageTime = timeRun / numAll;
+                            if (averageTime > config.getAlertRunTimeout()) {
+                                alerts.add(new AlertData("runTimeout", config.getAlertRunTimeout() + "ms", averageTime + "ms"));
+                            }
+                        }
+                        if (timeWaitDelay > 0 && numAll > 0 && config.getAlertDelayOvertime() > 0) {
+                            long averageTime = timeWaitDelay / numAll;
+                            if (averageTime > config.getAlertDelayOvertime()) {
+                                alerts.add(new AlertData("delayOvertime", config.getAlertDelayOvertime() + "ms", averageTime + "ms"));
+                            }
+                        }
+                        if (alerts.size() > 0) {
+                            processAlertInfo("delay", config.getId(), config.getTaskName(), numAll, alerts, config.getTaskOwner(), config.getTaskLinkOur(),
+                                    config.getTaskLinkMch());
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    /**
      * 处理定时任务的统计信息。
      *
      * @param statsList 查询的结果
@@ -293,6 +368,16 @@ public class AlertProcessService {
     }
 
     /**
+     * 根据taskId筛选延迟任务配置。
+     *
+     * @param taskId
+     * @return
+     */
+    private TaskDelayerInfo getFitDelayerConfig(long taskId) {
+        return delayerMap.get(taskId);
+    }
+
+    /**
      * 初始化任务配置信息。
      * 定时执行此信息。
      */
@@ -301,13 +386,21 @@ public class AlertProcessService {
         // 查询语句，查询条件
         String connerSql = "select * from task_croner_info where state=1";
         String runnerSql = "select * from task_runner_info where state=1";
+        String delayerSql = "select * from task_delayer_info where state=1";
         Map<Long, TaskCronerInfo> cronerMap = new ConcurrentHashMap<>();
         Map<Long, TaskRunnerInfo> runnerMap = new ConcurrentHashMap<>();
+        Map<Long, TaskDelayerInfo> delayMap = new ConcurrentHashMap<>();
         dao.list(TaskRunnerInfo.class, runnerSql).onSuccess(list -> {
             for (TaskRunnerInfo runner : list) {
                 runnerMap.put(runner.getId(), runner);
             }
             this.runnerMap = runnerMap;
+        });
+        dao.list(TaskDelayerInfo.class, delayerSql).onSuccess(list -> {
+            for (TaskDelayerInfo delay : list) {
+                delayMap.put(delay.getId(), delay);
+            }
+            this.delayerMap = delayMap;
         });
         dao.list(TaskCronerInfo.class, connerSql).onSuccess(list -> {
             for (TaskCronerInfo croner : list) {

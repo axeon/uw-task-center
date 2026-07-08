@@ -8,7 +8,7 @@
 
 它本身不执行业务任务，而是作为整个任务体系的"大脑"，承担三类职责：
 
-1. **配置中心**：维护定时任务（croner）、队列任务（runner）的服务端配置（cron 表达式、并发、限速、重试、告警阈值、联系人等），任务执行主机通过 RPC 增量拉取。
+1. **配置中心**：维护定时任务（croner）、队列任务（runner）、延迟任务（delayer）的服务端配置（cron 表达式、并发、限速、重试、延迟 poll 节奏、告警阈值、联系人等），任务执行主机通过 RPC 增量拉取。
 2. **运维监控**：接收各执行主机上报的运行统计与主机指标，提供仪表盘、分时段/分任务报表、ES 日志检索。
 3. **告警中枢**：按任务配置的阈值（失败率、等待/运行超时、队列堆积、定时任务未按时执行等）判定并生成告警，经钉钉/notifyUrl 推送给责任人。
 
@@ -17,7 +17,7 @@
 ## 技术栈
 
 - **Spring Boot** + **Spring Cloud Alibaba (Nacos)**：服务注册与配置中心。
-- **MySQL**：存储任务配置、主机信息、告警数据；统计明细按日分表（`task_runner_stats` / `task_croner_stats`）。
+- **MySQL**：存储任务配置、主机信息、告警数据；统计明细按日分表（`task_runner_stats` / `task_croner_stats` / `task_delayer_stats`）。
 - **Elasticsearch**：存储任务运行日志（`uw.task.runner.log` / `uw.task.croner.log`），由执行主机经 logback-es 异步写入。
 - **Redis**：全局限速、缓存。
 - **RabbitMQ**：uw-task 客户端的队列任务通道（中心本身不直连 MQ）。
@@ -39,6 +39,7 @@ uw.task.center
 │   │   ├── host/                  # 主机管理
 │   │   ├── croner/                # 定时任务配置/报表/日志
 │   │   ├── runner/                # 队列任务配置/报表/日志
+│   │   ├── delay/                 # 延迟任务配置/报表/日志（目录名 delay，表名 task_delayer_*）
 │   │   ├── alert/                 # 告警信息/通知/联系人
 │   │   └── log/                   # 操作日志/数据历史
 │   └── open/EnumController        # 枚举导出（debug/dev）
@@ -58,9 +59,11 @@ uw.task.center
 |---|---|
 | `task_croner_info` | 定时任务配置（cron、运行目标、告警阈值、联系人） |
 | `task_runner_info` | 队列任务配置（并发、限速、重试、告警阈值、联系人） |
-| `task_host_info` | 任务执行主机注册信息与累计运行指标 |
+| `task_delayer_info` | 延迟任务配置（执行并发、poll 节奏、限速、重试、告警阈值、联系人） |
+| `task_host_info` | 任务执行主机注册信息与累计运行指标（含 croner/runner/delayer 三类统计） |
 | `task_croner_stats` | 定时任务运行统计明细（按日分表） |
 | `task_runner_stats` | 队列任务运行统计明细（按日分表） |
+| `task_delayer_stats` | 延迟任务运行统计明细（按日分表） |
 | `task_alert_info` | 告警事件记录（标题、正文、触发时间） |
 | `task_alert_notify` | 告警通知记录（待发送/已发送） |
 | `task_alert_contact` | 告警联系人（邮箱、钉钉 notifyUrl 等） |
@@ -110,12 +113,14 @@ java -jar target/uw-task-center-<version>.jar
 
 | 方法 | 路径 | 说明 |
 |---|---|---|
-| POST | `/host/report` | 主机状态上报：更新 JVM/线程指标与累计统计、写入分表统计明细、触发告警判定，返回主机 id/状态 |
+| POST | `/host/report` | 主机状态上报：更新 JVM/线程指标与三类任务（croner/runner/delayer）累计统计、写入分表统计明细、触发告警判定，返回主机 id/状态 |
 | GET | `/croner/list` | 拉取定时任务配置（按 runTarget/taskProject 前缀/增量时间过滤） |
 | GET | `/runner/list` | 拉取队列任务配置（同上） |
+| GET | `/delayer/list` | 拉取延迟任务配置（同上） |
 | PUT | `/croner/tick` | 心跳：更新定时任务下次执行时间 |
 | POST | `/croner/init` | 首次注册定时任务默认配置（taskClass+taskParam+runTarget 幂等） |
 | POST | `/runner/init` | 首次注册队列任务默认配置（taskClass+taskTag+runTarget 幂等） |
+| POST | `/delayer/init` | 首次注册延迟任务默认配置（taskClass+taskTag+runTarget 幂等） |
 | POST | `/contact/init` | 上传任务默认联系人信息 |
 
 ## 告警机制
@@ -128,6 +133,7 @@ java -jar target/uw-task-center-<version>.jar
 | `queueTimeout` / `waitTimeout` / `runTimeout` | 排队/限速等待/运行 平均耗时超限（ms） |
 | `queueSize` | 队列堆积超限 |
 | `cronerTimeOut` | 定时任务超过计划时间 5 分钟仍未执行 |
+| `delayOvertime` | 延迟任务（`task_type=delay`）实际执行晚于 runAt 的平均超时（ms）；延迟任务另判定 `failRate` / `failProgramRate` / `failPartnerRate` / `runTimeout` |
 
 告警生成 → 落库 `task_alert_info` / `task_alert_notify` → `AlertNotifyScanCroner` 每 3 分钟扫描合并，经钉钉/notifyUrl 推送。
 
@@ -136,6 +142,8 @@ java -jar target/uw-task-center-<version>.jar
 # uw-task 客户端框架使用文档
 
 > 以下内容面向**业务应用开发者**：如何在应用中引入 uw-task 客户端、编写定时/队列任务。这部分配置发生在**执行主机**（业务应用）一侧，不是 uw-task-center 服务端的配置。
+>
+> ⚠️ 本节为历史简版。完整、最新的客户端文档（含延迟任务 TaskDelayer、限速常量全表、TaskFactory 全部入口）见 uw-task 包自带文档：[`backend/uw-base/uw-task/README.md`](../../uw-base/uw-task/README.md)。
 
 ## 简介
 
@@ -353,6 +361,69 @@ public class DemoTask extends TaskRunner<DemoTaskParam, String> {
 	}
 }
 
+```
+
+## 延迟任务配置（TaskDelayer）
+
+延迟任务（TaskDelayer）是与 TaskCroner/TaskRunner 对等的第三种任务类型，到点后触发执行，基于 **Redis zset 多实例竞争 poll** 实现（不依赖 RabbitMQ、无队头阻塞、长延时不阻塞短延时、重启不丢存量）。适用于订单超时关闭、定时提醒、重试回调等"X 时间后执行"的场景。
+
+```
+@Component
+public class DemoDelayTask extends TaskDelayer<DemoTaskParam, Void> {
+
+	/**
+	 * 运行延迟任务。
+	 **/
+	@Override
+	public void run(TaskData<DemoTaskParam, Void> task) throws TaskException {
+		logger.info("demo delay task: {}", task.getTaskParam().getId());
+	}
+
+	/**
+	 * 初始化延迟任务配置。
+	 * 在没有服务端配置的时候，默认使用此配置。
+	 **/
+	@Override
+	public TaskDelayerConfig initConfig() {
+		TaskDelayerConfig config = new TaskDelayerConfig();
+		config.setTaskName("测试延迟任务");
+		config.setTaskDesc("这是一个测试延迟任务");
+		//执行并发数（虚拟线程+Semaphore）
+		config.setConsumerNum(5);
+		//poll间隔秒数，命中连续poll、空才sleep
+		config.setPollInterval(3);
+		//单次poll最大条数
+		config.setPrefetchNum(50);
+		//合作方异常重试次数
+		config.setRetryTimesByPartner(3);
+		//总失败率百分比数值
+		config.setAlertFailRate(10);
+		//运行超时ms数
+		config.setAlertRunTimeout(1000);
+		//延迟超时ms数（实际执行晚于runAt，Delayer特有）
+		config.setAlertDelayOvertime(5000);
+		return config;
+	}
+
+	/**
+	 * 初始化联系人信息。
+	 * 用于在服务器端设置默认的报警通知信息。
+	 */
+	@Override
+	public TaskContact initContact() {
+		return new TaskContact("开发人员姓名", "手机号码", "邮箱地址", "微信", "im", "notifyUrl", "备注");
+	}
+}
+```
+
+投递延迟任务使用 `TaskFactory.submitDelay(taskData)`，`taskDelay` 为延迟毫秒数（框架据此计算 zset 到期 score = `queueDate + taskDelay`）：
+
+```
+TaskData<DemoTaskParam, Void> taskData = TaskData.<DemoTaskParam, Void>builder(DemoDelayTask.class)
+		.taskParam(new DemoTaskParam(1))
+		.taskDelay(5000)   //5秒后执行
+		.build();
+taskFactory.submitDelay(taskData);
 ```
 
 ## 任务内异常处理
@@ -777,6 +848,5 @@ uw-task-center 大量使用 `uw.dao.DaoManager`（`dao.load` / `dao.queryForObje
 是不是不看文档？限速类型设定为“进程内限速”了？这样所有的任务会共用一个限速器，不卡死你才怪。认真阅读文档，选择合理的限速类型！
  
  **关于uw-task的延时队列任务**
- 当前uw-task的延时队列任务通过死信队列实现，所以存在长延时任务会阻塞短延时任务问题，需要谨慎使用。
- 一般情况下，并不推荐使用mq的延时队列任务，这不是一个节省资源的方案。
- 小负载情况可以直接轮询数据库；大负载情况可使用uw-cache:GlobalSortedSet，均可有效降低资源消耗。
+ uw-task 现提供专用的延迟任务类型 TaskDelayer（基于 Redis zset，到期即取即执行，无队头阻塞、重启不丢存量），推荐优先使用 `TaskFactory.submitDelay()` 投递延迟任务（详见 uw-task 客户端 README 的「延迟任务（TaskDelayer）」章节）。
+ 队列任务（TaskRunner）的 MQ 延时（delayType=ON，基于 RabbitMQ 死信）仍保留兼容，但存在长延时阻塞短延时问题，仅建议短延时（≤60秒）且量小的场景使用。延迟任务请用 TaskDelayer，小负载也可直接轮询数据库，均可有效降低资源消耗。

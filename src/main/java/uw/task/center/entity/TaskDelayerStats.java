@@ -12,14 +12,14 @@ import java.io.Serializable;
 
 
 /**
- * TaskRunnerStats实体类
- * 队列任务统计信息
+ * TaskDelayerStats实体类
+ * 延迟任务统计信息
  *
  * @author axeon
  */
-@TableMeta(tableName="task_runner_stats",tableType="table")
-@Schema(title = "队列任务统计信息", description = "队列任务统计信息")
-public class TaskRunnerStats implements DataEntity,Serializable{
+@TableMeta(tableName="task_delayer_stats",tableType="table")
+@Schema(title = "延迟任务统计信息", description = "延迟任务统计信息")
+public class TaskDelayerStats implements DataEntity,Serializable{
 
 
     /**
@@ -51,10 +51,10 @@ public class TaskRunnerStats implements DataEntity,Serializable{
     private int numFailProgram;
 
     /**
-     * 配置错误计数
+     * 配置错误计数(连续限速超限放弃)
      */
     @ColumnMeta(columnName="num_fail_config", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "配置错误计数", description = "配置错误计数", maxLength=10, nullable=true )
+    @Schema(title = "配置错误计数(连续限速超限放弃)", description = "配置错误计数(连续限速超限放弃)", maxLength=10, nullable=true )
     private int numFailConfig;
 
     /**
@@ -72,38 +72,31 @@ public class TaskRunnerStats implements DataEntity,Serializable{
     private int numFailPartner;
 
     /**
-     * 队列等待时间
-     */
-    @ColumnMeta(columnName="time_wait_queue", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "队列等待时间", description = "队列等待时间", maxLength=10, nullable=true )
-    private int timeWaitQueue;
-
-    /**
-     * 超时等待时间
+     * 实际延迟等待(runAt到consumeDate毫秒)
      */
     @ColumnMeta(columnName="time_wait_delay", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "超时等待时间", description = "超时等待时间", maxLength=10, nullable=true )
+    @Schema(title = "实际延迟等待(runAt到consumeDate毫秒)", description = "实际延迟等待(runAt到consumeDate毫秒)", maxLength=10, nullable=true )
     private int timeWaitDelay;
 
     /**
-     * 运行时间
+     * 运行时间(毫秒)
      */
     @ColumnMeta(columnName="time_run", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "运行时间", description = "运行时间", maxLength=10, nullable=true )
+    @Schema(title = "运行时间(毫秒)", description = "运行时间(毫秒)", maxLength=10, nullable=true )
     private int timeRun;
 
     /**
-     * 队列长度
+     * 队列积压消息数
      */
     @ColumnMeta(columnName="queue_size", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "队列长度", description = "队列长度", maxLength=10, nullable=true )
+    @Schema(title = "队列积压消息数", description = "队列积压消息数", maxLength=10, nullable=true )
     private int queueSize;
 
     /**
-     * 消费者数量
+     * 执行线程数
      */
     @ColumnMeta(columnName="consumer_num", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "消费者数量", description = "消费者数量", maxLength=10, nullable=true )
+    @Schema(title = "执行线程数", description = "执行线程数", maxLength=10, nullable=true )
     private int consumerNum;
 
     /**
@@ -128,7 +121,7 @@ public class TaskRunnerStats implements DataEntity,Serializable{
      */
     @Override
     public String ENTITY_TABLE(){
-        return "task_runner_stats";
+        return "task_delayer_stats";
     }
 
     /**
@@ -136,7 +129,7 @@ public class TaskRunnerStats implements DataEntity,Serializable{
      */
     @Override
     public String ENTITY_NAME(){
-        return "队列任务统计信息";
+        return "延迟任务统计信息";
     }
 
     /**
@@ -193,7 +186,7 @@ public class TaskRunnerStats implements DataEntity,Serializable{
     }
 
     /**
-     * 获取配置错误计数。
+     * 获取配置错误计数(连续限速超限放弃)。
      */
     public int getNumFailConfig(){
         return this.numFailConfig;
@@ -214,35 +207,28 @@ public class TaskRunnerStats implements DataEntity,Serializable{
     }
 
     /**
-     * 获取队列等待时间。
-     */
-    public int getTimeWaitQueue(){
-        return this.timeWaitQueue;
-    }
-
-    /**
-     * 获取超时等待时间。
+     * 获取实际延迟等待(runAt到consumeDate毫秒)。
      */
     public int getTimeWaitDelay(){
         return this.timeWaitDelay;
     }
 
     /**
-     * 获取运行时间。
+     * 获取运行时间(毫秒)。
      */
     public int getTimeRun(){
         return this.timeRun;
     }
 
     /**
-     * 获取队列长度。
+     * 获取队列积压消息数。
      */
     public int getQueueSize(){
         return this.queueSize;
     }
 
     /**
-     * 获取消费者数量。
+     * 获取执行线程数。
      */
     public int getConsumerNum(){
         return this.consumerNum;
@@ -267,7 +253,7 @@ public class TaskRunnerStats implements DataEntity,Serializable{
     /**
      *  设置id链式调用。
      */
-    public TaskRunnerStats id(long id){
+    public TaskDelayerStats id(long id){
         setId(id);
         return this;
     }
@@ -283,7 +269,7 @@ public class TaskRunnerStats implements DataEntity,Serializable{
     /**
      *  设置任务配置id链式调用。
      */
-    public TaskRunnerStats taskId(long taskId){
+    public TaskDelayerStats taskId(long taskId){
         setTaskId(taskId);
         return this;
     }
@@ -299,7 +285,7 @@ public class TaskRunnerStats implements DataEntity,Serializable{
     /**
      *  设置全部执行计数链式调用。
      */
-    public TaskRunnerStats numAll(int numAll){
+    public TaskDelayerStats numAll(int numAll){
         setNumAll(numAll);
         return this;
     }
@@ -315,13 +301,13 @@ public class TaskRunnerStats implements DataEntity,Serializable{
     /**
      *  设置程序错误计数链式调用。
      */
-    public TaskRunnerStats numFailProgram(int numFailProgram){
+    public TaskDelayerStats numFailProgram(int numFailProgram){
         setNumFailProgram(numFailProgram);
         return this;
     }
 
     /**
-     * 设置配置错误计数。
+     * 设置配置错误计数(连续限速超限放弃)。
      */
     public void setNumFailConfig(int numFailConfig){
         _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "numFailConfig", this.numFailConfig, numFailConfig, !_IS_LOADED );
@@ -329,9 +315,9 @@ public class TaskRunnerStats implements DataEntity,Serializable{
     }
 
     /**
-     *  设置配置错误计数链式调用。
+     *  设置配置错误计数(连续限速超限放弃)链式调用。
      */
-    public TaskRunnerStats numFailConfig(int numFailConfig){
+    public TaskDelayerStats numFailConfig(int numFailConfig){
         setNumFailConfig(numFailConfig);
         return this;
     }
@@ -347,7 +333,7 @@ public class TaskRunnerStats implements DataEntity,Serializable{
     /**
      *  设置数据错误计数链式调用。
      */
-    public TaskRunnerStats numFailData(int numFailData){
+    public TaskDelayerStats numFailData(int numFailData){
         setNumFailData(numFailData);
         return this;
     }
@@ -363,29 +349,13 @@ public class TaskRunnerStats implements DataEntity,Serializable{
     /**
      *  设置对方错误计数链式调用。
      */
-    public TaskRunnerStats numFailPartner(int numFailPartner){
+    public TaskDelayerStats numFailPartner(int numFailPartner){
         setNumFailPartner(numFailPartner);
         return this;
     }
 
     /**
-     * 设置队列等待时间。
-     */
-    public void setTimeWaitQueue(int timeWaitQueue){
-        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "timeWaitQueue", this.timeWaitQueue, timeWaitQueue, !_IS_LOADED );
-        this.timeWaitQueue = timeWaitQueue;
-    }
-
-    /**
-     *  设置队列等待时间链式调用。
-     */
-    public TaskRunnerStats timeWaitQueue(int timeWaitQueue){
-        setTimeWaitQueue(timeWaitQueue);
-        return this;
-    }
-
-    /**
-     * 设置超时等待时间。
+     * 设置实际延迟等待(runAt到consumeDate毫秒)。
      */
     public void setTimeWaitDelay(int timeWaitDelay){
         _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "timeWaitDelay", this.timeWaitDelay, timeWaitDelay, !_IS_LOADED );
@@ -393,15 +363,15 @@ public class TaskRunnerStats implements DataEntity,Serializable{
     }
 
     /**
-     *  设置超时等待时间链式调用。
+     *  设置实际延迟等待(runAt到consumeDate毫秒)链式调用。
      */
-    public TaskRunnerStats timeWaitDelay(int timeWaitDelay){
+    public TaskDelayerStats timeWaitDelay(int timeWaitDelay){
         setTimeWaitDelay(timeWaitDelay);
         return this;
     }
 
     /**
-     * 设置运行时间。
+     * 设置运行时间(毫秒)。
      */
     public void setTimeRun(int timeRun){
         _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "timeRun", this.timeRun, timeRun, !_IS_LOADED );
@@ -409,15 +379,15 @@ public class TaskRunnerStats implements DataEntity,Serializable{
     }
 
     /**
-     *  设置运行时间链式调用。
+     *  设置运行时间(毫秒)链式调用。
      */
-    public TaskRunnerStats timeRun(int timeRun){
+    public TaskDelayerStats timeRun(int timeRun){
         setTimeRun(timeRun);
         return this;
     }
 
     /**
-     * 设置队列长度。
+     * 设置队列积压消息数。
      */
     public void setQueueSize(int queueSize){
         _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "queueSize", this.queueSize, queueSize, !_IS_LOADED );
@@ -425,15 +395,15 @@ public class TaskRunnerStats implements DataEntity,Serializable{
     }
 
     /**
-     *  设置队列长度链式调用。
+     *  设置队列积压消息数链式调用。
      */
-    public TaskRunnerStats queueSize(int queueSize){
+    public TaskDelayerStats queueSize(int queueSize){
         setQueueSize(queueSize);
         return this;
     }
 
     /**
-     * 设置消费者数量。
+     * 设置执行线程数。
      */
     public void setConsumerNum(int consumerNum){
         _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "consumerNum", this.consumerNum, consumerNum, !_IS_LOADED );
@@ -441,9 +411,9 @@ public class TaskRunnerStats implements DataEntity,Serializable{
     }
 
     /**
-     *  设置消费者数量链式调用。
+     *  设置执行线程数链式调用。
      */
-    public TaskRunnerStats consumerNum(int consumerNum){
+    public TaskDelayerStats consumerNum(int consumerNum){
         setConsumerNum(consumerNum);
         return this;
     }
@@ -459,7 +429,7 @@ public class TaskRunnerStats implements DataEntity,Serializable{
     /**
      *  设置创建时间链式调用。
      */
-    public TaskRunnerStats createDate(java.util.Date createDate){
+    public TaskDelayerStats createDate(java.util.Date createDate){
         setCreateDate(createDate);
         return this;
     }

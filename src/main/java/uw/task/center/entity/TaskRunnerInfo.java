@@ -1,5 +1,6 @@
 package uw.task.center.entity;
 
+import com.fasterxml.jackson.annotation.JsonRawValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import uw.common.util.JsonUtils;
 import uw.dao.DataEntity;
@@ -52,8 +53,8 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
     /**
      * 任务所有人
      */
-    @ColumnMeta(columnName="task_owner", dataType="String", dataSize=200, nullable=true)
-    @Schema(title = "任务所有人", description = "任务所有人", maxLength=200, nullable=true )
+    @ColumnMeta(columnName="task_owner", dataType="String", dataSize=500, nullable=true)
+    @Schema(title = "任务所有人", description = "任务所有人", maxLength=500, nullable=true )
     private String taskOwner;
 
     /**

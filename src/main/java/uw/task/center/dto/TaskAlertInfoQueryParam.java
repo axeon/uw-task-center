@@ -5,6 +5,7 @@ import uw.common.dto.PageQueryParam;
 import uw.dao.annotation.QueryMeta;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -13,19 +14,21 @@ import java.util.Map;
 @Schema(title = "报警信息列表查询参数", description = "报警信息列表查询参数")
 public class TaskAlertInfoQueryParam extends PageQueryParam{
 
-    private static final Map<String, String> ALLOWED_SORT_PROPERTY = Map.ofEntries(
-        Map.entry("id", "id"),
-        Map.entry("taskType", "task_type"),
-        Map.entry("taskId", "task_id"),
-        Map.entry("alertTitle", "alert_title"),
-        Map.entry("createDate", "create_date"),
-        Map.entry("state", "state")
-);
 
     /**
-     * 允许的排序属性。
+     * 允许排序的属性。
+     * key:排序名 value:排序字段
      *
-     * @return
+     */
+    private static final Map<String, String> ALLOWED_SORT_PROPERTY = Map.ofEntries(
+        Map.entry( "id", "id" ),
+        Map.entry( "taskId", "task_id" ),
+        Map.entry( "createDate", "create_date" )
+        );
+
+    /**
+     * 获取允许排序的属性。
+     *
      */
     @Override
     public Map<String, String> ALLOWED_SORT_PROPERTY() {

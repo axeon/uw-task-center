@@ -5,6 +5,7 @@ import uw.common.dto.PageQueryParam;
 import uw.dao.annotation.QueryMeta;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -13,23 +14,21 @@ import java.util.Map;
 @Schema(title = "定时任务统计信息列表查询参数", description = "定时任务统计信息列表查询参数")
 public class TaskCronerStatsQueryParam extends PageQueryParam{
 
-    private static final Map<String, String> ALLOWED_SORT_PROPERTY = Map.ofEntries(
-        Map.entry("id", "id"),
-        Map.entry("taskId", "task_id"),
-        Map.entry("numAll", "num_all"),
-        Map.entry("numFailProgram", "num_fail_program"),
-        Map.entry("numFailConfig", "num_fail_config"),
-        Map.entry("numFailData", "num_fail_data"),
-        Map.entry("numFailPartner", "num_fail_partner"),
-        Map.entry("timeWait", "time_wait"),
-        Map.entry("timeRun", "time_run"),
-        Map.entry("createDate", "create_date")
-);
 
     /**
-     * 允许的排序属性。
+     * 允许排序的属性。
+     * key:排序名 value:排序字段
      *
-     * @return
+     */
+    private static final Map<String, String> ALLOWED_SORT_PROPERTY = Map.ofEntries(
+        Map.entry( "id", "id" ),
+        Map.entry( "taskId", "task_id" ),
+        Map.entry( "createDate", "create_date" )
+        );
+
+    /**
+     * 获取允许排序的属性。
+     *
      */
     @Override
     public Map<String, String> ALLOWED_SORT_PROPERTY() {

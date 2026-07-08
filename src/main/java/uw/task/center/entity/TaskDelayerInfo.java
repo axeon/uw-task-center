@@ -12,14 +12,14 @@ import java.io.Serializable;
 
 
 /**
- * TaskCronerInfo实体类
- * 定时任务配置
+ * TaskDelayerInfo实体类
+ * 延迟任务配置
  *
  * @author axeon
  */
-@TableMeta(tableName="task_croner_info",tableType="table")
-@Schema(title = "定时任务配置", description = "定时任务配置")
-public class TaskCronerInfo implements DataEntity,Serializable{
+@TableMeta(tableName="task_delayer_info",tableType="table")
+@Schema(title = "延迟任务配置", description = "延迟任务配置")
+public class TaskDelayerInfo implements DataEntity,Serializable{
 
 
     /**
@@ -51,13 +51,6 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     private String taskClass;
 
     /**
-     * 任务参数
-     */
-    @ColumnMeta(columnName="task_param", dataType="String", dataSize=100, nullable=true)
-    @Schema(title = "任务参数", description = "任务参数", maxLength=100, nullable=true )
-    private String taskParam;
-
-    /**
      * 任务所有人
      */
     @ColumnMeta(columnName="task_owner", dataType="String", dataSize=500, nullable=true)
@@ -65,18 +58,11 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     private String taskOwner;
 
     /**
-     * cron表达式
+     * 运行标签
      */
-    @ColumnMeta(columnName="task_cron", dataType="String", dataSize=100, nullable=true)
-    @Schema(title = "cron表达式", description = "cron表达式", maxLength=100, nullable=true )
-    private String taskCron;
-
-    /**
-     * 运行类型
-     */
-    @ColumnMeta(columnName="run_type", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "运行类型", description = "运行类型", maxLength=10, nullable=true )
-    private int runType;
+    @ColumnMeta(columnName="task_tag", dataType="String", dataSize=100, nullable=true)
+    @Schema(title = "运行标签", description = "运行标签", maxLength=100, nullable=true )
+    private String taskTag;
 
     /**
      * 运行目标
@@ -84,6 +70,76 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     @ColumnMeta(columnName="run_target", dataType="String", dataSize=100, nullable=true)
     @Schema(title = "运行目标", description = "运行目标", maxLength=100, nullable=true )
     private String runTarget;
+
+    /**
+     * 执行线程数
+     */
+    @ColumnMeta(columnName="consumer_num", dataType="int", dataSize=10, nullable=true)
+    @Schema(title = "执行线程数", description = "执行线程数", maxLength=10, nullable=true )
+    private int consumerNum;
+
+    /**
+     * poll间隔秒数
+     */
+    @ColumnMeta(columnName="poll_interval", dataType="long", dataSize=19, nullable=true)
+    @Schema(title = "poll间隔数", description = "poll间隔数", maxLength=19, nullable=true )
+    private long pollInterval;
+
+    /**
+     * 单次poll最大条数
+     */
+    @ColumnMeta(columnName="prefetch_num", dataType="int", dataSize=10, nullable=true)
+    @Schema(title = "单次poll最大条数", description = "单次poll最大条数", maxLength=10, nullable=true )
+    private int prefetchNum;
+
+    /**
+     * 限速类型
+     */
+    @ColumnMeta(columnName="rate_limit_type", dataType="int", dataSize=10, nullable=true)
+    @Schema(title = "限速类型", description = "限速类型", maxLength=10, nullable=true )
+    private int rateLimitType;
+
+    /**
+     * 限速窗口配额上限
+     */
+    @ColumnMeta(columnName="rate_limit_value", dataType="int", dataSize=10, nullable=true)
+    @Schema(title = "限速窗口配额上限", description = "限速窗口配额上限", maxLength=10, nullable=true )
+    private int rateLimitValue;
+
+    /**
+     * 限速窗口长度(秒)
+     */
+    @ColumnMeta(columnName="rate_limit_time", dataType="int", dataSize=10, nullable=true)
+    @Schema(title = "限速窗口长度(秒)", description = "限速窗口长度(秒)", maxLength=10, nullable=true )
+    private int rateLimitTime;
+
+    /**
+     * 限速不足时等待秒数
+     */
+    @ColumnMeta(columnName="rate_limit_wait", dataType="int", dataSize=10, nullable=true)
+    @Schema(title = "限速不足时等待秒数", description = "限速不足时等待秒数", maxLength=10, nullable=true )
+    private int rateLimitWait;
+
+    /**
+     * 连续限速超限放弃次数上限(防死循环)
+     */
+    @ColumnMeta(columnName="retry_times_by_overrated", dataType="int", dataSize=10, nullable=true)
+    @Schema(title = "连续限速超限放弃次数上限(防死循环)", description = "连续限速超限放弃次数上限(防死循环)", maxLength=10, nullable=true )
+    private int retryTimesByOverrated;
+
+    /**
+     * 合作方异常重试次数
+     */
+    @ColumnMeta(columnName="retry_times_by_partner", dataType="int", dataSize=10, nullable=true)
+    @Schema(title = "合作方异常重试次数", description = "合作方异常重试次数", maxLength=10, nullable=true )
+    private int retryTimesByPartner;
+
+    /**
+     * 程序异常重试次数
+     */
+    @ColumnMeta(columnName="retry_times_by_program", dataType="int", dataSize=10, nullable=true)
+    @Schema(title = "程序异常重试次数", description = "程序异常重试次数", maxLength=10, nullable=true )
+    private int retryTimesByProgram;
 
     /**
      * 日志类型
@@ -98,13 +154,6 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     @ColumnMeta(columnName="log_limit_size", dataType="int", dataSize=10, nullable=true)
     @Schema(title = "日志长度限制", description = "日志长度限制", maxLength=10, nullable=true )
     private int logLimitSize;
-
-    /**
-     * 下次执行时间
-     */
-    @ColumnMeta(columnName="next_run_date", dataType="java.util.Date", dataSize=19, nullable=true)
-    @Schema(title = "下次执行时间", description = "下次执行时间", maxLength=19, nullable=true )
-    private java.util.Date nextRunDate;
 
     /**
      * 最后统计时间
@@ -149,13 +198,6 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     private int alertFailPartnerRate;
 
     /**
-     * 数据失败率
-     */
-    @ColumnMeta(columnName="alert_fail_data_rate", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "数据失败率", description = "数据失败率", maxLength=10, nullable=true )
-    private int alertFailDataRate;
-
-    /**
      * 程序失败率
      */
     @ColumnMeta(columnName="alert_fail_program_rate", dataType="int", dataSize=10, nullable=true)
@@ -163,18 +205,18 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     private int alertFailProgramRate;
 
     /**
-     * 等待超时
-     */
-    @ColumnMeta(columnName="alert_wait_timeout", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "等待超时", description = "等待超时", maxLength=10, nullable=true )
-    private int alertWaitTimeout;
-
-    /**
-     * 运行超时
+     * 运行超时(毫秒)
      */
     @ColumnMeta(columnName="alert_run_timeout", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "运行超时", description = "运行超时", maxLength=10, nullable=true )
+    @Schema(title = "运行超时(毫秒)", description = "运行超时(毫秒)", maxLength=10, nullable=true )
     private int alertRunTimeout;
+
+    /**
+     * 延迟超时(实际执行晚于runAt的平均毫秒)
+     */
+    @ColumnMeta(columnName="alert_delay_overtime", dataType="int", dataSize=10, nullable=true)
+    @Schema(title = "延迟超时(实际执行晚于runAt的平均毫秒)", description = "延迟超时(实际执行晚于runAt的平均毫秒)", maxLength=10, nullable=true )
+    private int alertDelayOvertime;
 
     /**
      * 我方联系信息
@@ -191,17 +233,17 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     private String taskLinkMch;
 
     /**
-     * 创建时间
+     * 创建日期
      */
     @ColumnMeta(columnName="create_date", dataType="java.util.Date", dataSize=23, nullable=true)
-    @Schema(title = "创建时间", description = "创建时间", maxLength=23, nullable=true )
+    @Schema(title = "创建日期", description = "创建日期", maxLength=23, nullable=true )
     private java.util.Date createDate;
 
     /**
-     * 最后修改时间
+     * 最后修改日期
      */
     @ColumnMeta(columnName="modify_date", dataType="java.util.Date", dataSize=23, nullable=true)
-    @Schema(title = "最后修改时间", description = "最后修改时间", maxLength=23, nullable=true )
+    @Schema(title = "最后修改日期", description = "最后修改日期", maxLength=23, nullable=true )
     private java.util.Date modifyDate;
 
     /**
@@ -226,7 +268,7 @@ public class TaskCronerInfo implements DataEntity,Serializable{
      */
     @Override
     public String ENTITY_TABLE(){
-        return "task_croner_info";
+        return "task_delayer_info";
     }
 
     /**
@@ -234,7 +276,7 @@ public class TaskCronerInfo implements DataEntity,Serializable{
      */
     @Override
     public String ENTITY_NAME(){
-        return "定时任务配置";
+        return "延迟任务配置";
     }
 
     /**
@@ -291,13 +333,6 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     }
 
     /**
-     * 获取任务参数。
-     */
-    public String getTaskParam(){
-        return this.taskParam;
-    }
-
-    /**
      * 获取任务所有人。
      */
     public String getTaskOwner(){
@@ -305,17 +340,10 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     }
 
     /**
-     * 获取cron表达式。
+     * 获取运行标签。
      */
-    public String getTaskCron(){
-        return this.taskCron;
-    }
-
-    /**
-     * 获取运行类型。
-     */
-    public int getRunType(){
-        return this.runType;
+    public String getTaskTag(){
+        return this.taskTag;
     }
 
     /**
@@ -323,6 +351,76 @@ public class TaskCronerInfo implements DataEntity,Serializable{
      */
     public String getRunTarget(){
         return this.runTarget;
+    }
+
+    /**
+     * 获取执行线程数。
+     */
+    public int getConsumerNum(){
+        return this.consumerNum;
+    }
+
+    /**
+     * 获取poll间隔秒数。
+     */
+    public long getPollInterval(){
+        return this.pollInterval;
+    }
+
+    /**
+     * 获取单次poll最大条数。
+     */
+    public int getPrefetchNum(){
+        return this.prefetchNum;
+    }
+
+    /**
+     * 获取限速类型。
+     */
+    public int getRateLimitType(){
+        return this.rateLimitType;
+    }
+
+    /**
+     * 获取限速窗口配额上限。
+     */
+    public int getRateLimitValue(){
+        return this.rateLimitValue;
+    }
+
+    /**
+     * 获取限速窗口长度(秒)。
+     */
+    public int getRateLimitTime(){
+        return this.rateLimitTime;
+    }
+
+    /**
+     * 获取限速不足时等待秒数。
+     */
+    public int getRateLimitWait(){
+        return this.rateLimitWait;
+    }
+
+    /**
+     * 获取连续限速超限放弃次数上限(防死循环)。
+     */
+    public int getRetryTimesByOverrated(){
+        return this.retryTimesByOverrated;
+    }
+
+    /**
+     * 获取合作方异常重试次数。
+     */
+    public int getRetryTimesByPartner(){
+        return this.retryTimesByPartner;
+    }
+
+    /**
+     * 获取程序异常重试次数。
+     */
+    public int getRetryTimesByProgram(){
+        return this.retryTimesByProgram;
     }
 
     /**
@@ -337,13 +435,6 @@ public class TaskCronerInfo implements DataEntity,Serializable{
      */
     public int getLogLimitSize(){
         return this.logLimitSize;
-    }
-
-    /**
-     * 获取下次执行时间。
-     */
-    public java.util.Date getNextRunDate(){
-        return this.nextRunDate;
     }
 
     /**
@@ -389,13 +480,6 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     }
 
     /**
-     * 获取数据失败率。
-     */
-    public int getAlertFailDataRate(){
-        return this.alertFailDataRate;
-    }
-
-    /**
      * 获取程序失败率。
      */
     public int getAlertFailProgramRate(){
@@ -403,17 +487,17 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     }
 
     /**
-     * 获取等待超时。
-     */
-    public int getAlertWaitTimeout(){
-        return this.alertWaitTimeout;
-    }
-
-    /**
-     * 获取运行超时。
+     * 获取运行超时(毫秒)。
      */
     public int getAlertRunTimeout(){
         return this.alertRunTimeout;
+    }
+
+    /**
+     * 获取延迟超时(实际执行晚于runAt的平均毫秒)。
+     */
+    public int getAlertDelayOvertime(){
+        return this.alertDelayOvertime;
     }
 
     /**
@@ -431,14 +515,14 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     }
 
     /**
-     * 获取创建时间。
+     * 获取创建日期。
      */
     public java.util.Date getCreateDate(){
         return this.createDate;
     }
 
     /**
-     * 获取最后修改时间。
+     * 获取最后修改日期。
      */
     public java.util.Date getModifyDate(){
         return this.modifyDate;
@@ -463,7 +547,7 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     /**
      *  设置id链式调用。
      */
-    public TaskCronerInfo id(long id){
+    public TaskDelayerInfo id(long id){
         setId(id);
         return this;
     }
@@ -479,7 +563,7 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     /**
      *  设置任务名称链式调用。
      */
-    public TaskCronerInfo taskName(String taskName){
+    public TaskDelayerInfo taskName(String taskName){
         setTaskName(taskName);
         return this;
     }
@@ -495,7 +579,7 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     /**
      *  设置任务描述链式调用。
      */
-    public TaskCronerInfo taskDesc(String taskDesc){
+    public TaskDelayerInfo taskDesc(String taskDesc){
         setTaskDesc(taskDesc);
         return this;
     }
@@ -511,24 +595,8 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     /**
      *  设置执行类信息链式调用。
      */
-    public TaskCronerInfo taskClass(String taskClass){
+    public TaskDelayerInfo taskClass(String taskClass){
         setTaskClass(taskClass);
-        return this;
-    }
-
-    /**
-     * 设置任务参数。
-     */
-    public void setTaskParam(String taskParam){
-        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "taskParam", this.taskParam, taskParam, !_IS_LOADED );
-        this.taskParam = taskParam;
-    }
-
-    /**
-     *  设置任务参数链式调用。
-     */
-    public TaskCronerInfo taskParam(String taskParam){
-        setTaskParam(taskParam);
         return this;
     }
 
@@ -543,40 +611,24 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     /**
      *  设置任务所有人链式调用。
      */
-    public TaskCronerInfo taskOwner(String taskOwner){
+    public TaskDelayerInfo taskOwner(String taskOwner){
         setTaskOwner(taskOwner);
         return this;
     }
 
     /**
-     * 设置cron表达式。
+     * 设置运行标签。
      */
-    public void setTaskCron(String taskCron){
-        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "taskCron", this.taskCron, taskCron, !_IS_LOADED );
-        this.taskCron = taskCron;
+    public void setTaskTag(String taskTag){
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "taskTag", this.taskTag, taskTag, !_IS_LOADED );
+        this.taskTag = taskTag;
     }
 
     /**
-     *  设置cron表达式链式调用。
+     *  设置运行标签链式调用。
      */
-    public TaskCronerInfo taskCron(String taskCron){
-        setTaskCron(taskCron);
-        return this;
-    }
-
-    /**
-     * 设置运行类型。
-     */
-    public void setRunType(int runType){
-        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "runType", this.runType, runType, !_IS_LOADED );
-        this.runType = runType;
-    }
-
-    /**
-     *  设置运行类型链式调用。
-     */
-    public TaskCronerInfo runType(int runType){
-        setRunType(runType);
+    public TaskDelayerInfo taskTag(String taskTag){
+        setTaskTag(taskTag);
         return this;
     }
 
@@ -591,8 +643,168 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     /**
      *  设置运行目标链式调用。
      */
-    public TaskCronerInfo runTarget(String runTarget){
+    public TaskDelayerInfo runTarget(String runTarget){
         setRunTarget(runTarget);
+        return this;
+    }
+
+    /**
+     * 设置执行线程数。
+     */
+    public void setConsumerNum(int consumerNum){
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "consumerNum", this.consumerNum, consumerNum, !_IS_LOADED );
+        this.consumerNum = consumerNum;
+    }
+
+    /**
+     *  设置执行线程数链式调用。
+     */
+    public TaskDelayerInfo consumerNum(int consumerNum){
+        setConsumerNum(consumerNum);
+        return this;
+    }
+
+    /**
+     * 设置poll间隔秒数。
+     */
+    public void setPollInterval(long pollInterval){
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "pollInterval", this.pollInterval, pollInterval, !_IS_LOADED );
+        this.pollInterval = pollInterval;
+    }
+
+    /**
+     *  设置poll间隔秒数链式调用。
+     */
+    public TaskDelayerInfo pollInterval(long pollInterval){
+        setPollInterval(pollInterval);
+        return this;
+    }
+
+    /**
+     * 设置单次poll最大条数。
+     */
+    public void setPrefetchNum(int prefetchNum){
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "prefetchNum", this.prefetchNum, prefetchNum, !_IS_LOADED );
+        this.prefetchNum = prefetchNum;
+    }
+
+    /**
+     *  设置单次poll最大条数链式调用。
+     */
+    public TaskDelayerInfo prefetchNum(int prefetchNum){
+        setPrefetchNum(prefetchNum);
+        return this;
+    }
+
+    /**
+     * 设置限速类型。
+     */
+    public void setRateLimitType(int rateLimitType){
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "rateLimitType", this.rateLimitType, rateLimitType, !_IS_LOADED );
+        this.rateLimitType = rateLimitType;
+    }
+
+    /**
+     *  设置限速类型链式调用。
+     */
+    public TaskDelayerInfo rateLimitType(int rateLimitType){
+        setRateLimitType(rateLimitType);
+        return this;
+    }
+
+    /**
+     * 设置限速窗口配额上限。
+     */
+    public void setRateLimitValue(int rateLimitValue){
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "rateLimitValue", this.rateLimitValue, rateLimitValue, !_IS_LOADED );
+        this.rateLimitValue = rateLimitValue;
+    }
+
+    /**
+     *  设置限速窗口配额上限链式调用。
+     */
+    public TaskDelayerInfo rateLimitValue(int rateLimitValue){
+        setRateLimitValue(rateLimitValue);
+        return this;
+    }
+
+    /**
+     * 设置限速窗口长度(秒)。
+     */
+    public void setRateLimitTime(int rateLimitTime){
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "rateLimitTime", this.rateLimitTime, rateLimitTime, !_IS_LOADED );
+        this.rateLimitTime = rateLimitTime;
+    }
+
+    /**
+     *  设置限速窗口长度(秒)链式调用。
+     */
+    public TaskDelayerInfo rateLimitTime(int rateLimitTime){
+        setRateLimitTime(rateLimitTime);
+        return this;
+    }
+
+    /**
+     * 设置限速不足时等待秒数。
+     */
+    public void setRateLimitWait(int rateLimitWait){
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "rateLimitWait", this.rateLimitWait, rateLimitWait, !_IS_LOADED );
+        this.rateLimitWait = rateLimitWait;
+    }
+
+    /**
+     *  设置限速不足时等待秒数链式调用。
+     */
+    public TaskDelayerInfo rateLimitWait(int rateLimitWait){
+        setRateLimitWait(rateLimitWait);
+        return this;
+    }
+
+    /**
+     * 设置连续限速超限放弃次数上限(防死循环)。
+     */
+    public void setRetryTimesByOverrated(int retryTimesByOverrated){
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "retryTimesByOverrated", this.retryTimesByOverrated, retryTimesByOverrated, !_IS_LOADED );
+        this.retryTimesByOverrated = retryTimesByOverrated;
+    }
+
+    /**
+     *  设置连续限速超限放弃次数上限(防死循环)链式调用。
+     */
+    public TaskDelayerInfo retryTimesByOverrated(int retryTimesByOverrated){
+        setRetryTimesByOverrated(retryTimesByOverrated);
+        return this;
+    }
+
+    /**
+     * 设置合作方异常重试次数。
+     */
+    public void setRetryTimesByPartner(int retryTimesByPartner){
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "retryTimesByPartner", this.retryTimesByPartner, retryTimesByPartner, !_IS_LOADED );
+        this.retryTimesByPartner = retryTimesByPartner;
+    }
+
+    /**
+     *  设置合作方异常重试次数链式调用。
+     */
+    public TaskDelayerInfo retryTimesByPartner(int retryTimesByPartner){
+        setRetryTimesByPartner(retryTimesByPartner);
+        return this;
+    }
+
+    /**
+     * 设置程序异常重试次数。
+     */
+    public void setRetryTimesByProgram(int retryTimesByProgram){
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "retryTimesByProgram", this.retryTimesByProgram, retryTimesByProgram, !_IS_LOADED );
+        this.retryTimesByProgram = retryTimesByProgram;
+    }
+
+    /**
+     *  设置程序异常重试次数链式调用。
+     */
+    public TaskDelayerInfo retryTimesByProgram(int retryTimesByProgram){
+        setRetryTimesByProgram(retryTimesByProgram);
         return this;
     }
 
@@ -607,7 +819,7 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     /**
      *  设置日志类型链式调用。
      */
-    public TaskCronerInfo logLevel(int logLevel){
+    public TaskDelayerInfo logLevel(int logLevel){
         setLogLevel(logLevel);
         return this;
     }
@@ -623,24 +835,8 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     /**
      *  设置日志长度限制链式调用。
      */
-    public TaskCronerInfo logLimitSize(int logLimitSize){
+    public TaskDelayerInfo logLimitSize(int logLimitSize){
         setLogLimitSize(logLimitSize);
-        return this;
-    }
-
-    /**
-     * 设置下次执行时间。
-     */
-    public void setNextRunDate(java.util.Date nextRunDate){
-        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "nextRunDate", this.nextRunDate, nextRunDate, !_IS_LOADED );
-        this.nextRunDate = nextRunDate;
-    }
-
-    /**
-     *  设置下次执行时间链式调用。
-     */
-    public TaskCronerInfo nextRunDate(java.util.Date nextRunDate){
-        setNextRunDate(nextRunDate);
         return this;
     }
 
@@ -655,7 +851,7 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     /**
      *  设置最后统计时间链式调用。
      */
-    public TaskCronerInfo statsDate(java.util.Date statsDate){
+    public TaskDelayerInfo statsDate(java.util.Date statsDate){
         setStatsDate(statsDate);
         return this;
     }
@@ -671,7 +867,7 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     /**
      *  设置统计运行次数链式调用。
      */
-    public TaskCronerInfo statsRunNum(int statsRunNum){
+    public TaskDelayerInfo statsRunNum(int statsRunNum){
         setStatsRunNum(statsRunNum);
         return this;
     }
@@ -687,7 +883,7 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     /**
      *  设置统计运行失败次数链式调用。
      */
-    public TaskCronerInfo statsFailNum(int statsFailNum){
+    public TaskDelayerInfo statsFailNum(int statsFailNum){
         setStatsFailNum(statsFailNum);
         return this;
     }
@@ -703,7 +899,7 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     /**
      *  设置统计总时间毫秒数链式调用。
      */
-    public TaskCronerInfo statsRunTime(long statsRunTime){
+    public TaskDelayerInfo statsRunTime(long statsRunTime){
         setStatsRunTime(statsRunTime);
         return this;
     }
@@ -719,7 +915,7 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     /**
      *  设置失败率链式调用。
      */
-    public TaskCronerInfo alertFailRate(int alertFailRate){
+    public TaskDelayerInfo alertFailRate(int alertFailRate){
         setAlertFailRate(alertFailRate);
         return this;
     }
@@ -735,24 +931,8 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     /**
      *  设置接口失败率链式调用。
      */
-    public TaskCronerInfo alertFailPartnerRate(int alertFailPartnerRate){
+    public TaskDelayerInfo alertFailPartnerRate(int alertFailPartnerRate){
         setAlertFailPartnerRate(alertFailPartnerRate);
-        return this;
-    }
-
-    /**
-     * 设置数据失败率。
-     */
-    public void setAlertFailDataRate(int alertFailDataRate){
-        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "alertFailDataRate", this.alertFailDataRate, alertFailDataRate, !_IS_LOADED );
-        this.alertFailDataRate = alertFailDataRate;
-    }
-
-    /**
-     *  设置数据失败率链式调用。
-     */
-    public TaskCronerInfo alertFailDataRate(int alertFailDataRate){
-        setAlertFailDataRate(alertFailDataRate);
         return this;
     }
 
@@ -767,29 +947,13 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     /**
      *  设置程序失败率链式调用。
      */
-    public TaskCronerInfo alertFailProgramRate(int alertFailProgramRate){
+    public TaskDelayerInfo alertFailProgramRate(int alertFailProgramRate){
         setAlertFailProgramRate(alertFailProgramRate);
         return this;
     }
 
     /**
-     * 设置等待超时。
-     */
-    public void setAlertWaitTimeout(int alertWaitTimeout){
-        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "alertWaitTimeout", this.alertWaitTimeout, alertWaitTimeout, !_IS_LOADED );
-        this.alertWaitTimeout = alertWaitTimeout;
-    }
-
-    /**
-     *  设置等待超时链式调用。
-     */
-    public TaskCronerInfo alertWaitTimeout(int alertWaitTimeout){
-        setAlertWaitTimeout(alertWaitTimeout);
-        return this;
-    }
-
-    /**
-     * 设置运行超时。
+     * 设置运行超时(毫秒)。
      */
     public void setAlertRunTimeout(int alertRunTimeout){
         _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "alertRunTimeout", this.alertRunTimeout, alertRunTimeout, !_IS_LOADED );
@@ -797,10 +961,26 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     }
 
     /**
-     *  设置运行超时链式调用。
+     *  设置运行超时(毫秒)链式调用。
      */
-    public TaskCronerInfo alertRunTimeout(int alertRunTimeout){
+    public TaskDelayerInfo alertRunTimeout(int alertRunTimeout){
         setAlertRunTimeout(alertRunTimeout);
+        return this;
+    }
+
+    /**
+     * 设置延迟超时(实际执行晚于runAt的平均毫秒)。
+     */
+    public void setAlertDelayOvertime(int alertDelayOvertime){
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "alertDelayOvertime", this.alertDelayOvertime, alertDelayOvertime, !_IS_LOADED );
+        this.alertDelayOvertime = alertDelayOvertime;
+    }
+
+    /**
+     *  设置延迟超时(实际执行晚于runAt的平均毫秒)链式调用。
+     */
+    public TaskDelayerInfo alertDelayOvertime(int alertDelayOvertime){
+        setAlertDelayOvertime(alertDelayOvertime);
         return this;
     }
 
@@ -815,7 +995,7 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     /**
      *  设置我方联系信息链式调用。
      */
-    public TaskCronerInfo taskLinkOur(String taskLinkOur){
+    public TaskDelayerInfo taskLinkOur(String taskLinkOur){
         setTaskLinkOur(taskLinkOur);
         return this;
     }
@@ -831,13 +1011,13 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     /**
      *  设置商户联系信息链式调用。
      */
-    public TaskCronerInfo taskLinkMch(String taskLinkMch){
+    public TaskDelayerInfo taskLinkMch(String taskLinkMch){
         setTaskLinkMch(taskLinkMch);
         return this;
     }
 
     /**
-     * 设置创建时间。
+     * 设置创建日期。
      */
     public void setCreateDate(java.util.Date createDate){
         _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "createDate", this.createDate, createDate, !_IS_LOADED );
@@ -845,15 +1025,15 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     }
 
     /**
-     *  设置创建时间链式调用。
+     *  设置创建日期链式调用。
      */
-    public TaskCronerInfo createDate(java.util.Date createDate){
+    public TaskDelayerInfo createDate(java.util.Date createDate){
         setCreateDate(createDate);
         return this;
     }
 
     /**
-     * 设置最后修改时间。
+     * 设置最后修改日期。
      */
     public void setModifyDate(java.util.Date modifyDate){
         _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "modifyDate", this.modifyDate, modifyDate, !_IS_LOADED );
@@ -861,9 +1041,9 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     }
 
     /**
-     *  设置最后修改时间链式调用。
+     *  设置最后修改日期链式调用。
      */
-    public TaskCronerInfo modifyDate(java.util.Date modifyDate){
+    public TaskDelayerInfo modifyDate(java.util.Date modifyDate){
         setModifyDate(modifyDate);
         return this;
     }
@@ -879,7 +1059,7 @@ public class TaskCronerInfo implements DataEntity,Serializable{
     /**
      *  设置状态1正常，0暂停，-1标记删除链式调用。
      */
-    public TaskCronerInfo state(int state){
+    public TaskDelayerInfo state(int state){
         setState(state);
         return this;
     }

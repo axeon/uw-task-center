@@ -44,10 +44,19 @@ public class TaskRunnerReportController {
     /**
      * 分时段数据汇总报表，如果指定taskId，则显示该任务的报表，否则显示全部报表。
      *
-     * @param startDate
-     * @param endDate
-     * @param dateType
-     * @return
+     * <p>跨天分表查询：通过 {@link ShardingTableUtils#unionAllShards} 遍历 [startDate,endDate] 覆盖的
+     * 所有 task_runner_stats 按天分表，UNION ALL 拼接内层明细，外层再按 stats_date 分组聚合（sum），
+     * 避免只按 startDate 推单一表名而漏掉 endDate 侧分表数据。</p>
+     *
+     * <p>时间分桶由 LEFT(create_date,N) 截取实现：dateType=1 取 LEFT(create_date,10) 按日（yyyy-MM-dd）、
+     * dateType=2 取 LEFT(create_date,13) 按时（yyyy-MM-dd HH）、dateType=3 取 LEFT(create_date,16) 按分
+     * （yyyy-MM-dd HH:mm）。dateType=0 时按区间跨度自动选择：≤12h 按分、≤24h 按时、否则按日。</p>
+     *
+     * @param startDate 开始日期（null 默认近 24h）
+     * @param endDate   结束日期（null 默认当前）
+     * @param dateType  聚合粒度：0 自动、1 按日、2 按时、3 按分
+     * @param taskId    任务 id（>0 时仅汇总该任务，<=0 汇总全部）
+     * @return 分时段统计列表（RunnerStatsVo，按 stats_date 升序）
      */
     @GetMapping("/statsDateSummary")
     @Operation(summary = "分时段汇总报表", description = "分时段数据汇总报表，如果指定taskId，则显示该任务的报表，否则显示全部报表。")
@@ -73,35 +82,38 @@ public class TaskRunnerReportController {
                 dateType = 1;
             }
         }
-        String tableName = ShardingTableUtils.getTableNameByDate( "task_runner_stats", startDate );
-        List<Object> param = new ArrayList<>();
-        String sql = switch (dateType) {
-            case 1 -> "SELECT LEFT(create_date,10) AS stats_date,";
-            case 2 -> "SELECT LEFT(create_date,13) AS stats_date,";
-            case 3 -> "SELECT LEFT(create_date,15) AS stats_date,";
+        String leftExpr = switch (dateType) {
+            case 1 -> "LEFT(create_date,10)";
+            case 2 -> "LEFT(create_date,13)";
+            case 3 -> "LEFT(create_date,16)";
             default -> throw new IllegalArgumentException("dateType is error :" + dateType);
         };
-        // 1按日 2按时 3按10分
-        sql += " sum(num_all) as num_all ,sum(num_fail_program) as num_fail_program ," + "sum(num_fail_config) as num_fail_config ,sum(num_fail_data) as num_fail_data,sum" +
-                "(num_fail_partner) as num_fail_partner" + ",sum(time_wait_queue) as time_wait_queue,sum(time_wait_delay) as time_wait_delay,sum(time_run) as time_run FROM " + tableName;
-        sql += " WHERE  create_date >= ? AND create_date <= ? ";
-        param.add( startDate );
-        param.add( endDate );
-        if (taskId > 0) {
-            sql += " AND task_id=?";
-            param.add( taskId );
-        }
-        sql += " group by stats_date";
-        sql += " ORDER BY stats_date ASC";
-        return dao.list( RunnerStatsVo.class, sql, param.toArray() );
+        // 跨天分表 UNION ALL，外层聚合（避免单表只按 startDate 推表名而漏 endDate 侧数据）
+        String innerSelect = leftExpr + " AS stats_date, num_all, num_fail_program, num_fail_config, num_fail_data, num_fail_partner, time_wait_queue, time_wait_delay, time_run";
+        List<Object> param = new ArrayList<>();
+        String union = ShardingTableUtils.unionAllShards("task_runner_stats", startDate, endDate, innerSelect, param,
+                taskId > 0 ? "AND task_id=?" : null, taskId > 0 ? new Object[]{taskId} : null);
+        String sql = "SELECT stats_date, sum(num_all) as num_all, sum(num_fail_program) as num_fail_program,"
+                + " sum(num_fail_config) as num_fail_config, sum(num_fail_data) as num_fail_data, sum(num_fail_partner) as num_fail_partner,"
+                + " sum(time_wait_queue) as time_wait_queue, sum(time_wait_delay) as time_wait_delay, sum(time_run) as time_run"
+                + " FROM (" + union + ") t group by stats_date ORDER BY stats_date ASC";
+        return dao.list(RunnerStatsVo.class, sql, param.toArray());
     }
 
     /**
      * 分任务的汇总数据，不分时。可以显示出任务名、运行目标、运行类等关键信息。
      *
-     * @param startDate
-     * @param endDate
-     * @return
+     * <p>任务维度汇总：三层嵌套 SQL —— 内层 UNION ALL 跨天分表明细（task_runner_stats 所有覆盖分表，
+     * 由 {@link ShardingTableUtils#unionAllShards} 生成）、中层按 task_id GROUP BY 聚合、
+     * 外层 LEFT JOIN task_runner_info 带出任务名/运行目标/执行类等信息。</p>
+     *
+     * <p>任务维度按整个区间汇总，<b>不分时段（dateType 参数仅保留签名一致、实际忽略）</b>，
+     * 故无需对 create_date 做 LEFT 截取。</p>
+     *
+     * @param startDate 开始日期（null 默认近 24h）
+     * @param endDate   结束日期（null 默认当前）
+     * @param dateType  忽略（任务维度不分时段，保留仅为接口签名一致）
+     * @return 任务维度统计明细列表（RunnerStatsDetailVo，按 num_all 倒序）
      */
     @GetMapping("/taskStatsList")
     @Operation(summary = "任务汇总报表", description = "分任务的汇总数据，不分时。可以显示出任务名、运行目标、运行类等关键信息")
@@ -126,27 +138,23 @@ public class TaskRunnerReportController {
                 dateType = 1;
             }
         }
-        String tableName = ShardingTableUtils.getTableNameByDate( "task_runner_stats", startDate );
+        // 跨天分表 UNION ALL（内层明细→中层 group by task_id→外层 JOIN 任务信息）；任务维度汇总不分时段，dateType 忽略
+        String innerSelect = "task_id, num_all, num_fail_program, num_fail_config, num_fail_data, num_fail_partner, time_wait_queue, time_wait_delay, time_run";
         List<Object> param = new ArrayList<>();
-        String sql = switch (dateType) {
-            case 1 -> "SELECT LEFT(create_date,10) AS stats_date,";
-            case 2 -> "SELECT LEFT(create_date,13) AS stats_date,";
-            case 3 -> "SELECT LEFT(create_date,15) AS stats_date,";
-            default -> throw new IllegalArgumentException("dateType is error :" + dateType);
-        };
-
-        sql += " tcs.*,tcc.task_name,tcc.run_target,tcc.task_class, tcc.task_owner, tcc.task_tag, tcc.run_type, tcc.consumer_num, tcc.prefetch_num, tcc.queue_type";
-        sql += " from (SELECT task_id ,sum(num_all) as num_all ,sum(num_fail_program) as num_fail_program ,sum(num_fail_config) as num_fail_config ,sum(num_fail_data) as num_fail_data,sum(num_fail_partner) as num_fail_partner, sum(time_wait_queue) as time_wait_queue,sum(time_wait_delay) as time_wait_delay,sum(time_run) as time_run FROM " + tableName;
-        sql += " WHERE create_date >= ? AND create_date <= ? ";
-        sql += " group by task_id order by num_all desc) tcs left join task_runner_info tcc on tcs.task_id =tcc.id ";
-        param.add( startDate );
-        param.add( endDate );
-        return dao.list( RunnerStatsDetailVo.class, sql, param.toArray() );
+        String union = ShardingTableUtils.unionAllShards("task_runner_stats", startDate, endDate, innerSelect, param, null);
+        String sql = "SELECT tcs.task_id, tcs.num_all, tcs.num_fail_program, tcs.num_fail_config, tcs.num_fail_data, tcs.num_fail_partner,"
+                + " tcs.time_wait_queue, tcs.time_wait_delay, tcs.time_run,"
+                + " tcc.task_name, tcc.run_target, tcc.task_class, tcc.task_owner, tcc.task_tag, tcc.run_type, tcc.consumer_num, tcc.prefetch_num, tcc.queue_type"
+                + " from (SELECT task_id, sum(num_all) as num_all, sum(num_fail_program) as num_fail_program, sum(num_fail_config) as num_fail_config,"
+                + " sum(num_fail_data) as num_fail_data, sum(num_fail_partner) as num_fail_partner, sum(time_wait_queue) as time_wait_queue,"
+                + " sum(time_wait_delay) as time_wait_delay, sum(time_run) as time_run FROM (" + union + ") raw"
+                + " group by task_id order by num_all desc) tcs left join task_runner_info tcc on tcs.task_id = tcc.id";
+        return dao.list(RunnerStatsDetailVo.class, sql, param.toArray());
     }
 
 
     /**
-     * 定时任务统计详细vo。
+     * 队列任务统计详细 VO（任务维度，含任务名/运行目标/执行类等信息，用于 taskStatsList）。
      */
     @Schema(title = "队列任务统计信息")
     @TableMeta(tableName = "RunnerStatsDetailVo", tableType = "view")
@@ -305,7 +313,7 @@ public class TaskRunnerReportController {
     }
 
     /**
-     * 定时任务统计vo
+     * 队列任务统计 VO（时间维度汇总，用于 statsDateSummary）。
      */
     @Schema(title = "队列任务统计vo")
     @TableMeta(tableName = "RunnerStatsVo", tableType = "view")

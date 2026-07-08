@@ -9,10 +9,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
-* 队列任务统计信息列表查询参数。
+* 延迟任务统计信息列表查询参数。
 */
-@Schema(title = "队列任务统计信息列表查询参数", description = "队列任务统计信息列表查询参数")
-public class TaskRunnerStatsQueryParam extends PageQueryParam{
+@Schema(title = "延迟任务统计信息列表查询参数", description = "延迟任务统计信息列表查询参数")
+public class TaskDelayerStatsQueryParam extends PageQueryParam{
 
 
     /**
@@ -85,17 +85,17 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
     private Integer[] numFailProgramRange;
 	
     /**
-    * 配置错误计数。
+    * 配置错误计数(连续限速超限放弃)。
     */
     @QueryMeta(expr = "num_fail_config=?")
-    @Schema(title="配置错误计数", description = "配置错误计数")
+    @Schema(title="配置错误计数(连续限速超限放弃)", description = "配置错误计数(连续限速超限放弃)")
     private Integer numFailConfig;
 
     /**
-    * 配置错误计数范围。
+    * 配置错误计数(连续限速超限放弃)范围。
     */
     @QueryMeta(expr = "num_fail_config between ? and ?")
-    @Schema(title="配置错误计数范围", description = "配置错误计数范围")
+    @Schema(title="配置错误计数(连续限速超限放弃)范围", description = "配置错误计数(连续限速超限放弃)范围")
     private Integer[] numFailConfigRange;
 	
     /**
@@ -127,73 +127,59 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
     private Integer[] numFailPartnerRange;
 	
     /**
-    * 队列等待时间。
-    */
-    @QueryMeta(expr = "time_wait_queue=?")
-    @Schema(title="队列等待时间", description = "队列等待时间")
-    private Integer timeWaitQueue;
-
-    /**
-    * 队列等待时间范围。
-    */
-    @QueryMeta(expr = "time_wait_queue between ? and ?")
-    @Schema(title="队列等待时间范围", description = "队列等待时间范围")
-    private Integer[] timeWaitQueueRange;
-	
-    /**
-    * 超时等待时间。
+    * 实际延迟等待(runAt到consumeDate毫秒)。
     */
     @QueryMeta(expr = "time_wait_delay=?")
-    @Schema(title="超时等待时间", description = "超时等待时间")
+    @Schema(title="实际延迟等待(runAt到consumeDate毫秒)", description = "实际延迟等待(runAt到consumeDate毫秒)")
     private Integer timeWaitDelay;
 
     /**
-    * 超时等待时间范围。
+    * 实际延迟等待(runAt到consumeDate毫秒)范围。
     */
     @QueryMeta(expr = "time_wait_delay between ? and ?")
-    @Schema(title="超时等待时间范围", description = "超时等待时间范围")
+    @Schema(title="实际延迟等待(runAt到consumeDate毫秒)范围", description = "实际延迟等待(runAt到consumeDate毫秒)范围")
     private Integer[] timeWaitDelayRange;
 	
     /**
-    * 运行时间。
+    * 运行时间(毫秒)。
     */
     @QueryMeta(expr = "time_run=?")
-    @Schema(title="运行时间", description = "运行时间")
+    @Schema(title="运行时间(毫秒)", description = "运行时间(毫秒)")
     private Integer timeRun;
 
     /**
-    * 运行时间范围。
+    * 运行时间(毫秒)范围。
     */
     @QueryMeta(expr = "time_run between ? and ?")
-    @Schema(title="运行时间范围", description = "运行时间范围")
+    @Schema(title="运行时间(毫秒)范围", description = "运行时间(毫秒)范围")
     private Integer[] timeRunRange;
 	
     /**
-    * 队列长度。
+    * 队列积压消息数。
     */
     @QueryMeta(expr = "queue_size=?")
-    @Schema(title="队列长度", description = "队列长度")
+    @Schema(title="队列积压消息数", description = "队列积压消息数")
     private Integer queueSize;
 
     /**
-    * 队列长度范围。
+    * 队列积压消息数范围。
     */
     @QueryMeta(expr = "queue_size between ? and ?")
-    @Schema(title="队列长度范围", description = "队列长度范围")
+    @Schema(title="队列积压消息数范围", description = "队列积压消息数范围")
     private Integer[] queueSizeRange;
 	
     /**
-    * 消费者数量。
+    * 执行线程数。
     */
     @QueryMeta(expr = "consumer_num=?")
-    @Schema(title="消费者数量", description = "消费者数量")
+    @Schema(title="执行线程数", description = "执行线程数")
     private Integer consumerNum;
 
     /**
-    * 消费者数量范围。
+    * 执行线程数范围。
     */
     @QueryMeta(expr = "consumer_num between ? and ?")
-    @Schema(title="消费者数量范围", description = "消费者数量范围")
+    @Schema(title="执行线程数范围", description = "执行线程数范围")
     private Integer[] consumerNumRange;
 	
     /**
@@ -221,7 +207,7 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
     /**
     * 设置id链式调用。
     */
-    public TaskRunnerStatsQueryParam id(Long id) {
+    public TaskDelayerStatsQueryParam id(Long id) {
         setId(id);
         return this;
     }
@@ -243,7 +229,7 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
     /**
     * 设置ID数组链式调用。
     */
-    public TaskRunnerStatsQueryParam ids(Long[] ids) {
+    public TaskDelayerStatsQueryParam ids(Long[] ids) {
         setIds(ids);
         return this;
     }
@@ -265,7 +251,7 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
     /**
     * 设置任务配置id链式调用。
     */
-	public TaskRunnerStatsQueryParam taskId(Long taskId){
+	public TaskDelayerStatsQueryParam taskId(Long taskId){
         setTaskId(taskId);
         return this;
     }
@@ -287,7 +273,7 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
     /**
     * 设置全部执行计数链式调用。
     */
-    public TaskRunnerStatsQueryParam numAll(Integer numAll){
+    public TaskDelayerStatsQueryParam numAll(Integer numAll){
         setNumAll(numAll);
         return this;
     }
@@ -309,7 +295,7 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
     /**
     * 设置全部执行计数范围链式调用。
     */
-    public TaskRunnerStatsQueryParam numAllRange(Integer[] numAllRange){
+    public TaskDelayerStatsQueryParam numAllRange(Integer[] numAllRange){
         setNumAllRange(numAllRange);
         return this;
     }
@@ -331,7 +317,7 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
     /**
     * 设置程序错误计数链式调用。
     */
-    public TaskRunnerStatsQueryParam numFailProgram(Integer numFailProgram){
+    public TaskDelayerStatsQueryParam numFailProgram(Integer numFailProgram){
         setNumFailProgram(numFailProgram);
         return this;
     }
@@ -353,51 +339,51 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
     /**
     * 设置程序错误计数范围链式调用。
     */
-    public TaskRunnerStatsQueryParam numFailProgramRange(Integer[] numFailProgramRange){
+    public TaskDelayerStatsQueryParam numFailProgramRange(Integer[] numFailProgramRange){
         setNumFailProgramRange(numFailProgramRange);
         return this;
     }
 	
     /**
-    * 获取配置错误计数。
+    * 获取配置错误计数(连续限速超限放弃)。
     */
     public Integer getNumFailConfig(){
         return this.numFailConfig;
     }
 
     /**
-    * 设置配置错误计数。
+    * 设置配置错误计数(连续限速超限放弃)。
     */
     public void setNumFailConfig(Integer numFailConfig){
         this.numFailConfig = numFailConfig;
     }
 	
     /**
-    * 设置配置错误计数链式调用。
+    * 设置配置错误计数(连续限速超限放弃)链式调用。
     */
-    public TaskRunnerStatsQueryParam numFailConfig(Integer numFailConfig){
+    public TaskDelayerStatsQueryParam numFailConfig(Integer numFailConfig){
         setNumFailConfig(numFailConfig);
         return this;
     }
 
     /**
-    * 获取配置错误计数范围。
+    * 获取配置错误计数(连续限速超限放弃)范围。
     */
     public Integer[] getNumFailConfigRange(){
         return this.numFailConfigRange;
     }
 
     /**
-    * 设置配置错误计数范围。
+    * 设置配置错误计数(连续限速超限放弃)范围。
     */
     public void setNumFailConfigRange(Integer[] numFailConfigRange){
         this.numFailConfigRange = numFailConfigRange;
     }
 	
     /**
-    * 设置配置错误计数范围链式调用。
+    * 设置配置错误计数(连续限速超限放弃)范围链式调用。
     */
-    public TaskRunnerStatsQueryParam numFailConfigRange(Integer[] numFailConfigRange){
+    public TaskDelayerStatsQueryParam numFailConfigRange(Integer[] numFailConfigRange){
         setNumFailConfigRange(numFailConfigRange);
         return this;
     }
@@ -419,7 +405,7 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
     /**
     * 设置数据错误计数链式调用。
     */
-    public TaskRunnerStatsQueryParam numFailData(Integer numFailData){
+    public TaskDelayerStatsQueryParam numFailData(Integer numFailData){
         setNumFailData(numFailData);
         return this;
     }
@@ -441,7 +427,7 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
     /**
     * 设置数据错误计数范围链式调用。
     */
-    public TaskRunnerStatsQueryParam numFailDataRange(Integer[] numFailDataRange){
+    public TaskDelayerStatsQueryParam numFailDataRange(Integer[] numFailDataRange){
         setNumFailDataRange(numFailDataRange);
         return this;
     }
@@ -463,7 +449,7 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
     /**
     * 设置对方错误计数链式调用。
     */
-    public TaskRunnerStatsQueryParam numFailPartner(Integer numFailPartner){
+    public TaskDelayerStatsQueryParam numFailPartner(Integer numFailPartner){
         setNumFailPartner(numFailPartner);
         return this;
     }
@@ -485,227 +471,183 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
     /**
     * 设置对方错误计数范围链式调用。
     */
-    public TaskRunnerStatsQueryParam numFailPartnerRange(Integer[] numFailPartnerRange){
+    public TaskDelayerStatsQueryParam numFailPartnerRange(Integer[] numFailPartnerRange){
         setNumFailPartnerRange(numFailPartnerRange);
         return this;
     }
 	
     /**
-    * 获取队列等待时间。
-    */
-    public Integer getTimeWaitQueue(){
-        return this.timeWaitQueue;
-    }
-
-    /**
-    * 设置队列等待时间。
-    */
-    public void setTimeWaitQueue(Integer timeWaitQueue){
-        this.timeWaitQueue = timeWaitQueue;
-    }
-	
-    /**
-    * 设置队列等待时间链式调用。
-    */
-    public TaskRunnerStatsQueryParam timeWaitQueue(Integer timeWaitQueue){
-        setTimeWaitQueue(timeWaitQueue);
-        return this;
-    }
-
-    /**
-    * 获取队列等待时间范围。
-    */
-    public Integer[] getTimeWaitQueueRange(){
-        return this.timeWaitQueueRange;
-    }
-
-    /**
-    * 设置队列等待时间范围。
-    */
-    public void setTimeWaitQueueRange(Integer[] timeWaitQueueRange){
-        this.timeWaitQueueRange = timeWaitQueueRange;
-    }
-	
-    /**
-    * 设置队列等待时间范围链式调用。
-    */
-    public TaskRunnerStatsQueryParam timeWaitQueueRange(Integer[] timeWaitQueueRange){
-        setTimeWaitQueueRange(timeWaitQueueRange);
-        return this;
-    }
-	
-    /**
-    * 获取超时等待时间。
+    * 获取实际延迟等待(runAt到consumeDate毫秒)。
     */
     public Integer getTimeWaitDelay(){
         return this.timeWaitDelay;
     }
 
     /**
-    * 设置超时等待时间。
+    * 设置实际延迟等待(runAt到consumeDate毫秒)。
     */
     public void setTimeWaitDelay(Integer timeWaitDelay){
         this.timeWaitDelay = timeWaitDelay;
     }
 	
     /**
-    * 设置超时等待时间链式调用。
+    * 设置实际延迟等待(runAt到consumeDate毫秒)链式调用。
     */
-    public TaskRunnerStatsQueryParam timeWaitDelay(Integer timeWaitDelay){
+    public TaskDelayerStatsQueryParam timeWaitDelay(Integer timeWaitDelay){
         setTimeWaitDelay(timeWaitDelay);
         return this;
     }
 
     /**
-    * 获取超时等待时间范围。
+    * 获取实际延迟等待(runAt到consumeDate毫秒)范围。
     */
     public Integer[] getTimeWaitDelayRange(){
         return this.timeWaitDelayRange;
     }
 
     /**
-    * 设置超时等待时间范围。
+    * 设置实际延迟等待(runAt到consumeDate毫秒)范围。
     */
     public void setTimeWaitDelayRange(Integer[] timeWaitDelayRange){
         this.timeWaitDelayRange = timeWaitDelayRange;
     }
 	
     /**
-    * 设置超时等待时间范围链式调用。
+    * 设置实际延迟等待(runAt到consumeDate毫秒)范围链式调用。
     */
-    public TaskRunnerStatsQueryParam timeWaitDelayRange(Integer[] timeWaitDelayRange){
+    public TaskDelayerStatsQueryParam timeWaitDelayRange(Integer[] timeWaitDelayRange){
         setTimeWaitDelayRange(timeWaitDelayRange);
         return this;
     }
 	
     /**
-    * 获取运行时间。
+    * 获取运行时间(毫秒)。
     */
     public Integer getTimeRun(){
         return this.timeRun;
     }
 
     /**
-    * 设置运行时间。
+    * 设置运行时间(毫秒)。
     */
     public void setTimeRun(Integer timeRun){
         this.timeRun = timeRun;
     }
 	
     /**
-    * 设置运行时间链式调用。
+    * 设置运行时间(毫秒)链式调用。
     */
-    public TaskRunnerStatsQueryParam timeRun(Integer timeRun){
+    public TaskDelayerStatsQueryParam timeRun(Integer timeRun){
         setTimeRun(timeRun);
         return this;
     }
 
     /**
-    * 获取运行时间范围。
+    * 获取运行时间(毫秒)范围。
     */
     public Integer[] getTimeRunRange(){
         return this.timeRunRange;
     }
 
     /**
-    * 设置运行时间范围。
+    * 设置运行时间(毫秒)范围。
     */
     public void setTimeRunRange(Integer[] timeRunRange){
         this.timeRunRange = timeRunRange;
     }
 	
     /**
-    * 设置运行时间范围链式调用。
+    * 设置运行时间(毫秒)范围链式调用。
     */
-    public TaskRunnerStatsQueryParam timeRunRange(Integer[] timeRunRange){
+    public TaskDelayerStatsQueryParam timeRunRange(Integer[] timeRunRange){
         setTimeRunRange(timeRunRange);
         return this;
     }
 	
     /**
-    * 获取队列长度。
+    * 获取队列积压消息数。
     */
     public Integer getQueueSize(){
         return this.queueSize;
     }
 
     /**
-    * 设置队列长度。
+    * 设置队列积压消息数。
     */
     public void setQueueSize(Integer queueSize){
         this.queueSize = queueSize;
     }
 	
     /**
-    * 设置队列长度链式调用。
+    * 设置队列积压消息数链式调用。
     */
-    public TaskRunnerStatsQueryParam queueSize(Integer queueSize){
+    public TaskDelayerStatsQueryParam queueSize(Integer queueSize){
         setQueueSize(queueSize);
         return this;
     }
 
     /**
-    * 获取队列长度范围。
+    * 获取队列积压消息数范围。
     */
     public Integer[] getQueueSizeRange(){
         return this.queueSizeRange;
     }
 
     /**
-    * 设置队列长度范围。
+    * 设置队列积压消息数范围。
     */
     public void setQueueSizeRange(Integer[] queueSizeRange){
         this.queueSizeRange = queueSizeRange;
     }
 	
     /**
-    * 设置队列长度范围链式调用。
+    * 设置队列积压消息数范围链式调用。
     */
-    public TaskRunnerStatsQueryParam queueSizeRange(Integer[] queueSizeRange){
+    public TaskDelayerStatsQueryParam queueSizeRange(Integer[] queueSizeRange){
         setQueueSizeRange(queueSizeRange);
         return this;
     }
 	
     /**
-    * 获取消费者数量。
+    * 获取执行线程数。
     */
     public Integer getConsumerNum(){
         return this.consumerNum;
     }
 
     /**
-    * 设置消费者数量。
+    * 设置执行线程数。
     */
     public void setConsumerNum(Integer consumerNum){
         this.consumerNum = consumerNum;
     }
 	
     /**
-    * 设置消费者数量链式调用。
+    * 设置执行线程数链式调用。
     */
-    public TaskRunnerStatsQueryParam consumerNum(Integer consumerNum){
+    public TaskDelayerStatsQueryParam consumerNum(Integer consumerNum){
         setConsumerNum(consumerNum);
         return this;
     }
 
     /**
-    * 获取消费者数量范围。
+    * 获取执行线程数范围。
     */
     public Integer[] getConsumerNumRange(){
         return this.consumerNumRange;
     }
 
     /**
-    * 设置消费者数量范围。
+    * 设置执行线程数范围。
     */
     public void setConsumerNumRange(Integer[] consumerNumRange){
         this.consumerNumRange = consumerNumRange;
     }
 	
     /**
-    * 设置消费者数量范围链式调用。
+    * 设置执行线程数范围链式调用。
     */
-    public TaskRunnerStatsQueryParam consumerNumRange(Integer[] consumerNumRange){
+    public TaskDelayerStatsQueryParam consumerNumRange(Integer[] consumerNumRange){
         setConsumerNumRange(consumerNumRange);
         return this;
     }
@@ -727,7 +669,7 @@ public class TaskRunnerStatsQueryParam extends PageQueryParam{
     /**
     * 设置创建时间范围链式调用。
     */
-    public TaskRunnerStatsQueryParam createDateRange(Date[] createDateRange) {
+    public TaskDelayerStatsQueryParam createDateRange(Date[] createDateRange) {
         setCreateDateRange(createDateRange);
         return this;
     }
