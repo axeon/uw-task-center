@@ -414,7 +414,7 @@ public class AlertProcessService {
                     continue;
                 }
                 // 如果超过约定时间还未执行，就要报警了。
-                if ((croner.getNextRunDate().getTime() + 300_000L) < SystemClock.now()) {
+                if ((croner.getNextRunDate().getTime() + (croner.getStatsRunTime() / croner.getStatsRunNum()) + 300_000L) < SystemClock.now()) {
                     // 先以 next_run_date 为条件推进为 NULL，仅当本实例抢到（影响行数>0）时才发告警，
                     // 避免多任务中心实例并发对同一个 croner 重复告警。
                     ResponseData<Integer> claim = dao.execute("update task_croner_info set next_run_date=NULL where id=? and next_run_date=?",
