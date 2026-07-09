@@ -113,7 +113,7 @@ public class TaskCronerEsLogQueryParam extends PageQueryParam {
     private static final Map<String, String> ALLOWED_SORT_PROPERTY = Map.ofEntries(
             Map.entry("id", "id"),
             Map.entry("timestamp", "\"@timestamp\"")
-);
+    );
 
     /**
      * 允许的排序属性。

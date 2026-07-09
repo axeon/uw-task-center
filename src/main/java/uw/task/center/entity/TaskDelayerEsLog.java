@@ -23,7 +23,7 @@ import java.util.Date;
 @TableMeta(tableName = "\"uw.task.delayer.log\"")
 public class TaskDelayerEsLog extends LogBaseVo implements Serializable {
 
-    @ColumnMeta(columnName = "id", dataType = "long", dataSize = 19, nullable = false, primaryKey = true, autoIncrement = true)
+    @ColumnMeta(columnName = "id", dataType = "long", dataSize = 19, nullable = false, primaryKey = true)
     @Schema(title = "id", format = "long", defaultValue = "1")
     private long id;
 

@@ -21,7 +21,7 @@ public class TaskCronerEsLog extends LogBaseVo implements Serializable {
     /**
      * id
      */
-    @ColumnMeta(columnName = "id", dataType = "long", dataSize = 19, nullable = false, primaryKey = true, autoIncrement = true)
+    @ColumnMeta(columnName = "id", dataType = "long", dataSize = 19, nullable = false, primaryKey = true)
     @Schema(title = "id")
     private long id;
 
