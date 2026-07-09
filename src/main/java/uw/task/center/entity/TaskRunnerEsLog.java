@@ -101,14 +101,14 @@ public class TaskRunnerEsLog extends LogBaseVo implements Serializable {
     /**
      * 队列类型
      */
-    @ColumnMeta(columnName = "queue_type", dataType = "String", dataSize = 20, nullable = true)
+    @ColumnMeta(columnName = "queue_type", dataType = "int", dataSize = 11, nullable = true)
     @Schema(title = "队列类型", description = "队列类型")
     private int queueType;
 
     /**
      * 重试类型
      */
-    @ColumnMeta(columnName = "retry_type", dataType = "String", dataSize = 20, nullable = true)
+    @ColumnMeta(columnName = "retry_type", dataType = "int", dataSize = 11, nullable = true)
     @Schema(title = "重试类型", description = "重试类型")
     private int retryType;
 

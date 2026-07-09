@@ -11,12 +11,12 @@ import uw.auth.service.AuthServiceHelper;
 import uw.auth.service.annotation.MscPermDeclare;
 import uw.auth.service.constant.UserType;
 import uw.common.app.constant.CommonState;
+import uw.common.data.PageList;
 import uw.common.response.ResponseData;
 import uw.common.util.JsonUtils;
 import uw.common.util.SystemClock;
 import uw.dao.BatchUpdateManager;
 import uw.dao.DaoFactory;
-import uw.common.data.PageList;
 import uw.dao.DaoManager;
 import uw.dao.TransactionManager;
 import uw.dao.util.ShardingTableUtils;
@@ -44,7 +44,7 @@ public class TaskRpcController {
     /**
      * 日志器。
      */
-    private static final Logger log = LoggerFactory.getLogger( TaskRpcController.class );
+    private static final Logger log = LoggerFactory.getLogger(TaskRpcController.class);
     /**
      * 更新定时任务统计信息。
      */
@@ -97,13 +97,13 @@ public class TaskRpcController {
         //构造返回数据。
         HostReportResponse reportResponse = new HostReportResponse();
         String ip = AuthServiceHelper.getRemoteIp();
-        taskHostInfoExt.setHostIp( ip );
-        reportResponse.setHostIp( ip );
-        reportResponse.setState( CommonState.ENABLED.getValue() ); //默认给正常状态。
+        taskHostInfoExt.setHostIp(ip);
+        reportResponse.setHostIp(ip);
+        reportResponse.setState(CommonState.ENABLED.getValue()); //默认给正常状态。
         TaskHostInfoExt taskHostInfoDb = null;
         if (taskHostInfoExt.getId() > 0) {
-            reportResponse.setId( taskHostInfoExt.getId() );
-            ResponseData<TaskHostInfoExt> loadResult = dao.load( TaskHostInfoExt.class, taskHostInfoExt.getId() );
+            reportResponse.setId(taskHostInfoExt.getId());
+            ResponseData<TaskHostInfoExt> loadResult = dao.load(TaskHostInfoExt.class, taskHostInfoExt.getId());
             // dao.load 查无数据返回 warn（uw.dao.data.not.found.warn），此处语义是"该 id 对应主机不存在则走新建分支"，
             // 不能用 isNotSuccess() 判定（warn 也算 not-success，会让携带已失效旧 id 的主机上报整体失败）。
             // 仅真正的 error 才中断；warn 时 taskHostInfoDb 保持 null，由下方 isNewInfo 逻辑新建主机记录。
@@ -113,7 +113,7 @@ public class TaskRpcController {
             taskHostInfoDb = loadResult.getData();
             //处理屏蔽状态
             if (taskHostInfoDb != null && taskHostInfoDb.getState() == 0) {
-                reportResponse.setState( 0 );
+                reportResponse.setState(0);
                 return ResponseData.success(reportResponse);
             }
         }
@@ -131,20 +131,20 @@ public class TaskRpcController {
         DaoFactory batchDao = DaoFactory.getInstance();
         TransactionManager tm = batchDao.beginTransaction();
         BatchUpdateManager bum = batchDao.beginBatchUpdate();
-        bum.setBatchSize( 1000 );
+        bum.setBatchSize(1000);
 
         //开始循环插入统计数据
         Date createDate = SystemClock.nowDate();
-        String cronerTable = ShardingTableUtils.getTableNameByDate( "task_croner_stats", createDate );
-        String runnerTable = ShardingTableUtils.getTableNameByDate( "task_runner_stats", createDate );
-        String delayerTable = ShardingTableUtils.getTableNameByDate( "task_delayer_stats", createDate );
+        String cronerTable = ShardingTableUtils.getTableNameByDate("task_croner_stats", createDate);
+        String runnerTable = ShardingTableUtils.getTableNameByDate("task_runner_stats", createDate);
+        String delayerTable = ShardingTableUtils.getTableNameByDate("task_delayer_stats", createDate);
         try {
             //处理croner告警信息。
-            alertProcessService.processCronerStats( taskHostInfoExt.getTaskCronerStatsList() );
+            alertProcessService.processCronerStats(taskHostInfoExt.getTaskCronerStatsList());
             //处理runner告警信息。
-            alertProcessService.processRunnerStats( taskHostInfoExt.getTaskRunnerStatsList() );
+            alertProcessService.processRunnerStats(taskHostInfoExt.getTaskRunnerStatsList());
             //处理delayer告警信息（旧客户端无 delayer list，processDelayerStats 内部判空）。
-            alertProcessService.processDelayerStats( taskHostInfoExt.getTaskDelayerStatsList() );
+            alertProcessService.processDelayerStats(taskHostInfoExt.getTaskDelayerStatsList());
             //更新croner统计信息。
             for (TaskCronerStats stats : taskHostInfoExt.getTaskCronerStatsList() != null ? taskHostInfoExt.getTaskCronerStatsList() : java.util.Collections.<TaskCronerStats>emptyList()) {
                 int numFail = stats.getNumFailConfig() + stats.getNumFailData() + stats.getNumFailPartner() + stats.getNumFailProgram();
@@ -152,11 +152,11 @@ public class TaskRpcController {
                 cronerRunTime += stats.getTimeRun();
                 cronerFailNum += numFail;
                 //更新任务统计信息。
-                batchDao.execute( UPDATE_CRONER_STATS, new Object[]{createDate, stats.getNumAll(), numFail, stats.getTimeRun(), stats.getTaskId()} );
+                batchDao.execute(UPDATE_CRONER_STATS, new Object[]{createDate, stats.getNumAll(), numFail, stats.getTimeRun(), stats.getTaskId()});
                 //保存stats。
-                stats.setId( dao.getSequenceId( TaskCronerStats.class ) );
-                stats.setCreateDate( createDate );
-                batchDao.save( stats, cronerTable );
+                stats.setId(dao.getSequenceId(TaskCronerStats.class));
+                stats.setCreateDate(createDate);
+                batchDao.save(stats, cronerTable);
             }
             //更新runner统计信息。
             for (TaskRunnerStats stats : taskHostInfoExt.getTaskRunnerStatsList() != null ? taskHostInfoExt.getTaskRunnerStatsList() : java.util.Collections.<TaskRunnerStats>emptyList()) {
@@ -165,11 +165,11 @@ public class TaskRpcController {
                 runnerRunTime += stats.getTimeRun();
                 runnerFailNum += numFail;
                 //更新任务统计信息。
-                batchDao.execute( UPDATE_RUNNER_STATS, new Object[]{createDate, stats.getNumAll(), numFail, stats.getTimeRun(), stats.getTaskId()} );
+                batchDao.execute(UPDATE_RUNNER_STATS, new Object[]{createDate, stats.getNumAll(), numFail, stats.getTimeRun(), stats.getTaskId()});
                 //保存stats。
-                stats.setId( dao.getSequenceId( TaskRunnerStats.class ) );
-                stats.setCreateDate( createDate );
-                batchDao.save( stats, runnerTable );
+                stats.setId(dao.getSequenceId(TaskRunnerStats.class));
+                stats.setCreateDate(createDate);
+                batchDao.save(stats, runnerTable);
             }
             //更新delayer统计信息（旧客户端无 delayer list，判空跳过）。
             if (taskHostInfoExt.getTaskDelayerStatsList() != null) {
@@ -178,20 +178,20 @@ public class TaskRpcController {
                     delayerRunNum += stats.getNumAll();
                     delayerRunTime += stats.getTimeRun();
                     delayerFailNum += numFail;
-                    batchDao.execute( UPDATE_DELAYER_STATS, new Object[]{createDate, stats.getNumAll(), numFail, stats.getTimeRun(), stats.getTaskId()} );
-                    stats.setId( dao.getSequenceId( TaskDelayerStats.class ) );
-                    stats.setCreateDate( createDate );
-                    batchDao.save( stats, delayerTable );
+                    batchDao.execute(UPDATE_DELAYER_STATS, new Object[]{createDate, stats.getNumAll(), numFail, stats.getTimeRun(), stats.getTaskId()});
+                    stats.setId(dao.getSequenceId(TaskDelayerStats.class));
+                    stats.setCreateDate(createDate);
+                    batchDao.save(stats, delayerTable);
                 }
             }
             bum.submit();
             tm.commit();
         } catch (Throwable e) {
-            log.error( "Batch save host metrics error! {}", e.getMessage(), e );
+            log.error("Batch save host metrics error! {}", e.getMessage(), e);
             try {
                 tm.rollback();
             } catch (Throwable re) {
-                log.error( "TransactionManager rollback error! {}", re.getMessage(), re );
+                log.error("TransactionManager rollback error! {}", re.getMessage(), re);
             }
         }
 
@@ -207,15 +207,19 @@ public class TaskRpcController {
                         "=croner_run_time+?, runner_num=?, runner_run_num=runner_run_num+?, runner_fail_num=runner_fail_num+?, runner_run_time=runner_run_time+?, " +
                         "delayer_num=?, delayer_run_num=delayer_run_num+?, delayer_fail_num=delayer_fail_num+?, delayer_run_time=delayer_run_time+?, " +
                         "jvm_mem_max=?, jvm_mem_total=?, jvm_mem_free=?, thread_active=?, thread_peak=?, thread_daemon=?, thread_started=?, " +
-                        "host_ip=?, app_host=?, app_port=?, app_name=?, app_version=?, task_project=?, run_target=?, last_update=? WHERE id=?";
-                ResponseData<Integer> updateResult = dao.execute( updateHostSql, new Object[]{taskHostInfoExt.getCronerNum(), cronerRunNum, cronerFailNum, cronerRunTime,
+                        "host_ip=?, app_host=?, app_port=?, app_name=?, app_version=?, task_project=?, run_target=?, last_update=?, " +
+                        // state 自愈：失联主机被 TaskHostCleanCroner 标记 state=-1(软删除,记录仍在)后，恢复上报走 UPDATE 时自愈为启用(1)，
+                        // 避免 OPS 监控(查 state=1)永久看不到该主机、CleanCroner(WHERE state=1)不再命中致 state=-1 不可逆累积。
+                        // state=0 手动禁用已在 report() 上方 state==0 分支提前 return，不会走到此 UPDATE，不会被误覆盖为 1。
+                        "state=IF(state=-1,1,state) WHERE id=?";
+                ResponseData<Integer> updateResult = dao.execute(updateHostSql, new Object[]{taskHostInfoExt.getCronerNum(), cronerRunNum, cronerFailNum, cronerRunTime,
                         taskHostInfoExt.getRunnerNum(), runnerRunNum, runnerFailNum, runnerRunTime,
                         taskHostInfoExt.getDelayerNum(), delayerRunNum, delayerFailNum, delayerRunTime,
                         taskHostInfoExt.getJvmMemMax(), taskHostInfoExt.getJvmMemTotal(),
                         taskHostInfoExt.getJvmMemFree(), taskHostInfoExt.getThreadActive(), taskHostInfoExt.getThreadPeak(), taskHostInfoExt.getThreadDaemon(),
                         taskHostInfoExt.getThreadStarted(), taskHostInfoExt.getHostIp(), taskHostInfoExt.getAppHost(),
                         taskHostInfoExt.getAppPort(), taskHostInfoExt.getAppName(), taskHostInfoExt.getAppVersion(), taskHostInfoExt.getTaskProject(),
-                        taskHostInfoExt.getRunTarget(), createDate, taskHostInfoExt.getId()} );
+                        taskHostInfoExt.getRunTarget(), createDate, taskHostInfoExt.getId()});
                 // dao.execute 影响行数<1 返回 warn（uw.dao.data.not.found.warn）。此处 id 已由上方 load 确认存在，
                 // 正常应命中 1 行；若返回 warn/error 则视为更新未生效，降级走下方新建分支兜底，避免主机统计丢失。
                 if (updateResult.isError()) {
@@ -225,27 +229,27 @@ public class TaskRpcController {
             }
             if (isNewInfo) {
                 //对应新增操作。
-                taskHostInfoExt.setId( dao.getSequenceId( TaskHostInfo.class ) );
-                taskHostInfoExt.setRunnerRunNum( runnerRunNum );
-                taskHostInfoExt.setRunnerFailNum( runnerFailNum );
-                taskHostInfoExt.setRunnerRunTime( runnerRunTime );
-                taskHostInfoExt.setDelayerRunNum( delayerRunNum );
-                taskHostInfoExt.setDelayerFailNum( delayerFailNum );
-                taskHostInfoExt.setDelayerRunTime( delayerRunTime );
-                taskHostInfoExt.setCronerRunNum( cronerRunNum );
-                taskHostInfoExt.setCronerFailNum( cronerFailNum );
-                taskHostInfoExt.setCronerRunTime( cronerRunTime );
-                taskHostInfoExt.setCreateDate( createDate );
-                taskHostInfoExt.setLastUpdate( createDate );
-                taskHostInfoExt.setState( CommonState.ENABLED.getValue() );
-                ResponseData<TaskHostInfo> saveResult = dao.save( taskHostInfoExt );
+                taskHostInfoExt.setId(dao.getSequenceId(TaskHostInfo.class));
+                taskHostInfoExt.setRunnerRunNum(runnerRunNum);
+                taskHostInfoExt.setRunnerFailNum(runnerFailNum);
+                taskHostInfoExt.setRunnerRunTime(runnerRunTime);
+                taskHostInfoExt.setDelayerRunNum(delayerRunNum);
+                taskHostInfoExt.setDelayerFailNum(delayerFailNum);
+                taskHostInfoExt.setDelayerRunTime(delayerRunTime);
+                taskHostInfoExt.setCronerRunNum(cronerRunNum);
+                taskHostInfoExt.setCronerFailNum(cronerFailNum);
+                taskHostInfoExt.setCronerRunTime(cronerRunTime);
+                taskHostInfoExt.setCreateDate(createDate);
+                taskHostInfoExt.setLastUpdate(createDate);
+                taskHostInfoExt.setState(CommonState.ENABLED.getValue());
+                ResponseData<TaskHostInfo> saveResult = dao.save(taskHostInfoExt);
                 if (saveResult.isNotSuccess()) {
                     return saveResult.raw();
                 }
-                reportResponse.setId( taskHostInfoExt.getId() );
+                reportResponse.setId(taskHostInfoExt.getId());
             }
         } catch (Throwable e) {
-            log.error( "taskHostInfoExt update exception: {}", e.getMessage(), e );
+            log.error("taskHostInfoExt update exception: {}", e.getMessage(), e);
         }
         return ResponseData.success(reportResponse);
     }
@@ -254,8 +258,8 @@ public class TaskRpcController {
      * 拉取定时任务配置列表（供客户端增量同步配置）。
      * <p>按 runTarget、taskProject 前缀、lastUpdateTime 过滤，仅返回 state>=0 的配置。</p>
      *
-     * @param runTarget     运行目标（可空）
-     * @param taskProject   任务项目包名前缀（可空）
+     * @param runTarget      运行目标（可空）
+     * @param taskProject    任务项目包名前缀（可空）
      * @param lastUpdateTime 上次更新时间戳，>0 时仅返回此后变更的配置
      * @return 定时任务配置列表
      */
@@ -263,24 +267,24 @@ public class TaskRpcController {
     @Operation(summary = "获取定时任务列表", description = "获取定时任务列表")
     @MscPermDeclare(user = UserType.RPC)
     public ResponseData<List<TaskCronerInfo>> getCronerConfigList(@Parameter(description = "运行目标", example = "default") String runTarget,
-                                                    @Parameter(description = "任务项目", example = "任务项目") String taskProject,
-                                                    @Parameter(description = "上一次更新时间", example = "0") Long lastUpdateTime) {
-        StringBuilder sql = new StringBuilder( 256 );
-        ArrayList<Object> params = new ArrayList<>( 3 );
-        sql.append( "select * from task_croner_info where state>=0 " );
-        if (StringUtils.isNotBlank( runTarget )) {
-            sql.append( "and run_target=? " );
-            params.add( runTarget );
+                                                                  @Parameter(description = "任务项目", example = "任务项目") String taskProject,
+                                                                  @Parameter(description = "上一次更新时间", example = "0") Long lastUpdateTime) {
+        StringBuilder sql = new StringBuilder(256);
+        ArrayList<Object> params = new ArrayList<>(3);
+        sql.append("select * from task_croner_info where state>=0 ");
+        if (StringUtils.isNotBlank(runTarget)) {
+            sql.append("and run_target=? ");
+            params.add(runTarget);
         }
-        if (StringUtils.isNotBlank( taskProject )) {
-            sql.append( "and task_class like ? " );
-            params.add( taskProject + "%" );
+        if (StringUtils.isNotBlank(taskProject)) {
+            sql.append("and task_class like ? ");
+            params.add(taskProject + "%");
         }
         if (lastUpdateTime > 0) {
-            sql.append( "and modify_date>=? " );
-            params.add( new Date( lastUpdateTime ) );
+            sql.append("and modify_date>=? ");
+            params.add(new Date(lastUpdateTime));
         }
-        ResponseData<PageList<TaskCronerInfo>> result = dao.list( TaskCronerInfo.class, sql.toString(), params.toArray(), 0, 0, false );
+        ResponseData<PageList<TaskCronerInfo>> result = dao.list(TaskCronerInfo.class, sql.toString(), params.toArray(), 0, 0, false);
         if (result.isNotSuccess()) {
             return result.raw();
         }
@@ -291,8 +295,8 @@ public class TaskRpcController {
      * 拉取队列任务配置列表（供客户端增量同步配置）。
      * <p>按 runTarget、taskProject 前缀、lastUpdateTime 过滤，仅返回 state>=0 的配置。</p>
      *
-     * @param runTarget     运行目标（可空）
-     * @param taskProject   任务项目包名前缀（可空）
+     * @param runTarget      运行目标（可空）
+     * @param taskProject    任务项目包名前缀（可空）
      * @param lastUpdateTime 上次更新时间戳，>0 时仅返回此后变更的配置
      * @return 队列任务配置列表
      */
@@ -300,24 +304,24 @@ public class TaskRpcController {
     @Operation(summary = "获取队列任务列表", description = "获取队列任务列表")
     @MscPermDeclare(user = UserType.RPC)
     public ResponseData<List<TaskRunnerInfo>> getRunnerConfigList(@Parameter(description = "运行目标", example = "default") String runTarget,
-                                                    @Parameter(description = "任务项目", example = "任务项目") String taskProject,
-                                                    @Parameter(description = "上一次更新时间", example = "0") Long lastUpdateTime) {
-        StringBuilder sql = new StringBuilder( 256 );
-        ArrayList<Object> params = new ArrayList<>( 3 );
-        sql.append( "select * from task_runner_info where state>=0 " );
-        if (StringUtils.isNotBlank( runTarget )) {
-            sql.append( "and run_target=? " );
-            params.add( runTarget );
+                                                                  @Parameter(description = "任务项目", example = "任务项目") String taskProject,
+                                                                  @Parameter(description = "上一次更新时间", example = "0") Long lastUpdateTime) {
+        StringBuilder sql = new StringBuilder(256);
+        ArrayList<Object> params = new ArrayList<>(3);
+        sql.append("select * from task_runner_info where state>=0 ");
+        if (StringUtils.isNotBlank(runTarget)) {
+            sql.append("and run_target=? ");
+            params.add(runTarget);
         }
-        if (StringUtils.isNotBlank( taskProject )) {
-            sql.append( "and task_class like ? " );
-            params.add( taskProject + "%" );
+        if (StringUtils.isNotBlank(taskProject)) {
+            sql.append("and task_class like ? ");
+            params.add(taskProject + "%");
         }
         if (lastUpdateTime > 0) {
-            sql.append( "and modify_date>=? " );
-            params.add( new Date( lastUpdateTime ) );
+            sql.append("and modify_date>=? ");
+            params.add(new Date(lastUpdateTime));
         }
-        ResponseData<PageList<TaskRunnerInfo>> result = dao.list( TaskRunnerInfo.class, sql.toString(), params.toArray(), 0, 0, false );
+        ResponseData<PageList<TaskRunnerInfo>> result = dao.list(TaskRunnerInfo.class, sql.toString(), params.toArray(), 0, 0, false);
         if (result.isNotSuccess()) {
             return result.raw();
         }
@@ -341,7 +345,7 @@ public class TaskRpcController {
         if (id == null || nextDate == null) {
             return ResponseData.errorCode("400", "id and nextDate are required.");
         }
-        ResponseData<Integer> result = dao.execute( "update task_croner_info set next_run_date=? where id=? ", new Object[]{new Date( nextDate ), id} );
+        ResponseData<Integer> result = dao.execute("update task_croner_info set next_run_date=? where id=? ", new Object[]{new Date(nextDate), id});
         if (result.isNotSuccess()) {
             return result;
         }
@@ -362,17 +366,17 @@ public class TaskRpcController {
         if (config != null) {
             String taskClass = config.getTaskClass();
             if (config.getRunTarget() == null) {
-                config.setRunTarget( "" );
+                config.setRunTarget("");
             }
             if (config.getTaskTag() == null) {
-                config.setTaskTag( "" );
+                config.setTaskTag("");
             }
-            if (StringUtils.isNotBlank( taskClass )) {
+            if (StringUtils.isNotBlank(taskClass)) {
                 // 去重维度：task_class + task_tag + run_target。
                 // task_tag 是多实例区分维度（同一 TaskRunner 子类通过不同 taskTag 运行多份实例），
                 // 必须纳入去重，否则同 taskClass 下不同 taskTag 的实例会互相覆盖、只保留首条。
-                ResponseData<TaskRunnerInfo> queryResult = dao.queryForObject( TaskRunnerInfo.class, "select * from task_runner_info where task_class=? and task_tag=? and run_target=? and state>=0",
-                        new Object[]{taskClass, config.getTaskTag(), config.getRunTarget()} );
+                ResponseData<TaskRunnerInfo> queryResult = dao.queryForObject(TaskRunnerInfo.class, "select * from task_runner_info where task_class=? and task_tag=? and run_target=? and state>=0",
+                        new Object[]{taskClass, config.getTaskTag(), config.getRunTarget()});
                 // queryForObject 查无数据返回 warn（uw.dao.data.not.found.warn），这正是"需要新建"的正常分支，
                 // 不能用 isNotSuccess() 判定（它对 warn 也为 true，会把首次注册误判成失败直接 return，导致任务永远注册不进去、id 恒为 0）。
                 // 仅真正的 error 才中断。
@@ -381,13 +385,13 @@ public class TaskRpcController {
                 }
                 TaskRunnerInfo testOpt = queryResult.getData();
                 if (testOpt == null) {
-                    config.setId( dao.getSequenceId( TaskRunnerInfo.class ) );
-                    config.setTaskOwner( "" );
-                    config.setTaskLinkMch( "" );
-                    config.setTaskLinkOur( "" );
-                    config.setCreateDate( SystemClock.nowDate() );
-                    config.setState( CommonState.ENABLED.getValue() );
-                    ResponseData<TaskRunnerInfo> saveResult = dao.save( config );
+                    config.setId(dao.getSequenceId(TaskRunnerInfo.class));
+                    config.setTaskOwner("");
+                    config.setTaskLinkMch("");
+                    config.setTaskLinkOur("");
+                    config.setCreateDate(SystemClock.nowDate());
+                    config.setState(CommonState.ENABLED.getValue());
+                    ResponseData<TaskRunnerInfo> saveResult = dao.save(config);
                     if (saveResult.isNotSuccess()) {
                         return saveResult;
                     }
@@ -411,17 +415,17 @@ public class TaskRpcController {
         if (config != null) {
             String taskClass = config.getTaskClass();
             if (config.getRunTarget() == null) {
-                config.setRunTarget( "" );
+                config.setRunTarget("");
             }
             if (config.getTaskParam() == null) {
-                config.setTaskParam( "" );
+                config.setTaskParam("");
             }
-            if (StringUtils.isNotBlank( taskClass )) {
+            if (StringUtils.isNotBlank(taskClass)) {
                 // 去重维度：task_class + task_param + run_target。
                 // task_param 是多实例区分维度（同一 TaskCroner 子类通过不同 taskParam 运行多份实例），
                 // 必须纳入去重，否则同 taskClass 下不同 taskParam 的实例会互相覆盖、只保留首条。
-                ResponseData<TaskCronerInfo> queryResult = dao.queryForObject( TaskCronerInfo.class, "select * from task_croner_info where task_class=? and task_param=? and run_target=? and state>=0",
-                        new Object[]{taskClass, config.getTaskParam(), config.getRunTarget()} );
+                ResponseData<TaskCronerInfo> queryResult = dao.queryForObject(TaskCronerInfo.class, "select * from task_croner_info where task_class=? and task_param=? and run_target=? and state>=0",
+                        new Object[]{taskClass, config.getTaskParam(), config.getRunTarget()});
                 // queryForObject 查无数据返回 warn（uw.dao.data.not.found.warn），这正是"需要新建"的正常分支，
                 // 不能用 isNotSuccess() 判定（它对 warn 也为 true，会把首次注册误判成失败直接 return，导致任务永远注册不进去、id 恒为 0）。
                 // 仅真正的 error 才中断。
@@ -430,13 +434,13 @@ public class TaskRpcController {
                 }
                 TaskCronerInfo testOpt = queryResult.getData();
                 if (testOpt == null) {
-                    config.setId( dao.getSequenceId( TaskCronerInfo.class ) );
-                    config.setTaskOwner( "" );
-                    config.setTaskLinkMch( "" );
-                    config.setTaskLinkOur( "" );
-                    config.setCreateDate( SystemClock.nowDate() );
-                    config.setState( CommonState.ENABLED.getValue() );
-                    ResponseData<TaskCronerInfo> saveResult = dao.save( config );
+                    config.setId(dao.getSequenceId(TaskCronerInfo.class));
+                    config.setTaskOwner("");
+                    config.setTaskLinkMch("");
+                    config.setTaskLinkOur("");
+                    config.setCreateDate(SystemClock.nowDate());
+                    config.setState(CommonState.ENABLED.getValue());
+                    ResponseData<TaskCronerInfo> saveResult = dao.save(config);
                     if (saveResult.isNotSuccess()) {
                         return saveResult;
                     }
@@ -459,8 +463,8 @@ public class TaskRpcController {
     @Operation(summary = "获取延迟任务列表", description = "获取延迟任务列表")
     @MscPermDeclare(user = UserType.RPC)
     public ResponseData<List<TaskDelayerInfo>> getDelayerConfigList(@Parameter(description = "运行目标", example = "default") String runTarget,
-                                                                  @Parameter(description = "任务项目", example = "任务项目") String taskProject,
-                                                                  @Parameter(description = "上一次更新时间", example = "0") Long lastUpdateTime) {
+                                                                    @Parameter(description = "任务项目", example = "任务项目") String taskProject,
+                                                                    @Parameter(description = "上一次更新时间", example = "0") Long lastUpdateTime) {
         StringBuilder sql = new StringBuilder(256);
         ArrayList<Object> params = new ArrayList<>(3);
         sql.append("select * from task_delayer_info where state>=0 ");
@@ -541,10 +545,10 @@ public class TaskRpcController {
     @MscPermDeclare(user = UserType.RPC)
     public ResponseData<Void> initTaskContact(@RequestBody Map<String, String> contactData) {
         if (contactData != null) {
-            String contactName = contactData.get( "contactName" );
-            if (StringUtils.isNotBlank( contactName )) {
-                ResponseData<TaskAlertContact> queryResult = dao.queryForObject( TaskAlertContact.class, "select * from task_alert_contact where contact_name=? and state=1",
-                        new Object[]{contactName} );
+            String contactName = contactData.get("contactName");
+            if (StringUtils.isNotBlank(contactName)) {
+                ResponseData<TaskAlertContact> queryResult = dao.queryForObject(TaskAlertContact.class, "select * from task_alert_contact where contact_name=? and state=1",
+                        new Object[]{contactName});
                 // queryForObject 查无数据返回 warn，这是"需要新建联系人"的正常分支，仅 error 才中断。
                 if (queryResult.isError()) {
                     return queryResult.raw();
@@ -552,18 +556,18 @@ public class TaskRpcController {
                 TaskAlertContact taskAlertContact = queryResult.getData();
                 if (taskAlertContact == null) {
                     taskAlertContact = new TaskAlertContact();
-                    taskAlertContact.setId( dao.getSequenceId( TaskAlertContact.class ) );
-                    taskAlertContact.setContactType( 0 );// 任务负责人
-                    taskAlertContact.setContactName( contactName );
-                    taskAlertContact.setMobile( contactData.get( "mobile" ) );
-                    taskAlertContact.setEmail( contactData.get( "email" ) );
-                    taskAlertContact.setWechat( contactData.get( "wechat" ) );
-                    taskAlertContact.setIm( contactData.get( "im" ) );
-                    taskAlertContact.setNotifyUrl( contactData.get( "notifyUrl" ) );
-                    taskAlertContact.setRemark( contactData.get( "remark" ) );
-                    taskAlertContact.setCreateDate( SystemClock.nowDate() );
-                    taskAlertContact.setState( CommonState.ENABLED.getValue() );
-                    ResponseData<TaskAlertContact> saveResult = dao.save( taskAlertContact );
+                    taskAlertContact.setId(dao.getSequenceId(TaskAlertContact.class));
+                    taskAlertContact.setContactType(0);// 任务负责人
+                    taskAlertContact.setContactName(contactName);
+                    taskAlertContact.setMobile(contactData.get("mobile"));
+                    taskAlertContact.setEmail(contactData.get("email"));
+                    taskAlertContact.setWechat(contactData.get("wechat"));
+                    taskAlertContact.setIm(contactData.get("im"));
+                    taskAlertContact.setNotifyUrl(contactData.get("notifyUrl"));
+                    taskAlertContact.setRemark(contactData.get("remark"));
+                    taskAlertContact.setCreateDate(SystemClock.nowDate());
+                    taskAlertContact.setState(CommonState.ENABLED.getValue());
+                    ResponseData<TaskAlertContact> saveResult = dao.save(taskAlertContact);
                     if (saveResult.isNotSuccess()) {
                         return saveResult.raw();
                     }
@@ -572,13 +576,13 @@ public class TaskRpcController {
                 // 若 contactName 含 " 或 \ 会生成非法 JSON，导致后续告警链路 JsonUtils.parse 失败、
                 // 该任务所有告警都无法匹配联系人。
                 HashMap<String, String> linkMap = new HashMap<>();
-                linkMap.put( String.valueOf( taskAlertContact.getId() ), taskAlertContact.getContactName() );
-                String linkData = JsonUtils.toString( linkMap );
-                String taskClass = contactData.get( "taskClass" );
-                if (StringUtils.isNotBlank( taskClass )) {
-                    dao.execute( "update task_runner_info set task_owner=? where task_class=? and task_owner='' and state=1", new Object[]{linkData, taskClass} );
-                    dao.execute( "update task_croner_info set task_owner=? where task_class=? and task_owner='' and state=1", new Object[]{linkData, taskClass} );
-                    dao.execute( "update task_delayer_info set task_owner=? where task_class=? and task_owner='' and state=1", new Object[]{linkData, taskClass} );
+                linkMap.put(String.valueOf(taskAlertContact.getId()), taskAlertContact.getContactName());
+                String linkData = JsonUtils.toString(linkMap);
+                String taskClass = contactData.get("taskClass");
+                if (StringUtils.isNotBlank(taskClass)) {
+                    dao.execute("update task_runner_info set task_owner=? where task_class=? and task_owner='' and state=1", new Object[]{linkData, taskClass});
+                    dao.execute("update task_croner_info set task_owner=? where task_class=? and task_owner='' and state=1", new Object[]{linkData, taskClass});
+                    dao.execute("update task_delayer_info set task_owner=? where task_class=? and task_owner='' and state=1", new Object[]{linkData, taskClass});
                 }
             }
         }

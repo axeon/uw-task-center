@@ -66,6 +66,8 @@ public class DashboardController {
         taskStatsVo.setTaskCronerConfigNum( taskCronerConfigNum );
         Integer taskRunnerConfigNum = dao.queryForValue( Integer.class, "select count(1) from task_runner_info where state = 1" ).getData();
         taskStatsVo.setTaskRunnerConfigNum( taskRunnerConfigNum );
+        Integer taskDelayerConfigNum = dao.queryForValue( Integer.class, "select count(1) from task_delayer_info where state = 1" ).getData();
+        taskStatsVo.setTaskDelayerConfigNum( taskDelayerConfigNum );
         return taskStatsVo;
     }
 
@@ -117,11 +119,13 @@ public class DashboardController {
         // 收集日期范围内所有不同的分表名
         HashSet<String> runnerTables = new HashSet<>();
         HashSet<String> cronerTables = new HashSet<>();
+        HashSet<String> delayerTables = new HashSet<>();
         LocalDate startLocal = startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         LocalDate endLocal = endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         for (LocalDate d = startLocal; !d.isAfter(endLocal); d = d.plusDays(1)) {
             runnerTables.add(ShardingTableUtils.getTableNameByDate("task_runner_stats", d));
             cronerTables.add(ShardingTableUtils.getTableNameByDate("task_croner_stats", d));
+            delayerTables.add(ShardingTableUtils.getTableNameByDate("task_delayer_stats", d));
         }
         // 1按日 2按時 3按分 4按秒
         String selectSql = switch (dateType) {
@@ -136,11 +140,15 @@ public class DashboardController {
         String runnerCommand =
                 selectSql + " sum(num_all) as num_all, sum(num_fail_program + num_fail_config + num_fail_data + num_fail_partner) as num_fail FROM %s WHERE " +
                         " create_date >= ? AND create_date <= ? group by stats_date";
+        String delayerCommand =
+                selectSql + " sum(num_all) as num_all, sum(num_fail_program + num_fail_config + num_fail_data + num_fail_partner) as num_fail FROM %s WHERE " +
+                        " create_date >= ? AND create_date <= ? group by stats_date";
         List<Object> param = new ArrayList<>( 2 );
         param.add( startDate );
         param.add( endDate );
         ArrayList<TaskReportDetail> cronerReportList = new ArrayList<>();
         ArrayList<TaskReportDetail> runnerReportList = new ArrayList<>();
+        ArrayList<TaskReportDetail> delayerReportList = new ArrayList<>();
         for (String tableName : runnerTables) {
             PageList<TaskReportDetail> result = dao.list(TaskReportDetail.class, String.format(runnerCommand, tableName), param.toArray()).getData();
             if (result != null) {
@@ -153,10 +161,17 @@ public class DashboardController {
                 cronerReportList.addAll(result.list());
             }
         }
+        for (String tableName : delayerTables) {
+            PageList<TaskReportDetail> result = dao.list(TaskReportDetail.class, String.format(delayerCommand, tableName), param.toArray()).getData();
+            if (result != null) {
+                delayerReportList.addAll(result.list());
+            }
+        }
 
         TaskReportVo taskReportVo = new TaskReportVo();
         taskReportVo.setCronerReportDetail( cronerReportList );
         taskReportVo.setRunnerReportDetail( runnerReportList );
+        taskReportVo.setDelayerReportDetail( delayerReportList );
         return taskReportVo;
     }
 
@@ -171,6 +186,9 @@ public class DashboardController {
 
         @Schema(title = "队列任务数量", description = "队列任务数量")
         private int taskRunnerConfigNum;
+
+        @Schema(title = "延迟任务数量", description = "延迟任务数量")
+        private int taskDelayerConfigNum;
 
         public int getTaskHostStatusNum() {
             return taskHostStatusNum;
@@ -195,6 +213,14 @@ public class DashboardController {
         public void setTaskRunnerConfigNum(int taskRunnerConfigNum) {
             this.taskRunnerConfigNum = taskRunnerConfigNum;
         }
+
+        public int getTaskDelayerConfigNum() {
+            return taskDelayerConfigNum;
+        }
+
+        public void setTaskDelayerConfigNum(int taskDelayerConfigNum) {
+            this.taskDelayerConfigNum = taskDelayerConfigNum;
+        }
     }
 
 
@@ -206,6 +232,9 @@ public class DashboardController {
 
         @Schema(title = "定时任务报表", description = "定时任务报表")
         private List<TaskReportDetail> cronerReportDetail;
+
+        @Schema(title = "延迟任务报表", description = "延迟任务报表")
+        private List<TaskReportDetail> delayerReportDetail;
 
         public List<TaskReportDetail> getRunnerReportDetail() {
             return runnerReportDetail;
@@ -221,6 +250,14 @@ public class DashboardController {
 
         public void setCronerReportDetail(List<TaskReportDetail> cronerReportDetail) {
             this.cronerReportDetail = cronerReportDetail;
+        }
+
+        public List<TaskReportDetail> getDelayerReportDetail() {
+            return delayerReportDetail;
+        }
+
+        public void setDelayerReportDetail(List<TaskReportDetail> delayerReportDetail) {
+            this.delayerReportDetail = delayerReportDetail;
         }
     }
 
