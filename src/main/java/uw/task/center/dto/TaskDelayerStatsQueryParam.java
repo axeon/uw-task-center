@@ -128,14 +128,14 @@ public class TaskDelayerStatsQueryParam extends PageQueryParam{
     /**
     * 实际延迟等待(runAt到consumeDate毫秒)。
     */
-    @QueryMeta(expr = "time_wait_delay=?")
+    @QueryMeta(expr = "time_wait=?")
     @Schema(title="实际延迟等待(runAt到consumeDate毫秒)", description = "实际延迟等待(runAt到consumeDate毫秒)")
     private Integer timeWaitDelay;
 
     /**
     * 实际延迟等待(runAt到consumeDate毫秒)范围。
     */
-    @QueryMeta(expr = "time_wait_delay between ? and ?")
+    @QueryMeta(expr = "time_wait between ? and ?")
     @Schema(title="实际延迟等待(runAt到consumeDate毫秒)范围", description = "实际延迟等待(runAt到consumeDate毫秒)范围")
     private Integer[] timeWaitDelayRange;
 	

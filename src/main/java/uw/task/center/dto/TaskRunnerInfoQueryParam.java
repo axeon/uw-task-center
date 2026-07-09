@@ -5,6 +5,7 @@ import uw.common.dto.PageQueryParam;
 import uw.dao.annotation.QueryMeta;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -239,6 +240,20 @@ public class TaskRunnerInfoQueryParam extends PageQueryParam{
     private Integer[] retryTimesByPartnerRange;
 	
     /**
+    * 程序异常重试次数。
+    */
+    @QueryMeta(expr = "retry_times_by_program=?")
+    @Schema(title="程序异常重试次数", description = "程序异常重试次数")
+    private Integer retryTimesByProgram;
+
+    /**
+    * 程序异常重试次数范围。
+    */
+    @QueryMeta(expr = "retry_times_by_program between ? and ?")
+    @Schema(title="程序异常重试次数范围", description = "程序异常重试次数范围")
+    private Integer[] retryTimesByProgramRange;
+	
+    /**
     * 最后统计时间范围。
     */
     @QueryMeta(expr = "stats_date between ? and ?")
@@ -386,31 +401,31 @@ public class TaskRunnerInfoQueryParam extends PageQueryParam{
     private Integer[] alertQueueTimeoutRange;
 	
     /**
-    * 等待超时。
+    * 等待超时(毫秒)。
     */
     @QueryMeta(expr = "alert_wait_timeout=?")
-    @Schema(title="等待超时", description = "等待超时")
+    @Schema(title="等待超时(毫秒)", description = "等待超时(毫秒)")
     private Integer alertWaitTimeout;
 
     /**
-    * 等待超时范围。
+    * 等待超时(毫秒)范围。
     */
     @QueryMeta(expr = "alert_wait_timeout between ? and ?")
-    @Schema(title="等待超时范围", description = "等待超时范围")
+    @Schema(title="等待超时(毫秒)范围", description = "等待超时(毫秒)范围")
     private Integer[] alertWaitTimeoutRange;
 	
     /**
-    * 运行超时。
+    * 运行超时(毫秒)。
     */
     @QueryMeta(expr = "alert_run_timeout=?")
-    @Schema(title="运行超时", description = "运行超时")
+    @Schema(title="运行超时(毫秒)", description = "运行超时(毫秒)")
     private Integer alertRunTimeout;
 
     /**
-    * 运行超时范围。
+    * 运行超时(毫秒)范围。
     */
     @QueryMeta(expr = "alert_run_timeout between ? and ?")
-    @Schema(title="运行超时范围", description = "运行超时范围")
+    @Schema(title="运行超时(毫秒)范围", description = "运行超时(毫秒)范围")
     private Integer[] alertRunTimeoutRange;
 	
     /**
@@ -1109,6 +1124,50 @@ public class TaskRunnerInfoQueryParam extends PageQueryParam{
     }
 	
     /**
+    * 获取程序异常重试次数。
+    */
+    public Integer getRetryTimesByProgram(){
+        return this.retryTimesByProgram;
+    }
+
+    /**
+    * 设置程序异常重试次数。
+    */
+    public void setRetryTimesByProgram(Integer retryTimesByProgram){
+        this.retryTimesByProgram = retryTimesByProgram;
+    }
+	
+    /**
+    * 设置程序异常重试次数链式调用。
+    */
+    public TaskRunnerInfoQueryParam retryTimesByProgram(Integer retryTimesByProgram){
+        setRetryTimesByProgram(retryTimesByProgram);
+        return this;
+    }
+
+    /**
+    * 获取程序异常重试次数范围。
+    */
+    public Integer[] getRetryTimesByProgramRange(){
+        return this.retryTimesByProgramRange;
+    }
+
+    /**
+    * 设置程序异常重试次数范围。
+    */
+    public void setRetryTimesByProgramRange(Integer[] retryTimesByProgramRange){
+        this.retryTimesByProgramRange = retryTimesByProgramRange;
+    }
+	
+    /**
+    * 设置程序异常重试次数范围链式调用。
+    */
+    public TaskRunnerInfoQueryParam retryTimesByProgramRange(Integer[] retryTimesByProgramRange){
+        setRetryTimesByProgramRange(retryTimesByProgramRange);
+        return this;
+    }
+	
+    /**
     * 获取最后统计时间范围。
     */
     public Date[] getStatsDateRange(){
@@ -1571,21 +1630,21 @@ public class TaskRunnerInfoQueryParam extends PageQueryParam{
     }
 	
     /**
-    * 获取等待超时。
+    * 获取等待超时(毫秒)。
     */
     public Integer getAlertWaitTimeout(){
         return this.alertWaitTimeout;
     }
 
     /**
-    * 设置等待超时。
+    * 设置等待超时(毫秒)。
     */
     public void setAlertWaitTimeout(Integer alertWaitTimeout){
         this.alertWaitTimeout = alertWaitTimeout;
     }
 	
     /**
-    * 设置等待超时链式调用。
+    * 设置等待超时(毫秒)链式调用。
     */
     public TaskRunnerInfoQueryParam alertWaitTimeout(Integer alertWaitTimeout){
         setAlertWaitTimeout(alertWaitTimeout);
@@ -1593,21 +1652,21 @@ public class TaskRunnerInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获取等待超时范围。
+    * 获取等待超时(毫秒)范围。
     */
     public Integer[] getAlertWaitTimeoutRange(){
         return this.alertWaitTimeoutRange;
     }
 
     /**
-    * 设置等待超时范围。
+    * 设置等待超时(毫秒)范围。
     */
     public void setAlertWaitTimeoutRange(Integer[] alertWaitTimeoutRange){
         this.alertWaitTimeoutRange = alertWaitTimeoutRange;
     }
 	
     /**
-    * 设置等待超时范围链式调用。
+    * 设置等待超时(毫秒)范围链式调用。
     */
     public TaskRunnerInfoQueryParam alertWaitTimeoutRange(Integer[] alertWaitTimeoutRange){
         setAlertWaitTimeoutRange(alertWaitTimeoutRange);
@@ -1615,21 +1674,21 @@ public class TaskRunnerInfoQueryParam extends PageQueryParam{
     }
 	
     /**
-    * 获取运行超时。
+    * 获取运行超时(毫秒)。
     */
     public Integer getAlertRunTimeout(){
         return this.alertRunTimeout;
     }
 
     /**
-    * 设置运行超时。
+    * 设置运行超时(毫秒)。
     */
     public void setAlertRunTimeout(Integer alertRunTimeout){
         this.alertRunTimeout = alertRunTimeout;
     }
 	
     /**
-    * 设置运行超时链式调用。
+    * 设置运行超时(毫秒)链式调用。
     */
     public TaskRunnerInfoQueryParam alertRunTimeout(Integer alertRunTimeout){
         setAlertRunTimeout(alertRunTimeout);
@@ -1637,21 +1696,21 @@ public class TaskRunnerInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获取运行超时范围。
+    * 获取运行超时(毫秒)范围。
     */
     public Integer[] getAlertRunTimeoutRange(){
         return this.alertRunTimeoutRange;
     }
 
     /**
-    * 设置运行超时范围。
+    * 设置运行超时(毫秒)范围。
     */
     public void setAlertRunTimeoutRange(Integer[] alertRunTimeoutRange){
         this.alertRunTimeoutRange = alertRunTimeoutRange;
     }
 	
     /**
-    * 设置运行超时范围链式调用。
+    * 设置运行超时(毫秒)范围链式调用。
     */
     public TaskRunnerInfoQueryParam alertRunTimeoutRange(Integer[] alertRunTimeoutRange){
         setAlertRunTimeoutRange(alertRunTimeoutRange);

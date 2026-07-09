@@ -1,5 +1,6 @@
 package uw.task.center.entity;
 
+import com.fasterxml.jackson.annotation.JsonRawValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import uw.common.util.JsonUtils;
 import uw.dao.DataEntity;
@@ -38,8 +39,8 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
     /**
      * 任务描述
      */
-    @ColumnMeta(columnName="task_desc", dataType="String", dataSize=1000, nullable=true)
-    @Schema(title = "任务描述", description = "任务描述", maxLength=1000, nullable=true )
+    @ColumnMeta(columnName="task_desc", dataType="String", dataSize=65535, nullable=true)
+    @Schema(title = "任务描述", description = "任务描述", maxLength=65535, nullable=true )
     private String taskDesc;
 
     /**
@@ -162,6 +163,13 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
     private int retryTimesByPartner;
 
     /**
+     * 程序异常重试次数
+     */
+    @ColumnMeta(columnName="retry_times_by_program", dataType="int", dataSize=10, nullable=true)
+    @Schema(title = "程序异常重试次数", description = "程序异常重试次数", maxLength=10, nullable=true )
+    private int retryTimesByProgram;
+
+    /**
      * 最后统计时间
      */
     @ColumnMeta(columnName="stats_date", dataType="java.util.Date", dataSize=19, nullable=true)
@@ -239,17 +247,17 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
     private int alertQueueTimeout;
 
     /**
-     * 等待超时
+     * 等待超时(毫秒)
      */
     @ColumnMeta(columnName="alert_wait_timeout", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "等待超时", description = "等待超时", maxLength=10, nullable=true )
+    @Schema(title = "等待超时(毫秒)", description = "等待超时(毫秒)", maxLength=10, nullable=true )
     private int alertWaitTimeout;
 
     /**
-     * 运行超时
+     * 运行超时(毫秒)
      */
     @ColumnMeta(columnName="alert_run_timeout", dataType="int", dataSize=10, nullable=true)
-    @Schema(title = "运行超时", description = "运行超时", maxLength=10, nullable=true )
+    @Schema(title = "运行超时(毫秒)", description = "运行超时(毫秒)", maxLength=10, nullable=true )
     private int alertRunTimeout;
 
     /**
@@ -479,6 +487,13 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
     }
 
     /**
+     * 获取程序异常重试次数。
+     */
+    public int getRetryTimesByProgram(){
+        return this.retryTimesByProgram;
+    }
+
+    /**
      * 获取最后统计时间。
      */
     public java.util.Date getStatsDate(){
@@ -556,14 +571,14 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
     }
 
     /**
-     * 获取等待超时。
+     * 获取等待超时(毫秒)。
      */
     public int getAlertWaitTimeout(){
         return this.alertWaitTimeout;
     }
 
     /**
-     * 获取运行超时。
+     * 获取运行超时(毫秒)。
      */
     public int getAlertRunTimeout(){
         return this.alertRunTimeout;
@@ -926,6 +941,22 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
     }
 
     /**
+     * 设置程序异常重试次数。
+     */
+    public void setRetryTimesByProgram(int retryTimesByProgram){
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "retryTimesByProgram", this.retryTimesByProgram, retryTimesByProgram, !_IS_LOADED );
+        this.retryTimesByProgram = retryTimesByProgram;
+    }
+
+    /**
+     *  设置程序异常重试次数链式调用。
+     */
+    public TaskRunnerInfo retryTimesByProgram(int retryTimesByProgram){
+        setRetryTimesByProgram(retryTimesByProgram);
+        return this;
+    }
+
+    /**
      * 设置最后统计时间。
      */
     public void setStatsDate(java.util.Date statsDate){
@@ -1102,7 +1133,7 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
     }
 
     /**
-     * 设置等待超时。
+     * 设置等待超时(毫秒)。
      */
     public void setAlertWaitTimeout(int alertWaitTimeout){
         _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "alertWaitTimeout", this.alertWaitTimeout, alertWaitTimeout, !_IS_LOADED );
@@ -1110,7 +1141,7 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
     }
 
     /**
-     *  设置等待超时链式调用。
+     *  设置等待超时(毫秒)链式调用。
      */
     public TaskRunnerInfo alertWaitTimeout(int alertWaitTimeout){
         setAlertWaitTimeout(alertWaitTimeout);
@@ -1118,7 +1149,7 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
     }
 
     /**
-     * 设置运行超时。
+     * 设置运行超时(毫秒)。
      */
     public void setAlertRunTimeout(int alertRunTimeout){
         _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "alertRunTimeout", this.alertRunTimeout, alertRunTimeout, !_IS_LOADED );
@@ -1126,7 +1157,7 @@ public class TaskRunnerInfo implements DataEntity,Serializable{
     }
 
     /**
-     *  设置运行超时链式调用。
+     *  设置运行超时(毫秒)链式调用。
      */
     public TaskRunnerInfo alertRunTimeout(int alertRunTimeout){
         setAlertRunTimeout(alertRunTimeout);

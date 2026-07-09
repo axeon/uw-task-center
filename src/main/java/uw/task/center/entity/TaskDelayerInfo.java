@@ -1,5 +1,6 @@
 package uw.task.center.entity;
 
+import com.fasterxml.jackson.annotation.JsonRawValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import uw.common.util.JsonUtils;
 import uw.dao.DataEntity;
@@ -38,8 +39,8 @@ public class TaskDelayerInfo implements DataEntity,Serializable{
     /**
      * 任务描述
      */
-    @ColumnMeta(columnName="task_desc", dataType="String", dataSize=1000, nullable=true)
-    @Schema(title = "任务描述", description = "任务描述", maxLength=1000, nullable=true )
+    @ColumnMeta(columnName="task_desc", dataType="String", dataSize=65535, nullable=true)
+    @Schema(title = "任务描述", description = "任务描述", maxLength=65535, nullable=true )
     private String taskDesc;
 
     /**
@@ -78,10 +79,10 @@ public class TaskDelayerInfo implements DataEntity,Serializable{
     private int consumerNum;
 
     /**
-     * poll间隔秒数
+     * poll间隔秒
      */
     @ColumnMeta(columnName="poll_interval", dataType="long", dataSize=19, nullable=true)
-    @Schema(title = "poll间隔数", description = "poll间隔数", maxLength=19, nullable=true )
+    @Schema(title = "poll间隔秒", description = "poll间隔秒", maxLength=19, nullable=true )
     private long pollInterval;
 
     /**
@@ -204,6 +205,20 @@ public class TaskDelayerInfo implements DataEntity,Serializable{
     private int alertFailProgramRate;
 
     /**
+     * 配置失败率
+     */
+    @ColumnMeta(columnName="alert_fail_config_rate", dataType="int", dataSize=10, nullable=true)
+    @Schema(title = "配置失败率", description = "配置失败率", maxLength=10, nullable=true )
+    private int alertFailConfigRate;
+
+    /**
+     * 数据失败率
+     */
+    @ColumnMeta(columnName="alert_fail_data_rate", dataType="int", dataSize=10, nullable=true)
+    @Schema(title = "数据失败率", description = "数据失败率", maxLength=10, nullable=true )
+    private int alertFailDataRate;
+
+    /**
      * 运行超时(毫秒)
      */
     @ColumnMeta(columnName="alert_run_timeout", dataType="int", dataSize=10, nullable=true)
@@ -213,9 +228,9 @@ public class TaskDelayerInfo implements DataEntity,Serializable{
     /**
      * 延迟超时(实际执行晚于runAt的平均毫秒)
      */
-    @ColumnMeta(columnName="alert_delay_overtime", dataType="int", dataSize=10, nullable=true)
+    @ColumnMeta(columnName="alert_wait_timeout", dataType="int", dataSize=10, nullable=true)
     @Schema(title = "延迟超时(实际执行晚于runAt的平均毫秒)", description = "延迟超时(实际执行晚于runAt的平均毫秒)", maxLength=10, nullable=true )
-    private int alertDelayOvertime;
+    private int alertWaitTimeout;
 
     /**
      * 我方联系信息
@@ -360,7 +375,7 @@ public class TaskDelayerInfo implements DataEntity,Serializable{
     }
 
     /**
-     * 获取poll间隔秒数。
+     * 获取poll间隔秒。
      */
     public long getPollInterval(){
         return this.pollInterval;
@@ -486,6 +501,20 @@ public class TaskDelayerInfo implements DataEntity,Serializable{
     }
 
     /**
+     * 获取配置失败率。
+     */
+    public int getAlertFailConfigRate(){
+        return this.alertFailConfigRate;
+    }
+
+    /**
+     * 获取数据失败率。
+     */
+    public int getAlertFailDataRate(){
+        return this.alertFailDataRate;
+    }
+
+    /**
      * 获取运行超时(毫秒)。
      */
     public int getAlertRunTimeout(){
@@ -495,8 +524,8 @@ public class TaskDelayerInfo implements DataEntity,Serializable{
     /**
      * 获取延迟超时(实际执行晚于runAt的平均毫秒)。
      */
-    public int getAlertDelayOvertime(){
-        return this.alertDelayOvertime;
+    public int getAlertWaitTimeout(){
+        return this.alertWaitTimeout;
     }
 
     /**
@@ -664,7 +693,7 @@ public class TaskDelayerInfo implements DataEntity,Serializable{
     }
 
     /**
-     * 设置poll间隔秒数。
+     * 设置poll间隔秒。
      */
     public void setPollInterval(long pollInterval){
         _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "pollInterval", this.pollInterval, pollInterval, !_IS_LOADED );
@@ -672,7 +701,7 @@ public class TaskDelayerInfo implements DataEntity,Serializable{
     }
 
     /**
-     *  设置poll间隔秒数链式调用。
+     *  设置poll间隔秒链式调用。
      */
     public TaskDelayerInfo pollInterval(long pollInterval){
         setPollInterval(pollInterval);
@@ -952,6 +981,38 @@ public class TaskDelayerInfo implements DataEntity,Serializable{
     }
 
     /**
+     * 设置配置失败率。
+     */
+    public void setAlertFailConfigRate(int alertFailConfigRate){
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "alertFailConfigRate", this.alertFailConfigRate, alertFailConfigRate, !_IS_LOADED );
+        this.alertFailConfigRate = alertFailConfigRate;
+    }
+
+    /**
+     *  设置配置失败率链式调用。
+     */
+    public TaskDelayerInfo alertFailConfigRate(int alertFailConfigRate){
+        setAlertFailConfigRate(alertFailConfigRate);
+        return this;
+    }
+
+    /**
+     * 设置数据失败率。
+     */
+    public void setAlertFailDataRate(int alertFailDataRate){
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "alertFailDataRate", this.alertFailDataRate, alertFailDataRate, !_IS_LOADED );
+        this.alertFailDataRate = alertFailDataRate;
+    }
+
+    /**
+     *  设置数据失败率链式调用。
+     */
+    public TaskDelayerInfo alertFailDataRate(int alertFailDataRate){
+        setAlertFailDataRate(alertFailDataRate);
+        return this;
+    }
+
+    /**
      * 设置运行超时(毫秒)。
      */
     public void setAlertRunTimeout(int alertRunTimeout){
@@ -970,16 +1031,16 @@ public class TaskDelayerInfo implements DataEntity,Serializable{
     /**
      * 设置延迟超时(实际执行晚于runAt的平均毫秒)。
      */
-    public void setAlertDelayOvertime(int alertDelayOvertime){
-        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "alertDelayOvertime", this.alertDelayOvertime, alertDelayOvertime, !_IS_LOADED );
-        this.alertDelayOvertime = alertDelayOvertime;
+    public void setAlertWaitTimeout(int alertWaitTimeout){
+        _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "alertWaitTimeout", this.alertWaitTimeout, alertWaitTimeout, !_IS_LOADED );
+        this.alertWaitTimeout = alertWaitTimeout;
     }
 
     /**
      *  设置延迟超时(实际执行晚于runAt的平均毫秒)链式调用。
      */
-    public TaskDelayerInfo alertDelayOvertime(int alertDelayOvertime){
-        setAlertDelayOvertime(alertDelayOvertime);
+    public TaskDelayerInfo alertWaitTimeout(int alertWaitTimeout){
+        setAlertWaitTimeout(alertWaitTimeout);
         return this;
     }
 

@@ -83,13 +83,13 @@ public class TaskDelayerReportController {
             case 3 -> "LEFT(create_date,16)";
             default -> throw new IllegalArgumentException("dateType is error :" + dateType);
         };
-        String innerSelect = leftExpr + " AS stats_date, num_all, num_fail_program, num_fail_config, num_fail_data, num_fail_partner, time_wait_delay, time_run";
+        String innerSelect = leftExpr + " AS stats_date, num_all, num_fail_program, num_fail_config, num_fail_data, num_fail_partner, time_wait, time_run";
         List<Object> param = new ArrayList<>();
         String union = ShardingTableUtils.unionAllShards("task_delayer_stats", startDate, endDate, innerSelect, param,
                 taskId > 0 ? "AND task_id=?" : null, taskId > 0 ? new Object[]{taskId} : null);
         String sql = "SELECT stats_date, sum(num_all) as num_all, sum(num_fail_program) as num_fail_program, sum(num_fail_config) as num_fail_config,"
                 + " sum(num_fail_data) as num_fail_data, sum(num_fail_partner) as num_fail_partner,"
-                + " sum(time_wait_delay) as time_wait_delay, sum(time_run) as time_run FROM (" + union + ") t"
+                + " sum(time_wait) as time_wait, sum(time_run) as time_run FROM (" + union + ") t"
                 + " group by stats_date order by stats_date asc";
         return dao.list(DelayerStatsVo.class, sql, param.toArray());
     }
@@ -123,13 +123,13 @@ public class TaskDelayerReportController {
             endDate = SystemClock.nowDate();
         }
         // 跨天分表：内层 UNION ALL 明细 → 中层 group by task_id 聚合 → 外层 LEFT JOIN 任务信息（避免单表漏 endDate 侧数据）
-        String innerSelect = "task_id, num_all, num_fail_program, num_fail_config, num_fail_data, num_fail_partner, time_wait_delay, time_run";
+        String innerSelect = "task_id, num_all, num_fail_program, num_fail_config, num_fail_data, num_fail_partner, time_wait, time_run";
         List<Object> param = new ArrayList<>();
         String union = ShardingTableUtils.unionAllShards("task_delayer_stats", startDate, endDate, innerSelect, param, null);
         String sql = "SELECT tcs.task_id, tcs.num_all, tcs.num_fail_program, tcs.num_fail_config, tcs.num_fail_data, tcs.num_fail_partner,"
-                + " tcs.time_wait_delay, tcs.time_run, tcc.task_name, tcc.task_class, tcc.task_owner, tcc.task_tag, tcc.run_target, tcc.consumer_num"
+                + " tcs.time_wait, tcs.time_run, tcc.task_name, tcc.task_class, tcc.task_owner, tcc.task_tag, tcc.run_target, tcc.consumer_num"
                 + " from (SELECT task_id, sum(num_all) as num_all, sum(num_fail_program) as num_fail_program, sum(num_fail_config) as num_fail_config,"
-                + " sum(num_fail_data) as num_fail_data, sum(num_fail_partner) as num_fail_partner, sum(time_wait_delay) as time_wait_delay, sum(time_run) as time_run"
+                + " sum(num_fail_data) as num_fail_data, sum(num_fail_partner) as num_fail_partner, sum(time_wait) as time_wait, sum(time_run) as time_run"
                 + " FROM (" + union + ") raw group by task_id order by num_all desc) tcs"
                 + " left join task_delayer_info tcc on tcs.task_id = tcc.id";
         return dao.list(DelayerStatsDetailVo.class, sql, param.toArray());
@@ -159,7 +159,7 @@ public class TaskDelayerReportController {
         @ColumnMeta(columnName = "num_fail_partner", dataType = "long", dataSize = 19, nullable = true)
         private long numFailPartner;
         /** 延迟等待时间。 */
-        @ColumnMeta(columnName = "time_wait_delay", dataType = "long", dataSize = 19, nullable = true)
+        @ColumnMeta(columnName = "time_wait", dataType = "long", dataSize = 19, nullable = true)
         private long timeWaitDelay;
         /** 运行时间。 */
         @ColumnMeta(columnName = "time_run", dataType = "long", dataSize = 19, nullable = true)

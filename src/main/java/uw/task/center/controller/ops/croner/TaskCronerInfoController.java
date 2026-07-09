@@ -64,7 +64,7 @@ public class TaskCronerInfoController {
     @Operation(summary = "轻量级列表定时任务配置", description = "轻量级列表定时任务配置，一般用于select控件。")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.USER, log = ActionLog.NONE)
     public ResponseData<PageList<TaskCronerInfo>> listLite(TaskCronerInfoQueryParam queryParam) {
-        queryParam.SELECT_SQL("SELECT id,task_name,task_class,task_param,task_owner,task_cron,run_type,run_target,log_level,log_limit_size,next_run_date,stats_date,stats_run_num,stats_fail_num,stats_run_time,alert_fail_rate,alert_fail_partner_rate,alert_fail_data_rate,alert_fail_program_rate,alert_wait_timeout,alert_run_timeout,task_link_our,task_link_mch,create_date,modify_date,state from task_croner_info ");
+        queryParam.SELECT_SQL("SELECT id,task_name,task_class,task_param,task_owner,task_cron,run_type,run_target,log_level,log_limit_size,next_run_date,stats_date,stats_run_num,stats_fail_num,stats_run_time,alert_fail_rate,alert_fail_partner_rate,alert_fail_data_rate,alert_fail_program_rate,alert_fail_config_rate,alert_wait_timeout,alert_run_timeout,task_link_our,task_link_mch,create_date,modify_date,state from task_croner_info ");
         return dao.list(TaskCronerInfo.class, queryParam);
     }
 
@@ -166,14 +166,11 @@ public class TaskCronerInfoController {
             taskCronerInfoDb.setLogLevel(taskCronerInfo.getLogLevel());
             taskCronerInfoDb.setLogLimitSize(taskCronerInfo.getLogLimitSize());
             taskCronerInfoDb.setNextRunDate(taskCronerInfo.getNextRunDate());
-            taskCronerInfoDb.setStatsDate(taskCronerInfo.getStatsDate());
-            taskCronerInfoDb.setStatsRunNum(taskCronerInfo.getStatsRunNum());
-            taskCronerInfoDb.setStatsFailNum(taskCronerInfo.getStatsFailNum());
-            taskCronerInfoDb.setStatsRunTime(taskCronerInfo.getStatsRunTime());
             taskCronerInfoDb.setAlertFailRate(taskCronerInfo.getAlertFailRate());
             taskCronerInfoDb.setAlertFailPartnerRate(taskCronerInfo.getAlertFailPartnerRate());
             taskCronerInfoDb.setAlertFailDataRate(taskCronerInfo.getAlertFailDataRate());
             taskCronerInfoDb.setAlertFailProgramRate(taskCronerInfo.getAlertFailProgramRate());
+            taskCronerInfoDb.setAlertFailConfigRate(taskCronerInfo.getAlertFailConfigRate());
             taskCronerInfoDb.setAlertWaitTimeout(taskCronerInfo.getAlertWaitTimeout());
             taskCronerInfoDb.setAlertRunTimeout(taskCronerInfo.getAlertRunTimeout());
             taskCronerInfoDb.setTaskLinkOur(taskCronerInfo.getTaskLinkOur());

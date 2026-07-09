@@ -5,6 +5,7 @@ import uw.common.dto.PageQueryParam;
 import uw.dao.annotation.QueryMeta;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -99,17 +100,17 @@ public class TaskDelayerInfoQueryParam extends PageQueryParam{
     private Integer[] consumerNumRange;
 	
     /**
-    * poll间隔毫秒。
+    * poll间隔秒。
     */
     @QueryMeta(expr = "poll_interval=?")
     @Schema(title="poll间隔秒", description = "poll间隔秒")
     private Long pollInterval;
 
     /**
-    * poll间隔毫秒范围。
+    * poll间隔秒范围。
     */
     @QueryMeta(expr = "poll_interval between ? and ?")
-    @Schema(title="poll间隔毫秒范围", description = "poll间隔毫秒范围")
+    @Schema(title="poll间隔秒范围", description = "poll间隔秒范围")
     private Long[] pollIntervalRange;
 	
     /**
@@ -337,6 +338,34 @@ public class TaskDelayerInfoQueryParam extends PageQueryParam{
     private Integer[] alertFailProgramRateRange;
 	
     /**
+    * 配置失败率。
+    */
+    @QueryMeta(expr = "alert_fail_config_rate=?")
+    @Schema(title="配置失败率", description = "配置失败率")
+    private Integer alertFailConfigRate;
+
+    /**
+    * 配置失败率范围。
+    */
+    @QueryMeta(expr = "alert_fail_config_rate between ? and ?")
+    @Schema(title="配置失败率范围", description = "配置失败率范围")
+    private Integer[] alertFailConfigRateRange;
+	
+    /**
+    * 数据失败率。
+    */
+    @QueryMeta(expr = "alert_fail_data_rate=?")
+    @Schema(title="数据失败率", description = "数据失败率")
+    private Integer alertFailDataRate;
+
+    /**
+    * 数据失败率范围。
+    */
+    @QueryMeta(expr = "alert_fail_data_rate between ? and ?")
+    @Schema(title="数据失败率范围", description = "数据失败率范围")
+    private Integer[] alertFailDataRateRange;
+	
+    /**
     * 运行超时(毫秒)。
     */
     @QueryMeta(expr = "alert_run_timeout=?")
@@ -353,16 +382,16 @@ public class TaskDelayerInfoQueryParam extends PageQueryParam{
     /**
     * 延迟超时(实际执行晚于runAt的平均毫秒)。
     */
-    @QueryMeta(expr = "alert_delay_overtime=?")
+    @QueryMeta(expr = "alert_wait_timeout=?")
     @Schema(title="延迟超时(实际执行晚于runAt的平均毫秒)", description = "延迟超时(实际执行晚于runAt的平均毫秒)")
-    private Integer alertDelayOvertime;
+    private Integer alertWaitTimeout;
 
     /**
     * 延迟超时(实际执行晚于runAt的平均毫秒)范围。
     */
-    @QueryMeta(expr = "alert_delay_overtime between ? and ?")
+    @QueryMeta(expr = "alert_wait_timeout between ? and ?")
     @Schema(title="延迟超时(实际执行晚于runAt的平均毫秒)范围", description = "延迟超时(实际执行晚于runAt的平均毫秒)范围")
-    private Integer[] alertDelayOvertimeRange;
+    private Integer[] alertWaitTimeoutRange;
 	
     /**
     * 我方联系信息。
@@ -620,21 +649,21 @@ public class TaskDelayerInfoQueryParam extends PageQueryParam{
     }
 	
     /**
-    * 获取poll间隔毫秒。
+    * 获取poll间隔秒。
     */
     public Long getPollInterval(){
         return this.pollInterval;
     }
 
     /**
-    * 设置poll间隔毫秒。
+    * 设置poll间隔秒。
     */
     public void setPollInterval(Long pollInterval){
         this.pollInterval = pollInterval;
     }
 	
     /**
-    * 设置poll间隔毫秒链式调用。
+    * 设置poll间隔秒链式调用。
     */
     public TaskDelayerInfoQueryParam pollInterval(Long pollInterval){
         setPollInterval(pollInterval);
@@ -642,21 +671,21 @@ public class TaskDelayerInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获取poll间隔毫秒范围。
+    * 获取poll间隔秒范围。
     */
     public Long[] getPollIntervalRange(){
         return this.pollIntervalRange;
     }
 
     /**
-    * 设置poll间隔毫秒范围。
+    * 设置poll间隔秒范围。
     */
     public void setPollIntervalRange(Long[] pollIntervalRange){
         this.pollIntervalRange = pollIntervalRange;
     }
 	
     /**
-    * 设置poll间隔毫秒范围链式调用。
+    * 设置poll间隔秒范围链式调用。
     */
     public TaskDelayerInfoQueryParam pollIntervalRange(Long[] pollIntervalRange){
         setPollIntervalRange(pollIntervalRange);
@@ -1368,6 +1397,94 @@ public class TaskDelayerInfoQueryParam extends PageQueryParam{
     }
 	
     /**
+    * 获取配置失败率。
+    */
+    public Integer getAlertFailConfigRate(){
+        return this.alertFailConfigRate;
+    }
+
+    /**
+    * 设置配置失败率。
+    */
+    public void setAlertFailConfigRate(Integer alertFailConfigRate){
+        this.alertFailConfigRate = alertFailConfigRate;
+    }
+	
+    /**
+    * 设置配置失败率链式调用。
+    */
+    public TaskDelayerInfoQueryParam alertFailConfigRate(Integer alertFailConfigRate){
+        setAlertFailConfigRate(alertFailConfigRate);
+        return this;
+    }
+
+    /**
+    * 获取配置失败率范围。
+    */
+    public Integer[] getAlertFailConfigRateRange(){
+        return this.alertFailConfigRateRange;
+    }
+
+    /**
+    * 设置配置失败率范围。
+    */
+    public void setAlertFailConfigRateRange(Integer[] alertFailConfigRateRange){
+        this.alertFailConfigRateRange = alertFailConfigRateRange;
+    }
+	
+    /**
+    * 设置配置失败率范围链式调用。
+    */
+    public TaskDelayerInfoQueryParam alertFailConfigRateRange(Integer[] alertFailConfigRateRange){
+        setAlertFailConfigRateRange(alertFailConfigRateRange);
+        return this;
+    }
+	
+    /**
+    * 获取数据失败率。
+    */
+    public Integer getAlertFailDataRate(){
+        return this.alertFailDataRate;
+    }
+
+    /**
+    * 设置数据失败率。
+    */
+    public void setAlertFailDataRate(Integer alertFailDataRate){
+        this.alertFailDataRate = alertFailDataRate;
+    }
+	
+    /**
+    * 设置数据失败率链式调用。
+    */
+    public TaskDelayerInfoQueryParam alertFailDataRate(Integer alertFailDataRate){
+        setAlertFailDataRate(alertFailDataRate);
+        return this;
+    }
+
+    /**
+    * 获取数据失败率范围。
+    */
+    public Integer[] getAlertFailDataRateRange(){
+        return this.alertFailDataRateRange;
+    }
+
+    /**
+    * 设置数据失败率范围。
+    */
+    public void setAlertFailDataRateRange(Integer[] alertFailDataRateRange){
+        this.alertFailDataRateRange = alertFailDataRateRange;
+    }
+	
+    /**
+    * 设置数据失败率范围链式调用。
+    */
+    public TaskDelayerInfoQueryParam alertFailDataRateRange(Integer[] alertFailDataRateRange){
+        setAlertFailDataRateRange(alertFailDataRateRange);
+        return this;
+    }
+	
+    /**
     * 获取运行超时(毫秒)。
     */
     public Integer getAlertRunTimeout(){
@@ -1414,44 +1531,44 @@ public class TaskDelayerInfoQueryParam extends PageQueryParam{
     /**
     * 获取延迟超时(实际执行晚于runAt的平均毫秒)。
     */
-    public Integer getAlertDelayOvertime(){
-        return this.alertDelayOvertime;
+    public Integer getAlertWaitTimeout(){
+        return this.alertWaitTimeout;
     }
 
     /**
     * 设置延迟超时(实际执行晚于runAt的平均毫秒)。
     */
-    public void setAlertDelayOvertime(Integer alertDelayOvertime){
-        this.alertDelayOvertime = alertDelayOvertime;
+    public void setAlertWaitTimeout(Integer alertWaitTimeout){
+        this.alertWaitTimeout = alertWaitTimeout;
     }
 	
     /**
     * 设置延迟超时(实际执行晚于runAt的平均毫秒)链式调用。
     */
-    public TaskDelayerInfoQueryParam alertDelayOvertime(Integer alertDelayOvertime){
-        setAlertDelayOvertime(alertDelayOvertime);
+    public TaskDelayerInfoQueryParam alertWaitTimeout(Integer alertWaitTimeout){
+        setAlertWaitTimeout(alertWaitTimeout);
         return this;
     }
 
     /**
     * 获取延迟超时(实际执行晚于runAt的平均毫秒)范围。
     */
-    public Integer[] getAlertDelayOvertimeRange(){
-        return this.alertDelayOvertimeRange;
+    public Integer[] getAlertWaitTimeoutRange(){
+        return this.alertWaitTimeoutRange;
     }
 
     /**
     * 设置延迟超时(实际执行晚于runAt的平均毫秒)范围。
     */
-    public void setAlertDelayOvertimeRange(Integer[] alertDelayOvertimeRange){
-        this.alertDelayOvertimeRange = alertDelayOvertimeRange;
+    public void setAlertWaitTimeoutRange(Integer[] alertWaitTimeoutRange){
+        this.alertWaitTimeoutRange = alertWaitTimeoutRange;
     }
 	
     /**
     * 设置延迟超时(实际执行晚于runAt的平均毫秒)范围链式调用。
     */
-    public TaskDelayerInfoQueryParam alertDelayOvertimeRange(Integer[] alertDelayOvertimeRange){
-        setAlertDelayOvertimeRange(alertDelayOvertimeRange);
+    public TaskDelayerInfoQueryParam alertWaitTimeoutRange(Integer[] alertWaitTimeoutRange){
+        setAlertWaitTimeoutRange(alertWaitTimeoutRange);
         return this;
     }
 	

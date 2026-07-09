@@ -62,7 +62,7 @@ public class TaskDelayerInfoController {
                 + "rate_limit_type,rate_limit_value,rate_limit_time,rate_limit_wait,retry_times_by_overrated,"
                 + "retry_times_by_partner,retry_times_by_program,log_level,log_limit_size,"
                 + "stats_date,stats_run_num,stats_fail_num,stats_run_time,"
-                + "alert_fail_rate,alert_fail_partner_rate,alert_fail_program_rate,alert_run_timeout,alert_delay_overtime,"
+                + "alert_fail_rate,alert_fail_partner_rate,alert_fail_program_rate,alert_fail_config_rate,alert_fail_data_rate,alert_run_timeout,alert_wait_timeout,"
                 + "task_link_our,task_link_mch,create_date,modify_date,state from task_delayer_info ");
         return dao.list(TaskDelayerInfo.class, queryParam);
     }
@@ -136,8 +136,10 @@ public class TaskDelayerInfoController {
             db.setAlertFailRate(taskDelayInfo.getAlertFailRate());
             db.setAlertFailPartnerRate(taskDelayInfo.getAlertFailPartnerRate());
             db.setAlertFailProgramRate(taskDelayInfo.getAlertFailProgramRate());
+            db.setAlertFailConfigRate(taskDelayInfo.getAlertFailConfigRate());
+            db.setAlertFailDataRate(taskDelayInfo.getAlertFailDataRate());
             db.setAlertRunTimeout(taskDelayInfo.getAlertRunTimeout());
-            db.setAlertDelayOvertime(taskDelayInfo.getAlertDelayOvertime());
+            db.setAlertWaitTimeout(taskDelayInfo.getAlertWaitTimeout());
             db.setTaskLinkOur(taskDelayInfo.getTaskLinkOur());
             db.setTaskLinkMch(taskDelayInfo.getTaskLinkMch());
             db.setModifyDate(SystemClock.nowDate());
@@ -206,7 +208,7 @@ public class TaskDelayerInfoController {
     }
 
     /**
-     * 校验延迟任务配置三元组是否重复（与 RPC /delayer/init 去重条件一致：state>=0，不含 id<>?）。
+     * 校验延迟任务配置三元组是否重复（与 RPC /delayer/init 去重条件一致）。
      *
      * @param info       待校验配置
      * @param excludeId  排除的自身 id（新增传 0）

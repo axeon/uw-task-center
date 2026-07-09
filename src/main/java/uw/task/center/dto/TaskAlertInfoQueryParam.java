@@ -5,6 +5,7 @@ import uw.common.dto.PageQueryParam;
 import uw.dao.annotation.QueryMeta;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -49,10 +50,10 @@ public class TaskAlertInfoQueryParam extends PageQueryParam{
     private Long[] ids;
 
     /**
-    * 任务类型。1croner2runner。
+    * 任务类型：croner/runner/delayer。
     */
     @QueryMeta(expr = "task_type like ?")
-    @Schema(title="任务类型。1croner2runner", description = "任务类型。1croner2runner")
+    @Schema(title="任务类型：croner/runner/delayer", description = "任务类型：croner/runner/delayer")
     private String taskType;
 	
     /**
@@ -150,21 +151,21 @@ public class TaskAlertInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获取任务类型。1croner2runner。
+    * 获取任务类型：croner/runner/delayer。
     */
     public String getTaskType(){
         return this.taskType;
     }
 
     /**
-    * 设置任务类型。1croner2runner。
+    * 设置任务类型：croner/runner/delayer。
     */
     public void setTaskType(String taskType){
         this.taskType = taskType;
     }
 	
     /**
-    * 设置任务类型。1croner2runner链式调用。
+    * 设置任务类型：croner/runner/delayer链式调用。
     */
     public TaskAlertInfoQueryParam taskType(String taskType) {
         setTaskType(taskType);

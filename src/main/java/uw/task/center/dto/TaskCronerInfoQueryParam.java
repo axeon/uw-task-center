@@ -5,6 +5,7 @@ import uw.common.dto.PageQueryParam;
 import uw.dao.annotation.QueryMeta;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -240,31 +241,45 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     private Integer[] alertFailProgramRateRange;
 	
     /**
-    * 等待超时。
+    * 配置失败率。
+    */
+    @QueryMeta(expr = "alert_fail_config_rate=?")
+    @Schema(title="配置失败率", description = "配置失败率")
+    private Integer alertFailConfigRate;
+
+    /**
+    * 配置失败率范围。
+    */
+    @QueryMeta(expr = "alert_fail_config_rate between ? and ?")
+    @Schema(title="配置失败率范围", description = "配置失败率范围")
+    private Integer[] alertFailConfigRateRange;
+	
+    /**
+    * 等待超时(毫秒)。
     */
     @QueryMeta(expr = "alert_wait_timeout=?")
-    @Schema(title="等待超时", description = "等待超时")
+    @Schema(title="等待超时(毫秒)", description = "等待超时(毫秒)")
     private Integer alertWaitTimeout;
 
     /**
-    * 等待超时范围。
+    * 等待超时(毫秒)范围。
     */
     @QueryMeta(expr = "alert_wait_timeout between ? and ?")
-    @Schema(title="等待超时范围", description = "等待超时范围")
+    @Schema(title="等待超时(毫秒)范围", description = "等待超时(毫秒)范围")
     private Integer[] alertWaitTimeoutRange;
 	
     /**
-    * 运行超时。
+    * 运行超时(毫秒)。
     */
     @QueryMeta(expr = "alert_run_timeout=?")
-    @Schema(title="运行超时", description = "运行超时")
+    @Schema(title="运行超时(毫秒)", description = "运行超时(毫秒)")
     private Integer alertRunTimeout;
 
     /**
-    * 运行超时范围。
+    * 运行超时(毫秒)范围。
     */
     @QueryMeta(expr = "alert_run_timeout between ? and ?")
-    @Schema(title="运行超时范围", description = "运行超时范围")
+    @Schema(title="运行超时(毫秒)范围", description = "运行超时(毫秒)范围")
     private Integer[] alertRunTimeoutRange;
 	
     /**
@@ -963,21 +978,65 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     }
 	
     /**
-    * 获取等待超时。
+    * 获取配置失败率。
+    */
+    public Integer getAlertFailConfigRate(){
+        return this.alertFailConfigRate;
+    }
+
+    /**
+    * 设置配置失败率。
+    */
+    public void setAlertFailConfigRate(Integer alertFailConfigRate){
+        this.alertFailConfigRate = alertFailConfigRate;
+    }
+	
+    /**
+    * 设置配置失败率链式调用。
+    */
+    public TaskCronerInfoQueryParam alertFailConfigRate(Integer alertFailConfigRate){
+        setAlertFailConfigRate(alertFailConfigRate);
+        return this;
+    }
+
+    /**
+    * 获取配置失败率范围。
+    */
+    public Integer[] getAlertFailConfigRateRange(){
+        return this.alertFailConfigRateRange;
+    }
+
+    /**
+    * 设置配置失败率范围。
+    */
+    public void setAlertFailConfigRateRange(Integer[] alertFailConfigRateRange){
+        this.alertFailConfigRateRange = alertFailConfigRateRange;
+    }
+	
+    /**
+    * 设置配置失败率范围链式调用。
+    */
+    public TaskCronerInfoQueryParam alertFailConfigRateRange(Integer[] alertFailConfigRateRange){
+        setAlertFailConfigRateRange(alertFailConfigRateRange);
+        return this;
+    }
+	
+    /**
+    * 获取等待超时(毫秒)。
     */
     public Integer getAlertWaitTimeout(){
         return this.alertWaitTimeout;
     }
 
     /**
-    * 设置等待超时。
+    * 设置等待超时(毫秒)。
     */
     public void setAlertWaitTimeout(Integer alertWaitTimeout){
         this.alertWaitTimeout = alertWaitTimeout;
     }
 	
     /**
-    * 设置等待超时链式调用。
+    * 设置等待超时(毫秒)链式调用。
     */
     public TaskCronerInfoQueryParam alertWaitTimeout(Integer alertWaitTimeout){
         setAlertWaitTimeout(alertWaitTimeout);
@@ -985,21 +1044,21 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获取等待超时范围。
+    * 获取等待超时(毫秒)范围。
     */
     public Integer[] getAlertWaitTimeoutRange(){
         return this.alertWaitTimeoutRange;
     }
 
     /**
-    * 设置等待超时范围。
+    * 设置等待超时(毫秒)范围。
     */
     public void setAlertWaitTimeoutRange(Integer[] alertWaitTimeoutRange){
         this.alertWaitTimeoutRange = alertWaitTimeoutRange;
     }
 	
     /**
-    * 设置等待超时范围链式调用。
+    * 设置等待超时(毫秒)范围链式调用。
     */
     public TaskCronerInfoQueryParam alertWaitTimeoutRange(Integer[] alertWaitTimeoutRange){
         setAlertWaitTimeoutRange(alertWaitTimeoutRange);
@@ -1007,21 +1066,21 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     }
 	
     /**
-    * 获取运行超时。
+    * 获取运行超时(毫秒)。
     */
     public Integer getAlertRunTimeout(){
         return this.alertRunTimeout;
     }
 
     /**
-    * 设置运行超时。
+    * 设置运行超时(毫秒)。
     */
     public void setAlertRunTimeout(Integer alertRunTimeout){
         this.alertRunTimeout = alertRunTimeout;
     }
 	
     /**
-    * 设置运行超时链式调用。
+    * 设置运行超时(毫秒)链式调用。
     */
     public TaskCronerInfoQueryParam alertRunTimeout(Integer alertRunTimeout){
         setAlertRunTimeout(alertRunTimeout);
@@ -1029,21 +1088,21 @@ public class TaskCronerInfoQueryParam extends PageQueryParam{
     }
 
     /**
-    * 获取运行超时范围。
+    * 获取运行超时(毫秒)范围。
     */
     public Integer[] getAlertRunTimeoutRange(){
         return this.alertRunTimeoutRange;
     }
 
     /**
-    * 设置运行超时范围。
+    * 设置运行超时(毫秒)范围。
     */
     public void setAlertRunTimeoutRange(Integer[] alertRunTimeoutRange){
         this.alertRunTimeoutRange = alertRunTimeoutRange;
     }
 	
     /**
-    * 设置运行超时范围链式调用。
+    * 设置运行超时(毫秒)范围链式调用。
     */
     public TaskCronerInfoQueryParam alertRunTimeoutRange(Integer[] alertRunTimeoutRange){
         setAlertRunTimeoutRange(alertRunTimeoutRange);

@@ -7,9 +7,9 @@ import uw.dao.annotation.QueryMeta;
 import java.util.Map;
 
 /**
- * 定时任务配置列表查询参数。
+ * 队列任务ES日志查询参数。
  */
-@Schema(title = "定时任务配置列表查询参数", description = "定时任务配置列表查询参数")
+@Schema(title = "队列任务ES日志查询参数", description = "队列任务ES日志查询参数")
 public class TaskRunnerEsLogQueryParam extends PageQueryParam {
 
     /**

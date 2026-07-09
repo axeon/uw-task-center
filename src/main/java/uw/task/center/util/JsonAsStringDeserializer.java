@@ -11,7 +11,7 @@ import java.io.IOException;
 
 /**
  * 这是为了解决jackson强制解析json为String的Deserializer。
- * 对于TaskRunnerLog的taskParam,taskConfig,resultData字段，应加上
+ * 对于TaskRunnerLog的taskParam,resultData,errorInfo字段，应加上
  *
  * @author axeon
  * @JsonDeserialize(using = JsonAsStringDeserializer.class)

@@ -73,7 +73,7 @@ public class TaskDelayerStats implements DataEntity,Serializable{
     /**
      * 实际延迟等待(runAt到consumeDate毫秒)
      */
-    @ColumnMeta(columnName="time_wait_delay", dataType="int", dataSize=10, nullable=true)
+    @ColumnMeta(columnName="time_wait", dataType="int", dataSize=10, nullable=true)
     @Schema(title = "实际延迟等待(runAt到consumeDate毫秒)", description = "实际延迟等待(runAt到consumeDate毫秒)", maxLength=10, nullable=true )
     private int timeWaitDelay;
 

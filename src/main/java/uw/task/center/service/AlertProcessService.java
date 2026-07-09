@@ -26,8 +26,8 @@ import java.util.stream.Collectors;
 /**
  * 任务告警处理服务。
  *
- * <p>接收任务执行主机上报的 runner/croner 统计数据，按任务配置的各类阈值（失败率、等待/运行超时、队列堆积等）
- * 判定是否触发告警，生成告警记录。处理异步提交到独立线程池（runner/croner 各一个），互不阻塞。
+ * <p>接收任务执行主机上报的 runner/croner/delayer 统计数据，按任务配置的各类阈值（失败率、等待/运行超时、队列堆积等）
+ * 判定是否触发告警，生成告警记录。处理异步提交到独立线程池（runner/croner/delayer 各一个），互不阻塞。
  * 同时周期性扫描定时任务是否按计划时间运行（cronerTimeOut 告警）。</p>
  *
  * @author axeon
@@ -53,6 +53,7 @@ public class AlertProcessService {
         FAIL_TYPE_TRANSLATE_MAP.put("failDataRate", "数据错误率");
         FAIL_TYPE_TRANSLATE_MAP.put("queueTimeout", "排队超时");
         FAIL_TYPE_TRANSLATE_MAP.put("waitTimeout", "限速超时");
+        FAIL_TYPE_TRANSLATE_MAP.put("scheduleDelay", "调度延迟超时");
         FAIL_TYPE_TRANSLATE_MAP.put("runTimeout", "运行超时");
         FAIL_TYPE_TRANSLATE_MAP.put("queueSize", "队列长度超限");
         FAIL_TYPE_TRANSLATE_MAP.put("cronerTimeOut", "定时任务未在计划时间运行");
@@ -226,7 +227,9 @@ public class AlertProcessService {
                         long numAll = stats.getNumAll();
                         long numFailProgram = stats.getNumFailProgram();
                         long numFailPartner = stats.getNumFailPartner();
-                        long numFail = numFailProgram + numFailPartner + stats.getNumFailConfig() + stats.getNumFailData();
+                        long numFailConfig = stats.getNumFailConfig();
+                        long numFailData = stats.getNumFailData();
+                        long numFail = numFailProgram + numFailPartner + numFailConfig + numFailData;
                         long timeWaitDelay = stats.getTimeWaitDelay();
                         long timeRun = stats.getTimeRun();
                         DecimalFormat percentFormat = new DecimalFormat("#.##");
@@ -251,16 +254,30 @@ public class AlertProcessService {
                                         percentFormat.format(v) + "%(" + numFailPartner + ")"));
                             }
                         }
+                        if (numFailConfig > 0 && numAll > 0 && config.getAlertFailConfigRate() > 0) {
+                            double v = (double) numFailConfig / numAll * 100;
+                            if (v > config.getAlertFailConfigRate()) {
+                                alerts.add(new AlertData("failConfigRate", percentFormat.format(config.getAlertFailConfigRate()) + "%",
+                                        percentFormat.format(v) + "%(" + numFailConfig + ")"));
+                            }
+                        }
+                        if (numFailData > 0 && numAll > 0 && config.getAlertFailDataRate() > 0) {
+                            double v = (double) numFailData / numAll * 100;
+                            if (v > config.getAlertFailDataRate()) {
+                                alerts.add(new AlertData("failDataRate", percentFormat.format(config.getAlertFailDataRate()) + "%",
+                                        percentFormat.format(v) + "%(" + numFailData + ")"));
+                            }
+                        }
                         if (timeRun > 0 && numAll > 0 && config.getAlertRunTimeout() > 0) {
                             long averageTime = timeRun / numAll;
                             if (averageTime > config.getAlertRunTimeout()) {
                                 alerts.add(new AlertData("runTimeout", config.getAlertRunTimeout() + "ms", averageTime + "ms"));
                             }
                         }
-                        if (timeWaitDelay > 0 && numAll > 0 && config.getAlertDelayOvertime() > 0) {
+                        if (timeWaitDelay > 0 && numAll > 0 && config.getAlertWaitTimeout() > 0) {
                             long averageTime = timeWaitDelay / numAll;
-                            if (averageTime > config.getAlertDelayOvertime()) {
-                                alerts.add(new AlertData("delayOvertime", config.getAlertDelayOvertime() + "ms", averageTime + "ms"));
+                            if (averageTime > config.getAlertWaitTimeout()) {
+                                alerts.add(new AlertData("delayOvertime", config.getAlertWaitTimeout() + "ms", averageTime + "ms"));
                             }
                         }
                         if (alerts.size() > 0) {
@@ -316,6 +333,13 @@ public class AlertProcessService {
                                         "(" + numFailPartner + ")"));
                             }
                         }
+                        if (numFailConfig > 0 && numAll > 0 && config.getAlertFailConfigRate() > 0) {
+                            double v = (double) numFailConfig / numAll * 100;
+                            if (v > config.getAlertFailConfigRate()) {
+                                alerts.add(new AlertData("failConfigRate", percentFormat.format(config.getAlertFailConfigRate()) + "%", percentFormat.format(v) + "%" +
+                                        "(" + numFailConfig + ")"));
+                            }
+                        }
                         if (numFailData > 0 && numAll > 0 && config.getAlertFailDataRate() > 0) {
                             double v = (double) numFailData / numAll * 100;
                             if (v > config.getAlertFailDataRate()) {
@@ -326,7 +350,7 @@ public class AlertProcessService {
                         if (timeWait > 0 && numAll > 0 && config.getAlertWaitTimeout() > 0) {
                             long averageTime = timeWait / numAll;
                             if (averageTime > config.getAlertWaitTimeout()) {
-                                alerts.add(new AlertData("waitTimeout", config.getAlertWaitTimeout() + "ms", averageTime + "ms"));
+                                alerts.add(new AlertData("scheduleDelay", config.getAlertWaitTimeout() + "ms", averageTime + "ms"));
                             }
                         }
                         if (timeRun > 0 && numAll > 0 && config.getAlertRunTimeout() > 0) {
@@ -435,7 +459,7 @@ public class AlertProcessService {
     }
 
     /**
-     * 根据错误类型对所发送的邮件进行处理，保存发送信息，提取联系人，取得发送类型
+     * 根据告警类型处理通知发送：保存告警信息，提取联系人，按 notifyUrl 等通道分发
      */
     private void processAlertInfo(String type, long taskId, String taskName, long runTimes, List<AlertData> alertList, String taskOwner, String taskLinkOur, String taskLinkMch) {
         // 检测报警通知范围。
@@ -525,7 +549,7 @@ public class AlertProcessService {
             notify.setInfoId(info.getId());
             // 联系人
             notify.setContactMan(contact.getContactName());
-            // 设置为email，因为这是邮件发送 获取根据里面的设置
+            // 设置通知基础信息（实际通过 notifyUrl 发送，email 通道已停用）
             notify.setCreateDate(SystemClock.nowDate());
             notify.setSentTimes(0);
             notify.setState(0);
@@ -567,7 +591,7 @@ public class AlertProcessService {
         info.setId(dao.getSequenceId(TaskAlertInfo.class));
         info.setTaskId(taskId);
         info.setTaskType(type);
-        // 拼接邮件信息
+        // 拼接告警通知信息
         StringBuilder title = new StringBuilder();
         title.append("#").append(info.getId()).append("报警");
         title.append("[").append(taskInfo).append("]");
@@ -594,7 +618,7 @@ public class AlertProcessService {
             }
         }
 
-        // 邮件错误类型
+        // 告警错误类型
         info.setAlertTitle(title.toString());
         info.setAlertBody(content.toString());
         info.setCreateDate(SystemClock.nowDate());

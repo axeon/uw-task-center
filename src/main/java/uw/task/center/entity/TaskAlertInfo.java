@@ -1,5 +1,6 @@
 package uw.task.center.entity;
 
+import com.fasterxml.jackson.annotation.JsonRawValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import uw.common.util.JsonUtils;
 import uw.dao.DataEntity;
@@ -29,10 +30,10 @@ public class TaskAlertInfo implements DataEntity,Serializable{
     private long id;
 
     /**
-     * 任务类型。1croner2runner
+     * 任务类型：croner/runner/delayer
      */
     @ColumnMeta(columnName="task_type", dataType="String", dataSize=20, nullable=true)
-    @Schema(title = "任务类型。1croner2runner", description = "任务类型。1croner2runner", maxLength=20, nullable=true )
+    @Schema(title = "任务类型：croner/runner/delayer", description = "任务类型：croner/runner/delayer", maxLength=20, nullable=true )
     private String taskType;
 
     /**
@@ -129,7 +130,7 @@ public class TaskAlertInfo implements DataEntity,Serializable{
     }
 
     /**
-     * 获取任务类型。1croner2runner。
+     * 获取任务类型：croner/runner/delayer。
      */
     public String getTaskType(){
         return this.taskType;
@@ -188,7 +189,7 @@ public class TaskAlertInfo implements DataEntity,Serializable{
     }
 
     /**
-     * 设置任务类型。1croner2runner。
+     * 设置任务类型：croner/runner/delayer。
      */
     public void setTaskType(String taskType){
         _UPDATED_INFO = DataUpdateInfo.addUpdateInfo(_UPDATED_INFO, "taskType", this.taskType, taskType, !_IS_LOADED );
@@ -196,7 +197,7 @@ public class TaskAlertInfo implements DataEntity,Serializable{
     }
 
     /**
-     *  设置任务类型。1croner2runner链式调用。
+     *  设置任务类型：croner/runner/delayer链式调用。
      */
     public TaskAlertInfo taskType(String taskType){
         setTaskType(taskType);
