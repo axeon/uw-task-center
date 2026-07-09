@@ -244,7 +244,7 @@ public class TaskRunnerInfoController {
     @PutMapping("/resetStats")
     @Operation(summary = "清空统计数据", description = "清空统计数据")
     @MscPermDeclare(user = UserType.OPS, auth = AuthType.PERM, log = ActionLog.CRIT)
-    public ResponseData resetStats(@Parameter(description = "主键") long id, @Parameter(description = "备注") @RequestParam String remark) {
+    public ResponseData resetStats(@Parameter(description = "主键") @RequestParam long id, @Parameter(description = "备注") @RequestParam String remark) {
         AuthServiceHelper.logInfo(TaskRunnerInfo.class, id, remark);
         return dao.update(new TaskRunnerInfo().statsDate(null).statsRunNum(0).statsFailNum(0).statsRunTime(0), new IdQueryParam(id));
 
