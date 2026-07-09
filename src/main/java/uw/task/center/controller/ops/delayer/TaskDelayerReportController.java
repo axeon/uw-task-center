@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import uw.auth.service.annotation.MscPermDeclare;
@@ -28,8 +29,8 @@ import java.util.List;
  * @author axeon
  */
 @RestController
-@org.springframework.web.bind.annotation.RequestMapping("/ops/delayer/report")
-@Tag(name = "延迟任务报表")
+@RequestMapping("/ops/delayer/report")
+@Tag(name = "延迟任务报表", description = "延迟任务报表")
 @MscPermDeclare(user = UserType.OPS)
 public class TaskDelayerReportController {
 
@@ -140,47 +141,110 @@ public class TaskDelayerReportController {
      */
     @TableMeta(tableName = "DelayerStatsVo", tableType = "view")
     public static class DelayerStatsVo implements java.io.Serializable {
-        /** 统计时间分桶（LEFT(create_date,N) 截取值：按日/按时/按分）。 */
+        /**
+         * 统计时间分桶（LEFT(create_date,N) 截取值：按日/按时/按分）。
+         */
         @ColumnMeta(columnName = "stats_date", dataType = "String", dataSize = 20, nullable = true)
         private String statsDate;
-        /** 全部执行计数。 */
+        /**
+         * 全部执行计数。
+         */
         @ColumnMeta(columnName = "num_all", dataType = "long", dataSize = 19, nullable = true)
         private long numAll;
-        /** 程序失败计数。 */
+        /**
+         * 程序失败计数。
+         */
         @ColumnMeta(columnName = "num_fail_program", dataType = "long", dataSize = 19, nullable = true)
         private long numFailProgram;
-        /** 配置失败计数。 */
+        /**
+         * 配置失败计数。
+         */
         @ColumnMeta(columnName = "num_fail_config", dataType = "long", dataSize = 19, nullable = true)
         private long numFailConfig;
-        /** 数据失败计数。 */
+        /**
+         * 数据失败计数。
+         */
         @ColumnMeta(columnName = "num_fail_data", dataType = "long", dataSize = 19, nullable = true)
         private long numFailData;
-        /** 对方失败计数。 */
+        /**
+         * 对方失败计数。
+         */
         @ColumnMeta(columnName = "num_fail_partner", dataType = "long", dataSize = 19, nullable = true)
         private long numFailPartner;
-        /** 延迟等待时间。 */
+        /**
+         * 延迟等待时间。
+         */
         @ColumnMeta(columnName = "time_wait", dataType = "long", dataSize = 19, nullable = true)
         private long timeWaitDelay;
-        /** 运行时间。 */
+        /**
+         * 运行时间。
+         */
         @ColumnMeta(columnName = "time_run", dataType = "long", dataSize = 19, nullable = true)
         private long timeRun;
 
-        public String getStatsDate() { return statsDate; }
-        public void setStatsDate(String statsDate) { this.statsDate = statsDate; }
-        public long getNumAll() { return numAll; }
-        public void setNumAll(long numAll) { this.numAll = numAll; }
-        public long getNumFailProgram() { return numFailProgram; }
-        public void setNumFailProgram(long numFailProgram) { this.numFailProgram = numFailProgram; }
-        public long getNumFailConfig() { return numFailConfig; }
-        public void setNumFailConfig(long numFailConfig) { this.numFailConfig = numFailConfig; }
-        public long getNumFailData() { return numFailData; }
-        public void setNumFailData(long numFailData) { this.numFailData = numFailData; }
-        public long getNumFailPartner() { return numFailPartner; }
-        public void setNumFailPartner(long numFailPartner) { this.numFailPartner = numFailPartner; }
-        public long getTimeWaitDelay() { return timeWaitDelay; }
-        public void setTimeWaitDelay(long timeWaitDelay) { this.timeWaitDelay = timeWaitDelay; }
-        public long getTimeRun() { return timeRun; }
-        public void setTimeRun(long timeRun) { this.timeRun = timeRun; }
+        public String getStatsDate() {
+            return statsDate;
+        }
+
+        public void setStatsDate(String statsDate) {
+            this.statsDate = statsDate;
+        }
+
+        public long getNumAll() {
+            return numAll;
+        }
+
+        public void setNumAll(long numAll) {
+            this.numAll = numAll;
+        }
+
+        public long getNumFailProgram() {
+            return numFailProgram;
+        }
+
+        public void setNumFailProgram(long numFailProgram) {
+            this.numFailProgram = numFailProgram;
+        }
+
+        public long getNumFailConfig() {
+            return numFailConfig;
+        }
+
+        public void setNumFailConfig(long numFailConfig) {
+            this.numFailConfig = numFailConfig;
+        }
+
+        public long getNumFailData() {
+            return numFailData;
+        }
+
+        public void setNumFailData(long numFailData) {
+            this.numFailData = numFailData;
+        }
+
+        public long getNumFailPartner() {
+            return numFailPartner;
+        }
+
+        public void setNumFailPartner(long numFailPartner) {
+            this.numFailPartner = numFailPartner;
+        }
+
+        public long getTimeWaitDelay() {
+            return timeWaitDelay;
+        }
+
+        public void setTimeWaitDelay(long timeWaitDelay) {
+            this.timeWaitDelay = timeWaitDelay;
+        }
+
+        public long getTimeRun() {
+            return timeRun;
+        }
+
+        public void setTimeRun(long timeRun) {
+            this.timeRun = timeRun;
+        }
     }
 
     /**
@@ -188,41 +252,96 @@ public class TaskDelayerReportController {
      */
     @TableMeta(tableName = "DelayerStatsDetailVo", tableType = "view")
     public static class DelayerStatsDetailVo extends DelayerStatsVo implements java.io.Serializable {
-        /** 任务配置 id。 */
+        /**
+         * 任务配置 id。
+         */
         @ColumnMeta(columnName = "task_id", dataType = "long", dataSize = 19, nullable = true)
         private long taskId;
-        /** 任务名称。 */
+        /**
+         * 任务名称。
+         */
         @ColumnMeta(columnName = "task_name", dataType = "String", dataSize = 200, nullable = true)
         private String taskName;
-        /** 执行类信息。 */
+        /**
+         * 执行类信息。
+         */
         @ColumnMeta(columnName = "task_class", dataType = "String", dataSize = 200, nullable = true)
         private String taskClass;
-        /** 任务所有人（JSON 联系人映射）。 */
+        /**
+         * 任务所有人（JSON 联系人映射）。
+         */
         @ColumnMeta(columnName = "task_owner", dataType = "String", dataSize = 500, nullable = true)
         private String taskOwner;
-        /** 运行标签（多实例区分维度）。 */
+        /**
+         * 运行标签（多实例区分维度）。
+         */
         @ColumnMeta(columnName = "task_tag", dataType = "String", dataSize = 100, nullable = true)
         private String taskTag;
-        /** 运行目标。 */
+        /**
+         * 运行目标。
+         */
         @ColumnMeta(columnName = "run_target", dataType = "String", dataSize = 100, nullable = true)
         private String runTarget;
-        /** 消费者数量。 */
+        /**
+         * 消费者数量。
+         */
         @ColumnMeta(columnName = "consumer_num", dataType = "int", dataSize = 10, nullable = true)
         private int consumerNum;
 
-        public long getTaskId() { return taskId; }
-        public void setTaskId(long taskId) { this.taskId = taskId; }
-        public String getTaskName() { return taskName; }
-        public void setTaskName(String taskName) { this.taskName = taskName; }
-        public String getTaskClass() { return taskClass; }
-        public void setTaskClass(String taskClass) { this.taskClass = taskClass; }
-        public String getTaskOwner() { return taskOwner; }
-        public void setTaskOwner(String taskOwner) { this.taskOwner = taskOwner; }
-        public String getTaskTag() { return taskTag; }
-        public void setTaskTag(String taskTag) { this.taskTag = taskTag; }
-        public String getRunTarget() { return runTarget; }
-        public void setRunTarget(String runTarget) { this.runTarget = runTarget; }
-        public int getConsumerNum() { return consumerNum; }
-        public void setConsumerNum(int consumerNum) { this.consumerNum = consumerNum; }
+        public long getTaskId() {
+            return taskId;
+        }
+
+        public void setTaskId(long taskId) {
+            this.taskId = taskId;
+        }
+
+        public String getTaskName() {
+            return taskName;
+        }
+
+        public void setTaskName(String taskName) {
+            this.taskName = taskName;
+        }
+
+        public String getTaskClass() {
+            return taskClass;
+        }
+
+        public void setTaskClass(String taskClass) {
+            this.taskClass = taskClass;
+        }
+
+        public String getTaskOwner() {
+            return taskOwner;
+        }
+
+        public void setTaskOwner(String taskOwner) {
+            this.taskOwner = taskOwner;
+        }
+
+        public String getTaskTag() {
+            return taskTag;
+        }
+
+        public void setTaskTag(String taskTag) {
+            this.taskTag = taskTag;
+        }
+
+        public String getRunTarget() {
+            return runTarget;
+        }
+
+        public void setRunTarget(String runTarget) {
+            this.runTarget = runTarget;
+        }
+
+        public int getConsumerNum() {
+            return consumerNum;
+        }
+
+        public void setConsumerNum(int consumerNum) {
+            this.consumerNum = consumerNum;
+        }
     }
 }

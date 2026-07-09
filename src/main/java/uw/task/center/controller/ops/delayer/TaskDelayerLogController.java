@@ -14,7 +14,6 @@ import uw.auth.service.constant.ActionLog;
 import uw.auth.service.constant.AuthType;
 import uw.auth.service.constant.UserType;
 import uw.common.data.PageList;
-import uw.common.dto.PageQueryParam;
 import uw.common.dto.QueryParam;
 import uw.dao.DaoManager;
 import uw.dao.vo.QueryParamResult;

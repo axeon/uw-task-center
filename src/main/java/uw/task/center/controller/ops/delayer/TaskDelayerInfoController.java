@@ -34,7 +34,7 @@ import uw.task.center.entity.TaskDelayerInfo;
  */
 @RestController
 @RequestMapping("/ops/delayer/info")
-@Tag(name = "延迟任务管理")
+@Tag(name = "延迟任务管理", description = "延迟任务管理")
 @MscPermDeclare(user = UserType.OPS)
 public class TaskDelayerInfoController {
 
