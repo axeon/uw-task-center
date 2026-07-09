@@ -13,18 +13,18 @@ import uw.auth.service.annotation.MscPermDeclare;
 import uw.auth.service.constant.ActionLog;
 import uw.auth.service.constant.AuthType;
 import uw.auth.service.constant.UserType;
+import uw.common.data.PageList;
+import uw.common.dto.QueryParam;
 import uw.dao.DaoManager;
 import uw.dao.vo.QueryParamResult;
 import uw.log.es.LogClient;
-import uw.common.data.PageList;
-import uw.common.dto.PageQueryParam;
 import uw.task.center.dto.TaskRunnerEsLogQueryParam;
 import uw.task.center.entity.TaskRunnerEsLog;
 
 /**
  * 队列任务运行日志查询接口。
  *
- * <p>日志数据来源于 ES（索引 {@value #INDEX_NAME}），由任务执行主机通过 logback-es 异步写入。
+ * <p>日志数据来源于 ES ，由任务执行主机通过 logback-es 异步写入。
  * 本接口仅提供按条件检索，不支持写入。</p>
  *
  * @author axeon
@@ -39,7 +39,6 @@ public class TaskRunnerLogController {
     /**
      * 队列任务日志在 ES 中的索引名。
      */
-    private static final String INDEX_NAME = "uw.task.runner.log";
     private final DaoManager dao = DaoManager.getInstance();
     /**
      * ES 日志客户端。
@@ -70,13 +69,11 @@ public class TaskRunnerLogController {
     public PageList<TaskRunnerEsLog> list(TaskRunnerEsLogQueryParam queryParam) throws Exception {
         AuthServiceHelper.logRef(TaskRunnerEsLog.class);
         //钉死关键参数
-        queryParam.SORT_NAME("@timestamp");
-        queryParam.SORT_TYPE(PageQueryParam.SORT_DESC);
-
+        queryParam.CLEAR_SORT().ADD_SORT("timestamp", QueryParam.SORT_DESC);
         QueryParamResult result = dao.parseQueryParam(TaskRunnerEsLog.class, queryParam);
-
         String dsl = logClient.translateSqlToDsl(result.genFullSql(), queryParam.START_INDEX(), queryParam.RESULT_NUM(), queryParam.CHECK_AUTO_COUNT());
-        return logClient.mapQueryResponseToPageList(logClient.dslQuery(TaskRunnerEsLog.class, INDEX_NAME, dsl), queryParam.START_INDEX(), queryParam.RESULT_NUM());
+        String loginLogIndex = logClient.getQueryIndexName(TaskRunnerEsLog.class);
+        return LogClient.mapQueryResponseToPageList(logClient.dslQuery(TaskRunnerEsLog.class, loginLogIndex, dsl), queryParam.START_INDEX(), queryParam.RESULT_NUM());
     }
 
 

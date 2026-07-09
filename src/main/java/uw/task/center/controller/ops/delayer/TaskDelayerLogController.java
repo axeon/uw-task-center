@@ -13,8 +13,9 @@ import uw.auth.service.annotation.MscPermDeclare;
 import uw.auth.service.constant.ActionLog;
 import uw.auth.service.constant.AuthType;
 import uw.auth.service.constant.UserType;
-import uw.common.dto.PageQueryParam;
 import uw.common.data.PageList;
+import uw.common.dto.PageQueryParam;
+import uw.common.dto.QueryParam;
 import uw.dao.DaoManager;
 import uw.dao.vo.QueryParamResult;
 import uw.log.es.LogClient;
@@ -37,8 +38,6 @@ public class TaskDelayerLogController {
     /**
      * ES 索引名（与客户端 TaskDelayerLog 写入的索引一致）。
      */
-    private static final String INDEX_NAME = "uw.task.delayer.log";
-
     private final DaoManager dao = DaoManager.getInstance();
 
     private final LogClient logClient;
@@ -57,17 +56,10 @@ public class TaskDelayerLogController {
     public PageList<TaskDelayerEsLog> list(TaskDelayerEsLogQueryParam queryParam) throws Exception {
         AuthServiceHelper.logRef(TaskDelayerEsLog.class);
         // 强制按时间倒序，最近的日志优先
-        queryParam.SORT_NAME("@timestamp");
-        queryParam.SORT_TYPE(PageQueryParam.SORT_DESC);
+        queryParam.CLEAR_SORT().ADD_SORT("timestamp", QueryParam.SORT_DESC);
         QueryParamResult result = dao.parseQueryParam(TaskDelayerEsLog.class, queryParam);
-        String dsl = logClient.translateSqlToDsl(
-                result.genFullSql(),
-                queryParam.START_INDEX(),
-                queryParam.RESULT_NUM(),
-                queryParam.CHECK_AUTO_COUNT());
-        return logClient.mapQueryResponseToPageList(
-                logClient.dslQuery(TaskDelayerEsLog.class, INDEX_NAME, dsl),
-                queryParam.START_INDEX(),
-                queryParam.RESULT_NUM());
+        String dsl = logClient.translateSqlToDsl(result.genFullSql(), queryParam.START_INDEX(), queryParam.RESULT_NUM(), queryParam.CHECK_AUTO_COUNT());
+        String loginLogIndex = logClient.getQueryIndexName(TaskDelayerEsLog.class);
+        return LogClient.mapQueryResponseToPageList(logClient.dslQuery(TaskDelayerEsLog.class, loginLogIndex, dsl), queryParam.START_INDEX(), queryParam.RESULT_NUM());
     }
 }

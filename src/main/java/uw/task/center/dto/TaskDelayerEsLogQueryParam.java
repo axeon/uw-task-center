@@ -12,35 +12,65 @@ import java.util.Map;
  *
  * <p>极简版（核心过滤字段），照 TaskRunnerEsLogQueryParam 模式，建议 gencode 重生成完整版。</p>
  */
-@Schema(title = "延迟任务日志查询参数", description = "延迟任务日志查询参数")
+@Schema(title = "延迟任务日志查询参数", description = "延迟任务ES日志查询参数，用于 uw.task.delayer.log 索引检索。")
 public class TaskDelayerEsLogQueryParam extends PageQueryParam {
+
+    /**
+     * 延迟任务配置id（对应 TaskDelayerConfig 的 id）。
+     */
+    @QueryMeta(expr = "task_id=?")
+    @Schema(title = "延迟任务配置id", description = "延迟任务配置id（对应 TaskDelayerConfig 的 id）。")
+    private Long taskId;
+
+    /**
+     * 执行的延迟任务类名（模糊匹配，全限定类名）。
+     */
+    @QueryMeta(expr = "task_class like ?")
+    @Schema(title = "执行的类名", description = "执行的延迟任务类名（模糊匹配，全限定类名）。")
+    private String taskClass;
+
+    /**
+     * 任务标签（模糊匹配）。
+     */
+    @QueryMeta(expr = "task_tag like ?")
+    @Schema(title = "任务标签", description = "任务标签（模糊匹配）。")
+    private String taskTag;
+
+    /**
+     * 运行目标（模糊匹配，指定执行主机/实例标识）。
+     */
+    @QueryMeta(expr = "run_target like ?")
+    @Schema(title = "运行目标", description = "运行目标（模糊匹配，指定执行主机/实例标识）。")
+    private String runTarget;
+
+    /**
+     * 执行状态（精确匹配）。
+     */
+    @QueryMeta(expr = "state=?")
+    @Schema(title = "执行状态", description = "执行状态（精确匹配）。")
+    private Integer state;
+
+    /**
+     * ES 日志时间戳（@timestamp）范围查询，长度为2的数组：[起始时间, 结束时间]。
+     */
+    @QueryMeta(expr = "@timestamp between ? and ?")
+    @Schema(title = "日志时间戳范围", description = "ES 日志时间戳（@timestamp）范围查询，长度为2的数组：[起始时间, 结束时间]。")
+    private Date[] timestampRange;
 
     private static final Map<String, String> ALLOWED_SORT_PROPERTY = Map.ofEntries(
             Map.entry("id", "id"),
             Map.entry("timestamp", "\"@timestamp\"")
     );
+
+    /**
+     * 允许的排序属性。
+     *
+     * @return 前端排序字段名到 ES 实际字段的映射
+     */
     @Override
     public Map<String, String> ALLOWED_SORT_PROPERTY() {
         return ALLOWED_SORT_PROPERTY;
     }
-
-    @QueryMeta(expr = "task_id=?")
-    private Long taskId;
-
-    @QueryMeta(expr = "task_class like ?")
-    private String taskClass;
-
-    @QueryMeta(expr = "task_tag like ?")
-    private String taskTag;
-
-    @QueryMeta(expr = "run_target like ?")
-    private String runTarget;
-
-    @QueryMeta(expr = "state=?")
-    private Integer state;
-
-    @QueryMeta(expr = "@timestamp between ? and ?")
-    private Date[] timestampRange;
 
     public Long getTaskId() {
         return taskId;
