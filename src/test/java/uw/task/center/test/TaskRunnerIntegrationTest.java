@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 @SpringBootTest(classes = TestContextConfig.class)
 @TestPropertySource(properties = "spring.profiles.active=debug")
-class UwTaskCenterIntegrationTest {
+class TaskRunnerIntegrationTest {
 
     @Test
     void contextLoads() {

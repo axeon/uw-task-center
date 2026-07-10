@@ -41,7 +41,7 @@ import java.util.concurrent.TimeUnit;
 @Warmup(iterations = 2, time = 3)
 @Measurement(iterations = 5, time = 3)
 @Fork(1)
-public class SendToQueueBenchmark {
+public class TaskRunnerBenchmark {
 
     private static final int BATCH = 1000;
     private static final String ECHO_QUEUE = "uw.task.center.test.EchoRunner#$default";
@@ -98,7 +98,7 @@ public class SendToQueueBenchmark {
         // 支持命令行透传 JMH 参数：-t N 控制线程数做多线程对照、-wi/-i/-f 调轮次
         CommandLineOptions cmdLine = new CommandLineOptions(args);
         Options opt = new OptionsBuilder()
-                .include(SendToQueueBenchmark.class.getSimpleName())
+                .include(TaskRunnerBenchmark.class.getSimpleName())
                 .parent(cmdLine)
                 .build();
         new Runner(opt).run();
