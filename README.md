@@ -407,7 +407,7 @@ public class DemoDelayTask extends TaskDelayer<DemoTaskParam, Void> {
 		//运行超时ms数
 		config.setAlertRunTimeout(1000);
 		//延迟超时ms数（实际执行晚于runAt，Delayer特有）
-		config.setAlertDelayOvertime(5000);
+		config.setAlertWaitTimeout(5000);
 		return config;
 	}
 
