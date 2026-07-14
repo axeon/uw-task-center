@@ -9,7 +9,7 @@ import uw.auth.service.annotation.MscPermDeclare;
 import uw.auth.service.constant.ActionLog;
 import uw.auth.service.constant.AuthType;
 import uw.auth.service.constant.UserType;
-import uw.common.app.constant.CommonState;
+import uw.common.constant.CommonState;
 import uw.common.app.dto.IdQueryParam;
 import uw.common.app.dto.IdStateQueryParam;
 import uw.common.app.dto.SysCritLogQueryParam;

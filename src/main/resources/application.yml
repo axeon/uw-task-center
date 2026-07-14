@@ -5,6 +5,9 @@ project:
 spring:
   application:
     name: ${project.name}
+  config:
+    import:
+      - "optional:nacos:${spring.application.name}"
   cloud:
     nacos:
       server-addr: ${NACOS_SERVER}

@@ -1,13 +1,10 @@
 package uw.task.center.util;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.TreeNode;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.node.NullNode;
-
-import java.io.IOException;
+import tools.jackson.core.JsonParser;
+import tools.jackson.core.TreeNode;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.ValueDeserializer;
+import tools.jackson.databind.node.NullNode;
 
 /**
  * 这是为了解决jackson强制解析json为String的Deserializer。
@@ -16,11 +13,11 @@ import java.io.IOException;
  * @author axeon
  * @JsonDeserialize(using = JsonAsStringDeserializer.class)
  */
-public class JsonAsStringDeserializer extends JsonDeserializer<String> {
+public class JsonAsStringDeserializer extends ValueDeserializer<String> {
     @Override
-    public String deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
-            throws IOException, JsonProcessingException {
-        TreeNode tree = jsonParser.getCodec().readTree(jsonParser);
+    public String deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) {
+        // Jackson 3 中 JsonParser.getCodec() 已移除，改用 readValueAsTree() 直接读取树节点。
+        TreeNode tree = jsonParser.readValueAsTree();
         // JSON null 应返回 null，而非字面字符串 "null"，避免下游字段被污染。
         if (tree == null || tree instanceof NullNode) {
             return null;

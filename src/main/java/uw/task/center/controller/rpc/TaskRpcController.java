@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import uw.auth.service.AuthServiceHelper;
 import uw.auth.service.annotation.MscPermDeclare;
 import uw.auth.service.constant.UserType;
-import uw.common.app.constant.CommonState;
+import uw.common.constant.CommonState;
 import uw.common.data.PageList;
 import uw.common.response.ResponseData;
 import uw.common.util.JsonUtils;

@@ -1,0 +1,7 @@
+# debug profile：仅本地业务差异（不注册到 nacos 发现）。
+# nacos 连接靠环境变量（IDE run config 设 NACOS_*），不在此覆盖。
+spring:
+  cloud:
+    nacos:
+      discovery:
+        register-enabled: false

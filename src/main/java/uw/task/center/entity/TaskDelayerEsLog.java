@@ -1,6 +1,6 @@
 package uw.task.center.entity;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonDeserialize;
 import io.swagger.v3.oas.annotations.media.Schema;
 import uw.dao.annotation.ColumnMeta;
 import uw.dao.annotation.TableMeta;

@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import uw.common.app.constant.CommonState;
+import uw.common.constant.CommonState;
 import uw.common.data.PageList;
 import uw.common.response.ResponseData;
 import uw.common.util.JsonUtils;
