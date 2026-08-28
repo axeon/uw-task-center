@@ -69,7 +69,7 @@ uw.task.center
 | `task_alert_contact` | 告警联系人（邮箱、钉钉 notifyUrl 等） |
 | `sys_crit_log` / `sys_data_history` / `sys_seq` | 操作日志 / 数据历史 / 序列号（公共表） |
 
-建表脚本见 [`database/ddl.sql`](database/ddl.sql)。
+建表脚本见 [`database/uw_task.sql`](database/uw_task.sql)。
 
 ## 部署
 

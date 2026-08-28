@@ -1,6 +1,6 @@
 # uw_task 数据库设计文档
 
-> 依据：`backend/uw-task-center/database/ddl.sql`（13 张表），
+> 依据：`uw_task.sql`（13 张表），
 > 并对照 `src/main/java/uw/task/center` 下实际代码（TaskRpcController、各 Report Controller、
 > AlertProcessService、AlertNotifyScanCroner、TaskHostCleanCroner 等）确认逻辑外键与分表行为。
 
@@ -78,7 +78,7 @@
 
 ### 2.9 sys_* 框架公共表
 
-- `sys_crit_log`：关键操作审计日志（含 saas_id/mch_id/user_*、请求响应全文）。**注意：结合 crit_log 治理结论，实际 DDL 以当前 ddl.sql 为准。**
+- `sys_crit_log`：关键操作审计日志（含 saas_id/mch_id/user_*、请求响应全文）。**注意：结合 crit_log 治理结论，实际 DDL 以当前 uw_code.sql 为准。**
 - `sys_data_history`：实体修改历史（entity_class + entity_id + entity_data JSON + 修改信息），供 OPS 追溯。
 - `sys_seq`：ID 发号序列（seq_name 主键，seq_id 当前值，increment_num 步长），是全库所有 `id` 的来源，绝对不可分表。
 
