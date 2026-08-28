@@ -28,8 +28,7 @@ CREATE TABLE `sys_crit_log` (
                                 `app_host` varchar(100) DEFAULT NULL COMMENT '应用主机',
                                 PRIMARY KEY (`id`),
                                 KEY `sys_crit_log_saas_id_IDX` (`saas_id`,`user_id`) USING BTREE,
-                                KEY `sys_crit_log_biz_type_IDX` (`biz_type`,`biz_id`) USING BTREE,
-                                KEY `sys_crit_log_saas_request_date_IDX` (`saas_id`,`request_date`) USING BTREE
+                                KEY `sys_crit_log_biz_type_IDX` (`biz_type`,`biz_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='系统关键日志';
 
 
@@ -55,8 +54,7 @@ CREATE TABLE `sys_data_history` (
                                     `create_date` datetime(3) DEFAULT CURRENT_TIMESTAMP(3) COMMENT '创建日期',
                                     PRIMARY KEY (`id`),
                                     KEY `sys_data_history_entity_class_IDX` (`entity_class`,`entity_id`) USING BTREE,
-                                    KEY `sys_data_history_saas_id_IDX` (`saas_id`,`user_id`) USING BTREE,
-                                    KEY `sys_data_history_saas_create_date_IDX` (`saas_id`,`create_date`) USING BTREE
+                                    KEY `sys_data_history_saas_id_IDX` (`saas_id`,`user_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='系统数据历史';
 
 
@@ -88,7 +86,8 @@ CREATE TABLE `task_alert_contact` (
                                       `create_date` datetime(3) DEFAULT NULL COMMENT '创建日期',
                                       `modify_date` datetime(3) DEFAULT NULL COMMENT '修改日期',
                                       `state` int DEFAULT NULL COMMENT '状态',
-                                      PRIMARY KEY (`id`)
+                                      PRIMARY KEY (`id`),
+                                      KEY `idx_name_state` (`contact_name`,`state`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='报警联系信息';
 
 
@@ -102,7 +101,8 @@ CREATE TABLE `task_alert_info` (
                                    `alert_body` longtext COMMENT '报警信息',
                                    `create_date` datetime(3) DEFAULT NULL COMMENT '创建时间',
                                    `state` int DEFAULT NULL COMMENT '状态',
-                                   PRIMARY KEY (`id`)
+                                   PRIMARY KEY (`id`),
+                                   KEY `idx_task_id` (`task_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='报警信息';
 
 
@@ -118,7 +118,9 @@ CREATE TABLE `task_alert_notify` (
                                      `sent_date` datetime(3) DEFAULT NULL COMMENT '发送时间',
                                      `sent_times` int DEFAULT NULL COMMENT '发送次数',
                                      `state` int DEFAULT NULL COMMENT '状态',
-                                     PRIMARY KEY (`id`)
+                                     PRIMARY KEY (`id`),
+                                     KEY `idx_state_sent` (`state`,`sent_times`),
+                                     KEY `idx_info_id` (`info_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='报警信息通知';
 
 
@@ -153,7 +155,8 @@ CREATE TABLE `task_croner_info` (
                                     `create_date` datetime(3) DEFAULT NULL COMMENT '创建时间',
                                     `modify_date` datetime(3) DEFAULT NULL COMMENT '最后修改时间',
                                     `state` int DEFAULT NULL COMMENT '状态1正常，0暂停，-1标记删除',
-                                    PRIMARY KEY (`id`)
+                                    PRIMARY KEY (`id`),
+                                    KEY `idx_class_target_param` (`task_class`,`run_target`,`task_param`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='定时任务配置';
 
 
@@ -170,7 +173,8 @@ CREATE TABLE `task_croner_stats` (
                                      `time_wait` int DEFAULT NULL COMMENT '超时等待',
                                      `time_run` int DEFAULT NULL COMMENT '运行时间',
                                      `create_date` datetime(3) DEFAULT NULL COMMENT '创建时间',
-                                     PRIMARY KEY (`id`)
+                                     PRIMARY KEY (`id`),
+                                     KEY `idx_task_date` (`task_id`,`create_date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='定时任务统计信息';
 
 
@@ -212,7 +216,8 @@ CREATE TABLE `task_delayer_info` (
                                      `create_date` datetime(3) DEFAULT NULL COMMENT '创建日期',
                                      `modify_date` datetime(3) DEFAULT NULL COMMENT '最后修改日期',
                                      `state` int DEFAULT NULL COMMENT '状态1正常，0暂停，-1标记删除',
-                                     PRIMARY KEY (`id`)
+                                     PRIMARY KEY (`id`),
+                                     KEY `idx_class_target_tag` (`task_class`,`run_target`,`task_tag`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='延迟任务配置';
 
 
@@ -231,7 +236,8 @@ CREATE TABLE `task_delayer_stats` (
                                       `queue_size` int DEFAULT NULL COMMENT '队列积压消息数',
                                       `consumer_num` int DEFAULT NULL COMMENT '执行线程数',
                                       `create_date` datetime(3) DEFAULT NULL COMMENT '创建时间',
-                                      PRIMARY KEY (`id`)
+                                      PRIMARY KEY (`id`),
+                                      KEY `idx_task_date` (`task_id`,`create_date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='延迟任务统计信息';
 
 
@@ -269,7 +275,8 @@ CREATE TABLE `task_host_info` (
                                   `modify_date` datetime(3) DEFAULT NULL COMMENT '修改时间',
                                   `last_update` datetime(3) DEFAULT NULL COMMENT '最后更新',
                                   `state` int DEFAULT NULL COMMENT '状态',
-                                  PRIMARY KEY (`id`)
+                                  PRIMARY KEY (`id`),
+                                  KEY `idx_state_last_update` (`state`,`last_update`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='task主机信息';
 
 
@@ -315,7 +322,8 @@ CREATE TABLE `task_runner_info` (
                                     `create_date` datetime(3) DEFAULT NULL COMMENT '创建日期',
                                     `modify_date` datetime(3) DEFAULT NULL COMMENT '最后修改日期',
                                     `state` int DEFAULT NULL COMMENT '状态1正常，0暂停，-1标记删除',
-                                    PRIMARY KEY (`id`)
+                                    PRIMARY KEY (`id`),
+                                    KEY `idx_class_target_tag` (`task_class`,`run_target`,`task_tag`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='队列任务配置';
 
 
@@ -335,5 +343,6 @@ CREATE TABLE `task_runner_stats` (
                                      `queue_size` int DEFAULT NULL COMMENT '队列长度',
                                      `consumer_num` int DEFAULT NULL COMMENT '消费者数量',
                                      `create_date` datetime(3) DEFAULT NULL COMMENT '创建时间',
-                                     PRIMARY KEY (`id`)
+                                     PRIMARY KEY (`id`),
+                                     KEY `idx_task_date` (`task_id`,`create_date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='队列任务统计信息';
